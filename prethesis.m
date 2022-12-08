@@ -8,7 +8,7 @@ datadir=dir('data\*.mat');
 Param.Fs = 250;
 Param.RemoveBeforeAndAfter = [35 100]*1e-3;
 Param.MinLengthNaNRepair = 5;
-LPWinSize = 0.5; % [s]: Window size of hamming-window for low-pass filtering
+LPWinSize = 0.75; % [s]: Window size of hamming-window for low-pass filtering
 LPWindow = hamming(round(LPWinSize*Param.Fs));
 LPWindow = LPWindow/sum(LPWindow); % Hamming-window
 
@@ -23,16 +23,28 @@ for i=1:length(datadir)
     % Preprocessing - Interpolating NaNs
     LDiamRaw(i,1:length([alldata_mat.diameterLeft])) = [alldata_mat.diameterLeft];
     RDiamRaw(i,1:length([alldata_mat.diameterRight])) = [alldata_mat.diameterRight];
-    [LDiam(i,:),LMetadata] = preprocpupil(LDiamRaw(i,:),Param);
-    [RDiam(i,:),RMetadata] = preprocpupil(RDiamRaw(i,:),Param);
+    [LDiam(i,:),LMetadata(i,:)] = preprocpupil(LDiamRaw(i,:),Param);
+    [RDiam(i,:),RMetadata(i,:)] = preprocpupil(RDiamRaw(i,:),Param);
     
     % Low-Pass Filtering
     LDiam(i,:) = conv(LDiam(i,:),LPWindow,'same');
     RDiam(i,:) = conv(RDiam(i,:),LPWindow,'same');
     
+    % Decide 'better' eye results
+    [Min idx_decision] = min([sum(LMetadata(i).Isnan) sum(RMetadata(i).Isnan)]);
+    if idx_decision == 1
+        Diameter(i,:) = LDiam(i,:);
+        DiameterRaw(i,:) = LDiamRaw(i,:);
+        eyeChosen(i,:) = 'Left ';
+    elseif idx_decision == 2
+        Diameter(i,:) = RDiam(i,:);
+        DiameterRaw(i,:) = RDiamRaw(i,:);
+        eyeChosen(i,:) = 'Right';
+    end
+    
     % Time vectors for plotting
-    t_LDiam(i,:) = linspace(1,length(LDiam(i,:)/Param.Fs),length(LDiam(i,:)));
-    t_RDiam(i,:) = linspace(1,length(RDiam(i,:)/Param.Fs),length(RDiam(i,:)));
+    t_LDiam(i,:) = linspace(1,length(LDiam(i,:))/Param.Fs,length(LDiam(i,:)));
+    t_RDiam(i,:) = linspace(1,length(RDiam(i,:))./Param.Fs,length(RDiam(i,:)));
     
     figure
     plot(t_LDiam(i,:),LDiam(i,:),color='blue');
@@ -40,4 +52,11 @@ for i=1:length(datadir)
     plot(t_RDiam(i,:),RDiam(i,:),color='red');
     title(strrep(datadir(i).name,'_','-'))
     legend('Diameter Left','Diameter Right')
+end
+%%
+figure
+plot(t_LDiam(1,:),mean(Diameter,1),color='red')
+hold on
+for i=1:length(datadir)
+    plot(t_LDiam(i,:),Diameter(i,:),color=[0 0 0 0.5]);
 end
