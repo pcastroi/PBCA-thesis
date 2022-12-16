@@ -3,7 +3,7 @@ clear all; clc; close all;
 BPath = strsplit(pwd,'PBCA-thesis');
 addpath(genpath('data\'));
 addpath([BPath{1} 'Pupil-preprocessing-tools\tools']) % For preprocessing
-datadir=dir('data\*.mat');
+datadir=dir('data\Main*\*.mat');
 % Parameters
 Param.Fs = 250;
 Param.RemoveBeforeAndAfter = [35 100]*1e-3;
@@ -51,6 +51,8 @@ for i=1:length(datadir)
     hold on
     plot(t_RDiam(i,:),RDiam(i,:),color='red');
     title(strrep(datadir(i).name,'_','-'))
+    xlabel('Time [s]')
+    ylabel('Pupil diameter [mm]')
     legend('Diameter Left','Diameter Right')
 end
 %%
