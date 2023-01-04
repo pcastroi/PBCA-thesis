@@ -1,9 +1,14 @@
 %% Master's thesis pre-project -- AMEND 1 data -- Pablo Castro (PBCA)
+% Main X - X pairs of participants
+% <=16 files: Talkers P1 and P2, 2 repetitions B1 and B2.
 clear all; clc; close all;
 BPath = strsplit(pwd,'PBCA-thesis');
 addpath(genpath('data\'));
 addpath([BPath{1} 'Pupil-preprocessing-tools\tools']) % For preprocessing
+
+dirlist=dir('data\');
 datadir=dir('data\Main*\*.mat');
+
 % Parameters
 Param.Fs = 250;
 Param.RemoveBeforeAndAfter = [35 100]*1e-3;
@@ -55,10 +60,25 @@ for i=1:length(datadir)
     ylabel('Pupil diameter [mm]')
     legend('Diameter Left','Diameter Right')
 end
+%% List of unique filenames (dirlist(3) = Main1: constains 16 unique names)
+namelist=struct2cell(dir(['data\' dirlist(3).name]));
+namelist=erase(namelist(1,3:end),'.mat');
+
+% Obtain idx and group data by filename (better eye)
+for i=1:length(namelist)
+    name_idx=find(contains(datadirl,namelist(i)));
+    % Store (Diameter) grouped data in temp variable
+    for j=1:length(name_idx)
+        datagroup(j,:)=Diameter(name_idx(j),:);
+    end
+    % Store everything in struct
+    sdata.(namelist{i})=datagroup;
+end
+
 %%
 figure
 plot(t_LDiam(1,:),mean(Diameter,1),color='red')
 hold on
 for i=1:length(datadir)
-    plot(t_LDiam(i,:),Diameter(i,:),color=[0 0 0 0.5]);
+    plot(t_LDiam(i,:),Diameter(i,:),color=[0 0.3 0.3 0.4]);
 end
