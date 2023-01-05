@@ -10,7 +10,7 @@ dirlist=dir('data\');
 datadir=dir('data\Main*\*.mat');
 
 % Parameters
-Param.Fs = 250;
+Param.Fs = 50;
 Param.RemoveBeforeAndAfter = [35 100]*1e-3;
 Param.MinLengthNaNRepair = 5;
 LPWinSize = 0.75; % [s]: Window size of hamming-window for low-pass filtering
@@ -18,11 +18,11 @@ LPWindow = hamming(round(LPWinSize*Param.Fs));
 LPWindow = LPWindow/sum(LPWindow); % Hamming-window
 
 % Initialization
-LDiamRaw = zeros(16,13300);
+LDiamRaw = zeros(numel(datadir),13300);
 RDiamRaw = LDiamRaw;
 
 for i=1:length(datadir)
-    alldata(i) = load(datadir(i).name);
+    alldata(i) = load([datadir(i).folder, '\', datadir(i).name]);
     alldata_mat = cell2mat(alldata(i).data);
     
     % Preprocessing - Interpolating NaNs
@@ -51,19 +51,19 @@ for i=1:length(datadir)
     t_LDiam(i,:) = linspace(1,length(LDiam(i,:))/Param.Fs,length(LDiam(i,:)));
     t_RDiam(i,:) = linspace(1,length(RDiam(i,:))./Param.Fs,length(RDiam(i,:)));
     
-    figure
-    plot(t_LDiam(i,:),LDiam(i,:),color='blue');
-    hold on
-    plot(t_RDiam(i,:),RDiam(i,:),color='red');
-    title(strrep(datadir(i).name,'_','-'))
-    xlabel('Time [s]')
-    ylabel('Pupil diameter [mm]')
-    legend('Diameter Left','Diameter Right')
+%     figure
+%     plot(t_LDiam(i,:),LDiam(i,:),color='blue');
+%     hold on
+%     plot(t_RDiam(i,:),RDiam(i,:),color='red');
+%     title(strrep(datadir(i).name,'_','-'))
+%     xlabel('Time [s]')
+%     ylabel('Pupil diameter [mm]')
+%     legend('Diameter Left','Diameter Right')
 end
 %% List of unique filenames (dirlist(3) = Main1: constains 16 unique names)
 namelist=struct2cell(dir(['data\' dirlist(3).name]));
 namelist=erase(namelist(1,3:end),'.mat');
-
+datadirl=struct2cell(datadir);
 % Obtain idx and group data by filename (better eye)
 for i=1:length(namelist)
     name_idx=find(contains(datadirl,namelist(i)));
