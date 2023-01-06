@@ -1,6 +1,6 @@
 %% PBCA-Thesis-W1
 % Pathing
-clear all; clc; close all;
+% clear all; clc; close all;
 BPath = strsplit(pwd,'PBCA-thesis');
 addpath(genpath('data\'));
 addpath([BPath{1} 'Pupil-preprocessing-tools\tools']) % For preprocessing
@@ -46,11 +46,11 @@ for i=1:numel(PairFiles)
     [Min idx_decision] = min([sum(LMetadata.Isnan) sum(RMetadata.Isnan)]);
     if idx_decision == 1
         Diameter = LDiam;
-        DiameterRaw = LDiamRaw;
+        DiameterRaw = LDiamRaw';
         eyeChosen = 'Left';
     elseif idx_decision == 2
         Diameter = RDiam;
-        DiameterRaw = RDiamRaw;
+        DiameterRaw = RDiamRaw';
         eyeChosen = 'Right';
     end
     
@@ -79,33 +79,92 @@ for i=1:numel(PairFiles)
         UttCond = UttB + 7;
     end
     
-    SpeakUtt = PairUtt{1,UttCond}.(SpeakKey);
-    ListenUtt = PairUtt{1,UttCond}.(ListenKey);
+    Speak = PairUtt{1,UttCond}.(SpeakKey);
+    Listen = PairUtt{1,UttCond}.(ListenKey);
     binRes = PairUtt{1,UttCond}.binRes;
     
     % Downsample (rounding) Utt from 250 Hz (1/binRes) to 50 Hz
-    SpeakUtt(:,2:3)=round(SpeakUtt(:,2:3)*binRes*Param.Fs);
-    ListenUtt(:,2:3)=round(ListenUtt(:,2:3)*binRes*Param.Fs);
+    Speak(:,2:3)=round(Speak(:,2:3)*binRes*Param.Fs);
+    Listen(:,2:3)=round(Listen(:,2:3)*binRes*Param.Fs);
     
-    % Arrays for plotting (patch)
-    SU = [sort([SpeakUtt(:,2); SpeakUtt(:,3)]), sort([SpeakUtt(:,2); SpeakUtt(:,3)])];
-    LU = [sort([ListenUtt(:,2); ListenUtt(:,3)]), sort([ListenUtt(:,2); ListenUtt(:,3)])];
+    % Time-locked indexes (based on Start or End of events)
+    TimeStartW=1; % [S], time previous to Utt/Lis starts
+    TimeEndW=2; % [S], time after Utt/Lis starts
+    SWSpeakIdx=[Speak(:,2)-TimeStartW*Param.Fs,Speak(:,2),Speak(:,2)+TimeEndW*Param.Fs];
+    SWListenIdx=[Listen(:,2)-TimeStartW*Param.Fs,Listen(:,2),Listen(:,2)+TimeEndW*Param.Fs];
+    EWSpeakIdx=[Speak(:,3)-TimeStartW*Param.Fs,Speak(:,3),Speak(:,3)+TimeEndW*Param.Fs];
+    EWListenIdx=[Listen(:,3)-TimeStartW*Param.Fs,Listen(:,3),Listen(:,3)+TimeEndW*Param.Fs];
     
     % Time vectors for plotting
     t_LDiam = linspace(1,length(LDiam)./Param.Fs,length(LDiam));
     t_RDiam = linspace(1,length(RDiam)./Param.Fs,length(RDiam));
     
+    % Plots
+    
     figure
     subplot(2,2,[1 2])
-    plot(t_LDiam,LDiam,color='blue');
+    Lplot=plot(t_LDiam,LDiam,color='blue');
     hold on
-    plot(t_RDiam,RDiam,color='red');
-    patch(SU,[-mean(LDiam)*(rem(1:size(SpeakUtt,1)*2,2)'-1),mean(LDiam)*rem(1:size(SpeakUtt,1)*2,2)'],[0 0.3 0.3 0.5])
-    title(strrep(PairFiles(i).name,'_','-'))
-    xticks([1:60:t_LDiam(end)])
+    Rplot=plot(t_RDiam,RDiam,color='red');
+    yl=ylim();
+    ylim(yl);
+    startStopU = t_LDiam(Speak(:,2:3)); 
+    widthU = startStopU(:,2)-startStopU(:,1);
+    startStopL = t_LDiam(Listen(:,2:3)); 
+    widthL = startStopL(:,2)-startStopL(:,1);
+    % Plot rectangles (Utterance and listening time windows)
+    arrayfun(@(i)rectangle('Position', [startStopU(i,1),yl(1),widthU(i),range(yl)], ...
+    'EdgeColor', 'none', 'FaceColor', [0 1 0 .2]), 1:size(startStopU,1))
+    arrayfun(@(i)rectangle('Position', [startStopL(i,1),yl(1),widthL(i),range(yl)], ...
+    'EdgeColor', 'none', 'FaceColor', [1 0 1 .2]), 1:size(startStopL,1))
+    if ~isempty(Speak)
+        eline1=line(NaN,NaN,'LineWidth',2,'Color',[0 1 0 .2]);
+        eline2=line(NaN,NaN,'LineWidth',2,'Color',[1 0 1 .2]);
+        legend([Lplot Rplot eline1 eline2],{'Diameter Left','Diameter Right','Utterance windows','Listening windows'})
+    else
+        disp(['Warning: No associated Utterance/Listening data for file ', PairFiles(i).name, '.']);
+        legend([Lplot Rplot],{'Diameter Left','Diameter Right'})
+    end
+    sgtitle(strrep(PairFiles(i).name,'_','-'))
+    xticks([0:30:t_LDiam(end)])
     xlabel('Time [s]')
     ylabel('Pupil diameter [mm]')
-    legend('Diameter Left','Diameter Right','Speaking Utterance', 'Listening Utterance')
     
+    subplot(2,2,3)
+    % Start/End Diameter Sum (for averaging)
+    SDSum=zeros(1,Param.Fs*(TimeEndW+TimeStartW)); 
+    EDSum=SDSum;
+    if ~isempty(Speak)
+        hold on
+        for j=1:size(Speak,1)
+            plot(linspace(-TimeStartW,TimeEndW,Param.Fs*(TimeEndW+TimeStartW)),...
+                 Diameter(SWSpeakIdx(j,1):SWSpeakIdx(j,3)-1),color=[0 1 0 .2],LineWidth=0.3)
+            SDSum=SDSum+Diameter(SWSpeakIdx(j,1):SWSpeakIdx(j,3)-1);
+        end
+        plot(linspace(-TimeStartW,TimeEndW,Param.Fs*(TimeEndW+TimeStartW)),...
+             SDSum./size(Speak,1),color=[1 0 0 0.8],LineWidth=1)
+        xline(0,"--")
+        xticks([-TimeStartW:1:TimeEndW])
+        title('Utterance-evoked pupil response')
+        xlabel('Time [s]')
+        ylabel('Pupil diameter [mm]')
+    end
+    
+    subplot(2,2,4)
+    if ~isempty(Listen)
+        hold on
+        for j=1:size(Listen,1)
+            plot(linspace(-TimeStartW,TimeEndW,Param.Fs*(TimeEndW+TimeStartW)),...
+                 Diameter(SWListenIdx(j,1):SWListenIdx(j,3)-1),color=[1 0 1 0.2],LineWidth=0.3)
+             EDSum=EDSum+Diameter(SWListenIdx(j,1):SWListenIdx(j,3)-1);
+        end
+        plot(linspace(-TimeStartW,TimeEndW,Param.Fs*(TimeEndW+TimeStartW)),...
+             EDSum./size(Listen,1),color=[1 0 0 0.8],LineWidth=1)
+        xline(0,"--")
+        xticks([-TimeStartW:1:TimeEndW])
+        title('Listening-evoked pupil response')
+        xlabel('Time [s]')
+        ylabel('Pupil diameter [mm]')
+    end
     
 end
