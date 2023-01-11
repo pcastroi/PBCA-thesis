@@ -64,19 +64,19 @@ for q=1:numel(subDirs)
         [Min idx_decision] = min([sum(LMetadata.Isnan) sum(RMetadata.Isnan)]);
         if idx_decision == 1
             Diameter = LDiam;
-            DiameterRaw = LDiamRaw;
+            DiameterRaw = LDiamRaw';
             eyeChosen = 'Left';
             DiamNaN = sum(LMetadata.Isnan);
         elseif idx_decision == 2
             Diameter = RDiam;
-            DiameterRaw = RDiamRaw;
+            DiameterRaw = RDiamRaw';
             eyeChosen = 'Right';
             DiamNaN = sum(RMetadata.Isnan);
         end
         
         % Reject a file if the chosen eye data has too many NaNs
         if DiamNaN/length(Diameter) >= RejectRatio
-            disp(['Warning: File ',PairFiles(i).folder, '\', PairFiles(i).name, ' was rejected because it contains too many NaNs (',num2str(DiamNaN/length(Diameter)),'%).'])
+            disp(['Warning: File ',PairFiles(i).folder, PairFiles(i).name, ' was rejected because it contains too many NaNs (<= ',num2str(RejectRatio*100),'%).'])
             continue
         end
         % Baseline the Diameter (from start to finish)
@@ -179,7 +179,7 @@ for q=1:numel(subDirs)
             eline2=line(NaN,NaN,'LineWidth',2,'Color',[1 0 1 .2]);
             legend(['Baselined diameter (', eyeChosen,' Eye)'],'Utterance windows','Listening windows')
         else
-            disp(['Warning: No associated Utterance/Listening data for file ', PairFiles(i).folder, '\', PairFiles(i).name, '.']);
+            disp(['Warning: No associated Utterance/Listening data for file ', PairFiles(i).folder, PairFiles(i).name, '.']);
             legend(['Baselined diameter (', eyeChosen,' Eye)'])
         end
         sgtitle(strrep(PairFiles(i).name,'_','-'))

@@ -2,12 +2,12 @@
 % Pathing
 clear all; clc; close all;
 BPath = strsplit(pwd,'PBCA-thesis');
-addpath(genpath('audio\'));
+addpath(genpath('audio\Main2\'));
 addpath([BPath{1} 'Pupil-preprocessing-tools\tools']) % For preprocessing
 
 % Files and Utterances: different conditions
-PairIn=2; % Audios from MainX
-AudFiles=dir('audio\Main2\*.wav');
+PairIn=1; % Audios from Main1
+AudFiles=dir('audio\*.wav');
 PairUtt=load('data\utterances1110.mat');
 PairUtt=PairUtt.Utterances(PairIn,:);
 
