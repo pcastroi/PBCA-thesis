@@ -30,9 +30,13 @@ TimeStartW=1; % [s], time before Utt/Lis starts
 TimeEndW=2; % [s], time after Utt/Lis starts
 TimeStart=20; % [s], time at which simultaneous recording started
 TimeBL=[5,15]; % [s], time chosen for baseline
-AvgPupilSize = zeros(1,numel(PairFiles)); % [mm], avg pupil size (per file)
-AvgPupilSlope = zeros(1,numel(PairFiles)); % [mm/s], avg pupil slope (per file)
+AvgLPupilSize = zeros(1,numel(PairFiles)); % [mm], avg Listening pupil size (per file)
+AvgLPupilSlope = zeros(1,numel(PairFiles)); % [mm/s], avg Listening baselined pupil slope (per file)
+AvgSPupilSize = zeros(1,numel(PairFiles)); % [mm], avg Speaking pupil size (per file)
+AvgSPupilSlope = zeros(1,numel(PairFiles)); % [mm/s], avg Speaking baselined pupil slope (per file)
 AvgTimeUtt = zeros(1,numel(PairFiles)); % [s], avg time of Utterance (per file)
+AvgTimeLis = zeros(1,numel(PairFiles)); % [s], avg time of Listening (per file)
+
 % Run once per file
 for i=1:numel(PairFiles)
     alldata(i) = load([PairFiles(i).folder, '\', PairFiles(i).name]);
@@ -110,20 +114,37 @@ for i=1:numel(PairFiles)
     widthL = startStopL(:,2)-startStopL(:,1);
     
     % Features (of each window): mean slope, mean pupil size
+    % Raw
+    % Speaking
     if ~isempty(Speak)
         for j=1:size(Speak,1)
-            AvgPupilSize(i)=AvgPupilSize(i)+mean(Diameter(Speak(j,2):Speak(j,3)));
-            AvgPupilSlope(i)=AvgPupilSlope(i)+...
+            AvgSPupilSize(i)=AvgSPupilSize(i)+mean(Diameter(Speak(j,2):Speak(j,3)));
+            AvgSPupilSlope(i)=AvgSPupilSlope(i)+...
                 mean(diff(Diameter(Speak(j,2):Speak(j,3)))./diff(t_Diam(Speak(j,2):Speak(j,3)))');
         end
-        AvgPupilSize(i)=AvgPupilSize(i)./j;
-        AvgPupilSlope(i)=AvgPupilSlope(i)./j;
+        AvgSPupilSize(i)=AvgSPupilSize(i)./j;
+        AvgSPupilSlope(i)=AvgSPupilSlope(i)./j;
     else
-        AvgPupilSize(i)=NaN;
-        AvgPupilSlope(i)=NaN;
+        AvgSPupilSize(i)=NaN;
+        AvgSPupilSlope(i)=NaN;
     end
-    % Global mean of utterance per file
+    % Listening
+    if ~isempty(Listen)
+        for j=1:size(Listen,1)
+            AvgLPupilSize(i)=AvgLPupilSize(i)+mean(Diameter(Listen(j,2):Listen(j,3)));
+            AvgLPupilSlope(i)=AvgLPupilSlope(i)+...
+                mean(diff(Diameter(Listen(j,2):Listen(j,3)))./diff(t_Diam(Listen(j,2):Listen(j,3)))');
+        end
+        AvgLPupilSize(i)=AvgLPupilSize(i)./j;
+        AvgLPupilSlope(i)=AvgLPupilSlope(i)./j;
+    else
+        AvgLPupilSize(i)=NaN;
+        AvgLPupilSlope(i)=NaN;
+    end
+    
+    % Average duration of utterance per file
     AvgTimeUtt(i) = mean(Speak(:,1)); % Possible NaNs
+    AvgTimeLis(i)= mean(Listen(:,1)); % Possible NaNs
     
     % Plots
     figure
@@ -198,7 +219,10 @@ for i=1:numel(PairFiles)
     
 end
 
-% Global paramters
-GlobalAvgPupilSize = mean(AvgPupilSize,'omitnan');
-GlobalAvgPupilSlope = mean(AvgPupilSlope,'omitnan');
-GlobalAvgTimeUtt = mean(AvgTimeUtt,'omitnan');
+% Global parameters from Utterance windows 
+GlobalAvgLPupilSize = mean(AvgLPupilSize,'omitnan'); % Avg Listening Diameter
+GlobalAvgLPupilSlope = mean(AvgLPupilSlope,'omitnan'); % Avg Listening Slope
+GlobalAvgSPupilSize = mean(AvgSPupilSize,'omitnan'); % Avg Speaking Diameter
+GlobalAvgSPupilSlope = mean(AvgSPupilSlope,'omitnan'); % Avg Speaking Slope
+GlobalAvgTimeUtt = mean(AvgTimeUtt,'omitnan'); % Avg duration of Utt
+GlobalAvgTimeLis = mean(AvgTimeLis,'omitnan'); % Avg duration of Lis
