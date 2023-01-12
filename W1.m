@@ -2,7 +2,6 @@
 % Pathing
 clear all; clc; close all;
 BPath = strsplit(pwd,'PBCA-thesis');
-addpath(genpath('data\'));
 addpath('tools')
 addpath([BPath{1} 'Pupil-preprocessing-tools\tools']) % For preprocessing
 
@@ -16,49 +15,77 @@ addpath([BPath{1} 'Pupil-preprocessing-tools\tools']) % For preprocessing
 % end
 
 [subDirs] = GetSubDirsFirstLevelOnly('data');
+LoadUtt=load('data\utterances1110.mat');
+
+% Parameters for processing
+Param.Fs = 50; % Sampling frequency of pupil data
+Param.RemoveBeforeAndAfter = [35 100]*1e-3; % Samples within the time range before and after NaNs will set NaNs as well.
+Param.MinLengthNaNRepair = 5; % Drop values (i.e., change to NaN) before and after NaNs only for contiguous NaNs of at least __ samples. 
+LPWinSize = 1; % [s]: Window size of hamming-window for low-pass filtering
+LPWindow = hamming(round(LPWinSize*Param.Fs));
+LPWindow = LPWindow/sum(LPWindow); % Hamming-window
+TimeStartW=1; % [s], time before Utt/Lis starts
+TimeEndW=2; % [s], time after Utt/Lis starts
+TimeStart=20; % [s], time at which simultaneous recording started
+TimeBL=[10,15]; % [s], time chosen for baseline
+RejectRatio = 0.3; % Limit of rejection (ratio of NaNs in data)
 
 % Run through all subfolders once
 for q=1:numel(subDirs)
-
     PairIn = q;
+    
     % Files and Utterances: different conditions
     PairFiles=dir(['data\Main',sprintf('%d',PairIn),'\*.mat']);
-    PairUtt=load('data\utterances1110.mat');
-    PairUtt=PairUtt.Utterances(PairIn,:);
-
-    % Parameters for processing
-    Param.Fs = 50; % Sampling frequency of pupil data
-    Param.RemoveBeforeAndAfter = [35 100]*1e-3; % Samples within the time range before and after NaNs will set NaNs as well.
-    Param.MinLengthNaNRepair = 5; % Drop values (i.e., change to NaN) before and after NaNs only for contiguous NaNs of at least __ samples. 
-    LPWinSize = 0.75; % [s]: Window size of hamming-window for low-pass filtering
-    LPWindow = hamming(round(LPWinSize*Param.Fs));
-    LPWindow = LPWindow/sum(LPWindow); % Hamming-window
-    TimeStartW=1; % [s], time before Utt/Lis starts
-    TimeEndW=2; % [s], time after Utt/Lis starts
-    TimeStart=20; % [s], time at which simultaneous recording started
-    TimeBL=[10,15]; % [s], time chosen for baseline
+    PairUtt=LoadUtt.Utterances(PairIn,:);
+    
+    % Parameters
     AvgLPupilSize = zeros(1,numel(PairFiles)); % [mm], avg Listening pupil size (per file)
     AvgLPupilSlope = zeros(1,numel(PairFiles)); % [mm/s], avg Listening baselined pupil slope (per file)
     AvgSPupilSize = zeros(1,numel(PairFiles)); % [mm], avg Speaking pupil size (per file)
     AvgSPupilSlope = zeros(1,numel(PairFiles)); % [mm/s], avg Speaking baselined pupil slope (per file)
     AvgTimeSpe = zeros(1,numel(PairFiles)); % [s], avg time of Utterance (per file)
     AvgTimeLis = zeros(1,numel(PairFiles)); % [s], avg time of Listening (per file)
-    RejectRatio = 0.3; % Limit of rejection (ratio of NaNs in data)
     
     % Run once per file
     for i=1:numel(PairFiles)
-        alldata(i) = load([PairFiles(i).folder, '\', PairFiles(i).name]);
-        alldata_mat = cell2mat(alldata(i).data);
+        alldata = load([PairFiles(i).folder, '\', PairFiles(i).name]);
+        alldata_mat = cell2mat(alldata.data);
+        
+        % Replace blanks '[]' for 'NaN' in fields diameterLeft and diameterRight
+        [alldata_mat(cellfun(@isempty,{alldata_mat.diameterLeft})).diameterLeft] = deal(NaN);
+        [alldata_mat(cellfun(@isempty,{alldata_mat.diameterRight})).diameterRight] = deal(NaN);        
+        
+        % Extract delay [s] (Duration_timeStamps - Duration_nsamples)
+        EyeAudDelay=alldata_mat(end).timeStamp-alldata_mat(1).timeStamp-length(alldata_mat)/Param.Fs;
 
-        % Preprocessing - Interpolating NaNs
+        % Skip file if the difference in duration from the number of
+        % samples and the duration given by timestamps is bigger than 0.5 s
+        if alldata_mat(end).timeStamp-alldata_mat(1).timeStamp-length(alldata_mat)/Param.Fs > 0.5
+            disp(['Warning: File ',PairFiles(i).folder, '\', PairFiles(i).name, ' was rejected, too much delay (',sprintf('%0.5f',EyeAudDelay),'s total).']);
+            continue
+        end
+        
         LDiamRaw = [alldata_mat.diameterLeft];
         RDiamRaw = [alldata_mat.diameterRight];
+        
+        % Preprocessing - Setting outliers as NaNs (remove artifacts)
+        LThreshOut = [mean(LDiamRaw,'omitnan')-2*std(LDiamRaw,'omitnan'),mean(LDiamRaw,'omitnan')+2*std(LDiamRaw,'omitnan')];
+        RThreshOut = [mean(RDiamRaw,'omitnan')-2*std(RDiamRaw,'omitnan'),mean(RDiamRaw,'omitnan')+2*std(RDiamRaw,'omitnan')];
+        for s=1:length(alldata_mat)
+            if LDiamRaw(1,s) < LThreshOut(1) || LDiamRaw(1,s) > LThreshOut(2)
+                LDiamRaw(1,s)=NaN;
+            elseif RDiamRaw(1,s) < RThreshOut(1) || RDiamRaw(1,s) > RThreshOut(2)
+                RDiamRaw(1,s)=NaN;
+            end
+        end
+        
+        % Processing - Interpolating NaNs
         [LDiam,LMetadata] = preprocpupil(LDiamRaw,Param);
         [RDiam,RMetadata] = preprocpupil(RDiamRaw,Param);
 
-        % Low-Pass Filtering
-        LDiam = conv(LDiam,LPWindow,'same');
-        RDiam = conv(RDiam,LPWindow,'same');
+        % Low-Pass Filtering ('valid' to avoid peak/dip at start/finish)
+        LDiam = conv(LDiam,LPWindow,'valid'); 
+        RDiam = conv(RDiam,LPWindow,'valid');
 
         % Decide 'better' eye results
         [Min idx_decision] = min([sum(LMetadata.Isnan) sum(RMetadata.Isnan)]);
@@ -76,7 +103,7 @@ for q=1:numel(subDirs)
         
         % Reject a file if the chosen eye data has too many NaNs
         if DiamNaN/length(Diameter) >= RejectRatio
-            disp(['Warning: File ',PairFiles(i).folder, '\', PairFiles(i).name, ' was rejected because it contains too many NaNs (',num2str(DiamNaN/length(Diameter)),'%).'])
+            disp(['Warning: File ',PairFiles(i).folder, '\', PairFiles(i).name, ' was rejected because it contains too many NaNs (',num2str(100*DiamNaN/length(Diameter)),'%).'])
             continue
         end
         % Baseline the Diameter (from start to finish)
@@ -111,9 +138,12 @@ for q=1:numel(subDirs)
         Listen = PairUtt{1,SpeCond}.(ListenKey);
         binRes = PairUtt{1,SpeCond}.binRes;
 
-        % Downsample (rounding) Utt from 250 Hz (1/binRes) to 50 Hz
-        Speak(:,2:3)=round(Speak(:,2:3)*binRes*Param.Fs+TimeStart*Param.Fs);
-        Listen(:,2:3)=round(Listen(:,2:3)*binRes*Param.Fs+TimeStart*Param.Fs);
+        % Downsample (rounding) Utt from 250 Hz (1/binRes) to 50 Hz, shift
+        % in time to account for the time at which the audio recording
+        % started (from 0 to 20 s only eye data) and add the relative
+        % delay from eye tracker and audio (changes from file to file)
+        Speak(:,2:3)=round((Speak(:,2:3)*binRes+TimeStart+EyeAudDelay)*Param.Fs);
+        Listen(:,2:3)=round((Listen(:,2:3)*binRes+TimeStart+EyeAudDelay)*Param.Fs);
 
         % Time-locked indexes (based on Start or End of events)
     %     SWSpeakIdx=[Speak(:,2)-TimeStartW*Param.Fs,Speak(:,2),Speak(:,2)+TimeEndW*Param.Fs];
@@ -164,7 +194,7 @@ for q=1:numel(subDirs)
         % Plots
         figure
     %     subplot(2,2,[1 2])
-        plot(t_Diam,BLDiam,color='black');
+        plot(t_Diam,Diameter,color='black');
         hold on
         xline(TimeStart,"--",'HandleVisibility','off')
         yl=ylim();
@@ -234,6 +264,7 @@ for q=1:numel(subDirs)
 
     end
 end
+
 % Global parameters from Utterance windows 
 GlobalAvgLPupilSize = mean(AvgLPupilSize,'omitnan'); % Avg Listening Diameter
 GlobalAvgLPupilSlope = mean(AvgLPupilSlope,'omitnan'); % Avg Listening Slope

@@ -2,12 +2,11 @@
 % Pathing
 clear all; clc; close all;
 BPath = strsplit(pwd,'PBCA-thesis');
-addpath(genpath('audio\'));
 addpath([BPath{1} 'Pupil-preprocessing-tools\tools']) % For preprocessing
 
 % Files and Utterances: different conditions
 PairIn=2; % Audios from MainX
-AudFiles=dir('audio\Main2\*.wav');
+AudFiles=dir(['audio\Main',sprintf('%d',PairIn),'\*.wav']);
 PairUtt=load('data\utterances1110.mat');
 PairUtt=PairUtt.Utterances(PairIn,:);
 
@@ -16,7 +15,7 @@ Param.Fs = 50;
 
 % Run once per file
 for i=1:numel(AudFiles)
-    [AudData,AudFs]=audioread(AudFiles(i).name);
+    [AudData,AudFs]=audioread([AudFiles(i).folder,'\',AudFiles(i).name]);
     if contains(AudFiles(i).name,'talker1')
         SpeakKey = 'utteranceCH1';
     elseif contains(AudFiles(i).name,'talker2')
