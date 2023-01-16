@@ -28,6 +28,7 @@ TimeStartW=1; % [s], time before Utt/Lis starts
 TimeEndW=2; % [s], time after Utt/Lis starts
 TimeStart=20; % [s], time at which simultaneous recording started
 TimeBL=[10,15]; % [s], time chosen for baseline
+TimeMinWin = 0.5;% [s], Minimum time of a window
 RejectRatio = 0.3; % Rejection threshold based on the ratio of NaNs in data
 RejectDelay = 0.5; % [s], Rejection threshold based on delay between timestamps and n-samples
 NFilesMax = 16; % Max number of files
@@ -167,16 +168,20 @@ for q=1:numel(subDirs)
             SpeCond = SpeB + 7;
         end
 
-        Speak = PairUtt{1,SpeCond}.(SpeakKey);
-        Listen = PairUtt{1,SpeCond}.(ListenKey);
+        SpeakRaw = PairUtt{1,SpeCond}.(SpeakKey);
+        ListenRaw = PairUtt{1,SpeCond}.(ListenKey);
         binRes = PairUtt{1,SpeCond}.binRes;
 
         % Downsample (rounding) Utt from 250 Hz (1/binRes) to 50 Hz, shift
         % in time to account for the time at which the audio recording
         % started (from 0 to 20 s only eye data)
-        Speak(:,2:3)=round((Speak(:,2:3)*binRes+TimeStart)*Param.Fs);
-        Listen(:,2:3)=round((Listen(:,2:3)*binRes+TimeStart)*Param.Fs);
+        SpeakRaw(:,2:3)=round((SpeakRaw(:,2:3)*binRes+TimeStart)*Param.Fs);
+        ListenRaw(:,2:3)=round((ListenRaw(:,2:3)*binRes+TimeStart)*Param.Fs);
 
+        % Discard windows if duration is < TimeMinWin
+        Speak = SpeakRaw(SpeakRaw(:,1)>TimeMinWin,:);
+        Listen = ListenRaw(ListenRaw(:,1)>TimeMinWin,:);
+        
         % Time-locked indexes (based on Start or End of events)
     %     SWSpeakIdx=[Speak(:,2)-TimeStartW*Param.Fs,Speak(:,2),Speak(:,2)+TimeEndW*Param.Fs];
     %     SWListenIdx=[Listen(:,2)-TimeStartW*Param.Fs,Listen(:,2),Listen(:,2)+TimeEndW*Param.Fs];
