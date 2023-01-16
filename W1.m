@@ -1,4 +1,4 @@
-%% PBCA-Thesis - Week 1, 2 - Processing existing pupil data
+%% PBCA-Thesis - Week 1, 2, 3 - Processing existing pupil data
 % Pathing
 clear all; clc; close all;
 BPath = strsplit(pwd,'PBCA-thesis');
@@ -28,7 +28,17 @@ TimeStartW=1; % [s], time before Utt/Lis starts
 TimeEndW=2; % [s], time after Utt/Lis starts
 TimeStart=20; % [s], time at which simultaneous recording started
 TimeBL=[10,15]; % [s], time chosen for baseline
-RejectRatio = 0.3; % Limit of rejection (ratio of NaNs in data)
+RejectRatio = 0.3; % Rejection threshold based on the ratio of NaNs in data
+RejectDelay = 0.5; % [s], Rejection threshold based on delay between timestamps and n-samples
+NFilesMax = 16; % Max number of files
+
+% Initialize variables
+AvgLPupilSize = zeros(numel(subDirs),NFilesMax); % [mm], avg Listening pupil size (per file)
+AvgLPupilSlope = zeros(numel(subDirs),NFilesMax); % [mm/s], avg Listening baselined pupil slope (per file)
+AvgSPupilSize = zeros(numel(subDirs),NFilesMax); % [mm], avg Speaking pupil size (per file)
+AvgSPupilSlope = zeros(numel(subDirs),NFilesMax); % [mm/s], avg Speaking baselined pupil slope (per file)
+AvgTimeSpe = zeros(numel(subDirs),NFilesMax); % [s], avg time of Utterance (per file)
+AvgTimeLis = zeros(numel(subDirs),NFilesMax); % [s], avg time of Listening (per file)
 
 % Run through all subfolders once
 for q=1:numel(subDirs)
@@ -38,13 +48,15 @@ for q=1:numel(subDirs)
     PairFiles=dir(['data\Main',sprintf('%d',PairIn),'\*.mat']);
     PairUtt=LoadUtt.Utterances(PairIn,:);
     
-    % Parameters
-    AvgLPupilSize = zeros(1,numel(PairFiles)); % [mm], avg Listening pupil size (per file)
-    AvgLPupilSlope = zeros(1,numel(PairFiles)); % [mm/s], avg Listening baselined pupil slope (per file)
-    AvgSPupilSize = zeros(numel(subDirs),numel(PairFiles)); % [mm], avg Speaking pupil size (per file)
-    AvgSPupilSlope = zeros(numel(subDirs),numel(PairFiles)); % [mm/s], avg Speaking baselined pupil slope (per file)
-    AvgTimeSpe = zeros(numel(subDirs),numel(PairFiles)); % [s], avg time of Utterance (per file)
-    AvgTimeLis = zeros(numel(subDirs),numel(PairFiles)); % [s], avg time of Listening (per file)
+    % Assign NaNs - Number of files in folder <= NFilesMax
+    if numel(PairFiles) < NFilesMax
+        AvgSPupilSize(q,numel(PairFiles):end)=NaN;
+        AvgSPupilSlope(q,numel(PairFiles):end)=NaN;
+        AvgLPupilSize(q,numel(PairFiles):end)=NaN;
+        AvgLPupilSlope(q,numel(PairFiles):end)=NaN;
+        AvgTimeSpe(q,numel(PairFiles):end)=NaN;
+        AvgTimeLis(q,numel(PairFiles):end)=NaN;
+    end
     
     % Run once per file
     for i=1:numel(PairFiles)
@@ -60,8 +72,14 @@ for q=1:numel(subDirs)
 
         % Skip file if the difference in duration from the number of
         % samples and the duration given by timestamps is bigger than 0.5 s
-        if EyeAudDelay > 0.5
-            disp(['Warning: File ',PairFiles(i).folder, '\', PairFiles(i).name, ' was rejected, too much delay (',sprintf('%0.5f',EyeAudDelay),'s total).']);
+        if EyeAudDelay > RejectDelay
+            disp(['Warning: File ',PairFiles(i).folder, '\', PairFiles(i).name, ' was rejected, too much delay (',sprintf('%0.2f',EyeAudDelay),'s).']);
+            AvgSPupilSize(q,i)=NaN;
+            AvgSPupilSlope(q,i)=NaN;
+            AvgLPupilSize(q,i)=NaN;
+            AvgLPupilSlope(q,i)=NaN;
+            AvgTimeSpe(q,i)=NaN;
+            AvgTimeLis(q,i)=NaN;
             continue
         end
         
@@ -84,13 +102,18 @@ for q=1:numel(subDirs)
         [RDiam,RMetadata] = preprocpupil(RDiamRaw,Param);
 
         % Low-Pass Filtering
-        LDiamConv = conv(LDiam,LPWindow,'full'); 
-        RDiamConv = conv(RDiam,LPWindow,'full');
-        LDiam = LDiamConv(Param.Fs:length(LDiam)+Param.Fs-1)
-% Seems as though artifacts at start and end are not easily removable.
-% figure;plot(LDiam,'k');hold on;plot(conv(LDiam,LPWindow,'same'));plot(conv(LDiam,LPWindow,'valid'));plot(conv(LDiam,LPWindow,'full'));legend('Diameter',['same: ', sprintf('%0.5f',numel(conv(LDiam,LPWindow,'same'))), ' samples'],['valid: ', sprintf('%0.5f',numel(conv(LDiam,LPWindow,'valid'))), ' samples'],['full: ', sprintf('%0.5f',numel(conv(LDiam,LPWindow,'full'))), ' samples'])
-% https://se.mathworks.com/matlabcentral/answers/358022-how-to-remove-artifacts-from-a-signal
-
+        LDiamConv = conv(LDiam,LPWindow,'same'); 
+        RDiamConv = conv(RDiam,LPWindow,'same');
+        
+        % Remove start/end artifacts (peak/dip) originated from Low-Pass Filtering
+        LDiamConv(1:length(LPWindow)/2-1) = mean(LDiam(1:length(LPWindow)/2-1));
+        LDiamConv(end-length(LPWindow)/2-1:end) = mean(LDiam(end-length(LPWindow)/2-1:end));
+        RDiamConv(1:length(LPWindow)/2-1) = mean(RDiam(1:length(LPWindow)/2-1));
+        RDiamConv(end-length(LPWindow)/2-1:end) = mean(RDiam(end-length(LPWindow)/2-1:end));
+        
+        LDiam = LDiamConv;
+        RDiam = RDiamConv;
+        
         % Decide 'better' eye results
         [Min idx_decision] = min([sum(LMetadata.Isnan) sum(RMetadata.Isnan)]);
         if idx_decision == 1
@@ -107,11 +130,17 @@ for q=1:numel(subDirs)
         
         % Reject a file if the chosen eye data has too many NaNs
         if DiamNaN/length(Diameter) >= RejectRatio
-            disp(['Warning: File ',PairFiles(i).folder, '\', PairFiles(i).name, ' was rejected because it contains too many NaNs (',num2str(100*DiamNaN/length(Diameter)),'%).'])
+            disp(['Warning: File ',PairFiles(i).folder, '\', PairFiles(i).name, ' was rejected because it contains too many NaNs (',sprintf('%0.2f',100*DiamNaN/length(Diameter)),'%).'])
+            AvgSPupilSize(q,i)=NaN;
+            AvgSPupilSlope(q,i)=NaN;
+            AvgLPupilSize(q,i)=NaN;
+            AvgLPupilSlope(q,i)=NaN;
+            AvgTimeSpe(q,i)=NaN;
+            AvgTimeLis(q,i)=NaN;
             continue
         end
-        % Baseline the Diameter (from start to finish)
-        BLDiam = mean(Diameter(TimeBL(1)*Param.Fs:TimeBL(2)*Param.Fs))-Diameter;
+        % Baseline the Diameter (subsctractively)
+        BLDiam = mean(Diameter(TimeBL(1)*Param.Fs:TimeBL(2)*Param.Fs-1))-Diameter;
 
         % Retrieve Utterances
         if contains(PairFiles(i).name,'P1')
@@ -156,72 +185,74 @@ for q=1:numel(subDirs)
 
         % Time vectors and idx for plotting
         t_Diam = linspace(1,length(BLDiam)./Param.Fs,length(BLDiam));
-        disp(['Time in between last Speaking window and end of recording: ',sprintf('%0.5f',(length(Diameter)-Speak(end,3))/Param.Fs)])
-        disp(['Time in between last Listening window and end of recording: ',sprintf('%0.5f',(length(Diameter)-Listen(end,3))/Param.Fs)])
+%         disp(['Time in between last Speaking window and end of recording: ',sprintf('%0.5f',(length(Diameter)-Speak(end,3))/Param.Fs)])
+%         disp(['Time in between last Listening window and end of recording: ',sprintf('%0.5f',(length(Diameter)-Listen(end,3))/Param.Fs)])
         startStopS = t_Diam(Speak(:,2:3)); 
         widthU = startStopS(:,2)-startStopS(:,1);
         startStopL = t_Diam(Listen(:,2:3)); 
         widthL = startStopL(:,2)-startStopL(:,1);
 
-        % Features (of each window): mean slope, mean pupil size
-        % Raw
-        % Speaking
-        if ~isempty(Speak)
+        % Features (each window): mean slope baselined, mean pupil raw
+        % Speaking & Listening
+        if ~isempty(Speak) && ~isempty(Listen)
             for j=1:size(Speak,1)
                 AvgSPupilSize(q,i)=AvgSPupilSize(q,i)+mean(Diameter(Speak(j,2):Speak(j,3)));
-                Slope=polyfit(t_Diam(Speak(j,2):Speak(j,3)),Diameter(Speak(j,2):Speak(j,3)),1);
+                Slope=polyfit(t_Diam(Speak(j,2):Speak(j,3)),BLDiam(Speak(j,2):Speak(j,3)),1);
                 AvgSPupilSlope(q,i)=AvgSPupilSlope(q,i)+Slope(1);
-                    
             end
             AvgSPupilSize(q,i)=AvgSPupilSize(q,i)./j;
             AvgSPupilSlope(q,i)=AvgSPupilSlope(q,i)./j;
-        else
-            AvgSPupilSize(q,i)=NaN;
-            AvgSPupilSlope(q,i)=NaN;
-        end
-        % Listening
-        if ~isempty(Listen)
+            
             for j=1:size(Listen,1)
                 AvgLPupilSize(q,i)=AvgLPupilSize(q,i)+mean(Diameter(Listen(j,2):Listen(j,3)));
-                AvgLPupilSlope(q,i)=AvgLPupilSlope(q,i)+...
-                    mean(diff(Diameter(Listen(j,2):Listen(j,3)))./diff(t_Diam(Listen(j,2):Listen(j,3)))');
+                Slope=polyfit(t_Diam(Listen(j,2):Listen(j,3)),BLDiam(Listen(j,2):Listen(j,3)),1);
+                AvgLPupilSlope(q,i)=AvgLPupilSlope(q,i)+Slope(1);
             end
             AvgLPupilSize(q,i)=AvgLPupilSize(q,i)./j;
             AvgLPupilSlope(q,i)=AvgLPupilSlope(q,i)./j;
+            if (length(Diameter)-Speak(end,3))/Param.Fs > EyeAudDelay && (length(Diameter)-Listen(end,3))/Param.Fs > EyeAudDelay
+                OutTxt = "Yes";
+            else
+                OutTxt = "Nop";
+            end
+            
+            disp(['Time diff [Speaking, Listening] = [',sprintf('%0.5f',(length(Diameter)-Speak(end,3))/Param.Fs),', ',sprintf('%0.5f',(length(Diameter)-Listen(end,3))/Param.Fs) '] s. // Eye-Aud-Delay =',sprintf('%0.5f',EyeAudDelay),' s. // Shift-able? = ',OutTxt]);
+
         else
+            disp(['Warning: No associated Utterance/Listening data for file ', PairFiles(i).folder, '\', PairFiles(i).name, '.']);
+            AvgSPupilSize(q,i)=NaN;
+            AvgSPupilSlope(q,i)=NaN;
             AvgLPupilSize(q,i)=NaN;
             AvgLPupilSlope(q,i)=NaN;
+            AvgTimeSpe(q,i)=NaN;
+            AvgTimeLis(q,i)=NaN;
+            continue
         end
 
         % Average duration of utterance per file
         AvgTimeSpe(q,i) = mean(Speak(:,1)); % Possible NaNs
         AvgTimeLis(q,i)= mean(Listen(:,1)); % Possible NaNs
-
+        
         % Plots
-        figure
-    %     subplot(2,2,[1 2])
-        plot(t_Diam,Diameter,color='black');
-        hold on
-        xline(TimeStart,"--",'HandleVisibility','off')
-        yl=ylim();
-        ylim(yl);
-        % Plot rectangles (Utterance and listening time windows)
-        arrayfun(@(i)rectangle('Position', [startStopS(i,1),yl(1),widthU(i),range(yl)], ...
-        'EdgeColor', 'none', 'FaceColor', [0 1 0 .2]), 1:size(startStopS,1))
-        arrayfun(@(i)rectangle('Position', [startStopL(i,1),yl(1),widthL(i),range(yl)], ...
-        'EdgeColor', 'none', 'FaceColor', [1 0 1 .2]), 1:size(startStopL,1))
-        if ~isempty(Speak)
-            eline1=line(NaN,NaN,'LineWidth',2,'Color',[0 1 0 .2]);
-            eline2=line(NaN,NaN,'LineWidth',2,'Color',[1 0 1 .2]);
-            legend(['Baselined diameter (', eyeChosen,' Eye)'],'Utterance windows','Listening windows')
-        else
-            disp(['Warning: No associated Utterance/Listening data for file ', PairFiles(i).folder, '\', PairFiles(i).name, '.']);
-            legend(['Baselined diameter (', eyeChosen,' Eye)'])
-        end
-        sgtitle(strrep(PairFiles(i).name,'_','-'))
-        xticks([0:TimeStart:t_Diam(end)])
-        xlabel('Time [s]')
-        ylabel('Pupil baseline difference [mm]');
+%         figure
+%     %     subplot(2,2,[1 2])
+%         plot(t_Diam,Diameter,color='black');
+%         hold on
+%         xline(TimeStart,"--",'HandleVisibility','off')
+%         yl=ylim();
+%         ylim(yl);
+%         % Plot rectangles (Utterance and listening time windows)
+%         arrayfun(@(i)rectangle('Position', [startStopS(i,1),yl(1),widthU(i),range(yl)], ...
+%         'EdgeColor', 'none', 'FaceColor', [0 1 0 .2]), 1:size(startStopS,1))
+%         arrayfun(@(i)rectangle('Position', [startStopL(i,1),yl(1),widthL(i),range(yl)], ...
+%         'EdgeColor', 'none', 'FaceColor', [1 0 1 .2]), 1:size(startStopL,1))
+%         eline1=line(NaN,NaN,'LineWidth',2,'Color',[0 1 0 .2]);
+%         eline2=line(NaN,NaN,'LineWidth',2,'Color',[1 0 1 .2]);
+%         legend(['Baselined diameter (', eyeChosen,' Eye)'],'Speaking windows','Listening windows')
+%         sgtitle(strrep(PairFiles(i).name,'_','-'))
+%         xticks([0:TimeStart:t_Diam(end)])
+%         xlabel('Time [s]')
+%         ylabel('Pupil baseline difference [mm]');
 
     %     subplot(2,2,3)
     %     % Start/End Diameter Sum (for averaging)
@@ -272,9 +303,9 @@ for q=1:numel(subDirs)
 end
 
 % Global parameters from Utterance windows 
-GlobalAvgLPupilSize = mean(AvgLPupilSize,'omitnan'); % Avg Listening Diameter
-GlobalAvgLPupilSlope = mean(AvgLPupilSlope,'omitnan'); % Avg Listening Slope
-GlobalAvgSPupilSize = mean(AvgSPupilSize,'omitnan'); % Avg Speaking Diameter
-GlobalAvgSPupilSlope = mean(AvgSPupilSlope,'omitnan'); % Avg Speaking Slope
-GlobalAvgTimeUtt = mean(AvgTimeSpe,'omitnan'); % Avg duration of Utt
-GlobalAvgTimeLis = mean(AvgTimeLis,'omitnan'); % Avg duration of Lis
+GlobalAvgLPupilSize = mean(mean(AvgLPupilSize,'omitnan')); % Avg Listening Diameter
+GlobalAvgLPupilSlope = mean(mean(AvgLPupilSlope,'omitnan')); % Avg Listening Slope
+GlobalAvgSPupilSize = mean(mean(AvgSPupilSize,'omitnan')); % Avg Speaking Diameter
+GlobalAvgSPupilSlope = mean(mean(AvgSPupilSlope,'omitnan')); % Avg Speaking Slope
+GlobalAvgTimeSpe = mean(mean(AvgTimeSpe,'omitnan')); % Avg duration of Utt
+GlobalAvgTimeLis = mean(mean(AvgTimeLis,'omitnan')); % Avg duration of Lis
