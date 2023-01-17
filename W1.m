@@ -24,8 +24,8 @@ Param.MinLengthNaNRepair = 5; % Drop values (i.e., change to NaN) before and aft
 LPWinSize = 1; % [s]: Window size of hamming-window for low-pass filtering
 LPWindow = hamming(round(LPWinSize*Param.Fs));
 LPWindow = LPWindow/sum(LPWindow); % Hamming-window
-TimeStartW=1; % [s], time before Utt/Lis starts
-TimeEndW=2; % [s], time after Utt/Lis starts
+TimeStartW=0.5; % [s], time before Utt/Lis starts
+TimeEndW=0; % [s], time after Utt/Lis starts
 TimeStart=20; % [s], time at which simultaneous recording started
 TimeBL=[10,15]; % [s], time chosen for baseline
 TimeMinWin = 0.5;% [s], Minimum time of a window
@@ -183,15 +183,13 @@ for q=1:numel(subDirs)
         Listen = ListenRaw(ListenRaw(:,1)>TimeMinWin,:);
         
         % Time-locked indexes (based on Start or End of events)
-    %     SWSpeakIdx=[Speak(:,2)-TimeStartW*Param.Fs,Speak(:,2),Speak(:,2)+TimeEndW*Param.Fs];
-    %     SWListenIdx=[Listen(:,2)-TimeStartW*Param.Fs,Listen(:,2),Listen(:,2)+TimeEndW*Param.Fs];
-    %     EWSpeakIdx=[Speak(:,3)-TimeStartW*Param.Fs,Speak(:,3),Speak(:,3)+TimeEndW*Param.Fs];
-    %     EWListenIdx=[Listen(:,3)-TimeStartW*Param.Fs,Listen(:,3),Listen(:,3)+TimeEndW*Param.Fs];
+        SWSpeakIdx=[Speak(:,2)-TimeStartW*Param.Fs,Speak(:,2),Speak(:,2)+TimeEndW*Param.Fs];
+        SWListenIdx=[Listen(:,2)-TimeStartW*Param.Fs,Listen(:,2),Listen(:,2)+TimeEndW*Param.Fs];
+        EWSpeakIdx=[Speak(:,3)-TimeStartW*Param.Fs,Speak(:,3),Speak(:,3)+TimeEndW*Param.Fs];
+        EWListenIdx=[Listen(:,3)-TimeStartW*Param.Fs,Listen(:,3),Listen(:,3)+TimeEndW*Param.Fs];
 
         % Time vectors and idx for plotting
         t_Diam = linspace(1,length(BLDiam)./Param.Fs,length(BLDiam));
-%         disp(['Time in between last Speaking window and end of recording: ',sprintf('%0.5f',(length(Diameter)-Speak(end,3))/Param.Fs)])
-%         disp(['Time in between last Listening window and end of recording: ',sprintf('%0.5f',(length(Diameter)-Listen(end,3))/Param.Fs)])
         startStopS = t_Diam(Speak(:,2:3)); 
         widthU = startStopS(:,2)-startStopS(:,1);
         startStopL = t_Diam(Listen(:,2:3)); 
@@ -221,7 +219,7 @@ for q=1:numel(subDirs)
                 OutTxt = "Nop";
             end
             
-            disp(['Time diff [Speaking, Listening] = [',sprintf('%0.5f',(length(Diameter)-Speak(end,3))/Param.Fs),', ',sprintf('%0.5f',(length(Diameter)-Listen(end,3))/Param.Fs) '] s. // Eye-Aud-Delay =',sprintf('%0.5f',EyeAudDelay),' s. // Shift-able? = ',OutTxt]);
+%             disp(['Time diff [Speaking, Listening] = [',sprintf('%0.5f',(length(Diameter)-Speak(end,3))/Param.Fs),', ',sprintf('%0.5f',(length(Diameter)-Listen(end,3))/Param.Fs) '] s. // Eye-Aud-Delay =',sprintf('%0.5f',EyeAudDelay),' s. // Shift-able? = ',OutTxt]);
 
         else
             disp(['Warning: No associated Utterance/Listening data for file ', PairFiles(i).folder, '\', PairFiles(i).name, '.']);
@@ -234,76 +232,73 @@ for q=1:numel(subDirs)
             continue
         end
 
-        % Average duration of utterance per file
+        % Average duration of speaking/listening per file
         AvgTimeSpe(q,i) = mean(Speak(:,1)); % Possible NaNs
         AvgTimeLis(q,i)= mean(Listen(:,1)); % Possible NaNs
         
         % Plots
-%         figure
-%     %     subplot(2,2,[1 2])
-%         plot(t_Diam,Diameter,color='black');
-%         hold on
-%         xline(TimeStart,"--",'HandleVisibility','off')
-%         yl=ylim();
-%         ylim(yl);
-%         % Plot rectangles (Utterance and listening time windows)
-%         arrayfun(@(i)rectangle('Position', [startStopS(i,1),yl(1),widthU(i),range(yl)], ...
-%         'EdgeColor', 'none', 'FaceColor', [0 1 0 .2]), 1:size(startStopS,1))
-%         arrayfun(@(i)rectangle('Position', [startStopL(i,1),yl(1),widthL(i),range(yl)], ...
-%         'EdgeColor', 'none', 'FaceColor', [1 0 1 .2]), 1:size(startStopL,1))
-%         eline1=line(NaN,NaN,'LineWidth',2,'Color',[0 1 0 .2]);
-%         eline2=line(NaN,NaN,'LineWidth',2,'Color',[1 0 1 .2]);
-%         legend(['Baselined diameter (', eyeChosen,' Eye)'],'Speaking windows','Listening windows')
-%         sgtitle(strrep(PairFiles(i).name,'_','-'))
-%         xticks([0:TimeStart:t_Diam(end)])
-%         xlabel('Time [s]')
-%         ylabel('Pupil baseline difference [mm]');
+        figure
+        subplot(2,2,[1 2])
+        plot(t_Diam,Diameter,color='black');
+        hold on
+        xline(TimeStart,"--",'HandleVisibility','off')
+        yl=ylim();
+        ylim(yl);
+        % Plot rectangles (Utterance and listening time windows)
+        arrayfun(@(i)rectangle('Position', [startStopS(i,1),yl(1),widthU(i),range(yl)], ...
+        'EdgeColor', 'none', 'FaceColor', [0 1 0 .2]), 1:size(startStopS,1))
+        arrayfun(@(i)rectangle('Position', [startStopL(i,1),yl(1),widthL(i),range(yl)], ...
+        'EdgeColor', 'none', 'FaceColor', [1 0 1 .2]), 1:size(startStopL,1))
+        eline1=line(NaN,NaN,'LineWidth',2,'Color',[0 1 0 .2]);
+        eline2=line(NaN,NaN,'LineWidth',2,'Color',[1 0 1 .2]);
+        legend(['Baselined diameter (', eyeChosen,' Eye)'],'Speaking windows','Listening windows')
+        sgtitle(strrep(PairFiles(i).name,'_','-'))
+        xticks([0:TimeStart:t_Diam(end)])
+        xlabel('Time [s]')
+        ylabel('Pupil baseline difference [mm]');
 
-    %     subplot(2,2,3)
-    %     % Start/End Diameter Sum (for averaging)
-    %     SDWSum = zeros(1,Param.Fs*(TimeEndW+TimeStartW)); % Sum Speak-Diam-Window
-    %     k=0;
-    %     if ~isempty(Speak)
-    %         hold on
-    %         for j=1:size(Speak,1)
-    %             if SWSpeakIdx(j,3)-1 <= length(BLDiam)
-    %                 plot(linspace(-TimeStartW,TimeEndW,Param.Fs*(TimeEndW+TimeStartW)),...
-    %                     BLDiam(SWSpeakIdx(j,1):SWSpeakIdx(j,3)-1),color=[0 1 0 .2],LineWidth=0.3)
-    %                 k=k+1;
-    %                 SDWSum=SDWSum+BLDiam(SWSpeakIdx(j,1):SWSpeakIdx(j,3)-1);
-    %             end
-    %         end
-    %         plot(linspace(-TimeStartW,TimeEndW,Param.Fs*(TimeEndW+TimeStartW)),...
-    %              SDWSum./k,color=[1 0 0 0.8],LineWidth=1.5)
-    %         xline(0,"--")
-    %         xticks([-TimeStartW:1:TimeEndW])
-    %         title('Baselined utterance-evoked pupil response')
-    %         xlabel('Time [s]')
-    %         ylabel('Pupil baseline difference [mm]');
-    %     end
-    %     
-    %     subplot(2,2,4)
-    %     LDWSum = zeros(1,Param.Fs*(TimeEndW+TimeStartW)); % Sum Listen-Diam-Window
-    %     k=0;
-    %     if ~isempty(Listen)
-    %         hold on
-    %         for j=1:size(Listen,1)
-    %             if SWListenIdx(j,3)-1 <= length(BLDiam)
-    %                 plot(linspace(-TimeStartW,TimeEndW,Param.Fs*(TimeEndW+TimeStartW)),...
-    %                      BLDiam(SWListenIdx(j,1):SWListenIdx(j,3)-1),color=[1 0 1 0.2],LineWidth=0.3)
-    %                 k=k+1;
-    %                 LDWSum=LDWSum+BLDiam(SWListenIdx(j,1):SWListenIdx(j,3)-1);
-    %             end
-    %         end
-    %         plot(linspace(-TimeStartW,TimeEndW,Param.Fs*(TimeEndW+TimeStartW)),...
-    %              LDWSum./k,color=[1 0 0 0.8],LineWidth=1.5)
-    %         xline(0,"--")
-    %         xticks([-TimeStartW:1:TimeEndW])
-    %         title('Baselined listening-evoked pupil response')
-    %         xlabel('Time [s]')
-    %         ylabel('Pupil baseline difference [mm]');
-    %     end
-
+        subplot(2,2,3)
+        % Speak-Diam-Window SUM
+        SDWSum = zeros(size(Speak,1),ceil(Param.Fs*(TimeStartW+max(Speak(:,1)))));
+        k=0;
+        hold on
+        for j=1:size(Speak,1)
+            if SWSpeakIdx(j,3)-1 <= length(BLDiam)
+                plot(linspace(-TimeStartW,Speak(j,1),length(SWSpeakIdx(j,1):Speak(j,3)-1)),...
+                    BLDiam(SWSpeakIdx(j,1):Speak(j,3)-1),color=[0 1 0 .2],LineWidth=0.3)
+                k=k+1;
+                % Add zero-padding
+                SDWSum(j,:)=[BLDiam(SWSpeakIdx(j,1):Speak(j,3)-1);NaN*ones(1,length(SDWSum)-length(SWSpeakIdx(j,1):Speak(j,3)-1))'];
+            end
+        end
+        plot(linspace(-TimeStartW,max(Speak(:,1)),length(SDWSum)),...
+             mean(SDWSum,'omitnan'),color=[1 0 0 0.8],LineWidth=1.5)
+        xline(0,"--")
+        xticks([-TimeStartW:TimeStartW:max(Speak(:,1))])
+        title('Baselined speaking-evoked pupil response')
+        xlabel('Time [s]')
+        ylabel('Pupil baseline difference [mm]');
+        
+        subplot(2,2,4)
+        % Listen-Diam-Window SUM
+        LDWSum = zeros(size(Listen,1),ceil(Param.Fs*(TimeStartW+max(Listen(:,1)))));
+        k=0;
+        hold on
+        for j=1:size(Listen,1)
+            if SWListenIdx(j,3)-1 <= length(BLDiam)
+                plot(linspace(-TimeStartW,Listen(j,1),length(SWListenIdx(j,1):Listen(j,3)-1)),...
+                    BLDiam(SWListenIdx(j,1):Listen(j,3)-1),color=[1 0 1 .2],LineWidth=0.3)
+                k=k+1;
+                LDWSum(j,:)=[BLDiam(SWListenIdx(j,1):Listen(j,3)-1);NaN*ones(1,length(LDWSum)-length(SWListenIdx(j,1):Listen(j,3)-1))'];
+            end
+        end
+        plot(linspace(-TimeStartW,max(Listen(:,1)),length(LDWSum)),...
+             mean(LDWSum,'omitnan'),color=[1 0 0 0.8],LineWidth=1.5)
+        xline(0,"--")
+        xticks([-TimeStartW:TimeStartW:max(Listen(:,1))])
+        title('Baselined listening-evoked pupil response')
+        xlabel('Time [s]')
+        ylabel('Pupil baseline difference [mm]');
     end
 end
 
