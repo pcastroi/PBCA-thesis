@@ -6,6 +6,7 @@ addpath([BPath{1} 'Pupil-preprocessing-tools\tools']) % For preprocessing
 
 % Files and Utterances: different conditions
 TobiiFs=50;
+BLDelay=20; % s
 x=0;
 [subDirs] = GetSubDirsFirstLevelOnly('data');
 
@@ -50,8 +51,9 @@ for q=1:numel(subDirs)
         
         [AudData,AudFs]=audioread(['audio\Main',sprintf('%d',PairIn),'\',AudKey]);
         FolderFile = strsplit(PairFiles(i).folder,'\');
+        EyeAudDelay=alldata_mat(end).timeStamp-alldata_mat(1).timeStamp-length(alldata_mat)/TobiiFs;
         if ~isempty(AudKey)
-            disp(['FILE ',int2str(i),' - ',FolderFile{end},' | Tobii duration = ',sprintf('%0.2f',numel(alldata_mat)/TobiiFs),' s | Audio duration = ',sprintf('%0.2f',numel(AudData)/AudFs),' s | DIFF = ',sprintf('%0.5f',numel(alldata_mat)/TobiiFs-numel(AudData)/AudFs),' s']);
+            disp(['FILE ',int2str(i),' - ',FolderFile{end},' | Tobii duration = ',sprintf('%0.2f',numel(alldata_mat)/TobiiFs),' s | Audio duration = ',sprintf('%0.2f',numel(AudData)/AudFs),' s | DIFF = ',sprintf('%0.5f',numel(alldata_mat)/TobiiFs-numel(AudData)/AudFs),' s | Delay timeStamp = ',sprintf('%0.5f',EyeAudDelay),'s | Intrinsic delay = ',sprintf('%0.5f',numel(alldata_mat)/TobiiFs-numel(AudData)/AudFs-EyeAudDelay-BLDelay),'s.']);
         else
             disp(['FILE ',int2str(i),' - ',FolderFile{end},' | No data'])
         end

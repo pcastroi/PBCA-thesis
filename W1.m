@@ -70,7 +70,7 @@ for q=1:numel(subDirs)
         
         % Extract delay [s] (Duration_timeStamps - Duration_nsamples)
         EyeAudDelay=alldata_mat(end).timeStamp-alldata_mat(1).timeStamp-length(alldata_mat)/Param.Fs;
-
+        
         % Skip file if the difference in duration from the number of
         % samples and the duration given by timestamps is bigger than 0.5 s
         if EyeAudDelay > RejectDelay
