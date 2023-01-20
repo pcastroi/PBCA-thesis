@@ -1,7 +1,8 @@
 %% PBCA-Thesis - Week 2 - Making sure audios and Utterances are synchronized
 % Pathing
-clear all; clc; close all;
+% clear all; clc; close all;
 BPath = strsplit(pwd,'PBCA-thesis');
+addpath('tools')
 addpath([BPath{1} 'Pupil-preprocessing-tools\tools']) % For preprocessing
 
 % Files and Utterances: different conditions

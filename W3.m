@@ -2,18 +2,21 @@
 % Pathing
 clear all; clc; close all;
 BPath = strsplit(pwd,'PBCA-thesis');
+addpath('tools')
 addpath([BPath{1} 'Pupil-preprocessing-tools\tools']) % For preprocessing
 
 % Files and Utterances: different conditions
 TobiiFs=50;
+AudFs= 48000;
 BLDelay=20; % s
-x=0;
+xd=zeros(1,96);
+x=1;
 [subDirs] = GetSubDirsFirstLevelOnly('data');
 
 for q=1:numel(subDirs)
     PairIn = q;
     PairFiles=dir(['data\Main',sprintf('%d',PairIn),'\*.mat']);
-    AudFiles=dir(['audio\Main',sprintf('%d',PairIn),'\*.wav']);
+    AudFiles=dir(['audio\Main',sprintf('%d',PairIn),'\*.mat']);
     if isempty(AudFiles)
        continue 
     end
@@ -21,41 +24,46 @@ for q=1:numel(subDirs)
     PairUtt=PairUtt.Utterances(PairIn,:);
     
     for i=1:numel(PairFiles)
-        AudKey=[];
         alldata = load([PairFiles(i).folder, '\', PairFiles(i).name]);
         alldata_mat = cell2mat(alldata.data);
 
         if contains(PairFiles(i).name,'P1')
-            TalkerKey = 'talker1';
+            DelKey = 'delayCH1';
         elseif contains(PairFiles(i).name,'P2')
-            TalkerKey = 'talker2';
+            DelKey = 'delayCH2';
         end
 
         if contains(PairFiles(i).name,'B1')
             RepKey='Rep1';
+            SpeB = 0;
         elseif contains(PairFiles(i).name,'B2')
             RepKey='Rep2';
+            SpeB = 1;
         end
 
         if contains(PairFiles(i).name,'Quiet')
-            CondKey='SpeechNH-Quiet';
+            CondKey='NH-Quiet';
+            SpeCond = SpeB + 1;
         elseif contains(PairFiles(i).name,'Noise60')
-            CondKey='SpeechNH-Noise60';
+            CondKey='NH-Noise60';
+            SpeCond = SpeB + 5;
         elseif contains(PairFiles(i).name,'Noise70')
-            CondKey='SpeechNH-Noise70';
+            CondKey='NH-Noise70';
+            SpeCond = SpeB + 7;
         elseif contains(PairFiles(i).name,'SHL')
-            CondKey='SpeechSHL-Quiet';
+            CondKey='SHL-Quiet';
+            SpeCond = SpeB + 3;
         end
 
-        AudKey = [CondKey,'_',RepKey,'_',TalkerKey,'.wav'];
-        
-        [AudData,AudFs]=audioread(['audio\Main',sprintf('%d',PairIn),'\',AudKey]);
+        AudKey = [CondKey,'_',RepKey,'.mat'];
+        AudData=load(['audio\Main',sprintf('%d',PairIn),'\',AudKey]);
         FolderFile = strsplit(PairFiles(i).folder,'\');
-        EyeAudDelay=alldata_mat(end).timeStamp-alldata_mat(1).timeStamp-length(alldata_mat)/TobiiFs;
-        if ~isempty(AudKey)
-            disp(['FILE ',int2str(i),' - ',FolderFile{end},' | Tobii duration = ',sprintf('%0.2f',numel(alldata_mat)/TobiiFs),' s | Audio duration = ',sprintf('%0.2f',numel(AudData)/AudFs),' s | DIFF = ',sprintf('%0.5f',numel(alldata_mat)/TobiiFs-numel(AudData)/AudFs),' s | Delay timeStamp = ',sprintf('%0.5f',EyeAudDelay),'s | Intrinsic delay = ',sprintf('%0.5f',numel(alldata_mat)/TobiiFs-numel(AudData)/AudFs-EyeAudDelay-BLDelay),'s.']);
-        else
-            disp(['FILE ',int2str(i),' - ',FolderFile{end},' | No data'])
-        end
+        
+        TobAudDelay{q,SpeCond}.(DelKey)(:,1)=numel(alldata_mat)-(size(AudData.outputAll.speech(:,1),1)/AudFs+20)*TobiiFs;
+        TobAudDelay{q,SpeCond}.(DelKey)(:,2)=numel(alldata_mat)/TobiiFs-size(AudData.outputAll.speech(:,1),1)/AudFs-20;
+        TobAudDelay{q,SpeCond}.binRes=1/TobiiFs;
+        xd(:,x)=TobAudDelay{q,SpeCond}.(DelKey)(:,2);
+        x=x+1;
     end
 end
+% TODO: save mat file
