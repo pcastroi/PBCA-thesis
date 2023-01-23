@@ -16,6 +16,7 @@ addpath([BPath{1} 'Pupil-preprocessing-tools\tools']) % For preprocessing
 
 [subDirs] = GetSubDirsFirstLevelOnly('data');
 LoadUtt=load('data\utterances1110.mat');
+LoadDelays=load('data\delays1110.mat');
 
 % Parameters for processing
 Param.Fs = 50; % Sampling frequency of pupil data
@@ -49,6 +50,7 @@ for q=1:numel(subDirs)
     % Files and Utterances: different conditions
     PairFiles=dir(['data\Main',sprintf('%d',PairIn),'\*.mat']);
     PairUtt=LoadUtt.Utterances(PairIn,:);
+    PairDelay=LoadDelays.TobAudDelay(PairIn,:);
     
     % Assign NaNs - Number of files in folder <= NFilesMax
     if numel(PairFiles) < NFilesMax
@@ -141,16 +143,20 @@ for q=1:numel(subDirs)
             AvgTimeLis(q,i)=NaN;
             continue
         end
-        % Baseline the Diameter (subsctractively)
+        % Baseline the Diameter (substractively)
         BLDiam = mean(Diameter(TimeBL(1)*Param.Fs:TimeBL(2)*Param.Fs-1))-Diameter;
 
         % Retrieve Utterances
         if contains(PairFiles(i).name,'P1')
             SpeakKey = 'utteranceCH1';
             ListenKey = 'utteranceCH2';
+            SDelayKey = 'delayCH1';
+            LDelayKey = 'delayCH2';
         elseif contains(PairFiles(i).name,'P2')
             SpeakKey = 'utteranceCH2';
             ListenKey = 'utteranceCH1';
+            SDelayKey = 'delayCH2';
+            LDelayKey = 'delayCH1';
         end
 
         if contains(PairFiles(i).name,'B1')
@@ -171,10 +177,33 @@ for q=1:numel(subDirs)
 
         SpeakRaw = PairUtt{1,SpeCond}.(SpeakKey);
         ListenRaw = PairUtt{1,SpeCond}.(ListenKey);
-        binRes = PairUtt{1,SpeCond}.binRes;
+        binResUtt = PairUtt{1,SpeCond}.binRes;
+        try
+            SDelayRaw = PairDelay{1,SpeCond}.(SDelayKey);
+            LDelayRaw = PairDelay{1,SpeCond}.(LDelayKey);
+        catch ME
+            disp(['Warning: No associated Delay data for file ', PairFiles(i).folder, '\', PairFiles(i).name, '.']);
+            AvgSPupilSize(q,i)=NaN;
+            AvgSPupilSlope(q,i)=NaN;
+            AvgLPupilSize(q,i)=NaN;
+            AvgLPupilSlope(q,i)=NaN;
+            AvgTimeSpe(q,i)=NaN;
+            AvgTimeLis(q,i)=NaN;
+            continue
+        end
+        binResDel = PairDelay{1,SpeCond}.binRes;
 
         if isempty(SpeakRaw) && isempty(ListenRaw)
             disp(['Warning: No associated Utterance/Listening data for file ', PairFiles(i).folder, '\', PairFiles(i).name, '.']);
+            AvgSPupilSize(q,i)=NaN;
+            AvgSPupilSlope(q,i)=NaN;
+            AvgLPupilSize(q,i)=NaN;
+            AvgLPupilSlope(q,i)=NaN;
+            AvgTimeSpe(q,i)=NaN;
+            AvgTimeLis(q,i)=NaN;
+            continue
+        elseif isempty(SDelayRaw) && isempty(LDelayRaw)
+            disp(['Warning: No associated Delay data for file ', PairFiles(i).folder, '\', PairFiles(i).name, '.']);
             AvgSPupilSize(q,i)=NaN;
             AvgSPupilSlope(q,i)=NaN;
             AvgLPupilSize(q,i)=NaN;
@@ -186,9 +215,9 @@ for q=1:numel(subDirs)
 
         % Downsample (rounding) Utt from 250 Hz (1/binRes) to 50 Hz, shift
         % in time to account for the time at which the audio recording
-        % started (from 0 to 20 s only eye data)
-        SpeakRaw(:,2:3)=round((SpeakRaw(:,2:3)*binRes+TimeStart)*Param.Fs);
-        ListenRaw(:,2:3)=round((ListenRaw(:,2:3)*binRes+TimeStart)*Param.Fs);
+        % started (from 0 to 20 s only eye data) plus delay
+        SpeakRaw(:,2:3)=round((SpeakRaw(:,2:3)*binResUtt+TimeStart)*Param.Fs+SDelayRaw(1)/2);
+        ListenRaw(:,2:3)=round((ListenRaw(:,2:3)*binResUtt+TimeStart)*Param.Fs+LDelayRaw(1)/2);
 
         % Merge windows if gap <= TimeMergeGap
 %         for j=1:size(SpeakRaw,1)
@@ -217,8 +246,7 @@ for q=1:numel(subDirs)
         % Discard windows if duration is < TimeMinWin
         Speak = SpeakRaw(SpeakRaw(:,1)>TimeMinWin,:);
         Listen = ListenRaw(ListenRaw(:,1)>TimeMinWin,:);
-        
-        
+          
         % Time-locked indexes (based on Start or End of events)
         SWSpeakIdx=[Speak(:,2)-TimeStartW*Param.Fs,Speak(:,2),Speak(:,2)+TimeEndW*Param.Fs];
         SWListenIdx=[Listen(:,2)-TimeStartW*Param.Fs,Listen(:,2),Listen(:,2)+TimeEndW*Param.Fs];
@@ -264,7 +292,7 @@ for q=1:numel(subDirs)
         % Plots
         figure
         subplot(2,2,[1 2])
-        plot(t_Diam,Diameter,color='black');
+        plot(t_Diam,BLDiam,color='black');
         hold on
         xline(TimeStart,"--",'HandleVisibility','off')
         yl=ylim();

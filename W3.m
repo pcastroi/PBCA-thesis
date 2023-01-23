@@ -1,4 +1,4 @@
-%% PBCA-Thesis - Week 3 - Delay between Tobii and Audio?
+%% PBCA-Thesis - Week 3 - Delay between Tobii and Audio
 % Pathing
 clear all; clc; close all;
 BPath = strsplit(pwd,'PBCA-thesis');
@@ -44,15 +44,15 @@ for q=1:numel(subDirs)
         if contains(PairFiles(i).name,'Quiet')
             CondKey='NH-Quiet';
             SpeCond = SpeB + 1;
+        elseif contains(PairFiles(i).name,'SHL')
+            CondKey='SHL-Quiet';
+            SpeCond = SpeB + 3;
         elseif contains(PairFiles(i).name,'Noise60')
             CondKey='NH-Noise60';
             SpeCond = SpeB + 5;
         elseif contains(PairFiles(i).name,'Noise70')
             CondKey='NH-Noise70';
             SpeCond = SpeB + 7;
-        elseif contains(PairFiles(i).name,'SHL')
-            CondKey='SHL-Quiet';
-            SpeCond = SpeB + 3;
         end
 
         AudKey = [CondKey,'_',RepKey,'.mat'];
@@ -66,4 +66,4 @@ for q=1:numel(subDirs)
         x=x+1;
     end
 end
-% TODO: save mat file
+save("data\delays1110.mat",'TobAudDelay');
