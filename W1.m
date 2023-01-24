@@ -220,32 +220,54 @@ for q=1:numel(subDirs)
         ListenRaw(:,2:3)=round((ListenRaw(:,2:3)*binResUtt+TimeStart)*Param.Fs+LDelayRaw(1)/2);
 
         % Merge windows if gap <= TimeMergeGap
-%         for j=1:size(SpeakRaw,1)
-%             if j < size(SpeakRaw,1)
-%                 if (SpeakRaw(j+1,2)-SpeakRaw(j,3))/Param.Fs <= TimeMergeGap
-%                     Speak(j,2) = SpeakRaw(j,2);
-%                     Speak(j,3) = SpeakRaw(j+1,3);
-%                 else
-%                     Speak(j,:) = SpeakRaw(j,:);
-%                 end
-%             else
-%                 if Speak(end,2)~=SpeakRaw(j-1,2) && Speak(end,3)~=SpeakRaw(j,3)
-%                     Speak(j,:) = SpeakRaw(j,:);
-%                 end
-%             end
-%         end
-%         
-%         
-%         for j=1:size(ListenRaw,1)
-%             
-%         end
-% t_Diam = linspace(1,length(BLDiam)./Param.Fs,length(BLDiam));
-% startStopS = t_Diam(Speak(:,2:3));
-% widthS = startStopS(:,2)-startStopS(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStopS(i,1),yl(1),widthS(i),range(yl)],'EdgeColor', 'none', 'FaceColor', [1 0 1 .2]), 1:size(startStopS,1))
+        PreWin = 0;
+        for j=1:size(SpeakRaw,1)
+            if j < size(SpeakRaw,1)
+                if (SpeakRaw(j+1,2)-SpeakRaw(j,3))/Param.Fs <= TimeMergeGap
+                    Speak(j,2) = SpeakRaw(j,2);
+                    Speak(j,3) = SpeakRaw(j+1,3);
+                    Speak(j,1) = (Speak(j,3)-Speak(j,2))/Param.Fs;
+                    PreWin = j+1;
+                elseif j ~= PreWin
+                    Speak(j,:) = SpeakRaw(j,:);
+                end
+            elseif j > 1
+                if Speak(end,2)~=SpeakRaw(j-1,2) && Speak(end,3)~=SpeakRaw(j,3)
+                    Speak(j,:) = SpeakRaw(j,:);
+                end
+            else
+                Speak(j,:) = SpeakRaw(j,:);
+            end
+        end
 
+        Speak(~any(Speak,2),:)=[];
+        % Group individual groups
+        
+        
+        for j=1:size(ListenRaw,1)
+            if j < size(ListenRaw,1)
+                if (ListenRaw(j+1,2)-ListenRaw(j,3))/Param.Fs <= TimeMergeGap
+                    Listen(j,2) = ListenRaw(j,2);
+                    Listen(j,3) = ListenRaw(j+1,3);
+                    Listen(j,1) = (Listen(j,3)-Listen(j,2))/Param.Fs;
+                    j = j+2; % Skip next 2 windows
+                else
+                    Listen(j,:) = ListenRaw(j,:);
+                end
+            elseif j > 1
+                if Listen(end,2)~=ListenRaw(j-1,2) && Listen(end,3)~=ListenRaw(j,3)
+                    Listen(j,:) = ListenRaw(j,:);
+                end
+            else
+                Listen(j,:) = ListenRaw(j,:);
+            end
+        end
+
+% figure;startStopS = t_Diam(Speak(:,2:3));widthS = startStopS(:,2)-startStopS(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStopS(i,1),yl(1),widthS(i),5],'EdgeColor', 'none', 'FaceColor', [1 0 0 .2]), 1:size(startStopS,1));startStopS2 = t_Diam(SpeakRaw(:,2:3));widthS = startStopS2(:,2)-startStopS2(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStopS2(i,1),yl(1),widthS(i),3],'EdgeColor', 'none', 'FaceColor', [0 0 1 .2]), 1:size(startStopS2,1))
+        
         % Discard windows if duration is < TimeMinWin
-        Speak = SpeakRaw(SpeakRaw(:,1)>TimeMinWin,:);
-        Listen = ListenRaw(ListenRaw(:,1)>TimeMinWin,:);
+        Speak = Speak(Speak(:,1)>TimeMinWin,:);
+        Listen = Listen(Listen(:,1)>TimeMinWin,:);
           
         % Time-locked indexes (based on Start or End of events)
         SWSpeakIdx=[Speak(:,2)-TimeStartW*Param.Fs,Speak(:,2),Speak(:,2)+TimeEndW*Param.Fs];
@@ -320,7 +342,7 @@ for q=1:numel(subDirs)
                 plot(linspace(-TimeStartW,Speak(j,1),length(SWSpeakIdx(j,1):Speak(j,3)-1)),...
                     BLDiam(SWSpeakIdx(j,1):Speak(j,3)-1),color=[0 1 0 .2],LineWidth=0.3)
                 k=k+1;
-                % Add zero-padding
+                % Add nan-padding when necessary
                 SDWSum(j,:)=[BLDiam(SWSpeakIdx(j,1):Speak(j,3)-1);NaN*ones(1,length(SDWSum)-length(SWSpeakIdx(j,1):Speak(j,3)-1))'];
             end
         end
