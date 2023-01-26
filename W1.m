@@ -147,12 +147,12 @@ for q=1:numel(subDirs)
         BLDiam = mean(Diameter(TimeBL(1)*Param.Fs:TimeBL(2)*Param.Fs-1))-Diameter;
 
         % Retrieve Utterances
-        if contains(PairFiles(i).name,'P1')
+        if contains(PairFiles(i).name,'P2')
             SpeakKey = 'utteranceCH1';
             ListenKey = 'utteranceCH2';
             SDelayKey = 'delayCH1';
             LDelayKey = 'delayCH2';
-        elseif contains(PairFiles(i).name,'P2')
+        elseif contains(PairFiles(i).name,'P1')
             SpeakKey = 'utteranceCH2';
             ListenKey = 'utteranceCH1';
             SDelayKey = 'delayCH2';
@@ -202,15 +202,6 @@ for q=1:numel(subDirs)
             AvgTimeSpe(q,i)=NaN;
             AvgTimeLis(q,i)=NaN;
             continue
-        elseif isempty(SDelayRaw) && isempty(LDelayRaw)
-            disp(['Warning: No associated Delay data for file ', PairFiles(i).folder, '\', PairFiles(i).name, '.']);
-            AvgSPupilSize(q,i)=NaN;
-            AvgSPupilSlope(q,i)=NaN;
-            AvgLPupilSize(q,i)=NaN;
-            AvgLPupilSlope(q,i)=NaN;
-            AvgTimeSpe(q,i)=NaN;
-            AvgTimeLis(q,i)=NaN;
-            continue
         end
 
         % Downsample (rounding) Utt from 250 Hz (1/binRes) to 50 Hz, shift
@@ -220,14 +211,14 @@ for q=1:numel(subDirs)
         ListenRaw(:,2:3)=round((ListenRaw(:,2:3)*binResUtt+TimeStart)*Param.Fs+LDelayRaw(1)/2);
 
         % Merge windows if gap <= TimeMergeGap
-        [Speak] = MergeWin(SpeakRaw, Param.Fs, TimeMergeGap);
-        [Listen] = MergeWin(ListenRaw, Param.Fs, TimeMergeGap);
+        [SpeakM] = MergeWin(SpeakRaw, Param.Fs, TimeMergeGap);
+        [ListenM] = MergeWin(ListenRaw, Param.Fs, TimeMergeGap);
         
         % figure;t_Diam = linspace(1,length(BLDiam)./Param.Fs,length(BLDiam));startStopS = t_Diam(Speak(:,2:3));yl=ylim();widthS = startStopS(:,2)-startStopS(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStopS(i,1),yl(1),widthS(i),3],'EdgeColor', 'none', 'FaceColor', [1 0 0 .2]), 1:size(startStopS,1));startStopS2 = t_Diam(SpeakRaw(:,2:3));widthS = startStopS2(:,2)-startStopS2(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStopS2(i,1),yl(1),widthS(i),5],'EdgeColor', 'none', 'FaceColor', [0 0 1 .2]), 1:size(startStopS2,1));grid on
         
         % Discard windows if duration is < TimeMinWin
-        Speak = Speak(Speak(:,1)>TimeMinWin,:);
-        Listen = Listen(Listen(:,1)>TimeMinWin,:);
+        Speak = SpeakM(SpeakM(:,1)>TimeMinWin,:);
+        Listen = ListenM(ListenM(:,1)>TimeMinWin,:);
           
         % Time-locked indexes (based on Start or End of events)
         SWSpeakIdx=[Speak(:,2)-TimeStartW*Param.Fs,Speak(:,2),Speak(:,2)+TimeEndW*Param.Fs];
@@ -236,7 +227,7 @@ for q=1:numel(subDirs)
         EWListenIdx=[Listen(:,3)-TimeStartW*Param.Fs,Listen(:,3),Listen(:,3)+TimeEndW*Param.Fs];
 
         % Time vectors and idx for plotting
-        t_Diam = linspace(1,length(BLDiam)./Param.Fs,length(BLDiam));
+        t_Diam = linspace(0,length(BLDiam)./Param.Fs,length(BLDiam));
         startStopS = t_Diam(Speak(:,2:3)); 
         widthS = startStopS(:,2)-startStopS(:,1);
         startStopL = t_Diam(Listen(:,2:3)); 
@@ -274,7 +265,7 @@ for q=1:numel(subDirs)
         % Plots
         figure
         subplot(2,2,[1 2])
-        plot(t_Diam,BLDiam,color='black');
+        plot(t_Diam,Diameter,color='black');
         hold on
         xline(TimeStart,"--",'HandleVisibility','off')
         yl=ylim();
@@ -288,7 +279,7 @@ for q=1:numel(subDirs)
         eline2=line(NaN,NaN,'LineWidth',2,'Color',[1 0 1 .2]);
         legend(['Baselined diameter (', eyeChosen,' Eye)'],'Speaking windows','Listening windows')
         sgtitle(strrep(PairFiles(i).name,'_','-'))
-        xticks([0:TimeStart:t_Diam(end)])
+%         xticks([0:TimeStart:t_Diam(end)])
         xlabel('Time [s]')
         ylabel('Pupil baseline difference [mm]');
 

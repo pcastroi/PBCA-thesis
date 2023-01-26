@@ -6,9 +6,21 @@ PreWin = 0;
                 Merged(j,2) = Raw(j,2);
                 if j < size(Raw,1)-1
                     if (Raw(j+2,2)-Raw(j+1,3))/Fs <= TimeMergeGap
-                        Merged(j,3) = Raw(j+2,3);
-                        Merged(j,1) = (Merged(j,3)-Merged(j,2))/Fs;
-                        PreWin = j+2;
+                        if j < size(Raw,1)-2
+                            if (Raw(j+3,2)-Raw(j+2,3))/Fs <= TimeMergeGap
+                                Merged(j,3) = Raw(j+3,3);
+                                Merged(j,1) = (Merged(j,3)-Merged(j,2))/Fs;
+                                PreWin = j+3;
+                            else
+                                Merged(j,3) = Raw(j+2,3);
+                                Merged(j,1) = (Merged(j,3)-Merged(j,2))/Fs;
+                                PreWin = j+2;
+                            end
+                        else
+                            Merged(j,3) = Raw(j+2,3);
+                            Merged(j,1) = (Merged(j,3)-Merged(j,2))/Fs;
+                            PreWin = j+2;
+                        end
                     else
                         Merged(j,3) = Raw(j+1,3);
                         Merged(j,1) = (Merged(j,3)-Merged(j,2))/Fs;

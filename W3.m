@@ -7,7 +7,7 @@ addpath([BPath{1} 'Pupil-preprocessing-tools\tools']) % For preprocessing
 
 % Files and Utterances: different conditions
 TobiiFs=50;
-AudFs= 48000;
+AudFs=48000;
 BLDelay=20; % s
 xd=zeros(1,96);
 x=1;
@@ -27,9 +27,9 @@ for q=1:numel(subDirs)
         alldata = load([PairFiles(i).folder, '\', PairFiles(i).name]);
         alldata_mat = cell2mat(alldata.data);
 
-        if contains(PairFiles(i).name,'P1')
+        if contains(PairFiles(i).name,'P2')
             DelKey = 'delayCH1';
-        elseif contains(PairFiles(i).name,'P2')
+        elseif contains(PairFiles(i).name,'P1')
             DelKey = 'delayCH2';
         end
 
