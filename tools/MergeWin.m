@@ -8,27 +8,34 @@ PreWin = 0;
                     if (Raw(j+2,2)-Raw(j+1,3))/Fs <= TimeMergeGap
                         if j < size(Raw,1)-2
                             if (Raw(j+3,2)-Raw(j+2,3))/Fs <= TimeMergeGap
+                                if j < size(Raw,1)-3
+                                    if (Raw(j+4,2)-Raw(j+3,3))/Fs <= TimeMergeGap
+                                        Merged(j,3) = Raw(j+4,3);
+                                        PreWin = j+4;
+                                    else
+                                        Merged(j,3) = Raw(j+3,3);
+                                        PreWin = j+3;
+                                    end
+                                else
+                                    Merged(j,3) = Raw(j+3,3);
+                                    PreWin = j+3;
+                                end
                                 Merged(j,3) = Raw(j+3,3);
-                                Merged(j,1) = (Merged(j,3)-Merged(j,2))/Fs;
                                 PreWin = j+3;
                             else
                                 Merged(j,3) = Raw(j+2,3);
-                                Merged(j,1) = (Merged(j,3)-Merged(j,2))/Fs;
                                 PreWin = j+2;
                             end
                         else
                             Merged(j,3) = Raw(j+2,3);
-                            Merged(j,1) = (Merged(j,3)-Merged(j,2))/Fs;
                             PreWin = j+2;
                         end
                     else
                         Merged(j,3) = Raw(j+1,3);
-                        Merged(j,1) = (Merged(j,3)-Merged(j,2))/Fs;
                         PreWin = j+1;
                     end
                 else
                     Merged(j,3) = Raw(j+1,3);
-                    Merged(j,1) = (Merged(j,3)-Merged(j,2))/Fs;
                     PreWin = j+1;
                 end
             elseif j ~= PreWin
@@ -47,4 +54,5 @@ PreWin = 0;
     % Merge all
     Merged(Merged(1:end-1,3)>Merged(2:end,2),3) = Merged(find(Merged(1:end-1,3)>Merged(2:end,2))+1,3);
     Merged(find(Merged(1:end-1,3)>Merged(2:end,2))+1,:)=[];
+    Merged(:,1) = (Merged(:,3)-Merged(:,2))/Fs;
 end

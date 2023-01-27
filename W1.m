@@ -110,10 +110,10 @@ for q=1:numel(subDirs)
         RDiamConv = conv(RDiam,LPWindow,'same');
         
         % Remove start/end artifacts (peak/dip) originated from Low-Pass Filtering
-        LDiamConv(1:length(LPWindow)/2-1) = mean(LDiam(1:length(LPWindow)/2-1));
-        LDiamConv(end-length(LPWindow)/2-1:end) = mean(LDiam(end-length(LPWindow)/2-1:end));
-        RDiamConv(1:length(LPWindow)/2-1) = mean(RDiam(1:length(LPWindow)/2-1));
-        RDiamConv(end-length(LPWindow)/2-1:end) = mean(RDiam(end-length(LPWindow)/2-1:end));
+        LDiamConv(1:round(length(LPWindow)/2-1)) = mean(LDiam(1:round(length(LPWindow)/2-1)));
+        LDiamConv(end-round(length(LPWindow)/2-1):end) = mean(LDiam(end-round(length(LPWindow)/2-1):end));
+        RDiamConv(1:round(length(LPWindow)/2-1)) = mean(RDiam(1:round(length(LPWindow)/2-1)));
+        RDiamConv(end-round(length(LPWindow)/2-1):end) = mean(RDiam(end-round(length(LPWindow)/2-1):end));
         
         LDiam = LDiamConv;
         RDiam = RDiamConv;
@@ -237,26 +237,19 @@ for q=1:numel(subDirs)
         % Speaking & Listening
         for j=1:size(Speak,1)
             AvgSPupilSize(q,i)=AvgSPupilSize(q,i)+mean(Diameter(Speak(j,2):Speak(j,3)));
-            Slope=polyfit(t_Diam(Speak(j,2):Speak(j,3)),BLDiam(Speak(j,2):Speak(j,3)),1);
-            AvgSPupilSlope(q,i)=AvgSPupilSlope(q,i)+Slope(1);
+            SSlope(j,:)=polyfit(t_Diam(Speak(j,2):Speak(j,3)),BLDiam(Speak(j,2):Speak(j,3)),1);
+            AvgSPupilSlope(q,i)=AvgSPupilSlope(q,i)+SSlope(1);
         end
         AvgSPupilSize(q,i)=AvgSPupilSize(q,i)./j;
         AvgSPupilSlope(q,i)=AvgSPupilSlope(q,i)./j;
 
         for j=1:size(Listen,1)
             AvgLPupilSize(q,i)=AvgLPupilSize(q,i)+mean(Diameter(Listen(j,2):Listen(j,3)));
-            Slope=polyfit(t_Diam(Listen(j,2):Listen(j,3)),BLDiam(Listen(j,2):Listen(j,3)),1);
-            AvgLPupilSlope(q,i)=AvgLPupilSlope(q,i)+Slope(1);
+            LSlope(j,:)=polyfit(t_Diam(Listen(j,2):Listen(j,3)),BLDiam(Listen(j,2):Listen(j,3)),1);
+            AvgLPupilSlope(q,i)=AvgLPupilSlope(q,i)+LSlope(j,1);
         end
         AvgLPupilSize(q,i)=AvgLPupilSize(q,i)./j;
         AvgLPupilSlope(q,i)=AvgLPupilSlope(q,i)./j;
-        if (length(Diameter)-Speak(end,3))/Param.Fs > EyeAudDelay && (length(Diameter)-Listen(end,3))/Param.Fs > EyeAudDelay
-            OutTxt = "Yes";
-        else
-            OutTxt = "Nop";
-        end
-
-%             disp(['Time diff [Speaking, Listening] = [',sprintf('%0.5f',(length(Diameter)-Speak(end,3))/Param.Fs),', ',sprintf('%0.5f',(length(Diameter)-Listen(end,3))/Param.Fs) '] s. // Eye-Aud-Delay =',sprintf('%0.5f',EyeAudDelay),' s. // Shift-able? = ',OutTxt]);
 
         % Average duration of speaking/listening per file
         AvgTimeSpe(q,i) = mean(Speak(:,1)); % Possible NaNs
@@ -284,21 +277,19 @@ for q=1:numel(subDirs)
         ylabel('Pupil baseline difference [mm]');
 
         subplot(2,2,3)
-        % Speak-Diam-Window SUM
-        SDWSum = zeros(size(Speak,1),ceil(Param.Fs*(TimeStartW+max(Speak(:,1)))));
-        k=0;
-        hold on
+        % Speak-Diam-Window
+        SDW = zeros(size(Speak,1),ceil(Param.Fs*(TimeStartW+max(Speak(:,1)))));
         for j=1:size(Speak,1)
             if SWSpeakIdx(j,3)-1 <= length(BLDiam)
                 plot(linspace(-TimeStartW,Speak(j,1),length(SWSpeakIdx(j,1):Speak(j,3)-1)),...
                     BLDiam(SWSpeakIdx(j,1):Speak(j,3)-1),color=[0 1 0 .2],LineWidth=0.3)
-                k=k+1;
+                hold on
                 % Add nan-padding when necessary
-                SDWSum(j,:)=[BLDiam(SWSpeakIdx(j,1):Speak(j,3)-1);NaN*ones(1,length(SDWSum)-length(SWSpeakIdx(j,1):Speak(j,3)-1))'];
+                SDW(j,:)=[BLDiam(SWSpeakIdx(j,1):Speak(j,3)-1);NaN*ones(1,length(SDW)-length(SWSpeakIdx(j,1):Speak(j,3)-1))'];
             end
         end
-        plot(linspace(-TimeStartW,max(Speak(:,1)),length(SDWSum)),...
-             mean(SDWSum,'omitnan'),color=[1 0 0 0.8],LineWidth=1.5)
+        plot(linspace(-TimeStartW,max(Speak(:,1)),length(SDW)),...
+             mean(SDW,1,'omitnan'),color=[1 0 0 0.8],LineWidth=1.5)
         xline(0,"--")
         xticks([-TimeStartW:TimeStartW:max(Speak(:,1))])
         title('Baselined speaking-evoked pupil response')
@@ -307,19 +298,17 @@ for q=1:numel(subDirs)
         
         subplot(2,2,4)
         % Listen-Diam-Window SUM
-        LDWSum = zeros(size(Listen,1),ceil(Param.Fs*(TimeStartW+max(Listen(:,1)))));
-        k=0;
+        LDW = zeros(size(Listen,1),ceil(Param.Fs*(TimeStartW+max(Listen(:,1)))));
         hold on
         for j=1:size(Listen,1)
             if SWListenIdx(j,3)-1 <= length(BLDiam)
                 plot(linspace(-TimeStartW,Listen(j,1),length(SWListenIdx(j,1):Listen(j,3)-1)),...
                     BLDiam(SWListenIdx(j,1):Listen(j,3)-1),color=[1 0 1 .2],LineWidth=0.3)
-                k=k+1;
-                LDWSum(j,:)=[BLDiam(SWListenIdx(j,1):Listen(j,3)-1);NaN*ones(1,length(LDWSum)-length(SWListenIdx(j,1):Listen(j,3)-1))'];
+                LDW(j,:)=[BLDiam(SWListenIdx(j,1):Listen(j,3)-1);NaN*ones(1,length(LDW)-length(SWListenIdx(j,1):Listen(j,3)-1))'];
             end
         end
-        plot(linspace(-TimeStartW,max(Listen(:,1)),length(LDWSum)),...
-             mean(LDWSum,'omitnan'),color=[1 0 0 0.8],LineWidth=1.5)
+        plot(linspace(-TimeStartW,max(Listen(:,1)),length(LDW)),...
+             mean(LDW,1,'omitnan'),color=[1 0 0 0.8],LineWidth=1.5)
         xline(0,"--")
         xticks([-TimeStartW:TimeStartW:max(Listen(:,1))])
         title('Baselined listening-evoked pupil response')
