@@ -144,7 +144,7 @@ for q=1:numel(subDirs)
             continue
         end
         % Baseline the Diameter (substractively)
-        BLDiam = mean(Diameter(TimeBL(1)*Param.Fs:TimeBL(2)*Param.Fs-1))-Diameter;
+        BLDiam = Diameter-mean(Diameter(TimeBL(1)*Param.Fs:TimeBL(2)*Param.Fs-1));
 
         % Retrieve Utterances
         if contains(PairFiles(i).name,'P2')

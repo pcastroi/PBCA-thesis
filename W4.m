@@ -13,12 +13,18 @@ LPWinSize = 0.5; % [s]: Window size of hamming-window for low-pass filtering
 LPWindow = hamming(round(LPWinSize*Param.Fs));
 LPWindow = LPWindow/sum(LPWindow); % Hamming-window
 AudFs=48000;
+WP=[-3,6]; % [s]
+BL=[15,20]; % [s]
 BLPeriod=[0,20]; % [s]
 BLStartEnd=BLPeriod*Param.Fs+1; % [samples]
+TimeMinWin = 0.5; % [s], Minimum time of a window
+TimeMergeGap = 0.3; % [s], Time threshold for merging windows
 G1 = zeros(200,BLStartEnd(2));
 G2 = G1;
-G3 = G1;
-G4 = G1;
+G3 = zeros(200,(WP(2)-WP(1))*Param.Fs+1);
+G4 = G3;
+G5 = G3;
+G6 = G3;
 x=1;
 [subDirs] = GetSubDirsFirstLevelOnly('data');
 LoadDelays=load('data\delays1110.mat');
@@ -136,68 +142,83 @@ for q=1:numel(subDirs)
         
         % Plots
         if x==1
-            tiledlayout(2,2);
+            figure;tiledlayout(1,2);
             ax1 = nexttile;
             ax2 = nexttile;
+            figure;tiledlayout(2,2);
             ax3 = nexttile;
             ax4 = nexttile;
+            ax5 = nexttile;
+            ax6 = nexttile;
         end
         x=x+1;
-        hold([ax1 ax2 ax3 ax4],'on')
-        if SpeakRaw(1,2) > ListenRaw(1,2)
-            plot(ax1,t_Diam(BLStartEnd(1):BLStartEnd(2)),Diameter(BLStartEnd(1):BLStartEnd(2)),color=[0 0 0 0.2],linewidth=0.5)
-            plot(ax3,linspace(-10,10,size(G3,2)),Diameter(SpeakRaw(1,2)-BLPeriod(2)/2*Param.Fs:SpeakRaw(1,2)+BLPeriod(2)/2*Param.Fs),color=[0 0 0 0.2],linewidth=0.5)
+        hold([ax1 ax2 ax3 ax4 ax5 ax6],'on')
+        if SpeakRaw(1,2) < ListenRaw(1,2) % Initially Speaking
             G1(x,:)=Diameter(BLStartEnd(1):BLStartEnd(2));
-            G3(x,:)=Diameter(SpeakRaw(1,2)-BLPeriod(2)/2*Param.Fs:SpeakRaw(1,2)+BLPeriod(2)/2*Param.Fs);
-        elseif SpeakRaw(1,2) < ListenRaw(1,2)
-            plot(ax2,t_Diam(BLStartEnd(1):BLStartEnd(2)),Diameter(BLStartEnd(1):BLStartEnd(2)),color=[0 0 0 0.2],linewidth=0.5)
-            plot(ax4,linspace(-10,10,size(G4,2)),Diameter(ListenRaw(1,2)-BLPeriod(2)/2*Param.Fs:ListenRaw(1,2)+BLPeriod(2)/2*Param.Fs),color=[0 0 0 0.2],linewidth=0.5)
+            G3(x,:)=Diameter(SpeakRaw(1,2)+WP(1)*Param.Fs:SpeakRaw(1,2)+WP(2)*Param.Fs);
+            G5(x,:)=Diameter(SpeakRaw(1,2)+WP(1)*Param.Fs:SpeakRaw(1,2)+WP(2)*Param.Fs)-mean(Diameter((BL(1):BL(2))*Param.Fs));
+            plot(ax1,t_Diam(BLStartEnd(1):BLStartEnd(2)),G1(x,:),color=[0 0 0 0.2],linewidth=0.5)
+            plot(ax3,linspace(WP(1),WP(2),size(G3,2)),G3(x,:),color=[0 0 0 0.2],linewidth=0.5)
+            plot(ax5,linspace(WP(1),WP(2),size(G5,2)),G5(x,:),color=[0 0 0 0.2],linewidth=0.5)
+        elseif SpeakRaw(1,2) > ListenRaw(1,2) % Initially Listening/Non-speaking
             G2(x,:)=Diameter(BLStartEnd(1):BLStartEnd(2));
-            G4(x,:)=Diameter(ListenRaw(1,2)-BLPeriod(2)/2*Param.Fs:ListenRaw(1,2)+BLPeriod(2)/2*Param.Fs);
+            G4(x,:)=Diameter(ListenRaw(1,2)+WP(1)*Param.Fs:ListenRaw(1,2)+WP(2)*Param.Fs);
+            G6(x,:)=Diameter(ListenRaw(1,2)+WP(1)*Param.Fs:ListenRaw(1,2)+WP(2)*Param.Fs)-mean(Diameter((BL(1):BL(2))*Param.Fs));
+            plot(ax2,t_Diam(BLStartEnd(1):BLStartEnd(2)),G2(x,:),color=[0 0 0 0.2],linewidth=0.5)
+            plot(ax4,linspace(WP(1),WP(2),size(G4,2)),G4(x,:),color=[0 0 0 0.2],linewidth=0.5)
+            plot(ax6,linspace(WP(1),WP(2),size(G6,2)),G6(x,:),color=[0 0 0 0.2],linewidth=0.5)
         else
-            plot(ax1,t_Diam(BLStartEnd(1):BLStartEnd(2)),Diameter(BLStartEnd(1):BLStartEnd(2)),color=[0 0 0 0.2],linewidth=0.5)
-            plot(ax2,t_Diam(BLStartEnd(1):BLStartEnd(2)),Diameter(BLStartEnd(1):BLStartEnd(2)),color=[0 0 0 0.2],linewidth=0.5)
-            plot(ax3,linspace(-10,10,size(G3,2)),Diameter(SpeakRaw(1,2)-BLPeriod(2)/2*Param.Fs:SpeakRaw(1,2)+BLPeriod(2)/2*Param.Fs),color=[0 0 0 0.2],linewidth=0.5)
-            plot(ax4,linspace(-10,10,size(G4,2)),Diameter(ListenRaw(1,2)-BLPeriod(2)/2*Param.Fs:ListenRaw(1,2)+BLPeriod(2)/2*Param.Fs),color=[0 0 0 0.2],linewidth=0.5)
-            G1(x,:)=Diameter(BLStartEnd(1):BLStartEnd(2));
-            G2(x,:)=Diameter(BLStartEnd(1):BLStartEnd(2));
-            G3(x,:)=Diameter(SpeakRaw(1,2)-BLPeriod(2)/2*Param.Fs:SpeakRaw(1,2)+BLPeriod(2)/2*Param.Fs);
-            G4(x,:)=Diameter(ListenRaw(1,2)-BLPeriod(2)/2*Param.Fs:ListenRaw(1,2)+BLPeriod(2)/2*Param.Fs);
+            continue
         end
         title(ax1,'G1: BL Period Initially Speaking')
         title(ax2,'G2: BL Period Initially Listening')
         title(ax3,'G3: Speaking-Evoked')
         title(ax4,'G4: Listening-Evoked')
-        xlabel([ax1 ax2 ax3 ax4],'Time [s]')
+        title(ax5,'G5: Baselined Speaking-Evoked')
+        title(ax6,'G6: Baselined Listening-Evoked')
+        xlabel([ax1 ax2 ax3 ax4 ax5 ax6],'Time [s]')
         ylabel([ax1 ax2 ax3 ax4],'Pupil diameter [mm]')
+        ylabel([ax5 ax6],'Pupil baseline difference [mm]')
         xlim([ax1 ax2],[0, 20])
-        xlim([ax3 ax4],[-10, 10])
-        grid([ax1 ax2 ax3 ax4],'on')
+        xlim([ax3 ax4 ax5 ax6],[-3, 6])
+        grid([ax1 ax2 ax3 ax4 ax5 ax6],'on')
         
         % Last file
         if contains([PairFiles(i).folder, '\', PairFiles(i).name],'\Main12\P2_SHL_B2.mat')
-            xline(ax3,0,'--')
-            xline(ax4,0,'--')
             G1(~any(G1,2),:)=[];
             G2(~any(G2,2),:)=[];
             G3(~any(G3,2),:)=[];
             G4(~any(G4,2),:)=[];
+            G5(~any(G5,2),:)=[];
+            G6(~any(G6,2),:)=[];
+            xline(ax3,0,'--')
+            xline(ax4,0,'--')
+            xline(ax5,0,'--')
+            xline(ax6,0,'--')
             G1_Mean = mean(G1,1);
             G2_Mean = mean(G2,1);
             G3_Mean = mean(G3,1);
             G4_Mean = mean(G4,1);
+            G5_Mean = mean(G5,1);
+            G6_Mean = mean(G6,1);
             G1_SEM = std(G1,[],1)/sqrt(size(G1,1));
             G2_SEM = std(G2,[],1)/sqrt(size(G2,1));
             G3_SEM = std(G3,[],1)/sqrt(size(G3,1));
             G4_SEM = std(G4,[],1)/sqrt(size(G4,1));
-            plot(ax1,t_Diam(1:size(G1_Mean,2)),G1_Mean,"Color",'r',"LineWidth",3)
-            plot(ax2,t_Diam(1:size(G2_Mean,2)),G2_Mean,"Color",'r',"LineWidth",3)
-            plot(ax3,linspace(-10,10,size(G3,2)),G3_Mean,"Color",'r',"LineWidth",3)
-            plot(ax4,linspace(-10,10,size(G4,2)),G4_Mean,"Color",'r',"LineWidth",3)
+            G5_SEM = std(G5,[],1)/sqrt(size(G5,1));
+            G6_SEM = std(G6,[],1)/sqrt(size(G6,1));
+            plot(ax1,t_Diam(1:size(G1_Mean,2)),G1_Mean,"Color",'r',"LineWidth",2)
+            plot(ax2,t_Diam(1:size(G2_Mean,2)),G2_Mean,"Color",'r',"LineWidth",2)
+            plot(ax3,linspace(WP(1),WP(2),size(G3,2)),G3_Mean,"Color",'r',"LineWidth",2)
+            plot(ax4,linspace(WP(1),WP(2),size(G4,2)),G4_Mean,"Color",'r',"LineWidth",2)
+            plot(ax5,linspace(WP(1),WP(2),size(G5,2)),G5_Mean,"Color",'r',"LineWidth",2)
+            plot(ax6,linspace(WP(1),WP(2),size(G6,2)),G6_Mean,"Color",'r',"LineWidth",2)
             fill(ax1,[t_Diam(1:size(G1_Mean,2)), flipud(t_Diam(1:size(G1_Mean,2))')'],[(G1_Mean+G1_SEM), flipud((G1_Mean-G1_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
             fill(ax2,[t_Diam(1:size(G2_Mean,2)), flipud(t_Diam(1:size(G2_Mean,2))')'],[(G2_Mean+G2_SEM), flipud((G2_Mean-G2_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax3,[linspace(-10,10,size(G3,2)), flipud(linspace(-10,10,size(G3,2))')'],[(G3_Mean+G3_SEM), flipud((G3_Mean-G3_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax4,[linspace(-10,10,size(G4,2)), flipud(linspace(-10,10,size(G4,2))')'],[(G4_Mean+G4_SEM), flipud((G4_Mean-G4_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax3,[linspace(WP(1),WP(2),size(G3,2)), flipud(linspace(WP(1),WP(2),size(G3,2))')'],[(G3_Mean+G3_SEM), flipud((G3_Mean-G3_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax4,[linspace(WP(1),WP(2),size(G4,2)), flipud(linspace(WP(1),WP(2),size(G4,2))')'],[(G4_Mean+G4_SEM), flipud((G4_Mean-G4_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax5,[linspace(WP(1),WP(2),size(G5,2)), flipud(linspace(WP(1),WP(2),size(G5,2))')'],[(G5_Mean+G5_SEM), flipud((G5_Mean-G5_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax6,[linspace(WP(1),WP(2),size(G6,2)), flipud(linspace(WP(1),WP(2),size(G6,2))')'],[(G6_Mean+G6_SEM), flipud((G6_Mean-G6_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
 % xlim([ax2 ax1],[9.5, 10.5]);xlim([ax3 ax4],[-0.5, 0.5]);ylim([ax1 ax2 ax3 ax4],[3.4, 3.7])
         end
         
