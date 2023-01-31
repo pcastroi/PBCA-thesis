@@ -19,12 +19,36 @@ BLPeriod=[0,20]; % [s]
 BLStartEnd=BLPeriod*Param.Fs+1; % [samples]
 TimeMinWin = 0.5; % [s], Minimum time of a window
 TimeMergeGap = 0.3; % [s], Time threshold for merging windows
-G1 = zeros(200,BLStartEnd(2));
-G2 = G1;
-G3 = zeros(200,(WP(2)-WP(1))*Param.Fs+1);
-G4 = G3;
-G5 = G3;
-G6 = G3;
+RejectRatio = 0.3; % Rejection threshold based on the ratio of NaNs in data
+RejectDelay = 0.5; % [s], Rejection threshold based on delay between timestamps and n-samples
+
+% Preallocate groups
+G1 = zeros(200,BLStartEnd(2)); % Initially Speaking: [0,20] s
+G2 = G1; % Initially Listening: [0,20] s
+G3 = zeros(200,(WP(2)-WP(1))*Param.Fs+1); % Initially Speaking: [-3,6] s with event starting at 0 s.
+G4 = G3; % Initially Listening: [-3,6] s with event starting at 0 s.
+G5 = G3; % Initially Speaking: Baselined [15,20] s: [-3,6] s with event starting at 0 s.
+G6 = G3; % Initially Listening: Baselined [15,20] s: [-3,6] s with event starting at 0 s.
+G7 = zeros(200,200,(WP(2)-WP(1))*Param.Fs+1); % All Speaking windows: [-3,6] s with event starting at 0 s.
+G8 = G7; % All Listening windows: [-3,6] s with event starting at 0 s.
+
+% Preallocate features
+F1_S_Q=zeros(200,1); % Feature 1 (Quiet): Mean pupil size (Speaking)
+F1_L_Q=F1_S_Q; % Feature 1 (Quiet): Mean pupil size (Listening)
+F2_S_Q=F1_S_Q; % Feature 2 (Quiet): Mean slope (Speaking)
+F2_L_Q=F1_S_Q; % Feature 2 (Quiet): Mean slope (Listening)
+F1_S_SHL=F1_S_Q; % Feature 1 (SHL): Mean pupil size (Speaking)
+F1_L_SHL=F1_S_Q; % Feature 1 (SHL): Mean pupil size (Listening)
+F2_S_SHL=F1_S_Q; % Feature 2 (SHL): Mean slope (Speaking)
+F2_L_SHL=F1_S_Q; % Feature 2 (SHL): Mean slope (Listening)
+F1_S_N60=F1_S_Q; % Feature 1 (N60): Mean pupil size (Speaking)
+F1_L_N60=F1_S_Q; % Feature 1 (N60): Mean pupil size (Listening)
+F2_S_N60=F1_S_Q; % Feature 2 (N60): Mean slope (Speaking)
+F2_L_N60=F1_S_Q; % Feature 2 (N60): Mean slope (Listening)
+F1_S_N70=F1_S_Q; % Feature 1 (N70): Mean pupil size (Speaking)
+F1_L_N70=F1_S_Q; % Feature 1 (N70): Mean pupil size (Listening)
+F2_S_N70=F1_S_Q; % Feature 2 (N70): Mean slope (Speaking)
+F2_L_N70=F1_S_Q; % Feature 2 (N70): Mean slope (Listening)
 x=1;
 [subDirs] = GetSubDirsFirstLevelOnly('data');
 LoadDelays=load('data\delays1110.mat');
@@ -43,6 +67,16 @@ for q=1:numel(subDirs)
         % Replace blanks '[]' for 'NaN' in fields diameterLeft and diameterRight
         [alldata_mat(cellfun(@isempty,{alldata_mat.diameterLeft})).diameterLeft] = deal(NaN);
         [alldata_mat(cellfun(@isempty,{alldata_mat.diameterRight})).diameterRight] = deal(NaN);
+        
+        % Extract delay [s] (Duration_timeStamps - Duration_nsamples)
+        EyeAudDelay=alldata_mat(end).timeStamp-alldata_mat(1).timeStamp-length(alldata_mat)/Param.Fs;
+        
+        % Skip file if the difference in duration from the number of
+        % samples and the duration given by timestamps is bigger than 0.5 s
+        if EyeAudDelay > RejectDelay
+            disp(['Warning: File ',PairFiles(i).folder, '\', PairFiles(i).name, ' was rejected, too much delay (',sprintf('%0.2f',EyeAudDelay),'s).']);
+            continue
+        end
         
         LDiamRaw = [alldata_mat.diameterLeft];
         RDiamRaw = [alldata_mat.diameterRight];
@@ -89,6 +123,11 @@ for q=1:numel(subDirs)
             DiamNaN = sum(RMetadata.Isnan);
         end
         
+        if DiamNaN/length(Diameter) >= RejectRatio
+            disp(['Warning: File ',PairFiles(i).folder, '\', PairFiles(i).name, ' was rejected because it contains too many NaNs (',sprintf('%0.2f',100*DiamNaN/length(Diameter)),'%).'])
+            continue
+        end
+        
         % Retrieve Utterances
         if contains(PairFiles(i).name,'P2')
             SpeakKey = 'utteranceCH1';
@@ -129,6 +168,10 @@ for q=1:numel(subDirs)
             continue
         end
         
+        if or(SDelayRaw < 0,LDelayRaw < 0)
+            SDelayRaw=[0,0];
+            LDelayRaw=[0,0];
+        end
         
         if isempty(SpeakRaw) && isempty(ListenRaw)
             disp(['Warning: No associated Utterance/Listening data for file ', PairFiles(i).folder, '\', PairFiles(i).name, '.']);
@@ -138,9 +181,17 @@ for q=1:numel(subDirs)
         SpeakRaw(:,2:3)=round((SpeakRaw(:,2:3)*binResUtt+BLPeriod(2))*Param.Fs+SDelayRaw(1)/2);
         ListenRaw(:,2:3)=round((ListenRaw(:,2:3)*binResUtt+BLPeriod(2))*Param.Fs+LDelayRaw(1)/2);
         
+        % Merge windows if gap <= TimeMergeGap
+        [SpeakM] = MergeWin(SpeakRaw, Param.Fs, TimeMergeGap);
+        [ListenM] = MergeWin(ListenRaw, Param.Fs, TimeMergeGap);
+                
+        % Discard windows if duration is < TimeMinWin
+        Speak = SpeakM(SpeakM(:,1)>TimeMinWin,:);
+        Listen = ListenM(ListenM(:,1)>TimeMinWin,:);
+        
         t_Diam = linspace(0,length(Diameter)./Param.Fs,length(Diameter));
         
-        % Plots
+        %% Plots
         if x==1
             figure;tiledlayout(1,2);
             ax1 = nexttile;
@@ -150,75 +201,165 @@ for q=1:numel(subDirs)
             ax4 = nexttile;
             ax5 = nexttile;
             ax6 = nexttile;
+            figure;tiledlayout(1,2);
+            ax7 = nexttile;
+            ax8 = nexttile;
         end
         x=x+1;
-        hold([ax1 ax2 ax3 ax4 ax5 ax6],'on')
-        if SpeakRaw(1,2) < ListenRaw(1,2) % Initially Speaking
+        hold([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8],'on')
+        if Speak(1,2) < Listen(1,2) % Initially Speaking
             G1(x,:)=Diameter(BLStartEnd(1):BLStartEnd(2));
-            G3(x,:)=Diameter(SpeakRaw(1,2)+WP(1)*Param.Fs:SpeakRaw(1,2)+WP(2)*Param.Fs);
-            G5(x,:)=Diameter(SpeakRaw(1,2)+WP(1)*Param.Fs:SpeakRaw(1,2)+WP(2)*Param.Fs)-mean(Diameter((BL(1):BL(2))*Param.Fs));
+            G3(x,:)=Diameter(Speak(1,2)+WP(1)*Param.Fs:Speak(1,2)+WP(2)*Param.Fs);
+            G5(x,:)=Diameter(Speak(1,2)+WP(1)*Param.Fs:Speak(1,2)+WP(2)*Param.Fs)-mean(Diameter((BL(1):BL(2))*Param.Fs));
             plot(ax1,t_Diam(BLStartEnd(1):BLStartEnd(2)),G1(x,:),color=[0 0 0 0.2],linewidth=0.5)
             plot(ax3,linspace(WP(1),WP(2),size(G3,2)),G3(x,:),color=[0 0 0 0.2],linewidth=0.5)
             plot(ax5,linspace(WP(1),WP(2),size(G5,2)),G5(x,:),color=[0 0 0 0.2],linewidth=0.5)
-        elseif SpeakRaw(1,2) > ListenRaw(1,2) % Initially Listening/Non-speaking
+        elseif Speak(1,2) > Listen(1,2) % Initially Listening/Non-speaking
             G2(x,:)=Diameter(BLStartEnd(1):BLStartEnd(2));
-            G4(x,:)=Diameter(ListenRaw(1,2)+WP(1)*Param.Fs:ListenRaw(1,2)+WP(2)*Param.Fs);
-            G6(x,:)=Diameter(ListenRaw(1,2)+WP(1)*Param.Fs:ListenRaw(1,2)+WP(2)*Param.Fs)-mean(Diameter((BL(1):BL(2))*Param.Fs));
+            G4(x,:)=Diameter(Listen(1,2)+WP(1)*Param.Fs:Listen(1,2)+WP(2)*Param.Fs);
+            G6(x,:)=Diameter(Listen(1,2)+WP(1)*Param.Fs:Listen(1,2)+WP(2)*Param.Fs)-mean(Diameter((BL(1):BL(2))*Param.Fs));
             plot(ax2,t_Diam(BLStartEnd(1):BLStartEnd(2)),G2(x,:),color=[0 0 0 0.2],linewidth=0.5)
             plot(ax4,linspace(WP(1),WP(2),size(G4,2)),G4(x,:),color=[0 0 0 0.2],linewidth=0.5)
             plot(ax6,linspace(WP(1),WP(2),size(G6,2)),G6(x,:),color=[0 0 0 0.2],linewidth=0.5)
         else
             continue
         end
-        title(ax1,'G1: BL Period Initially Speaking')
-        title(ax2,'G2: BL Period Initially Listening')
-        title(ax3,'G3: Speaking-Evoked')
-        title(ax4,'G4: Listening-Evoked')
-        title(ax5,'G5: Baselined Speaking-Evoked')
-        title(ax6,'G6: Baselined Listening-Evoked')
-        xlabel([ax1 ax2 ax3 ax4 ax5 ax6],'Time [s]')
-        ylabel([ax1 ax2 ax3 ax4],'Pupil diameter [mm]')
-        ylabel([ax5 ax6],'Pupil baseline difference [mm]')
-        xlim([ax1 ax2],[0, 20])
-        xlim([ax3 ax4 ax5 ax6],[-3, 6])
-        grid([ax1 ax2 ax3 ax4 ax5 ax6],'on')
         
+        for j=1:size(Speak,1)
+            if Speak(j,2)+WP(2)*Param.Fs <= length(Diameter) % When reaching 'end of tobii data'
+                G7(x,j,:)=Diameter(Speak(j,2)+WP(1)*Param.Fs:Speak(j,2)+WP(2)*Param.Fs);
+                plot(ax7,linspace(WP(1),WP(2),size(G7,3)),reshape(G7(x,j,:),[],1),color=[0 0 0 0.01],linewidth=0.5)
+            end
+        end
+        
+        for j=1:size(Listen,1)
+            if Listen(j,2)+WP(2)*Param.Fs <= length(Diameter) % When reaching 'end of tobii data'
+                G8(x,j,:)=Diameter(Listen(j,2)+WP(1)*Param.Fs:Listen(j,2)+WP(2)*Param.Fs);
+                plot(ax8,linspace(WP(1),WP(2),size(G8,3)),reshape(G8(x,j,:),[],1),color=[0 0 0 0.01],linewidth=0.5)
+            end
+        end
+        
+        % Extract features from G7 and G8 for different conditions
+        temp=zeros(1000,1);
+        temp2=zeros(1000,2);
+        if contains(PairFiles(i).name,'Quiet')
+            for j=1:size(Speak,1)
+                temp(j)=mean(Diameter(Speak(j,2):Speak(j,3)));
+                temp2(j,:)=polyfit(t_Diam(Speak(j,2):Speak(j,3)),Diameter(Speak(j,2):Speak(j,3)),1);
+            end
+            F1_S_Q(x)=mean(nonzeros(temp));
+            F2_S_Q(x)=mean(nonzeros(temp2(:,2)));
+            for j=1:size(Listen,1)
+                temp(j)=mean(Diameter(Listen(j,2):Listen(j,3)));
+                temp2(j,:)=polyfit(t_Diam(Listen(j,2):Listen(j,3)),Diameter(Listen(j,2):Listen(j,3)),1);
+            end
+            F1_L_Q(x)=mean(nonzeros(temp));
+            F2_L_Q(x)=mean(nonzeros(temp2(:,2))); % Check if this makes sense
+        elseif contains(PairFiles(i).name,'SHL')
+            for j=1:size(Speak,1)
+                temp(j)=mean(Diameter(Speak(j,2):Speak(j,3)));
+                temp2(j,:)=polyfit(t_Diam(Speak(j,2):Speak(j,3)),Diameter(Speak(j,2):Speak(j,3)),1);
+            end
+            F1_S_SHL(x)=mean(nonzeros(temp));
+            F2_S_SHL(x)=mean(nonzeros(temp2(:,2)));
+            for j=1:size(Listen,1)
+                temp(j)=mean(Diameter(Listen(j,2):Listen(j,3)));
+                temp2(j,:)=polyfit(t_Diam(Listen(j,2):Listen(j,3)),Diameter(Listen(j,2):Listen(j,3)),1);
+            end
+            F1_L_SHL(x)=mean(nonzeros(temp));
+            F2_L_SHL(x)=mean(nonzeros(temp2(:,2))); % Check if this makes sense
+        elseif contains(PairFiles(i).name,'Noise60')
+            for j=1:size(Speak,1)
+                temp(j)=mean(Diameter(Speak(j,2):Speak(j,3)));
+                temp2(j,:)=polyfit(t_Diam(Speak(j,2):Speak(j,3)),Diameter(Speak(j,2):Speak(j,3)),1);
+            end
+            F1_S_N60(x)=mean(nonzeros(temp));
+            F2_S_N60(x)=mean(nonzeros(temp2(:,2)));
+            for j=1:size(Listen,1)
+                temp(j)=mean(Diameter(Listen(j,2):Listen(j,3)));
+                temp2(j,:)=polyfit(t_Diam(Listen(j,2):Listen(j,3)),Diameter(Listen(j,2):Listen(j,3)),1);
+            end
+            F1_L_N60(x)=mean(nonzeros(temp));
+            F2_L_N60(x)=mean(nonzeros(temp2(:,2))); % Check if this makes sense
+        elseif contains(PairFiles(i).name,'Noise70')
+            for j=1:size(Speak,1)
+                temp(j)=mean(Diameter(Speak(j,2):Speak(j,3)));
+                temp2(j,:)=polyfit(t_Diam(Speak(j,2):Speak(j,3)),Diameter(Speak(j,2):Speak(j,3)),1);
+            end
+            F1_S_N70(x)=mean(nonzeros(temp));
+            F2_S_N70(x)=mean(nonzeros(temp2(:,2)));
+            for j=1:size(Listen,1)
+                temp(j)=mean(Diameter(Listen(j,2):Listen(j,3)));
+                temp2(j,:)=polyfit(t_Diam(Listen(j,2):Listen(j,3)),Diameter(Listen(j,2):Listen(j,3)),1);
+            end
+            F1_L_N70(x)=mean(nonzeros(temp));
+            F2_L_N70(x)=mean(nonzeros(temp2(:,2))); % Check if this makes sense
+        end
+
         % Last file
         if contains([PairFiles(i).folder, '\', PairFiles(i).name],'\Main12\P2_SHL_B2.mat')
+            title(ax1,'G1: BL Period Initially Speaking')
+            title(ax2,'G2: BL Period Initially Listening')
+            title(ax3,'G3: Speaking-Evoked')
+            title(ax4,'G4: Listening-Evoked')
+            title(ax5,'G5: Baselined Speaking-Evoked')
+            title(ax6,'G6: Baselined Listening-Evoked')
+            title(ax7,'G7: Global Speaking-evoked response')
+            title(ax8,'G8: Global Listening-evoked response')
+            xlabel([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8],'Time [s]')
+            ylabel([ax1 ax2 ax3 ax4 ax7 ax8],'Pupil diameter [mm]')
+            ylabel([ax5 ax6],'Pupil baseline difference [mm]')
+            xlim([ax1 ax2],[0, 20])
+            xlim([ax3 ax4 ax5 ax6 ax7 ax8],[-3, 6])
+            grid([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8],'on')
+            xline(ax3,0,'--')
+            xline(ax4,0,'--')
+            xline(ax5,0,'--')
+            xline(ax6,0,'--')
+            xline(ax7,0,'--')
+            xline(ax8,0,'--')
             G1(~any(G1,2),:)=[];
             G2(~any(G2,2),:)=[];
             G3(~any(G3,2),:)=[];
             G4(~any(G4,2),:)=[];
             G5(~any(G5,2),:)=[];
             G6(~any(G6,2),:)=[];
-            xline(ax3,0,'--')
-            xline(ax4,0,'--')
-            xline(ax5,0,'--')
-            xline(ax6,0,'--')
+            G7(~any(G7,[2 3]),:,:)=[];G7(:,~any(G7,[1 3]),:)=[];
+            G8(~any(G8,[2 3]),:,:)=[];G8(:,~any(G8,[1 3]),:)=[];
+            G7(G7==0)=NaN;
+            G8(G8==0)=NaN;
             G1_Mean = mean(G1,1);
             G2_Mean = mean(G2,1);
             G3_Mean = mean(G3,1);
             G4_Mean = mean(G4,1);
             G5_Mean = mean(G5,1);
             G6_Mean = mean(G6,1);
+            G7_Mean = reshape(mean(mean(G7,'omitnan'),'omitnan'),[],1)';
+            G8_Mean = reshape(mean(mean(G8,'omitnan'),'omitnan'),[],1)';
             G1_SEM = std(G1,[],1)/sqrt(size(G1,1));
             G2_SEM = std(G2,[],1)/sqrt(size(G2,1));
             G3_SEM = std(G3,[],1)/sqrt(size(G3,1));
             G4_SEM = std(G4,[],1)/sqrt(size(G4,1));
             G5_SEM = std(G5,[],1)/sqrt(size(G5,1));
             G6_SEM = std(G6,[],1)/sqrt(size(G6,1));
+            G7_SEM = (reshape(std(std(G7,'omitnan'),'omitnan'),[],1)/sqrt(numel(G7(~isnan(G7)))))';
+            G8_SEM = (reshape(std(std(G8,'omitnan'),'omitnan'),[],1)/sqrt(numel(G8(~isnan(G8)))))';
             plot(ax1,t_Diam(1:size(G1_Mean,2)),G1_Mean,"Color",'r',"LineWidth",2)
             plot(ax2,t_Diam(1:size(G2_Mean,2)),G2_Mean,"Color",'r',"LineWidth",2)
             plot(ax3,linspace(WP(1),WP(2),size(G3,2)),G3_Mean,"Color",'r',"LineWidth",2)
             plot(ax4,linspace(WP(1),WP(2),size(G4,2)),G4_Mean,"Color",'r',"LineWidth",2)
             plot(ax5,linspace(WP(1),WP(2),size(G5,2)),G5_Mean,"Color",'r',"LineWidth",2)
             plot(ax6,linspace(WP(1),WP(2),size(G6,2)),G6_Mean,"Color",'r',"LineWidth",2)
+            plot(ax7,linspace(WP(1),WP(2),size(G7,3)),G7_Mean,"Color",'r',"LineWidth",2)
+            plot(ax8,linspace(WP(1),WP(2),size(G8,3)),G8_Mean,"Color",'r',"LineWidth",2)
             fill(ax1,[t_Diam(1:size(G1_Mean,2)), flipud(t_Diam(1:size(G1_Mean,2))')'],[(G1_Mean+G1_SEM), flipud((G1_Mean-G1_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
             fill(ax2,[t_Diam(1:size(G2_Mean,2)), flipud(t_Diam(1:size(G2_Mean,2))')'],[(G2_Mean+G2_SEM), flipud((G2_Mean-G2_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
             fill(ax3,[linspace(WP(1),WP(2),size(G3,2)), flipud(linspace(WP(1),WP(2),size(G3,2))')'],[(G3_Mean+G3_SEM), flipud((G3_Mean-G3_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
             fill(ax4,[linspace(WP(1),WP(2),size(G4,2)), flipud(linspace(WP(1),WP(2),size(G4,2))')'],[(G4_Mean+G4_SEM), flipud((G4_Mean-G4_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
             fill(ax5,[linspace(WP(1),WP(2),size(G5,2)), flipud(linspace(WP(1),WP(2),size(G5,2))')'],[(G5_Mean+G5_SEM), flipud((G5_Mean-G5_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
             fill(ax6,[linspace(WP(1),WP(2),size(G6,2)), flipud(linspace(WP(1),WP(2),size(G6,2))')'],[(G6_Mean+G6_SEM), flipud((G6_Mean-G6_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax7,[linspace(WP(1),WP(2),size(G7,3)), flipud(linspace(WP(1),WP(2),size(G7,3))')'],[(G7_Mean+G7_SEM), flipud((G7_Mean-G7_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax8,[linspace(WP(1),WP(2),size(G8,3)), flipud(linspace(WP(1),WP(2),size(G8,3))')'],[(G8_Mean+G8_SEM), flipud((G8_Mean-G8_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
 % xlim([ax2 ax1],[9.5, 10.5]);xlim([ax3 ax4],[-0.5, 0.5]);ylim([ax1 ax2 ax3 ax4],[3.4, 3.7])
         end
         

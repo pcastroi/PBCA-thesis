@@ -191,6 +191,12 @@ for q=1:numel(subDirs)
             AvgTimeLis(q,i)=NaN;
             continue
         end
+        
+        if or(SDelayRaw < 0,LDelayRaw < 0)
+            SDelayRaw=[0,0];
+            LDelayRaw=[0,0];
+        end
+        
         binResDel = PairDelay{1,SpeCond}.binRes;
 
         if isempty(SpeakRaw) && isempty(ListenRaw)
