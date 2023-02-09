@@ -1,4 +1,4 @@
-%% PBCA-Thesis - Week 4 & Week 5 - Fixed or adaptive baseline?
+%% PBCA-Thesis - Week 4, Week 5, Week 6 - Fixed or adaptive baseline?
 % Pathing
 clear all; clc; close all;
 BPath = strsplit(pwd,'PBCA-thesis');
@@ -13,7 +13,7 @@ LPWinSize = 0.5; % [s]: Window size of hamming-window for low-pass filtering
 LPWindow = hamming(round(LPWinSize*Param.Fs));
 LPWindow = LPWindow/sum(LPWindow); % Hamming-window
 AudFs=48000;
-WP=[-3,6]; % [s]
+WP=[-0.5,1]; % [s]
 BL=[15,20]; % [s]
 BLPeriod=[0,20]; % [s]
 BLStartEnd=BLPeriod*Param.Fs+1; % [samples]
@@ -413,8 +413,8 @@ for q=1:numel(subDirs)
             ylabel([ax5 ax6 ax9 ax10 ax11 ax12],'Pupil baseline difference [mm]')
             ylabel(ax14,'Slope [mm/s]')
             xlim([ax1 ax2],[0, 20])
-            xlim([ax3 ax4 ax5 ax6 ax16 ax17],[-3, 6])
-            grid([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10 ax11 ax12 ax16 ax17],'on')
+            xlim([ax3 ax4 ax5 ax6 ax16 ax17],[WP(1), WP(2)])
+            grid([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10 ax11 ax12 ax13 ax14 ax15 ax16 ax17],'on')
             xline(ax3,0,'--')
             xline(ax4,0,'--')
             xline(ax5,0,'--')
