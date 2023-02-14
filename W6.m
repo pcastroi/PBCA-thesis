@@ -1,4 +1,4 @@
-%% PBCA-Thesis - Week 6 - Plot histogramograms with lenght of gaps, pauses, gap-between and gap-within
+%% PBCA-Thesis - Week 6 - Plot histograms with lenght of gaps, pauses, gap-between and gap-within
 % Pathing
 clear all; clc; close all;
 BPath = strsplit(pwd,'PBCA-thesis');
