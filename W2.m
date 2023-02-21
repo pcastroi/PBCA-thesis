@@ -6,7 +6,7 @@ addpath('tools')
 addpath([BPath{1} 'Pupil-preprocessing-tools\tools']) % For preprocessing
 
 % Files and Utterances: different conditions
-PairIn=2; % Audios from MainX
+PairIn=1; % Audios from MainX
 AudFiles=dir(['audio\Main',sprintf('%d',PairIn),'\*.wav']);
 PairUtt=load('data\utterances1110.mat');
 PairUtt=PairUtt.Utterances(PairIn,:);

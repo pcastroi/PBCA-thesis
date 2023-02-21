@@ -1,4 +1,4 @@
-%% PBCA-Thesis - Week 6 & Week 7 - Plot histograms with lenght of gaps, pauses, overlap-between and overlap-within - Multiple Durations
+%% PBCA-Thesis - Week 6 & Week 7 - Plot histograms with lenght of gaps, turns, pauses, overlap-between and overlap-within - Multiple Durations
 % Pathing
 clear all; clc; close all;
 BPath = strsplit(pwd,'PBCA-thesis');
@@ -37,7 +37,7 @@ ListenDurRaw=GapDurRaw;
 SpeakDur=GapDurRaw;
 ListenDur=GapDurRaw;
 
-TimeMinWin = 0.5; % [s], Minimum time of a window
+TimeMinWin = 0; % [s], Minimum time of a window
 nbins=50;
 x=1;
 
@@ -138,6 +138,9 @@ for q=1:numel(subDirs)
         for j=1:size(Turn,1)-1
             TurnDiff(x,j)=(Turn(j+1,2)-Turn(j,3))*binResUtt;
         end
+        
+        % Median
+        TurnMed=[median(nonzeros(TurnDurQuiet));median(nonzeros(TurnDurSHL));median(nonzeros(TurnDurN60));median(nonzeros(TurnDurN70))];
         
         x=x+1;
 
