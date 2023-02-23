@@ -1,4 +1,4 @@
-%% PBCA-Thesis - Week 4, Week 5, Week 6 - Fixed or adaptive baseline?
+%% PBCA-Thesis - Week 4, Week 5, Week 6 - Groups and Features -- Figures. Fixed or adaptive baseline?
 % Pathing
 clear all; clc; close all;
 BPath = strsplit(pwd,'PBCA-thesis');
@@ -12,11 +12,12 @@ Param.MinLengthNaNRepair = 5; % Drop values (i.e., change to NaN) before and aft
 LPWinSize = 0.5; % [s]: Window size of hamming-window for low-pass filtering
 LPWindow = hamming(round(LPWinSize*Param.Fs));
 LPWindow = LPWindow/sum(LPWindow); % Hamming-window
-AudFs=48000;
-WP=[-0.5,1]; % [s]
-BL=[15,20]; % [s]
-BLPeriod=[0,20]; % [s]
-BLStartEnd=BLPeriod*Param.Fs+1; % [samples]
+AudFs = 48000;
+WP = [-0.5,3]; % [s], Duration of analysis window
+AdapBL = 0.5; % [s], Duration of baseline prior to event
+BL = [15,20]; % [s]
+BLPeriod = [0,20]; % [s]
+BLStartEnd = BLPeriod*Param.Fs + 1; % [samples]
 TimeMinWin = 2; % [s], Minimum time of a window
 TimeMergeGap = 0.3; % [s], Time threshold for merging windows
 RejectRatio = 0.3; % Rejection threshold based on the ratio of NaNs in data
@@ -184,22 +185,22 @@ for q=1:numel(subDirs)
             SDelayRaw = PairDelay{1,SpeCond}.(SDelayKey);
             LDelayRaw = PairDelay{1,SpeCond}.(LDelayKey);
         catch ME
-            disp(['Warning: No associated Delay data for file ', PairFiles(i).folder, '\', PairFiles(i).name, '.']);
+            disp(['Warning: File ',PairFiles(i).folder, '\', PairFiles(i).name,' was rejected for not having an associated delay.']);
             continue
         end
         
-        if or(SDelayRaw < 0,LDelayRaw < 0)
-            SDelayRaw=[0,0];
-            LDelayRaw=[0,0];
+        if (SDelayRaw <= 0 | SDelayRaw >= 1 | LDelayRaw <= 0 | LDelayRaw >= 1)
+            disp(['Warning: File ', PairFiles(i).folder, '\', PairFiles(i).name,' was rejected because the delay between Tobii and Utterances is out of proportions (Speaking: ',sprintf('%0.3f',SDelayRaw(2)),' [s], Listening: ',sprintf('%0.3f',LDelayRaw(2)),' [s]).']);
+            continue
         end
         
         if isempty(SpeakRaw) && isempty(ListenRaw)
-            disp(['Warning: No associated Utterance/Listening data for file ', PairFiles(i).folder, '\', PairFiles(i).name, '.']);
+            disp(['Warning: File ',PairFiles(i).folder, '\', PairFiles(i).name,' was rejected for not having associated Utterance windows.']);
             continue
         end
         
-        SpeakRaw(:,2:3)=round((SpeakRaw(:,2:3)*binResUtt+BLPeriod(2)+0.26)*Param.Fs+SDelayRaw(1)/2);
-        ListenRaw(:,2:3)=round((ListenRaw(:,2:3)*binResUtt+BLPeriod(2)+0.58)*Param.Fs+LDelayRaw(1)/2);
+        SpeakRaw(:,2:3)=round((SpeakRaw(:,2:3)*binResUtt+BLPeriod(2))*Param.Fs); %+0.26 %+SDelayRaw(1)/2
+        ListenRaw(:,2:3)=round((ListenRaw(:,2:3)*binResUtt+BLPeriod(2))*Param.Fs); %+0.58 %+LDelayRaw(1)/2
         
         % Merge windows if gap <= TimeMergeGap
         [SpeakM] = MergeWin(SpeakRaw, Param.Fs, TimeMergeGap);
@@ -235,9 +236,12 @@ for q=1:numel(subDirs)
             figure;tiledlayout(1,2);
             ax16 = nexttile;
             ax17 = nexttile;
+            figure;tiledlayout(1,2);
+            ax18 = nexttile;
+            ax19 = nexttile;
         end
         x=x+1;
-        hold([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10 ax11 ax12 ax13 ax14 ax15 ax16 ax17],'on')
+        hold([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10 ax11 ax12 ax13 ax14 ax15 ax16 ax17 ax18 ax19],'on')
         
         if isempty(Speak)  % Could be empty
             Speak=Listen(1,:)+1;
@@ -273,7 +277,7 @@ for q=1:numel(subDirs)
                 if Speak(j,2)+WP(2)*Param.Fs <= length(Diameter) % When reaching 'end of tobii data'
                     G7(x,j,:)=Diameter(Speak(j,2)+WP(1)*Param.Fs:Speak(j,2)+WP(2)*Param.Fs);
                     G9(x,j,:)=Diameter(Speak(j,2)+WP(1)*Param.Fs:Speak(j,2)+WP(2)*Param.Fs)-mean(Diameter(BL(1)*Param.Fs:BL(2)*Param.Fs));
-                    G11(x,j,:)=Diameter(Speak(j,2)+WP(1)*Param.Fs:Speak(j,2)+WP(2)*Param.Fs)-mean(Diameter(Speak(j,2)-Param.Fs:Speak(j,2)));
+                    G11(x,j,:)=Diameter(Speak(j,2)+WP(1)*Param.Fs:Speak(j,2)+WP(2)*Param.Fs)-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));
 %                     plot(ax7,linspace(WP(1),WP(2),size(G7,3)),reshape(G7(x,j,:),[],1),color=[0 0 0 0.01],linewidth=0.5)
                 end
             end
@@ -284,7 +288,7 @@ for q=1:numel(subDirs)
                 if Listen(j,2)+WP(2)*Param.Fs <= length(Diameter) % When reaching 'end of tobii data'
                     G8(x,j,:)=Diameter(Listen(j,2)+WP(1)*Param.Fs:Listen(j,2)+WP(2)*Param.Fs);
                     G10(x,j,:)=Diameter(Listen(j,2)+WP(1)*Param.Fs:Listen(j,2)+WP(2)*Param.Fs)-mean(Diameter(BL(1)*Param.Fs:BL(2)*Param.Fs));
-                    G12(x,j,:)=Diameter(Listen(j,2)+WP(1)*Param.Fs:Listen(j,2)+WP(2)*Param.Fs)-mean(Diameter(Listen(j,2)-Param.Fs:Listen(j,2)));
+                    G12(x,j,:)=Diameter(Listen(j,2)+WP(1)*Param.Fs:Listen(j,2)+WP(2)*Param.Fs)-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));
 %                     plot(ax8,linspace(WP(1),WP(2),size(G8,3)),reshape(G8(x,j,:),[],1),color=[0 0 0 0.01],linewidth=0.5)
                 end
             end
@@ -301,6 +305,7 @@ for q=1:numel(subDirs)
                 temp3(j)=max(Diameter(Speak(j,2):Speak(j,3)));
                 if Speak(j,2)+WP(2)*Param.Fs <= length(Diameter) % When reaching 'end of tobii data'
                     G13(x,j,:)=Diameter(Speak(j,2)+WP(1)*Param.Fs:Speak(j,2)+WP(2)*Param.Fs);
+                    G13_B(x,j,:)=Diameter(Speak(j,2)+WP(1)*Param.Fs:Speak(j,2)+WP(2)*Param.Fs)-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));
                 end
             end
             F1_S_Q(x)=mean(nonzeros(temp));
@@ -312,6 +317,7 @@ for q=1:numel(subDirs)
                 temp3(j)=max(Diameter(Listen(j,2):Listen(j,3)));
                 if Listen(j,2)+WP(2)*Param.Fs <= length(Diameter) % When reaching 'end of tobii data'
                     G14(x,j,:)=Diameter(Listen(j,2)+WP(1)*Param.Fs:Listen(j,2)+WP(2)*Param.Fs);
+                    G14_B(x,j,:)=Diameter(Listen(j,2)+WP(1)*Param.Fs:Listen(j,2)+WP(2)*Param.Fs)-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));
                 end
             end
             F1_L_Q(x)=mean(nonzeros(temp));
@@ -324,6 +330,7 @@ for q=1:numel(subDirs)
                 temp3(j)=max(Diameter(Speak(j,2):Speak(j,3)));
                 if Speak(j,2)+WP(2)*Param.Fs <= length(Diameter) % When reaching 'end of tobii data'
                     G15(x,j,:)=Diameter(Speak(j,2)+WP(1)*Param.Fs:Speak(j,2)+WP(2)*Param.Fs);
+                    G15_B(x,j,:)=Diameter(Speak(j,2)+WP(1)*Param.Fs:Speak(j,2)+WP(2)*Param.Fs)-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));
                 end
             end
             F1_S_SHL(x)=mean(nonzeros(temp));
@@ -335,6 +342,7 @@ for q=1:numel(subDirs)
                 temp3(j)=max(Diameter(Listen(j,2):Listen(j,3)));
                 if Listen(j,2)+WP(2)*Param.Fs <= length(Diameter) % When reaching 'end of tobii data'
                     G16(x,j,:)=Diameter(Listen(j,2)+WP(1)*Param.Fs:Listen(j,2)+WP(2)*Param.Fs);
+                    G16_B(x,j,:)=Diameter(Listen(j,2)+WP(1)*Param.Fs:Listen(j,2)+WP(2)*Param.Fs)-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));
                 end
             end
             F1_L_SHL(x)=mean(nonzeros(temp));
@@ -347,6 +355,7 @@ for q=1:numel(subDirs)
                 temp3(j)=max(Diameter(Speak(j,2):Speak(j,3)));
                 if Speak(j,2)+WP(2)*Param.Fs <= length(Diameter) % When reaching 'end of tobii data'
                     G17(x,j,:)=Diameter(Speak(j,2)+WP(1)*Param.Fs:Speak(j,2)+WP(2)*Param.Fs);
+                    G17_B(x,j,:)=Diameter(Speak(j,2)+WP(1)*Param.Fs:Speak(j,2)+WP(2)*Param.Fs)-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));
                 end
             end
             F1_S_N60(x)=mean(nonzeros(temp));
@@ -358,6 +367,7 @@ for q=1:numel(subDirs)
                 temp3(j)=max(Diameter(Listen(j,2):Listen(j,3)));
                 if Listen(j,2)+WP(2)*Param.Fs <= length(Diameter) % When reaching 'end of tobii data'
                     G18(x,j,:)=Diameter(Listen(j,2)+WP(1)*Param.Fs:Listen(j,2)+WP(2)*Param.Fs);
+                    G18_B(x,j,:)=Diameter(Listen(j,2)+WP(1)*Param.Fs:Listen(j,2)+WP(2)*Param.Fs)-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));
                 end
             end
             F1_L_N60(x)=mean(nonzeros(temp));
@@ -370,6 +380,7 @@ for q=1:numel(subDirs)
                 temp3(j)=max(Diameter(Speak(j,2):Speak(j,3)));
                 if Speak(j,2)+WP(2)*Param.Fs <= length(Diameter) % When reaching 'end of tobii data'
                     G19(x,j,:)=Diameter(Speak(j,2)+WP(1)*Param.Fs:Speak(j,2)+WP(2)*Param.Fs);
+                    G19_B(x,j,:)=Diameter(Speak(j,2)+WP(1)*Param.Fs:Speak(j,2)+WP(2)*Param.Fs)-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));
                 end
             end
             F1_S_N70(x)=mean(nonzeros(temp));
@@ -381,6 +392,7 @@ for q=1:numel(subDirs)
                 temp3(j)=max(Diameter(Listen(j,2):Listen(j,3)));
                 if Listen(j,2)+WP(2)*Param.Fs <= length(Diameter) % When reaching 'end of tobii data'
                     G20(x,j,:)=Diameter(Listen(j,2)+WP(1)*Param.Fs:Listen(j,2)+WP(2)*Param.Fs);
+                    G20_B(x,j,:)=Diameter(Listen(j,2)+WP(1)*Param.Fs:Listen(j,2)+WP(2)*Param.Fs)-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));
                 end
             end
             F1_L_N70(x)=mean(nonzeros(temp));
@@ -407,14 +419,16 @@ for q=1:numel(subDirs)
             title(ax15,'Feature 3: Mean Peak Pupil Size')
             title(ax16,'Global Speaking-evoked response')
             title(ax17,'Global Listening-evoked response')
-            xlabel([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10 ax11 ax12 ax16 ax17],'Time [s]')
+            title(ax18,'Global adaptive baselined Speaking-evoked response')
+            title(ax19,'Global adaptive baselined Listening-evoked response')
+            xlabel([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10 ax11 ax12 ax16 ax17 ax18 ax19],'Time [s]')
             xlabel([ax13 ax14 ax15],'Conditions')
             ylabel([ax1 ax2 ax3 ax4 ax7 ax8 ax13 ax15 ax16 ax17],'Pupil diameter [mm]')
-            ylabel([ax5 ax6 ax9 ax10 ax11 ax12],'Pupil baseline difference [mm]')
+            ylabel([ax5 ax6 ax9 ax10 ax11 ax12 ax18 ax19],'Pupil baseline difference [mm]')
             ylabel(ax14,'Slope [mm/s]')
             xlim([ax1 ax2],[0, 20])
-            xlim([ax3 ax4 ax5 ax6 ax16 ax17],[WP(1), WP(2)])
-            grid([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10 ax11 ax12 ax13 ax14 ax15 ax16 ax17],'on')
+            xlim([ax3 ax4 ax5 ax6 ax16 ax17 ax18 ax19],[WP(1), WP(2)])
+            grid([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10 ax11 ax12 ax13 ax14 ax15 ax16 ax17 ax18 ax19],'on')
             xline(ax3,0,'--')
             xline(ax4,0,'--')
             xline(ax5,0,'--')
@@ -427,6 +441,8 @@ for q=1:numel(subDirs)
             xline(ax12,0,'--')
             xline(ax16,0,'--','handlevisibility' ,'off')
             xline(ax17,0,'--','handlevisibility' ,'off')
+            xline(ax18,0,'--','handlevisibility' ,'off')
+            xline(ax19,0,'--','handlevisibility' ,'off')
             G1(~any(G1,2),:)=[];
             G2(~any(G2,2),:)=[];
             G3(~any(G3,2),:)=[];
@@ -447,6 +463,14 @@ for q=1:numel(subDirs)
             G18(~any(G18,[2 3]),:,:)=[];G18(:,~any(G18,[1 3]),:)=[];
             G19(~any(G19,[2 3]),:,:)=[];G19(:,~any(G19,[1 3]),:)=[];
             G20(~any(G20,[2 3]),:,:)=[];G20(:,~any(G20,[1 3]),:)=[];
+            G13_B(~any(G13_B,[2 3]),:,:)=[];G13_B(:,~any(G13_B,[1 3]),:)=[];
+            G14_B(~any(G14_B,[2 3]),:,:)=[];G14_B(:,~any(G14_B,[1 3]),:)=[];
+            G15_B(~any(G15_B,[2 3]),:,:)=[];G15_B(:,~any(G15_B,[1 3]),:)=[];
+            G16_B(~any(G16_B,[2 3]),:,:)=[];G16_B(:,~any(G16_B,[1 3]),:)=[];
+            G17_B(~any(G17_B,[2 3]),:,:)=[];G17_B(:,~any(G17_B,[1 3]),:)=[];
+            G18_B(~any(G18_B,[2 3]),:,:)=[];G18_B(:,~any(G18_B,[1 3]),:)=[];
+            G19_B(~any(G19_B,[2 3]),:,:)=[];G19_B(:,~any(G19_B,[1 3]),:)=[];
+            G20_B(~any(G20_B,[2 3]),:,:)=[];G20_B(:,~any(G20_B,[1 3]),:)=[];
             G7(G7==0)=NaN;
             G8(G8==0)=NaN;
             G9(G9==0)=NaN;
@@ -461,6 +485,14 @@ for q=1:numel(subDirs)
             G18(G18==0)=NaN;
             G19(G19==0)=NaN;
             G20(G20==0)=NaN;
+            G13_B(G13_B==0)=NaN;
+            G14_B(G14_B==0)=NaN;
+            G15_B(G15_B==0)=NaN;
+            G16_B(G16_B==0)=NaN;
+            G17_B(G17_B==0)=NaN;
+            G18_B(G18_B==0)=NaN;
+            G19_B(G19_B==0)=NaN;
+            G20_B(G20_B==0)=NaN;
             G1_Mean = mean(G1,1);
             G2_Mean = mean(G2,1);
             G3_Mean = mean(G3,1);
@@ -481,6 +513,14 @@ for q=1:numel(subDirs)
             G18_Mean = reshape(mean(mean(G18,'omitnan'),'omitnan'),[],1)';
             G19_Mean = reshape(mean(mean(G19,'omitnan'),'omitnan'),[],1)';
             G20_Mean = reshape(mean(mean(G20,'omitnan'),'omitnan'),[],1)';
+            G13B_Mean = reshape(mean(mean(G13_B,'omitnan'),'omitnan'),[],1)';
+            G14B_Mean = reshape(mean(mean(G14_B,'omitnan'),'omitnan'),[],1)';
+            G15B_Mean = reshape(mean(mean(G15_B,'omitnan'),'omitnan'),[],1)';
+            G16B_Mean = reshape(mean(mean(G16_B,'omitnan'),'omitnan'),[],1)';
+            G17B_Mean = reshape(mean(mean(G17_B,'omitnan'),'omitnan'),[],1)';
+            G18B_Mean = reshape(mean(mean(G18_B,'omitnan'),'omitnan'),[],1)';
+            G19B_Mean = reshape(mean(mean(G19_B,'omitnan'),'omitnan'),[],1)';
+            G20B_Mean = reshape(mean(mean(G20_B,'omitnan'),'omitnan'),[],1)';
             G1_SEM = std(G1,[],1)/sqrt(size(G1,1));
             G2_SEM = std(G2,[],1)/sqrt(size(G2,1));
             G3_SEM = std(G3,[],1)/sqrt(size(G3,1));
@@ -501,6 +541,14 @@ for q=1:numel(subDirs)
             G18_SEM = (reshape(std(std(G18,'omitnan'),'omitnan'),[],1)/sqrt(numel(G18(~isnan(G18)))))';
             G19_SEM = (reshape(std(std(G19,'omitnan'),'omitnan'),[],1)/sqrt(numel(G19(~isnan(G19)))))';
             G20_SEM = (reshape(std(std(G20,'omitnan'),'omitnan'),[],1)/sqrt(numel(G20(~isnan(G20)))))';
+            G13B_SEM = (reshape(std(std(G13_B,'omitnan'),'omitnan'),[],1)/sqrt(numel(G13_B(~isnan(G13_B)))))';
+            G14B_SEM = (reshape(std(std(G14_B,'omitnan'),'omitnan'),[],1)/sqrt(numel(G14_B(~isnan(G14_B)))))';
+            G15B_SEM = (reshape(std(std(G15_B,'omitnan'),'omitnan'),[],1)/sqrt(numel(G15_B(~isnan(G15_B)))))';
+            G16B_SEM = (reshape(std(std(G16_B,'omitnan'),'omitnan'),[],1)/sqrt(numel(G16_B(~isnan(G16_B)))))';
+            G17B_SEM = (reshape(std(std(G17_B,'omitnan'),'omitnan'),[],1)/sqrt(numel(G17_B(~isnan(G17_B)))))';
+            G18B_SEM = (reshape(std(std(G18_B,'omitnan'),'omitnan'),[],1)/sqrt(numel(G18_B(~isnan(G18_B)))))';
+            G19B_SEM = (reshape(std(std(G19_B,'omitnan'),'omitnan'),[],1)/sqrt(numel(G19_B(~isnan(G19_B)))))';
+            G20B_SEM = (reshape(std(std(G20_B,'omitnan'),'omitnan'),[],1)/sqrt(numel(G20_B(~isnan(G20_B)))))';
             plot(ax1,t_Diam(1:size(G1_Mean,2)),G1_Mean,"Color",'r',"LineWidth",2)
             plot(ax2,t_Diam(1:size(G2_Mean,2)),G2_Mean,"Color",'r',"LineWidth",2)
             plot(ax3,linspace(WP(1),WP(2),size(G3,2)),G3_Mean,"Color",'r',"LineWidth",2)
@@ -521,6 +569,14 @@ for q=1:numel(subDirs)
             plot(ax17,linspace(WP(1),WP(2),size(G16,3)),G16_Mean,"Color",[62 150 81]./255,"LineWidth",2)
             plot(ax17,linspace(WP(1),WP(2),size(G18,3)),G18_Mean,"Color",[146 36 40]./255,"LineWidth",2)
             plot(ax17,linspace(WP(1),WP(2),size(G20,3)),G20_Mean,"Color",[107 76 154]./255,"LineWidth",2)
+            plot(ax18,linspace(WP(1),WP(2),size(G13_B,3)),G13B_Mean,"Color",[204 37 41]./255,"LineWidth",2)
+            plot(ax18,linspace(WP(1),WP(2),size(G15_B,3)),G15B_Mean,"Color",[62 150 81]./255,"LineWidth",2)
+            plot(ax18,linspace(WP(1),WP(2),size(G17_B,3)),G17B_Mean,"Color",[146 36 40]./255,"LineWidth",2)
+            plot(ax18,linspace(WP(1),WP(2),size(G19_B,3)),G19B_Mean,"Color",[107 76 154]./255,"LineWidth",2)
+            plot(ax19,linspace(WP(1),WP(2),size(G14_B,3)),G14B_Mean,"Color",[204 37 41]./255,"LineWidth",2)
+            plot(ax19,linspace(WP(1),WP(2),size(G16_B,3)),G16B_Mean,"Color",[62 150 81]./255,"LineWidth",2)
+            plot(ax19,linspace(WP(1),WP(2),size(G18_B,3)),G18B_Mean,"Color",[146 36 40]./255,"LineWidth",2)
+            plot(ax19,linspace(WP(1),WP(2),size(G20_B,3)),G20B_Mean,"Color",[107 76 154]./255,"LineWidth",2)
             fill(ax1,[t_Diam(1:size(G1_Mean,2)), flipud(t_Diam(1:size(G1_Mean,2))')'],[(G1_Mean+G1_SEM), flipud((G1_Mean-G1_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
             fill(ax2,[t_Diam(1:size(G2_Mean,2)), flipud(t_Diam(1:size(G2_Mean,2))')'],[(G2_Mean+G2_SEM), flipud((G2_Mean-G2_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
             fill(ax3,[linspace(WP(1),WP(2),size(G3,2)), flipud(linspace(WP(1),WP(2),size(G3,2))')'],[(G3_Mean+G3_SEM), flipud((G3_Mean-G3_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
@@ -543,6 +599,16 @@ for q=1:numel(subDirs)
             fill(ax17,[linspace(WP(1),WP(2),size(G20,3)), flipud(linspace(WP(1),WP(2),size(G20,3))')'],[(G20_Mean+G20_SEM), flipud((G20_Mean-G20_SEM)')'],[144 103 167]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
             lgd17=legend(ax17,'Quiet','SHL','N60','N70','Location','southeastoutside');
             lgd17.Title.String = 'Conditions:';
+            fill(ax18,[linspace(WP(1),WP(2),size(G13_B,3)), flipud(linspace(WP(1),WP(2),size(G13_B,3))')'],[(G13B_Mean+G13B_SEM), flipud((G13B_Mean-G13B_SEM)')'],[211 94 96]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax18,[linspace(WP(1),WP(2),size(G15_B,3)), flipud(linspace(WP(1),WP(2),size(G15_B,3))')'],[(G15B_Mean+G15B_SEM), flipud((G15B_Mean-G15B_SEM)')'],[132 186 91]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax18,[linspace(WP(1),WP(2),size(G17_B,3)), flipud(linspace(WP(1),WP(2),size(G17_B,3))')'],[(G17B_Mean+G17B_SEM), flipud((G17B_Mean-G17B_SEM)')'],[171 104 87]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax18,[linspace(WP(1),WP(2),size(G19_B,3)), flipud(linspace(WP(1),WP(2),size(G19_B,3))')'],[(G19B_Mean+G19B_SEM), flipud((G19B_Mean-G19B_SEM)')'],[144 103 167]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax19,[linspace(WP(1),WP(2),size(G14_B,3)), flipud(linspace(WP(1),WP(2),size(G14_B,3))')'],[(G14B_Mean+G14B_SEM), flipud((G14B_Mean-G14B_SEM)')'],[211 94 96]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax19,[linspace(WP(1),WP(2),size(G16_B,3)), flipud(linspace(WP(1),WP(2),size(G16_B,3))')'],[(G16B_Mean+G16B_SEM), flipud((G16B_Mean-G16B_SEM)')'],[132 186 91]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax19,[linspace(WP(1),WP(2),size(G18_B,3)), flipud(linspace(WP(1),WP(2),size(G18_B,3))')'],[(G18B_Mean+G18B_SEM), flipud((G18B_Mean-G18B_SEM)')'],[171 104 87]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax19,[linspace(WP(1),WP(2),size(G20_B,3)), flipud(linspace(WP(1),WP(2),size(G20_B,3))')'],[(G20B_Mean+G20B_SEM), flipud((G20B_Mean-G20B_SEM)')'],[144 103 167]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            lgd19=legend(ax19,'Quiet','SHL','N60','N70','Location','southeastoutside');
+            lgd19.Title.String = 'Conditions:';
             % Plot features
             data13=[mean(nonzeros(F1_S_Q)),mean(nonzeros(F1_L_Q));mean(nonzeros(F1_S_SHL)),mean(nonzeros(F1_L_SHL));mean(nonzeros(F1_S_N60)),mean(nonzeros(F1_L_N60));mean(nonzeros(F1_S_N70)),mean(nonzeros(F1_L_N70))];
             b13=bar(ax13,data13,'grouped');
