@@ -83,31 +83,31 @@ for q=1:numel(subDirs)
         GazeZ = GazeZRaw;
         
         % Plots
-        backimag = uint8(zeros(600,600,3));         % backimag is the background image we have; let's put black
-        [dimY, dimX, ~] = size(backimag);
-        X = round(rescale(GazeX,1,dimX));           % GazeX from [-1,1] -> convert to [1,600]
-        Y = round(rescale(GazeY,1,dimY));           % GazeY from [-1,1] -> convert to [1,600]
-        W = ones(size(GazeX));                      % we could have weights on each gaze (eg to normalise for different number of trials per subject)
-        heatmap = mat2cell(hot,256,[1 1 1]);        % we choose a heatmap colouring, eg "hot", and convert it to "cell"
-        sigma = 20;                                  % the variance parameter for the gaussian kernel
-        % Create "mask"
-        origmask = ones(dimX, dimY)*0.1;
-        for k = 1:size(GazeX,1)
-            origmask(Y(k), X(k)) = origmask(Y(k), X(k)) + W(k);
-        end
-        % Filter using a gaussian kernel
-        mask = imgaussfilt(origmask, sigma);
-        % Normalise total mass of heatmap
-        mask = rescale(mask);
-        % Colour the background image with the heatmap
-        newImage = backimag;
-        for rgbInd = 1:3
-            thisHeat = heatmap{rgbInd}( floor(mask*255) + 1 );
-            newImage(:,:,rgbInd) = (newImage(:,:,rgbInd) + uint8(thisHeat*255));
-        end
-        figure; imshow(newImage); set(gca, 'ydir', 'normal')
-        figure; imshow(origmask); set(gca, 'ydir', 'normal')
-        figure; plot(GazeX,GazeY); xlim([-1 1]); ylim([-1 1])
+%         backimag = uint8(zeros(600,600,3));         % backimag is the background image we have; let's put black
+%         [dimY, dimX, ~] = size(backimag);
+%         X = round(rescale(GazeX,1,dimX));           % GazeX from [-1,1] -> convert to [1,600]
+%         Y = round(rescale(GazeY,1,dimY));           % GazeY from [-1,1] -> convert to [1,600]
+%         W = ones(size(GazeX));                      % we could have weights on each gaze (eg to normalise for different number of trials per subject)
+%         heatmap = mat2cell(hot,256,[1 1 1]);        % we choose a heatmap colouring, eg "hot", and convert it to "cell"
+%         sigma = 20;                                  % the variance parameter for the gaussian kernel
+%         % Create "mask"
+%         origmask = ones(dimX, dimY)*0.1;
+%         for k = 1:size(GazeX,1)
+%             origmask(Y(k), X(k)) = origmask(Y(k), X(k)) + W(k);
+%         end
+%         % Filter using a gaussian kernel
+%         mask = imgaussfilt(origmask, sigma);
+%         % Normalise total mass of heatmap
+%         mask = rescale(mask);
+%         % Colour the background image with the heatmap
+%         newImage = backimag;
+%         for rgbInd = 1:3
+%             thisHeat = heatmap{rgbInd}( floor(mask*255) + 1 );
+%             newImage(:,:,rgbInd) = (newImage(:,:,rgbInd) + uint8(thisHeat*255));
+%         end
+%         figure; imshow(newImage); set(gca, 'ydir', 'normal')
+%         figure; imshow(origmask); set(gca, 'ydir', 'normal')
+%         figure; plot(GazeX,GazeY); xlim([-1 1]); ylim([-1 1])
         
 %         [alldata_mat(:,cellfun(@(xd) any(isnan(xd)),{alldata_mat.gaze3d})).gaze3d] % all non-nans in gaze3d
                
