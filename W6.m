@@ -115,8 +115,8 @@ for q=1:numel(subDirs)
 %         ListenRaw(:,2:3)=round((ListenRaw(:,2:3)*binResUtt+BLPeriod(2)+0.58)*Param.Fs+LDelayRaw(1)/2);
 
         % Merge windows if gap <= TimeMergeGap
-%         [SpeakM] = MergeWin(SpeakRaw, Param.Fs, TimeMergeGap);
-%         [ListenM] = MergeWin(ListenRaw, Param.Fs, TimeMergeGap);
+%         SpeakM = merge_windows(SpeakRaw, Param.Fs, TimeMergeGap);
+%         ListenM = merge_windows(ListenRaw, Param.Fs, TimeMergeGap);
 
         GapDurRaw(x,1:size(GapRaw,1))=GapRaw(:,1)';
         OLWDurRaw(x,1:size(OLWRaw,1))=OLWRaw(:,1)';

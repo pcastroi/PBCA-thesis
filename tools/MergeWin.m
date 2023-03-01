@@ -1,3 +1,4 @@
+%% Unstable function -- best not to use
 function [Merged] = MergeWin(Raw, Fs, TimeMergeGap)
 PreWin = 0;
     for j=1:size(Raw,1)

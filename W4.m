@@ -199,12 +199,12 @@ for q=1:numel(subDirs)
             continue
         end
         
-        SpeakRaw(:,2:3)=round((SpeakRaw(:,2:3)*binResUtt+BLPeriod(2))*Param.Fs); %+0.26 %+SDelayRaw(1)/2
-        ListenRaw(:,2:3)=round((ListenRaw(:,2:3)*binResUtt+BLPeriod(2))*Param.Fs); %+0.58 %+LDelayRaw(1)/2
+        SpeakRaw(:,2:3)=round((SpeakRaw(:,2:3)*binResUtt+BLPeriod(2))*Param.Fs+SDelayRaw(1)/2); %+0.26 %
+        ListenRaw(:,2:3)=round((ListenRaw(:,2:3)*binResUtt+BLPeriod(2))*Param.Fs+LDelayRaw(1)/2); %+0.58 %
         
         % Merge windows if gap <= TimeMergeGap
-        [SpeakM] = MergeWin(SpeakRaw, Param.Fs, TimeMergeGap);
-        [ListenM] = MergeWin(ListenRaw, Param.Fs, TimeMergeGap);
+        SpeakM = merge_windows(SpeakRaw, Param.Fs, TimeMergeGap);
+        ListenM = merge_windows(ListenRaw, Param.Fs, TimeMergeGap);
                 
         % Discard windows if duration is < TimeMinWin
         Speak = SpeakM(SpeakM(:,1)>TimeMinWin,:);

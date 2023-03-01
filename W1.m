@@ -217,8 +217,8 @@ for q=1:numel(subDirs)
         ListenRaw(:,2:3)=round((ListenRaw(:,2:3)*binResUtt+TimeStart)*Param.Fs+LDelayRaw(1)/2);
 
         % Merge windows if gap <= TimeMergeGap
-        [SpeakM] = MergeWin(SpeakRaw, Param.Fs, TimeMergeGap);
-        [ListenM] = MergeWin(ListenRaw, Param.Fs, TimeMergeGap);
+        SpeakM = merge_windows(SpeakRaw, Param.Fs, TimeMergeGap);
+        ListenM = merge_windows(ListenRaw, Param.Fs, TimeMergeGap);
         
         % figure;t_Diam = linspace(1,length(BLDiam)./Param.Fs,length(BLDiam));startStopS = t_Diam(Speak(:,2:3));yl=ylim();widthS = startStopS(:,2)-startStopS(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStopS(i,1),yl(1),widthS(i),3],'EdgeColor', 'none', 'FaceColor', [1 0 0 .2]), 1:size(startStopS,1));startStopS2 = t_Diam(SpeakRaw(:,2:3));widthS = startStopS2(:,2)-startStopS2(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStopS2(i,1),yl(1),widthS(i),5],'EdgeColor', 'none', 'FaceColor', [0 0 1 .2]), 1:size(startStopS2,1));grid on
         
