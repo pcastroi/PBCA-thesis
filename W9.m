@@ -13,6 +13,7 @@ Param.Fs = 50; % Sampling frequency of pupil data
 Param.Preblink = 0.1; % [s], set to NaN, time before blink
 Param.Postblink = 0.2; % [s], set to NaN, time after blink
 Param.BlinkThresh = 3; % [samples], threshold of samples in between artifacts or blinks
+MaxVisualAngle = 0.5; % [degrees], critical visual angle for fixation definition
 
 for q=1:numel(subDirs)
     PairIn = q;
@@ -82,6 +83,10 @@ for q=1:numel(subDirs)
         GazeY = GazeYRaw;
         GazeZ = GazeZRaw;
         
+        % Fixation duration
+        fixation = fix_duration([GazeXRaw,GazeYRaw,GazeZRaw],MaxVisualAngle,Param.Fs);
+        
+        figure;plot(linspace(0,length(fixation)./Param.Fs,length(fixation)),fixation)
         % Plots
 %         backimag = uint8(zeros(600,600,3));         % backimag is the background image we have; let's put black
 %         [dimY, dimX, ~] = size(backimag);

@@ -30,8 +30,9 @@ TimeEndW = 0; % [s], time after Utt/Lis starts
 TimeStart = 20; % [s], time at which simultaneous recording started
 TimeBL = [10,15]; % [s], time chosen for baseline
 TimeMinWin = 0.5; % [s], Minimum time of a window
-TimeMergeGap = 0.3; % [s], Time threshold for merging windows
-RejectRatio = 0.3; % Rejection threshold based on the ratio of NaNs in data
+TimeInitialMerge = 0.3; % [s], Time threshold for merging windows initially
+TimeMerge = 2; % [s], Time threshold for merging windows after rejecting small windows
+RejectRatio = 0.4; % Rejection threshold based on the ratio of NaNs in data
 RejectDelay = 0.5; % [s], Rejection threshold based on delay between timestamps and n-samples
 NFilesMax = 16; % Max number of files
 
@@ -216,16 +217,24 @@ for q=1:numel(subDirs)
         SpeakRaw(:,2:3)=round((SpeakRaw(:,2:3)*binResUtt+TimeStart)*Param.Fs+SDelayRaw(1)/2);
         ListenRaw(:,2:3)=round((ListenRaw(:,2:3)*binResUtt+TimeStart)*Param.Fs+LDelayRaw(1)/2);
 
-        % Merge windows if gap <= TimeMergeGap
-        SpeakM = merge_windows(SpeakRaw, Param.Fs, TimeMergeGap);
-        ListenM = merge_windows(ListenRaw, Param.Fs, TimeMergeGap);
+        % Merge windows if duration between windows <= TimeInitialMerge (300 ms)
+        SpeakMI = merge_windows(SpeakRaw, Param.Fs, TimeInitialMerge);
+        ListenMI = merge_windows(ListenRaw, Param.Fs, TimeInitialMerge);
         
-        % figure;t_Diam = linspace(1,length(BLDiam)./Param.Fs,length(BLDiam));startStopS = t_Diam(Speak(:,2:3));yl=ylim();widthS = startStopS(:,2)-startStopS(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStopS(i,1),yl(1),widthS(i),3],'EdgeColor', 'none', 'FaceColor', [1 0 0 .2]), 1:size(startStopS,1));startStopS2 = t_Diam(SpeakRaw(:,2:3));widthS = startStopS2(:,2)-startStopS2(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStopS2(i,1),yl(1),widthS(i),5],'EdgeColor', 'none', 'FaceColor', [0 0 1 .2]), 1:size(startStopS2,1));grid on
+        % Discard windows if duration is < TimeMinWin (500 ms)
+        SpeakD = SpeakMI(SpeakMI(:,1)>TimeMinWin,:);
+        ListenD = ListenMI(ListenMI(:,1)>TimeMinWin,:);
         
-        % Discard windows if duration is < TimeMinWin
-        Speak = SpeakM(SpeakM(:,1)>TimeMinWin,:);
-        Listen = ListenM(ListenM(:,1)>TimeMinWin,:);
-          
+        % Merge again if duration between windows <= TimeMerge (2 s)
+        SpeakM = merge_windows(SpeakD, Param.Fs, TimeMerge);
+        ListenM = merge_windows(ListenD, Param.Fs, TimeMerge);
+        
+        % Discard windows if duration is < 2*TimeMinWin (1 s)
+        Speak = SpeakM(SpeakM(:,1)>2*TimeMinWin,:);
+        Listen = ListenM(ListenM(:,1)>2*TimeMinWin,:);
+        
+        % figure;t_Diam = linspace(1,length(Diameter)./Param.Fs,length(Diameter));startStopS = t_Diam(SpeakRaw(:,2:3));yl=ylim();widthS = startStopS(:,2)-startStopS(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStopS(i,1),yl(1),widthS(i),1],'EdgeColor', 'none', 'FaceColor', [1 0 0 .2]), 1:size(startStopS,1));startStopS2 = t_Diam(SpeakMI(:,2:3));widthS = startStopS2(:,2)-startStopS2(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStopS2(i,1),1,widthS(i),1],'EdgeColor', 'none', 'FaceColor', [0 0 1 .2]), 1:size(startStopS2,1));startStopS3 = t_Diam(SpeakD(:,2:3));widthS = startStopS3(:,2)-startStopS3(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStopS3(i,1),2,widthS(i),1],'EdgeColor', 'none', 'FaceColor', [0 1 1 .2]), 1:size(startStopS3,1));startStopS4 = t_Diam(SpeakM(:,2:3));widthS = startStopS4(:,2)-startStopS4(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStopS5(i,1),3,widthS(i),1],'EdgeColor', 'none', 'FaceColor', [1 0 1 .2]), 1:size(startStopS4,1));startStopS5 = t_Diam(Speak(:,2:3));widthS = startStopS5(:,2)-startStopS5(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStopS5(i,1),4,widthS(i),1],'EdgeColor', 'none', 'FaceColor', [1 1 0 .2]), 1:size(startStopS5,1));grid on        
+        
         % Time-locked indexes (based on Start or End of events)
         SWSpeakIdx=[Speak(:,2)-TimeStartW*Param.Fs,Speak(:,2),Speak(:,2)+TimeEndW*Param.Fs];
         SWListenIdx=[Listen(:,2)-TimeStartW*Param.Fs,Listen(:,2),Listen(:,2)+TimeEndW*Param.Fs];
