@@ -200,8 +200,8 @@ for q=1:numel(subDirs)
             continue
         end
         
-        SpeakRaw(:,2:3)=round((SpeakRaw(:,2:3)*binResUtt+BLPeriod(2))*Param.Fs+SDelayRaw(1)/2); %+0.26 %
-        ListenRaw(:,2:3)=round((ListenRaw(:,2:3)*binResUtt+BLPeriod(2))*Param.Fs+LDelayRaw(1)/2); %+0.58 %
+        SpeakRaw(:,2:3)=round((SpeakRaw(:,2:3)*binResUtt+BLPeriod(2))*Param.Fs+SDelayRaw(1)/2);
+        ListenRaw(:,2:3)=round((ListenRaw(:,2:3)*binResUtt+BLPeriod(2))*Param.Fs+LDelayRaw(1)/2);
         
         % SAME PROCESSING AS IN W1.m
         % Merge windows if duration between windows <= TimeInitialMerge (300 ms)
@@ -219,6 +219,9 @@ for q=1:numel(subDirs)
         % Discard windows if duration is < 2*TimeMinWin (1 s)
         Speak = SpeakM(SpeakM(:,1)>2*TimeMinWin,:);
         Listen = ListenM(ListenM(:,1)>2*TimeMinWin,:);
+        
+        % Average median, mean of duration of Speaking/Listening
+        Med_S=Med_S+median(Speak(:,1));
         
         t_Diam = linspace(0,length(Diameter)./Param.Fs,length(Diameter));
         
