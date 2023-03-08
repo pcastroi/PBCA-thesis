@@ -1,4 +1,4 @@
-%% PBCA-Thesis - Week 9 - Fixation duration? Not using diameter anymore
+%% PBCA-Thesis - Week 9 & 10 - Fixation duration? Not using diameter anymore
 % Pathing
 clear all; clc; close all;
 BPath = strsplit(pwd,'PBCA-thesis');
@@ -25,6 +25,11 @@ TimeInitialMerge = 0.3; % [s], Time threshold for merging windows initially
 TimeMerge = 2; % [s], Time threshold for merging windows after rejecting small windows
 RejectRatio = 0.4; % Rejection threshold based on the ratio of NaNs in data
 RejectDelay = 0.5; % [s], Rejection threshold based on delay between timestamps and n-samples
+x=1; % idx to store global values
+
+% Variables
+GSW = zeros(200,4000); % Global Speaking Windows
+GLW = zeros(200,4000); % Global Listening Windows
 
 for q=1:numel(subDirs)
     PairIn = q;
@@ -40,6 +45,78 @@ for q=1:numel(subDirs)
             continue
         end
         alldata_mat = cell2mat(alldata.data);
+        
+        % In case gaze3d is transposed from origin [x;y;z] -> transpose to [x,y,z]
+        if size([alldata_mat(:,cellfun(@(xd) ~any(isnan(xd)),{alldata_mat.gaze3d})).gaze3d],1) == 3
+            for k=1:size(alldata_mat,2)
+               alldata_mat(k).gaze3d=alldata_mat(k).gaze3d'; 
+            end
+        end
+        
+        % Replace blanks '[]' for 'NaN' in gaze3d
+        [alldata_mat(cellfun(@isempty,{alldata_mat.gaze3d})).gaze3d] = deal(NaN);
+        
+        % Replace 'NaN' to '[NaN,NaN,NaN]'
+        [alldata_mat(:,cellfun(@(xd) any(isnan(xd)),{alldata_mat.gaze3d})).gaze3d] = deal([NaN,NaN,NaN]);
+        
+        gaze3d = vertcat(alldata_mat.gaze3d);
+        
+        GazeXRaw = gaze3d(:,1);
+        GazeYRaw = gaze3d(:,2);
+        GazeZRaw = gaze3d(:,3);
+        
+        GazeX = GazeXRaw;
+        GazeY = GazeYRaw;
+        GazeZ = GazeZRaw;
+        
+        % NaN's appear at the same time at [X,Y,Z], we only look at X.
+        XNan = find(isnan(GazeXRaw));
+        
+        % Reject a file if the chosen eye data has too many NaNs
+        if length(XNan)/length(gaze3d) >= RejectRatio
+            disp(['Warning: File ',PairFiles(1).folder, '\', cell2mat(FileNames(i)), ' was rejected because it contains too many NaNs (',sprintf('%0.2f',100*length(XNan)/length(gaze3d)),'%).'])
+            continue
+        end
+        
+        % Extract delay [s] (Duration_timeStamps - Duration_nsamples)
+        EyeAudDelay=alldata_mat(end).timeStamp-alldata_mat(1).timeStamp-length(alldata_mat)/Param.Fs;
+        
+        % Skip file if the difference in duration from the number of
+        % samples and the duration given by timestamps is bigger than 0.5 s
+        if EyeAudDelay > RejectDelay
+            disp(['Warning: File ',PairFiles(1).folder, '\', cell2mat(FileNames(i)), ' was rejected, too much delay (',sprintf('%0.2f',EyeAudDelay),'s).']);
+            continue
+        end
+        
+        % Preprocessing - 100 ms before and 200 ms after a blink -> NaN
+        if ~isempty(XNan)
+            
+            % Pre-blink
+            Pre = [XNan(1);XNan(find(diff(XNan,1) > 1) + 1)];
+            for h=1:length(Pre)
+                if Pre(h) > Param.Preblink*Param.Fs % Check start delimiter
+                   for k=1:Param.Preblink*Param.Fs
+                       GazeX(Pre(h)-k)=NaN;
+                       GazeY(Pre(h)-k)=NaN;
+                       GazeZ(Pre(h)-k)=NaN;
+                   end
+                end
+            end
+
+            % Post-blink
+            Post = XNan(diff(XNan,1) > Param.BlinkThresh);
+            for h=1:length(Post)
+                if Post(h) < length(GazeXRaw) + Param.Postblink*Param.Fs % Check end delimiter
+                   for k=1:Param.Postblink*Param.Fs
+                       GazeX(Post(h)+k)=NaN;
+                       GazeY(Post(h)+k)=NaN;
+                       GazeZ(Post(h)+k)=NaN;
+                   end
+                end
+            end
+        end
+        % Fixation duration
+        fixation = fix_duration([GazeX,GazeY,GazeZ],MaxVisualAngle,Param.Fs);
         
         % Retrieve Utterances
         if contains(cell2mat(FileNames(i)),'P2')
@@ -115,122 +192,61 @@ for q=1:numel(subDirs)
         Speak = SpeakM(SpeakM(:,1)>2*TimeMinWin,:);
         Listen = ListenM(ListenM(:,1)>2*TimeMinWin,:);
         
-        % In case gaze3d is transposed from origin [x;y;z] -> transpose to [x,y,z]
-        if size([alldata_mat(:,cellfun(@(xd) ~any(isnan(xd)),{alldata_mat.gaze3d})).gaze3d],1) == 3
-            for k=1:size(alldata_mat,2)
-               alldata_mat(k).gaze3d=alldata_mat(k).gaze3d'; 
-            end
-        end
-        
-        % Replace blanks '[]' for 'NaN' in gaze3d
-        [alldata_mat(cellfun(@isempty,{alldata_mat.gaze3d})).gaze3d] = deal(NaN);
-        
-        % Replace 'NaN' to '[NaN,NaN,NaN]'
-        [alldata_mat(:,cellfun(@(xd) any(isnan(xd)),{alldata_mat.gaze3d})).gaze3d] = deal([NaN,NaN,NaN]);
-        
-        gaze3d = vertcat(alldata_mat.gaze3d);
-        
-        GazeXRaw = gaze3d(:,1);
-        GazeYRaw = gaze3d(:,2);
-        GazeZRaw = gaze3d(:,3);
-        
-        GazeX = GazeXRaw;
-        GazeY = GazeYRaw;
-        GazeZ = GazeZRaw;
-        
-        % NaN's appear at the same time at [X,Y,Z], we only look at X.
-        XNan = find(isnan(GazeXRaw));
-        
-        % Reject a file if the chosen eye data has too many NaNs
-        if length(XNan)/length(gaze3d) >= RejectRatio
-            disp(['Warning: File ',PairFiles(1).folder, '\', cell2mat(FileNames(i)), ' was rejected because it contains too many NaNs (',sprintf('%0.2f',100*length(XNan)/length(gaze3d)),'%).'])
-            continue
-        end
-        
-        % Extract delay [s] (Duration_timeStamps - Duration_nsamples)
-        EyeAudDelay=alldata_mat(end).timeStamp-alldata_mat(1).timeStamp-length(alldata_mat)/Param.Fs;
-        
-        % Skip file if the difference in duration from the number of
-        % samples and the duration given by timestamps is bigger than 0.5 s
-        if EyeAudDelay > RejectDelay
-            disp(['Warning: File ',PairFiles(1).folder, '\', cell2mat(FileNames(i)), ' was rejected, too much delay (',sprintf('%0.2f',EyeAudDelay),'s).']);
-            continue
-        end
-        
-        % Preprocessing - 100 ms before and 200 ms after a blink -> NaN
-        if ~isempty(XNan)
-            
-            % Pre-blink
-            Pre = [XNan(1);XNan(find(diff(XNan,1) > 1) + 1)];
-            for h=1:length(Pre)
-                if Pre(h) > Param.Preblink*Param.Fs % Check start delimiter
-                   for k=1:Param.Preblink*Param.Fs
-                       GazeX(Pre(h)-k)=NaN;
-                       GazeY(Pre(h)-k)=NaN;
-                       GazeZ(Pre(h)-k)=NaN;
-                   end
-                end
-            end
-
-            % Post-blink
-            Post = XNan(diff(XNan,1) > Param.BlinkThresh);
-            for h=1:length(Post)
-                if Post(h) < length(GazeXRaw) + Param.Postblink*Param.Fs % Check end delimiter
-                   for k=1:Param.Postblink*Param.Fs
-                       GazeX(Post(h)+k)=NaN;
-                       GazeY(Post(h)+k)=NaN;
-                       GazeZ(Post(h)+k)=NaN;
-                   end
-                end
-            end
-        end
-        % Fixation duration
-        fixationRaw = fix_duration([GazeXRaw,GazeYRaw,GazeZRaw],MaxVisualAngle,Param.Fs);
-        fixation = fix_duration([GazeX,GazeY,GazeZ],MaxVisualAngle,Param.Fs);
-        
         % Time-locked indexes (based on Start or End of events)
         SWSpeakIdx=[Speak(:,2)-TimeStartW*Param.Fs,Speak(:,2),Speak(:,2)+TimeEndW*Param.Fs];
         SWListenIdx=[Listen(:,2)-TimeStartW*Param.Fs,Listen(:,2),Listen(:,2)+TimeEndW*Param.Fs];
         EWSpeakIdx=[Speak(:,3)-TimeStartW*Param.Fs,Speak(:,3),Speak(:,3)+TimeEndW*Param.Fs];
         EWListenIdx=[Listen(:,3)-TimeStartW*Param.Fs,Listen(:,3),Listen(:,3)+TimeEndW*Param.Fs];
         
+        
+        
         % Plots
-        figure;tiledlayout(1,2);ax1 = nexttile;ax2 = nexttile;
-        hold([ax1 ax2],'on')
+        SColor = [68, 212, 146]./255;
+        LColor = [250, 35, 62]./255;
+        figure
+        hold on
+        grid on
+        
         SW = zeros(size(Speak,1),ceil(Param.Fs*(TimeStartW+max(Speak(:,1)))));
         for j=1:size(Speak,1)
-            if SWSpeakIdx(j,3)-1 <= length(fixationRaw)
-                plot(ax1,linspace(-TimeStartW,Speak(j,1),length(SWSpeakIdx(j,1):Speak(j,3)-1)),fixationRaw(SWSpeakIdx(j,1):Speak(j,3)-1),color=[0 0 0 0.01],linewidth=0.5)
+            if SWSpeakIdx(j,3)-1 <= length(fixation)
+                plot(linspace(-TimeStartW,Speak(j,1),length(SWSpeakIdx(j,1):Speak(j,3)-1)),fixation(SWSpeakIdx(j,1):Speak(j,3)-1),'color',[0 0 0 0.01],'linewidth',0.5,'handlevisibility','off')
                 % Add nan-padding when necessary
-                SW(j,:)=[fixationRaw(SWSpeakIdx(j,1):Speak(j,3)-1);NaN*ones(1,length(SW)-length(SWSpeakIdx(j,1):Speak(j,3)-1))'];
+                SW(j,:)=[fixation(SWSpeakIdx(j,1):Speak(j,3)-1);NaN*ones(1,length(SW)-length(SWSpeakIdx(j,1):Speak(j,3)-1))'];
             end
         end
-        SW_Mean = mean(SW,1);
-        SW_SEM = std(SW,[],1)/sqrt(size(SW,1));
-        plot(ax1,linspace(-TimeStartW,max(Speak(:,1)),length(SW)),mean(SW,1,'omitnan'),color=[1 0 0 0.8],LineWidth=1.5)
-        fill(ax1,[linspace(-TimeStartW,max(Speak(:,1)),length(SW)), flipud(linspace(-TimeStartW,max(Speak(:,1)),length(SW)))'],[(SW_Mean+SW_SEM), flipud((SW_Mean-SW_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-        xline(ax1,0,"--")
+        SW_Mean = mean(SW,1,'omitnan');
+        GSW(x,1:length(SW_Mean)) = SW_Mean;
+        SW_SEM = std(SW,1,'omitnan')/sqrt(length(SW));
+        plot(linspace(-TimeStartW,max(Speak(:,1)),length(SW)),SW_Mean,color=SColor)
+        SW_Mean(isnan(SW_Mean))=0;SW_SEM(isnan(SW_SEM))=0;
+        fill([linspace(-TimeStartW,max(Speak(:,1)),length(SW)), flipud(linspace(-TimeStartW,max(Speak(:,1)),length(SW))')'],[(SW_Mean+SW_SEM), flipud((SW_Mean-SW_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+        
         
         LW = zeros(size(Listen,1),ceil(Param.Fs*(TimeStartW+max(Listen(:,1)))));
         for j=1:size(Listen,1)
-            if SWListenIdx(j,3)-1 <= length(fixationRaw)
-                plot(ax2,linspace(-TimeStartW,Listen(j,1),length(SWListenIdx(j,1):Listen(j,3)-1)),fixationRaw(SWListenIdx(j,1):Listen(j,3)-1),color=[0 0 0 0.01],linewidth=0.5)
+            if SWListenIdx(j,3)-1 <= length(fixation)
+                plot(linspace(-TimeStartW,Listen(j,1),length(SWListenIdx(j,1):Listen(j,3)-1)),fixation(SWListenIdx(j,1):Listen(j,3)-1),'color',[0 0 0 0.01],'linewidth',0.5,'handlevisibility','off')
                 % Add nan-padding when necessary
-                LW(j,:)=[fixationRaw(SWListenIdx(j,1):Listen(j,3)-1);NaN*ones(1,length(LW)-length(SWListenIdx(j,1):Listen(j,3)-1))'];
+                LW(j,:)=[fixation(SWListenIdx(j,1):Listen(j,3)-1);NaN*ones(1,length(LW)-length(SWListenIdx(j,1):Listen(j,3)-1))'];
             end
         end
-        plot(ax2,linspace(-TimeStartW,max(Listen(:,1)),length(LW)),mean(LW,1,'omitnan'),color=[1 0 0 0.8],LineWidth=1.5)
-        xline(ax2,0,"--")
+        LW_Mean = mean(LW,1,'omitnan');
+        GLW(x,1:length(LW_Mean)) = LW_Mean;
+        LW_SEM = std(LW,1,'omitnan')/sqrt(length(LW));
+        plot(linspace(-TimeStartW,max(Listen(:,1)),length(LW)),LW_Mean,color=LColor)
+        LW_Mean(isnan(LW_Mean))=0;LW_SEM(isnan(LW_SEM))=0;
+        fill([linspace(-TimeStartW,max(Listen(:,1)),length(LW)), flipud(linspace(-TimeStartW,max(Listen(:,1)),length(LW))')'],[(LW_Mean+LW_SEM), flipud((LW_Mean-LW_SEM)')'],LColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
         
-%         xticks(ax1,[-TimeStartW:TimeStartW:max(Speak(:,1))])
-%         xticks(ax2,[-TimeStartW:TimeStartW:max(Listen(:,1))])
-        title(ax1,'Fixation duration during Speaking windows')
-        title(ax2,'Baselined listening-evoked pupil response')
-        xlabel([ax1 ax2],'Time [s]')
-        ylabel([ax1 ax2],'Fixation duration [s]');
+        xline(0,'--','handlevisibility','off')
+        lgd=legend('Speaking','Listening','Location','southeastoutside');
+        lgd.Title.String = 'Types of windows:';
+        title(['File: ',PairFiles(1).folder,'\',cell2mat(FileNames(i))],'interpreter','none')
+        xlabel('Time [s]')
+        ylabel('Fixation duration [s]');
         
         
-%         figure;plot(linspace(0,length(fixation)./Param.Fs,length(fixation)),fixation,'LineWidth',2);hold on;plot(linspace(0,length(fixationRaw)./Param.Fs,length(fixationRaw)),fixationRaw);title([PairFiles(1).folder, '\', cell2mat(FileNames(i))],'interpreter','none')
+%         figure;plot(linspace(0,length(fixation)./Param.Fs,length(fixation)),fixation,'LineWidth',2);hold on;plot(linspace(0,length(fixation)./Param.Fs,length(fixation)),fixation);title([PairFiles(1).folder, '\', cell2mat(FileNames(i))],'interpreter','none')
      
 %         backimag = uint8(zeros(600,600,3));         % backimag is the background image we have; let's put black
 %         [dimY, dimX, ~] = size(backimag);
@@ -259,6 +275,34 @@ for q=1:numel(subDirs)
 %         figure; plot(GazeX,GazeY); xlim([-1 1]); ylim([-1 1])
         
 %         [alldata_mat(:,cellfun(@(xd) any(isnan(xd)),{alldata_mat.gaze3d})).gaze3d] % all non-nans in gaze3d
-               
+        
+        
+        % Last file = \Main12\P1_SHL_B2.mat -> default rejection criteria
+        if contains([PairFiles(i).folder, '\', PairFiles(i).name],'\Main12\P1_SHL_B2.mat')
+            figure
+            hold on
+            grid on
+            
+            GSW(~any(GSW,2),:)=[];GSW(GSW==0)=NaN;
+            GLW(~any(GLW,2),:)=[];GLW(GLW==0)=NaN;
+            
+            GSW_Mean = mean(GSW,1,'omitnan');
+            GLW_Mean = mean(GLW,1,'omitnan');
+            GSW_SEM = std(GSW,1,'omitnan')/sqrt(find(~isnan(std(GSW,1,'omitnan')),1,'last'));
+            GLW_SEM = std(GLW,1,'omitnan')/sqrt(find(~isnan(std(GLW,1,'omitnan')),1,'last'));
+            
+            xline(0,'--','handlevisibility','off')
+            plot(linspace(-TimeStartW,size(GSW,2)/Param.Fs,size(GSW,2)),GSW_Mean,color=SColor)
+            plot(linspace(-TimeStartW,size(GLW,2)/Param.Fs,size(GLW,2)),GLW_Mean,color=LColor)
+            GSW_Mean(isnan(GSW_Mean))=0;GSW_SEM(isnan(GSW_SEM))=0;
+            GLW_Mean(isnan(GLW_Mean))=0;GLW_SEM(isnan(GLW_SEM))=0;
+            fill([linspace(-TimeStartW,size(GSW,2)/Param.Fs,size(GSW,2)), flipud(linspace(-TimeStartW,size(GSW,2)/Param.Fs,size(GSW,2))')'],[(GSW_Mean+GSW_SEM), flipud((GSW_Mean-GSW_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')  
+            fill([linspace(-TimeStartW,size(GLW,2)/Param.Fs,size(GLW,2)), flipud(linspace(-TimeStartW,size(GLW,2)/Param.Fs,size(GLW,2))')'],[(GLW_Mean+GLW_SEM), flipud((GLW_Mean-GLW_SEM)')'],LColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            xlabel('Time [s]')
+            ylabel('Fixation duration [s]');
+            lgd=legend('Speaking','Listening','Location','southeastoutside');
+            lgd.Title.String = 'Types of windows:';
+        end
+        x=x+1;
     end
 end
