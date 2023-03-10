@@ -29,7 +29,7 @@ for i = 1:size(Gaze, 1)
     % Radius calculated from MaxVisualAngle and distance
     b = current_gaze_z; % from 0,0,0 to GazeX,GazeY,GazeZ
     c = b/cos(deg2rad(MaxVisualAngle)/2); % from 0,0,0 to GazeX + radius,GazeY,GazeZ
-    radius(i) = sqrt(c^2-b^2);
+    radius(i) = 2*sqrt(c^2-b^2);
 
 %     radius(i)=4;
             
@@ -79,7 +79,11 @@ for i = 1:size(Gaze, 1)
     
     % Count the number of continuous pre- and post-samples within the sphere
     if ~isnan(fixation(i))
-        fixation(i) = (pre_samples + post_samples)/Fs;
+        if pre_samples + post_samples ~= 0
+            fixation(i) = (pre_samples + post_samples)/Fs;
+        else
+            fixation(i) = NaN;
+        end
     end
 end
 
