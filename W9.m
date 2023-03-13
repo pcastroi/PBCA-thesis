@@ -28,12 +28,12 @@ RejectDelay = 0.5; % [s], Rejection threshold based on delay between timestamps 
 x=1; % idx to store global values
 
 % Colors
-SColor = [68, 212, 146]./255;
-LColor = [250, 35, 62]./255;
-QuietColor = [211 94 96]./255;
-SHLColor = [132 186 91]./255;
-N60Color = [171 104 87]./255;
-N70Color = [144 103 167]./255 ;
+SColor = [53, 155, 67]./255;
+LColor = [204, 36, 0]./255;
+QuietColor = [204, 152, 0]./255;
+SHLColor = [123, 31, 162]./255;
+N60Color = [0, 196, 215]./255;
+N70Color = [2, 36, 223]./255;
 
 % Variables
 GSW = zeros(200,4000); % Global Speaking Windows
@@ -365,14 +365,14 @@ LW_N70_SEM = (reshape(std(std(LW_N70,'omitnan'),'omitnan'),[],1)/sqrt(numel(LW_N
 xline(ax1,0,'--','handlevisibility','off')
 xline(ax2,0,'--','handlevisibility','off')
 
-plot(ax1,linspace(-TimeStartW,size(GSW,2)/Param.Fs,size(GSW,2)),GSW_Mean,color=SColor)
+plot(ax1,linspace(-TimeStartW,size(GSW,2)/Param.Fs,size(GSW,2)),GSW_Mean,color=SColor,linewidth=2)
 plot(ax1,linspace(-TimeStartW,size(SW_Quiet,3)/Param.Fs,size(SW_Quiet,3)),SW_Quiet_Mean,color=QuietColor)
 plot(ax1,linspace(-TimeStartW,size(SW_SHL,3)/Param.Fs,size(SW_SHL,3)),SW_SHL_Mean,color=SHLColor)
 plot(ax1,linspace(-TimeStartW,size(SW_N60,3)/Param.Fs,size(SW_N60,3)),SW_N60_Mean,color=N60Color)
 plot(ax1,linspace(-TimeStartW,size(SW_N70,3)/Param.Fs,size(SW_N70,3)),SW_N70_Mean,color=N70Color)
 
-plot(ax2,linspace(-TimeStartW,size(GLW,2)/Param.Fs,size(GLW,2)),GLW_Mean,color=LColor)
-plot(nan,color=SColor)
+plot(nan,color=SColor,linewidth=2) % plot nans to show color in legend
+plot(ax2,linspace(-TimeStartW,size(GLW,2)/Param.Fs,size(GLW,2)),GLW_Mean,color=LColor,linewidth=2)
 plot(ax2,linspace(-TimeStartW,size(LW_Quiet,3)/Param.Fs,size(LW_Quiet,3)),LW_Quiet_Mean,color=QuietColor)
 plot(ax2,linspace(-TimeStartW,size(LW_SHL,3)/Param.Fs,size(LW_SHL,3)),LW_SHL_Mean,color=SHLColor)
 plot(ax2,linspace(-TimeStartW,size(LW_N60,3)/Param.Fs,size(LW_N60,3)),LW_N60_Mean,color=N60Color)
@@ -406,3 +406,5 @@ xlabel([ax1 ax2],'Time [s]')
 ylabel([ax1 ax2],'Fixation duration [s]');
 lgd2=legend(ax2,'Speaking','Listening','Quiet','SHL','N60','N70','Location','southeastoutside');
 lgd.Title.String = 'Types of windows:';
+title(ax1,'Speaking windows')
+title(ax2,'Listening windows')
