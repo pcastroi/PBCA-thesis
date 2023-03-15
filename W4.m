@@ -23,6 +23,7 @@ TimeInitialMerge = 0.3; % [s], Time threshold for merging windows initially
 TimeMerge = 2; % [s], Time threshold for merging windows after rejecting small windows
 RejectRatio = 0.4; % Rejection threshold based on the ratio of NaNs in data
 RejectDelay = 0.5; % [s], Rejection threshold based on delay between timestamps and n-samples
+Med_S=0; % [mm], Median of Speaking windows
 
 % Preallocate groups
 G1 = zeros(200,BLStartEnd(2)); % Initially Speaking: [0,20] s

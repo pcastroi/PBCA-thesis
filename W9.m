@@ -1,4 +1,4 @@
-%% PBCA-Thesis - Week 9 & 10 - Fixation duration? Not using diameter anymore
+%% PBCA-Thesis - Week 9, 10 & 11 - Fixation duration? Not using diameter anymore
 % Pathing
 clear all; clc; close all;
 BPath = strsplit(pwd,'PBCA-thesis');
@@ -19,6 +19,7 @@ MaxVisualAngle = 0.5; % [degrees], critical visual angle for fixation definition
 FilterWidth = 10; % Width of hamming filter used for fixation duration
 
 TimeStartW = 0.5; % [s], time before Utt/Lis starts
+AdapBL = 0.1; % [s], Baseline period
 TimeEndW = 0; % [s], time after Utt/Lis starts
 TimeStart = 20; % [s], time at which simultaneous recording started
 TimeMinWin = 0.5; % [s], Minimum time of a window
@@ -47,6 +48,16 @@ SW_N60 = zeros(200,200,4000); % N60 Speaking Windows
 LW_N60 = zeros(200,200,4000); % N60 Listening Windows
 SW_N70 = zeros(200,200,4000); % N70 Speaking Windows
 LW_N70 = zeros(200,200,4000); % N70 Listening Windows
+GSWB = zeros(200,200,4000); % Global Speaking Windows Baselined
+GLWB = zeros(200,200,4000); % Global Listening Windows Baselined
+SWB_Quiet = zeros(200,200,4000); % Quiet Speaking Windows Baselined
+LWB_Quiet = zeros(200,200,4000); % Quiet Listening Windows Baselined
+SWB_SHL = zeros(200,200,4000); % SHL Speaking Windows Baselined
+LWB_SHL = zeros(200,200,4000); % SHL Listening Windows Baselined
+SWB_N60 = zeros(200,200,4000); % N60 Speaking Windows Baselined
+LWB_N60 = zeros(200,200,4000); % N60 Listening Windows Baselined
+SWB_N70 = zeros(200,200,4000); % N70 Speaking Windows Baselined
+LWB_N70 = zeros(200,200,4000); % N70 Listening Windows Baselined
 
 for q=1:numel(subDirs)
     PairIn = q;
@@ -241,8 +252,8 @@ for q=1:numel(subDirs)
         Listen = ListenM(ListenM(:,1)>2*TimeMinWin,:);
         
         % Time-locked indexes (based on Start or End of events)
-        SWSpeakIdx=[Speak(:,2)-TimeStartW*Param.Fs,Speak(:,2),Speak(:,2)+TimeEndW*Param.Fs];
-        SWListenIdx=[Listen(:,2)-TimeStartW*Param.Fs,Listen(:,2),Listen(:,2)+TimeEndW*Param.Fs];
+        WSpeakIdx=[Speak(:,2)-TimeStartW*Param.Fs,Speak(:,2),Speak(:,2)+TimeEndW*Param.Fs];
+        WListenIdx=[Listen(:,2)-TimeStartW*Param.Fs,Listen(:,2),Listen(:,2)+TimeEndW*Param.Fs];
 %         EWSpeakIdx=[Speak(:,3)-TimeStartW*Param.Fs,Speak(:,3),Speak(:,3)+TimeEndW*Param.Fs];
 %         EWListenIdx=[Listen(:,3)-TimeStartW*Param.Fs,Listen(:,3),Listen(:,3)+TimeEndW*Param.Fs];
         
@@ -250,31 +261,39 @@ for q=1:numel(subDirs)
         % Storing Speaking/Listening by conditions
         if contains(cell2mat(FileNames(i)),'Quiet')
             for j=1:size(Speak,1)
-                SW_Quiet(x,j,:)=[fixation(SWSpeakIdx(j,1):Speak(j,3)-1);NaN*ones(1,length(SW_Quiet)-length(SWSpeakIdx(j,1):Speak(j,3)-1))'];
+                SW_Quiet(x,j,:)=[fixation(WSpeakIdx(j,1):Speak(j,3)-1);NaN*ones(1,length(SW_Quiet)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
+                SWB_Quiet(x,j,:)=[fixation(WSpeakIdx(j,1):Speak(j,3)-1)-mean(fixation(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SWB_Quiet)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
             end
             for j=1:size(Listen,1)
-                LW_Quiet(x,j,:)=[fixation(SWListenIdx(j,1):Listen(j,3)-1);NaN*ones(1,length(LW_Quiet)-length(SWListenIdx(j,1):Listen(j,3)-1))'];
+                LW_Quiet(x,j,:)=[fixation(WListenIdx(j,1):Listen(j,3)-1);NaN*ones(1,length(LW_Quiet)-length(WListenIdx(j,1):Listen(j,3)-1))'];
+                LWB_Quiet(x,j,:)=[fixation(WListenIdx(j,1):Listen(j,3)-1)-mean(fixation(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LWB_Quiet)-length(WListenIdx(j,1):Listen(j,3)-1))'];
             end
         elseif contains(cell2mat(FileNames(i)),'SHL')
             for j=1:size(Speak,1)
-                SW_SHL(x,j,:)=[fixation(SWSpeakIdx(j,1):Speak(j,3)-1);NaN*ones(1,length(SW_SHL)-length(SWSpeakIdx(j,1):Speak(j,3)-1))'];
+                SW_SHL(x,j,:)=[fixation(WSpeakIdx(j,1):Speak(j,3)-1);NaN*ones(1,length(SW_SHL)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
+                SWB_SHL(x,j,:)=[fixation(WSpeakIdx(j,1):Speak(j,3)-1)-mean(fixation(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SWB_SHL)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
             end
             for j=1:size(Listen,1)
-                LW_SHL(x,j,:)=[fixation(SWListenIdx(j,1):Listen(j,3)-1);NaN*ones(1,length(LW_SHL)-length(SWListenIdx(j,1):Listen(j,3)-1))'];
+                LW_SHL(x,j,:)=[fixation(WListenIdx(j,1):Listen(j,3)-1);NaN*ones(1,length(LW_SHL)-length(WListenIdx(j,1):Listen(j,3)-1))'];
+                LWB_SHL(x,j,:)=[fixation(WListenIdx(j,1):Listen(j,3)-1)-mean(fixation(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LWB_SHL)-length(WListenIdx(j,1):Listen(j,3)-1))'];
             end
         elseif contains(cell2mat(FileNames(i)),'Noise60')
             for j=1:size(Speak,1)
-                SW_N60(x,j,:)=[fixation(SWSpeakIdx(j,1):Speak(j,3)-1);NaN*ones(1,length(SW_N60)-length(SWSpeakIdx(j,1):Speak(j,3)-1))'];
+                SW_N60(x,j,:)=[fixation(WSpeakIdx(j,1):Speak(j,3)-1);NaN*ones(1,length(SW_N60)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
+                SWB_N60(x,j,:)=[fixation(WSpeakIdx(j,1):Speak(j,3)-1)-mean(fixation(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SWB_N60)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
             end
             for j=1:size(Listen,1)
-                LW_N60(x,j,:)=[fixation(SWListenIdx(j,1):Listen(j,3)-1);NaN*ones(1,length(LW_N60)-length(SWListenIdx(j,1):Listen(j,3)-1))'];
+                LW_N60(x,j,:)=[fixation(WListenIdx(j,1):Listen(j,3)-1);NaN*ones(1,length(LW_N60)-length(WListenIdx(j,1):Listen(j,3)-1))'];
+                LWB_N60(x,j,:)=[fixation(WListenIdx(j,1):Listen(j,3)-1)-mean(fixation(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LWB_N60)-length(WListenIdx(j,1):Listen(j,3)-1))'];
             end
         elseif contains(cell2mat(FileNames(i)),'Noise70')
             for j=1:size(Speak,1)
-                SW_N70(x,j,:)=[fixation(SWSpeakIdx(j,1):Speak(j,3)-1);NaN*ones(1,length(SW_N70)-length(SWSpeakIdx(j,1):Speak(j,3)-1))'];
+                SW_N70(x,j,:)=[fixation(WSpeakIdx(j,1):Speak(j,3)-1);NaN*ones(1,length(SW_N70)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
+                SWB_N70(x,j,:)=[fixation(WSpeakIdx(j,1):Speak(j,3)-1)-mean(fixation(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SWB_N70)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
             end
             for j=1:size(Listen,1)
-                LW_N70(x,j,:)=[fixation(SWListenIdx(j,1):Listen(j,3)-1);NaN*ones(1,length(LW_N70)-length(SWListenIdx(j,1):Listen(j,3)-1))'];
+                LW_N70(x,j,:)=[fixation(WListenIdx(j,1):Listen(j,3)-1);NaN*ones(1,length(LW_N70)-length(WListenIdx(j,1):Listen(j,3)-1))'];
+                LWB_N70(x,j,:)=[fixation(WListenIdx(j,1):Listen(j,3)-1)-mean(fixation(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LWB_N70)-length(WListenIdx(j,1):Listen(j,3)-1))'];
             end
         end
         
@@ -283,13 +302,16 @@ for q=1:numel(subDirs)
 %         grid on
         
         SW = zeros(size(Speak,1),ceil(Param.Fs*(TimeStartW+max(Speak(:,1)))));
+        SWB = SW;
         for j=1:size(Speak,1)
 %             if SWSpeakIdx(j,3)-1 <= length(fixation)
 %                 plot(linspace(-TimeStartW,Speak(j,1),length(SWSpeakIdx(j,1):Speak(j,3)-1)),fixation(SWSpeakIdx(j,1):Speak(j,3)-1),'color',[0 0 0 0.01],'linewidth',0.5,'handlevisibility','off')
                 % Add nan-padding when necessary
-                SW(j,:)=[fixation(SWSpeakIdx(j,1):Speak(j,3)-1);NaN*ones(1,length(SW)-length(SWSpeakIdx(j,1):Speak(j,3)-1))'];
+                SW(j,:)=[fixation(WSpeakIdx(j,1):Speak(j,3)-1);NaN*ones(1,length(SW)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
+                SWB(j,:)=[fixation(WSpeakIdx(j,1):Speak(j,3)-1)-mean(fixation(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SWB)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
 %             end
             GSW(x,j,1:length(SW(j,:))) = SW(j,:);
+            GSWB(x,j,1:length(SWB(j,:))) = SWB(j,:);
         end
         SW_Mean = mean(SW,1,'omitnan');
         SW_SEM = std(SW,1,'omitnan')/sqrt(length(SW));
@@ -299,13 +321,16 @@ for q=1:numel(subDirs)
         
         
         LW = zeros(size(Listen,1),ceil(Param.Fs*(TimeStartW+max(Listen(:,1)))));
+        LWB = LW;
         for j=1:size(Listen,1)
 %             if SWListenIdx(j,3)-1 <= length(fixation)
 %                 plot(linspace(-TimeStartW,Listen(j,1),length(SWListenIdx(j,1):Listen(j,3)-1)),fixation(SWListenIdx(j,1):Listen(j,3)-1),'color',[0 0 0 0.01],'linewidth',0.5,'handlevisibility','off')
                 % Add nan-padding when necessary
-                LW(j,:)=[fixation(SWListenIdx(j,1):Listen(j,3)-1);NaN*ones(1,length(LW)-length(SWListenIdx(j,1):Listen(j,3)-1))'];
+                LW(j,:)=[fixation(WListenIdx(j,1):Listen(j,3)-1);NaN*ones(1,length(LW)-length(WListenIdx(j,1):Listen(j,3)-1))'];
+                LWB(j,:)=[fixation(WListenIdx(j,1):Listen(j,3)-1)-mean(fixation(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LWB)-length(WListenIdx(j,1):Listen(j,3)-1))'];
 %             end
             GLW(x,j,1:length(LW(j,:))) = LW(j,:);
+            GLWB(x,j,1:length(LWB(j,:))) = LWB(j,:);
         end
         LW_Mean = mean(LW,1,'omitnan');
         LW_SEM = std(LW,1,'omitnan')/sqrt(length(LW));
@@ -358,8 +383,9 @@ end
 %% Global Plots
 
 figure;tiledlayout(1,2);ax1 = nexttile;ax2 = nexttile;
-hold([ax1 ax2],'on')
-grid([ax1 ax2],'on')
+figure;tiledlayout(1,2);ax3 = nexttile;ax4 = nexttile;
+hold([ax1 ax2 ax3 ax4],'on')
+grid([ax1 ax2 ax3 ax4],'on')
 
 GSW(~any(GSW,[2 3]),:,:)=[];GSW(:,~any(GSW,[1 3]),:)=[];GSW(GSW==0)=NaN;
 GLW(~any(GLW,[2 3]),:,:)=[];GLW(:,~any(GLW,[1 3]),:)=[];GLW(GLW==0)=NaN;
@@ -372,6 +398,17 @@ LW_N60(~any(LW_N60,[2 3]),:,:)=[];LW_N60(:,~any(LW_N60,[1 3]),:)=[];LW_N60(LW_N6
 SW_N70(~any(SW_N70,[2 3]),:,:)=[];SW_N70(:,~any(SW_N70,[1 3]),:)=[];SW_N70(SW_N70==0)=NaN;
 LW_N70(~any(LW_N70,[2 3]),:,:)=[];LW_N70(:,~any(LW_N70,[1 3]),:)=[];LW_N70(LW_N70==0)=NaN;
 
+GSWB(~any(GSWB,[2 3]),:,:)=[];GSWB(:,~any(GSWB,[1 3]),:)=[];GSWB(GSWB==0)=NaN;
+GLWB(~any(GLWB,[2 3]),:,:)=[];GLWB(:,~any(GLWB,[1 3]),:)=[];GLWB(GLWB==0)=NaN;
+SWB_Quiet(~any(SWB_Quiet,[2 3]),:,:)=[];SWB_Quiet(:,~any(SWB_Quiet,[1 3]),:)=[];SWB_Quiet(SWB_Quiet==0)=NaN;
+LWB_Quiet(~any(LWB_Quiet,[2 3]),:,:)=[];LWB_Quiet(:,~any(LWB_Quiet,[1 3]),:)=[];LWB_Quiet(LWB_Quiet==0)=NaN;
+SWB_SHL(~any(SWB_SHL,[2 3]),:,:)=[];SWB_SHL(:,~any(SWB_SHL,[1 3]),:)=[];SWB_SHL(SWB_SHL==0)=NaN;
+LWB_SHL(~any(LWB_SHL,[2 3]),:,:)=[];LWB_SHL(:,~any(LWB_SHL,[1 3]),:)=[];LWB_SHL(LWB_SHL==0)=NaN;
+SWB_N60(~any(SWB_N60,[2 3]),:,:)=[];SWB_N60(:,~any(SWB_N60,[1 3]),:)=[];SWB_N60(SWB_N60==0)=NaN;
+LWB_N60(~any(LWB_N60,[2 3]),:,:)=[];LWB_N60(:,~any(LWB_N60,[1 3]),:)=[];LWB_N60(LWB_N60==0)=NaN;
+SWB_N70(~any(SWB_N70,[2 3]),:,:)=[];SWB_N70(:,~any(SWB_N70,[1 3]),:)=[];SWB_N70(SWB_N70==0)=NaN;
+LWB_N70(~any(LWB_N70,[2 3]),:,:)=[];LWB_N70(:,~any(LWB_N70,[1 3]),:)=[];LWB_N70(LWB_N70==0)=NaN;
+
 GSW_Mean = reshape(mean(GSW,[1 2],'omitnan'),[],1)';
 GLW_Mean = reshape(mean(GLW,[1 2],'omitnan'),[],1)';
 SW_Quiet_Mean = reshape(mean(SW_Quiet,[1 2],'omitnan'),[],1)';
@@ -383,6 +420,16 @@ LW_N60_Mean = reshape(mean(LW_N60,[1 2],'omitnan'),[],1)';
 SW_N70_Mean = reshape(mean(SW_N70,[1 2],'omitnan'),[],1)';
 LW_N70_Mean = reshape(mean(LW_N70,[1 2],'omitnan'),[],1)';
 
+GSWB_Mean = reshape(mean(GSWB,[1 2],'omitnan'),[],1)';
+GLWB_Mean = reshape(mean(GLWB,[1 2],'omitnan'),[],1)';
+SWB_Quiet_Mean = reshape(mean(SWB_Quiet,[1 2],'omitnan'),[],1)';
+LWB_Quiet_Mean = reshape(mean(LWB_Quiet,[1 2],'omitnan'),[],1)';
+SWB_SHL_Mean = reshape(mean(SWB_SHL,[1 2],'omitnan'),[],1)';
+LWB_SHL_Mean = reshape(mean(LWB_SHL,[1 2],'omitnan'),[],1)';
+SWB_N60_Mean = reshape(mean(SWB_N60,[1 2],'omitnan'),[],1)';
+LWB_N60_Mean = reshape(mean(LWB_N60,[1 2],'omitnan'),[],1)';
+SWB_N70_Mean = reshape(mean(SWB_N70,[1 2],'omitnan'),[],1)';
+LWB_N70_Mean = reshape(mean(LWB_N70,[1 2],'omitnan'),[],1)';
 
 GSW_SEM = (reshape(std(GSW,0,[1 2],'omitnan'),[],1)/sqrt(numel(GSW(~isnan(GSW)))))';
 GLW_SEM = (reshape(std(GLW,0,[1 2],'omitnan'),[],1)/sqrt(numel(GLW(~isnan(GLW)))))';
@@ -395,8 +442,22 @@ LW_N60_SEM = (reshape(std(LW_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_N60(~isn
 SW_N70_SEM = (reshape(std(SW_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_N70(~isnan(SW_N70)))))';
 LW_N70_SEM = (reshape(std(LW_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_N70(~isnan(LW_N70)))))';
 
+GSWB_SEM = (reshape(std(GSWB,0,[1 2],'omitnan'),[],1)/sqrt(numel(GSWB(~isnan(GSWB)))))';
+GLWB_SEM = (reshape(std(GLWB,0,[1 2],'omitnan'),[],1)/sqrt(numel(GLWB(~isnan(GLWB)))))';
+SWB_Quiet_SEM = (reshape(std(SWB_Quiet,0,[1 2],'omitnan'),[],1)/sqrt(numel(SWB_Quiet(~isnan(SWB_Quiet)))))';
+LWB_Quiet_SEM = (reshape(std(LWB_Quiet,0,[1 2],'omitnan'),[],1)/sqrt(numel(LWB_Quiet(~isnan(LWB_Quiet)))))';
+SWB_SHL_SEM = (reshape(std(SWB_SHL,0,[1 2],'omitnan'),[],1)/sqrt(numel(SWB_SHL(~isnan(SWB_SHL)))))';
+LWB_SHL_SEM = (reshape(std(LWB_SHL,0,[1 2],'omitnan'),[],1)/sqrt(numel(LWB_SHL(~isnan(LWB_SHL)))))';
+SWB_N60_SEM = (reshape(std(SWB_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(SWB_N60(~isnan(SWB_N60)))))';
+LWB_N60_SEM = (reshape(std(LWB_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(LWB_N60(~isnan(LWB_N60)))))';
+SWB_N70_SEM = (reshape(std(SWB_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(SWB_N70(~isnan(SWB_N70)))))';
+LWB_N70_SEM = (reshape(std(LWB_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(LWB_N70(~isnan(LWB_N70)))))';
+
 xline(ax1,0,'--','handlevisibility','off')
 xline(ax2,0,'--','handlevisibility','off')
+xline(ax3,0,'--','handlevisibility','off')
+xline(ax4,0,'--','handlevisibility','off')
+
 
 plot(ax1,linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)),GSW_Mean,color=SColor,linewidth=2)
 plot(ax1,linspace(-TimeStartW,size(SW_Quiet,3)/Param.Fs,size(SW_Quiet,3)),SW_Quiet_Mean,color=QuietColor)
@@ -404,15 +465,28 @@ plot(ax1,linspace(-TimeStartW,size(SW_SHL,3)/Param.Fs,size(SW_SHL,3)),SW_SHL_Mea
 plot(ax1,linspace(-TimeStartW,size(SW_N60,3)/Param.Fs,size(SW_N60,3)),SW_N60_Mean,color=N60Color)
 plot(ax1,linspace(-TimeStartW,size(SW_N70,3)/Param.Fs,size(SW_N70,3)),SW_N70_Mean,color=N70Color)
 
-plot(nan,color=SColor,linewidth=2) % plot nans to show color in legend
+plot(ax2,nan,color=SColor,linewidth=2) % plot nans to show color in legend
 plot(ax2,linspace(-TimeStartW,size(GLW,3)/Param.Fs,size(GLW,3)),GLW_Mean,color=LColor,linewidth=2)
 plot(ax2,linspace(-TimeStartW,size(LW_Quiet,3)/Param.Fs,size(LW_Quiet,3)),LW_Quiet_Mean,color=QuietColor)
 plot(ax2,linspace(-TimeStartW,size(LW_SHL,3)/Param.Fs,size(LW_SHL,3)),LW_SHL_Mean,color=SHLColor)
 plot(ax2,linspace(-TimeStartW,size(LW_N60,3)/Param.Fs,size(LW_N60,3)),LW_N60_Mean,color=N60Color)
 plot(ax2,linspace(-TimeStartW,size(LW_N70,3)/Param.Fs,size(LW_N70,3)),LW_N70_Mean,color=N70Color)
 
-plot(ax1,linspace(-TimeStartW,size(SW_SHL,3)/Param.Fs,size(SW_SHL,3)),mean([SW_Quiet_Mean;SW_SHL_Mean;SW_N60_Mean;SW_N70_Mean],1,'omitnan'),'k--')
-plot(ax2,linspace(-TimeStartW,size(LW_SHL,3)/Param.Fs,size(LW_SHL,3)),mean([LW_Quiet_Mean;LW_SHL_Mean;LW_N60_Mean;LW_N70_Mean],1,'omitnan'),'k--')
+% plot(ax1,linspace(-TimeStartW,size(SW_SHL,3)/Param.Fs,size(SW_SHL,3)),mean([SW_Quiet_Mean;SW_SHL_Mean;SW_N60_Mean;SW_N70_Mean],1,'omitnan'),'k--')
+% plot(ax2,linspace(-TimeStartW,size(LW_SHL,3)/Param.Fs,size(LW_SHL,3)),mean([LW_Quiet_Mean;LW_SHL_Mean;LW_N60_Mean;LW_N70_Mean],1,'omitnan'),'k--')
+
+plot(ax3,linspace(-TimeStartW,size(GSWB,3)/Param.Fs,size(GSWB,3)),GSWB_Mean,color=SColor,linewidth=2)
+plot(ax3,linspace(-TimeStartW,size(SWB_Quiet,3)/Param.Fs,size(SWB_Quiet,3)),SWB_Quiet_Mean,color=QuietColor)
+plot(ax3,linspace(-TimeStartW,size(SWB_SHL,3)/Param.Fs,size(SWB_SHL,3)),SWB_SHL_Mean,color=SHLColor)
+plot(ax3,linspace(-TimeStartW,size(SWB_N60,3)/Param.Fs,size(SWB_N60,3)),SWB_N60_Mean,color=N60Color)
+plot(ax3,linspace(-TimeStartW,size(SWB_N70,3)/Param.Fs,size(SWB_N70,3)),SWB_N70_Mean,color=N70Color)
+
+plot(ax4,nan,color=SColor,linewidth=2) % plot nans to show color in legend
+plot(ax4,linspace(-TimeStartW,size(GLWB,3)/Param.Fs,size(GLWB,3)),GLWB_Mean,color=LColor,linewidth=2)
+plot(ax4,linspace(-TimeStartW,size(LWB_Quiet,3)/Param.Fs,size(LWB_Quiet,3)),LWB_Quiet_Mean,color=QuietColor)
+plot(ax4,linspace(-TimeStartW,size(LWB_SHL,3)/Param.Fs,size(LWB_SHL,3)),LWB_SHL_Mean,color=SHLColor)
+plot(ax4,linspace(-TimeStartW,size(LWB_N60,3)/Param.Fs,size(LWB_N60,3)),LWB_N60_Mean,color=N60Color)
+plot(ax4,linspace(-TimeStartW,size(LWB_N70,3)/Param.Fs,size(LWB_N70,3)),LWB_N70_Mean,color=N70Color)
 
 GSW_Mean(isnan(GSW_Mean))=0;GSW_SEM(isnan(GSW_SEM))=0;
 SW_Quiet_Mean(isnan(SW_Quiet_Mean))=0;SW_Quiet_SEM(isnan(SW_Quiet_SEM))=0;
@@ -426,6 +500,18 @@ LW_SHL_Mean(isnan(LW_SHL_Mean))=0;LW_SHL_SEM(isnan(LW_SHL_SEM))=0;
 LW_N60_Mean(isnan(LW_N60_Mean))=0;LW_N60_SEM(isnan(LW_N60_SEM))=0;
 LW_N70_Mean(isnan(LW_N70_Mean))=0;LW_N70_SEM(isnan(LW_N70_SEM))=0;
 
+GSWB_Mean(isnan(GSW_Mean))=0;GSWB_SEM(isnan(GSWB_SEM))=0;
+SWB_Quiet_Mean(isnan(SWB_Quiet_Mean))=0;SWB_Quiet_SEM(isnan(SWB_Quiet_SEM))=0;
+SWB_SHL_Mean(isnan(SWB_SHL_Mean))=0;SWB_SHL_SEM(isnan(SWB_SHL_SEM))=0;
+SWB_N60_Mean(isnan(SWB_N60_Mean))=0;SWB_N60_SEM(isnan(SWB_N60_SEM))=0;
+SWB_N70_Mean(isnan(SWB_N70_Mean))=0;SWB_N70_SEM(isnan(SWB_N70_SEM))=0;
+
+GLWB_Mean(isnan(GLWB_Mean))=0;GLWB_SEM(isnan(GLWB_SEM))=0;
+LWB_Quiet_Mean(isnan(LWB_Quiet_Mean))=0;LWB_Quiet_SEM(isnan(LWB_Quiet_SEM))=0;
+LWB_SHL_Mean(isnan(LWB_SHL_Mean))=0;LWB_SHL_SEM(isnan(LWB_SHL_SEM))=0;
+LWB_N60_Mean(isnan(LWB_N60_Mean))=0;LWB_N60_SEM(isnan(LWB_N60_SEM))=0;
+LWB_N70_Mean(isnan(LWB_N70_Mean))=0;LWB_N70_SEM(isnan(LWB_N70_SEM))=0;
+
 fill(ax1,[linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)), flipud(linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3))')'],[(GSW_Mean+GSW_SEM), flipud((GSW_Mean-GSW_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
 fill(ax1,[linspace(-TimeStartW,size(SW_Quiet,3)/Param.Fs,size(SW_Quiet,3)), flipud(linspace(-TimeStartW,size(SW_Quiet,3)/Param.Fs,size(SW_Quiet,3))')'],[(SW_Quiet_Mean+SW_Quiet_SEM), flipud((SW_Quiet_Mean-SW_Quiet_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
 fill(ax1,[linspace(-TimeStartW,size(SW_SHL,3)/Param.Fs,size(SW_SHL,3)), flipud(linspace(-TimeStartW,size(SW_SHL,3)/Param.Fs,size(SW_SHL,3))')'],[(SW_SHL_Mean+SW_SHL_SEM), flipud((SW_SHL_Mean-SW_SHL_SEM)')'],SHLColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
@@ -438,10 +524,26 @@ fill(ax2,[linspace(-TimeStartW,size(LW_SHL,3)/Param.Fs,size(LW_SHL,3)), flipud(l
 fill(ax2,[linspace(-TimeStartW,size(LW_N60,3)/Param.Fs,size(LW_N60,3)), flipud(linspace(-TimeStartW,size(LW_N60,3)/Param.Fs,size(LW_N60,3))')'],[(LW_N60_Mean+LW_N60_SEM), flipud((LW_N60_Mean-LW_N60_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
 fill(ax2,[linspace(-TimeStartW,size(LW_N70,3)/Param.Fs,size(LW_N70,3)), flipud(linspace(-TimeStartW,size(LW_N70,3)/Param.Fs,size(LW_N70,3))')'],[(LW_N70_Mean+LW_N70_SEM), flipud((LW_N70_Mean-LW_N70_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
 
-xlabel([ax1 ax2],'Time [s]')
-ylabel([ax1 ax2],'Fixation duration [s]');
-xlim([ax1 ax2],[-TimeStartW 3])
+fill(ax3,[linspace(-TimeStartW,size(GSWB,3)/Param.Fs,size(GSWB,3)), flipud(linspace(-TimeStartW,size(GSWB,3)/Param.Fs,size(GSWB,3))')'],[(GSWB_Mean+GSWB_SEM), flipud((GSWB_Mean-GSWB_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax3,[linspace(-TimeStartW,size(SWB_Quiet,3)/Param.Fs,size(SW_Quiet,3)), flipud(linspace(-TimeStartW,size(SWB_Quiet,3)/Param.Fs,size(SWB_Quiet,3))')'],[(SWB_Quiet_Mean+SWB_Quiet_SEM), flipud((SWB_Quiet_Mean-SWB_Quiet_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax3,[linspace(-TimeStartW,size(SWB_SHL,3)/Param.Fs,size(SW_SHL,3)), flipud(linspace(-TimeStartW,size(SWB_SHL,3)/Param.Fs,size(SWB_SHL,3))')'],[(SWB_SHL_Mean+SWB_SHL_SEM), flipud((SWB_SHL_Mean-SWB_SHL_SEM)')'],SHLColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax3,[linspace(-TimeStartW,size(SWB_N60,3)/Param.Fs,size(SW_N60,3)), flipud(linspace(-TimeStartW,size(SWB_N60,3)/Param.Fs,size(SWB_N60,3))')'],[(SWB_N60_Mean+SWB_N60_SEM), flipud((SWB_N60_Mean-SWB_N60_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax3,[linspace(-TimeStartW,size(SWB_N70,3)/Param.Fs,size(SW_N70,3)), flipud(linspace(-TimeStartW,size(SWB_N70,3)/Param.Fs,size(SWB_N70,3))')'],[(SWB_N70_Mean+SWB_N70_SEM), flipud((SWB_N70_Mean-SWB_N70_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+
+fill(ax4,[linspace(-TimeStartW,size(GLWB,3)/Param.Fs,size(GLWB,3)), flipud(linspace(-TimeStartW,size(GLWB,3)/Param.Fs,size(GLWB,3))')'],[(GLWB_Mean+GLWB_SEM), flipud((GLWB_Mean-GLWB_SEM)')'],LColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax4,[linspace(-TimeStartW,size(LWB_Quiet,3)/Param.Fs,size(LWB_Quiet,3)), flipud(linspace(-TimeStartW,size(LWB_Quiet,3)/Param.Fs,size(LWB_Quiet,3))')'],[(LWB_Quiet_Mean+LWB_Quiet_SEM), flipud((LWB_Quiet_Mean-LWB_Quiet_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax4,[linspace(-TimeStartW,size(LWB_SHL,3)/Param.Fs,size(LWB_SHL,3)), flipud(linspace(-TimeStartW,size(LWB_SHL,3)/Param.Fs,size(LWB_SHL,3))')'],[(LWB_SHL_Mean+LWB_SHL_SEM), flipud((LWB_SHL_Mean-LWB_SHL_SEM)')'],SHLColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax4,[linspace(-TimeStartW,size(LWB_N60,3)/Param.Fs,size(LWB_N60,3)), flipud(linspace(-TimeStartW,size(LWB_N60,3)/Param.Fs,size(LWB_N60,3))')'],[(LWB_N60_Mean+LWB_N60_SEM), flipud((LWB_N60_Mean-LWB_N60_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax4,[linspace(-TimeStartW,size(LWB_N70,3)/Param.Fs,size(LWB_N70,3)), flipud(linspace(-TimeStartW,size(LWB_N70,3)/Param.Fs,size(LWB_N70,3))')'],[(LWB_N70_Mean+LWB_N70_SEM), flipud((LWB_N70_Mean-LWB_N70_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+
+xlabel([ax1 ax2 ax3 ax4],'Time [s]')
+ylabel([ax1 ax2 ax3 ax4],'Fixation duration [s]');
+xlim([ax1 ax2 ax3 ax4],[-TimeStartW 3])
 lgd2=legend(ax2,'Speaking','Listening','Quiet','SHL','N60','N70','Location','southeastoutside');
-lgd.Title.String = 'Types of windows:';
-title(ax1,'Speaking windows')
-title(ax2,'Listening windows')
+lgd2.Title.String = 'Types of windows:';
+lgd4=legend(ax4,'Speaking','Listening','Quiet','SHL','N60','N70','Location','southeastoutside');
+lgd4.Title.String = 'Types of windows:';
+title(ax1,'Global Speaking-evoked response')
+title(ax2,'Global Listening-evoked response')
+title(ax3,'Global adaptive baselined Speaking-evoked response')
+title(ax4,'Global adaptive baselined Listening-evoked response')
