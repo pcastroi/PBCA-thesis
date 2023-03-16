@@ -25,6 +25,14 @@ RejectRatio = 0.4; % Rejection threshold based on the ratio of NaNs in data
 RejectDelay = 0.5; % [s], Rejection threshold based on delay between timestamps and n-samples
 Med_S=0; % [mm], Median of Speaking windows
 
+% Colors
+SColor = [53, 155, 67]./255;
+LColor = [204, 36, 0]./255;
+QuietColor = [204, 152, 0]./255;
+SHLColor = [123, 31, 162]./255;
+N60Color = [0, 196, 215]./255;
+N70Color = [2, 36, 223]./255;
+
 % Preallocate groups
 G1 = zeros(200,BLStartEnd(2)); % Initially Speaking: [0,20] s
 G2 = G1; % Initially Listening: [0,20] s
@@ -574,118 +582,118 @@ for q=1:numel(subDirs)
             G18AB_Mean = reshape(mean(mean(G18_AB,'omitnan'),'omitnan'),[],1)';
             G19AB_Mean = reshape(mean(mean(G19_AB,'omitnan'),'omitnan'),[],1)';
             G20AB_Mean = reshape(mean(mean(G20_AB,'omitnan'),'omitnan'),[],1)';
-            G1_SEM = std(G1,[],1)/sqrt(size(G1,1));
-            G2_SEM = std(G2,[],1)/sqrt(size(G2,1));
-            G3_SEM = std(G3,[],1)/sqrt(size(G3,1));
-            G4_SEM = std(G4,[],1)/sqrt(size(G4,1));
-            G5_SEM = std(G5,[],1)/sqrt(size(G5,1));
-            G6_SEM = std(G6,[],1)/sqrt(size(G6,1));
-            G7_SEM = (reshape(std(std(G7,'omitnan'),'omitnan'),[],1)/sqrt(numel(G7(~isnan(G7)))))';
-            G8_SEM = (reshape(std(std(G8,'omitnan'),'omitnan'),[],1)/sqrt(numel(G8(~isnan(G8)))))';
-            G9_SEM = (reshape(std(std(G9,'omitnan'),'omitnan'),[],1)/sqrt(numel(G9(~isnan(G9)))))';
-            G10_SEM = (reshape(std(std(G10,'omitnan'),'omitnan'),[],1)/sqrt(numel(G10(~isnan(G10)))))';
-            G11_SEM = (reshape(std(std(G11,'omitnan'),'omitnan'),[],1)/sqrt(numel(G11(~isnan(G11)))))';
-            G12_SEM = (reshape(std(std(G12,'omitnan'),'omitnan'),[],1)/sqrt(numel(G12(~isnan(G12)))))';
-            G13_SEM = (reshape(std(std(G13,'omitnan'),'omitnan'),[],1)/sqrt(numel(G13(~isnan(G13)))))';
-            G14_SEM = (reshape(std(std(G14,'omitnan'),'omitnan'),[],1)/sqrt(numel(G14(~isnan(G14)))))';
-            G15_SEM = (reshape(std(std(G15,'omitnan'),'omitnan'),[],1)/sqrt(numel(G15(~isnan(G15)))))';
-            G16_SEM = (reshape(std(std(G16,'omitnan'),'omitnan'),[],1)/sqrt(numel(G16(~isnan(G16)))))';
-            G17_SEM = (reshape(std(std(G17,'omitnan'),'omitnan'),[],1)/sqrt(numel(G17(~isnan(G17)))))';
-            G18_SEM = (reshape(std(std(G18,'omitnan'),'omitnan'),[],1)/sqrt(numel(G18(~isnan(G18)))))';
-            G19_SEM = (reshape(std(std(G19,'omitnan'),'omitnan'),[],1)/sqrt(numel(G19(~isnan(G19)))))';
-            G20_SEM = (reshape(std(std(G20,'omitnan'),'omitnan'),[],1)/sqrt(numel(G20(~isnan(G20)))))';
-            G13FB_SEM = (reshape(std(std(G13_FB,'omitnan'),'omitnan'),[],1)/sqrt(numel(G13_FB(~isnan(G13_FB)))))';
-            G14FB_SEM = (reshape(std(std(G14_FB,'omitnan'),'omitnan'),[],1)/sqrt(numel(G14_FB(~isnan(G14_FB)))))';
-            G15FB_SEM = (reshape(std(std(G15_FB,'omitnan'),'omitnan'),[],1)/sqrt(numel(G15_FB(~isnan(G15_FB)))))';
-            G16FB_SEM = (reshape(std(std(G16_FB,'omitnan'),'omitnan'),[],1)/sqrt(numel(G16_FB(~isnan(G16_FB)))))';
-            G17FB_SEM = (reshape(std(std(G17_FB,'omitnan'),'omitnan'),[],1)/sqrt(numel(G17_FB(~isnan(G17_FB)))))';
-            G18FB_SEM = (reshape(std(std(G18_FB,'omitnan'),'omitnan'),[],1)/sqrt(numel(G18_FB(~isnan(G18_FB)))))';
-            G19FB_SEM = (reshape(std(std(G19_FB,'omitnan'),'omitnan'),[],1)/sqrt(numel(G19_FB(~isnan(G19_FB)))))';
-            G20FB_SEM = (reshape(std(std(G20_FB,'omitnan'),'omitnan'),[],1)/sqrt(numel(G20_FB(~isnan(G20_FB)))))';
-            G13AB_SEM = (reshape(std(std(G13_AB,'omitnan'),'omitnan'),[],1)/sqrt(numel(G13_AB(~isnan(G13_AB)))))';
-            G14AB_SEM = (reshape(std(std(G14_AB,'omitnan'),'omitnan'),[],1)/sqrt(numel(G14_AB(~isnan(G14_AB)))))';
-            G15AB_SEM = (reshape(std(std(G15_AB,'omitnan'),'omitnan'),[],1)/sqrt(numel(G15_AB(~isnan(G15_AB)))))';
-            G16AB_SEM = (reshape(std(std(G16_AB,'omitnan'),'omitnan'),[],1)/sqrt(numel(G16_AB(~isnan(G16_AB)))))';
-            G17AB_SEM = (reshape(std(std(G17_AB,'omitnan'),'omitnan'),[],1)/sqrt(numel(G17_AB(~isnan(G17_AB)))))';
-            G18AB_SEM = (reshape(std(std(G18_AB,'omitnan'),'omitnan'),[],1)/sqrt(numel(G18_AB(~isnan(G18_AB)))))';
-            G19AB_SEM = (reshape(std(std(G19_AB,'omitnan'),'omitnan'),[],1)/sqrt(numel(G19_AB(~isnan(G19_AB)))))';
-            G20AB_SEM = (reshape(std(std(G20_AB,'omitnan'),'omitnan'),[],1)/sqrt(numel(G20_AB(~isnan(G20_AB)))))';
-            plot(ax1,t_Diam(1:size(G1_Mean,2)),G1_Mean,"Color",'r',"LineWidth",2)
-            plot(ax2,t_Diam(1:size(G2_Mean,2)),G2_Mean,"Color",'r',"LineWidth",2)
-            plot(ax3,linspace(WP(1),WP(2),size(G3,2)),G3_Mean,"Color",'r',"LineWidth",2)
-            plot(ax4,linspace(WP(1),WP(2),size(G4,2)),G4_Mean,"Color",'r',"LineWidth",2)
-            plot(ax5,linspace(WP(1),WP(2),size(G5,2)),G5_Mean,"Color",'r',"LineWidth",2)
-            plot(ax6,linspace(WP(1),WP(2),size(G6,2)),G6_Mean,"Color",'r',"LineWidth",2)
-            plot(ax7,linspace(WP(1),WP(2),size(G7,3)),G7_Mean,"Color",'r',"LineWidth",2)
-            plot(ax8,linspace(WP(1),WP(2),size(G8,3)),G8_Mean,"Color",'r',"LineWidth",2)
-            plot(ax9,linspace(WP(1),WP(2),size(G9,3)),G9_Mean,"Color",'r',"LineWidth",2)
-            plot(ax10,linspace(WP(1),WP(2),size(G10,3)),G10_Mean,"Color",'r',"LineWidth",2)
-            plot(ax11,linspace(WP(1),WP(2),size(G11,3)),G11_Mean,"Color",'r',"LineWidth",2)
-            plot(ax12,linspace(WP(1),WP(2),size(G12,3)),G12_Mean,"Color",'r',"LineWidth",2)
-            plot(ax16,linspace(WP(1),WP(2),size(G13,3)),G13_Mean,"Color",[204 37 41]./255,"LineWidth",2)
-            plot(ax16,linspace(WP(1),WP(2),size(G15,3)),G15_Mean,"Color",[62 150 81]./255,"LineWidth",2)
-            plot(ax16,linspace(WP(1),WP(2),size(G17,3)),G17_Mean,"Color",[146 36 40]./255,"LineWidth",2)
-            plot(ax16,linspace(WP(1),WP(2),size(G19,3)),G19_Mean,"Color",[107 76 154]./255,"LineWidth",2)
-            plot(ax17,linspace(WP(1),WP(2),size(G14,3)),G14_Mean,"Color",[204 37 41]./255,"LineWidth",2)
-            plot(ax17,linspace(WP(1),WP(2),size(G16,3)),G16_Mean,"Color",[62 150 81]./255,"LineWidth",2)
-            plot(ax17,linspace(WP(1),WP(2),size(G18,3)),G18_Mean,"Color",[146 36 40]./255,"LineWidth",2)
-            plot(ax17,linspace(WP(1),WP(2),size(G20,3)),G20_Mean,"Color",[107 76 154]./255,"LineWidth",2)
-            plot(ax18,linspace(WP(1),WP(2),size(G13_FB,3)),G13FB_Mean,"Color",[204 37 41]./255,"LineWidth",2)
-            plot(ax18,linspace(WP(1),WP(2),size(G15_FB,3)),G15FB_Mean,"Color",[62 150 81]./255,"LineWidth",2)
-            plot(ax18,linspace(WP(1),WP(2),size(G17_FB,3)),G17FB_Mean,"Color",[146 36 40]./255,"LineWidth",2)
-            plot(ax18,linspace(WP(1),WP(2),size(G19_FB,3)),G19FB_Mean,"Color",[107 76 154]./255,"LineWidth",2)
-            plot(ax19,linspace(WP(1),WP(2),size(G14_FB,3)),G14FB_Mean,"Color",[204 37 41]./255,"LineWidth",2)
-            plot(ax19,linspace(WP(1),WP(2),size(G16_FB,3)),G16FB_Mean,"Color",[62 150 81]./255,"LineWidth",2)
-            plot(ax19,linspace(WP(1),WP(2),size(G18_FB,3)),G18FB_Mean,"Color",[146 36 40]./255,"LineWidth",2)
-            plot(ax19,linspace(WP(1),WP(2),size(G20_FB,3)),G20FB_Mean,"Color",[107 76 154]./255,"LineWidth",2)
-            plot(ax20,linspace(WP(1),WP(2),size(G13_AB,3)),G13AB_Mean,"Color",[204 37 41]./255,"LineWidth",2)
-            plot(ax20,linspace(WP(1),WP(2),size(G15_AB,3)),G15AB_Mean,"Color",[62 150 81]./255,"LineWidth",2)
-            plot(ax20,linspace(WP(1),WP(2),size(G17_AB,3)),G17AB_Mean,"Color",[146 36 40]./255,"LineWidth",2)
-            plot(ax20,linspace(WP(1),WP(2),size(G19_AB,3)),G19AB_Mean,"Color",[107 76 154]./255,"LineWidth",2)
-            plot(ax21,linspace(WP(1),WP(2),size(G14_AB,3)),G14AB_Mean,"Color",[204 37 41]./255,"LineWidth",2)
-            plot(ax21,linspace(WP(1),WP(2),size(G16_AB,3)),G16AB_Mean,"Color",[62 150 81]./255,"LineWidth",2)
-            plot(ax21,linspace(WP(1),WP(2),size(G18_AB,3)),G18AB_Mean,"Color",[146 36 40]./255,"LineWidth",2)
-            plot(ax21,linspace(WP(1),WP(2),size(G20_AB,3)),G20AB_Mean,"Color",[107 76 154]./255,"LineWidth",2)
-            fill(ax1,[t_Diam(1:size(G1_Mean,2)), flipud(t_Diam(1:size(G1_Mean,2))')'],[(G1_Mean+G1_SEM), flipud((G1_Mean-G1_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax2,[t_Diam(1:size(G2_Mean,2)), flipud(t_Diam(1:size(G2_Mean,2))')'],[(G2_Mean+G2_SEM), flipud((G2_Mean-G2_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax3,[linspace(WP(1),WP(2),size(G3,2)), flipud(linspace(WP(1),WP(2),size(G3,2))')'],[(G3_Mean+G3_SEM), flipud((G3_Mean-G3_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax4,[linspace(WP(1),WP(2),size(G4,2)), flipud(linspace(WP(1),WP(2),size(G4,2))')'],[(G4_Mean+G4_SEM), flipud((G4_Mean-G4_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax5,[linspace(WP(1),WP(2),size(G5,2)), flipud(linspace(WP(1),WP(2),size(G5,2))')'],[(G5_Mean+G5_SEM), flipud((G5_Mean-G5_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax6,[linspace(WP(1),WP(2),size(G6,2)), flipud(linspace(WP(1),WP(2),size(G6,2))')'],[(G6_Mean+G6_SEM), flipud((G6_Mean-G6_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax7,[linspace(WP(1),WP(2),size(G7,3)), flipud(linspace(WP(1),WP(2),size(G7,3))')'],[(G7_Mean+G7_SEM), flipud((G7_Mean-G7_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax8,[linspace(WP(1),WP(2),size(G8,3)), flipud(linspace(WP(1),WP(2),size(G8,3))')'],[(G8_Mean+G8_SEM), flipud((G8_Mean-G8_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax9,[linspace(WP(1),WP(2),size(G9,3)), flipud(linspace(WP(1),WP(2),size(G9,3))')'],[(G9_Mean+G9_SEM), flipud((G9_Mean-G9_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax10,[linspace(WP(1),WP(2),size(G10,3)), flipud(linspace(WP(1),WP(2),size(G10,3))')'],[(G10_Mean+G10_SEM), flipud((G10_Mean-G10_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax11,[linspace(WP(1),WP(2),size(G11,3)), flipud(linspace(WP(1),WP(2),size(G11,3))')'],[(G11_Mean+G11_SEM), flipud((G11_Mean-G11_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax12,[linspace(WP(1),WP(2),size(G12,3)), flipud(linspace(WP(1),WP(2),size(G12,3))')'],[(G12_Mean+G12_SEM), flipud((G12_Mean-G12_SEM)')'],[154 0 0]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax16,[linspace(WP(1),WP(2),size(G13,3)), flipud(linspace(WP(1),WP(2),size(G13,3))')'],[(G13_Mean+G13_SEM), flipud((G13_Mean-G13_SEM)')'],[211 94 96]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax16,[linspace(WP(1),WP(2),size(G15,3)), flipud(linspace(WP(1),WP(2),size(G15,3))')'],[(G15_Mean+G15_SEM), flipud((G15_Mean-G15_SEM)')'],[132 186 91]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax16,[linspace(WP(1),WP(2),size(G17,3)), flipud(linspace(WP(1),WP(2),size(G17,3))')'],[(G17_Mean+G17_SEM), flipud((G17_Mean-G17_SEM)')'],[171 104 87]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax16,[linspace(WP(1),WP(2),size(G19,3)), flipud(linspace(WP(1),WP(2),size(G19,3))')'],[(G19_Mean+G19_SEM), flipud((G19_Mean-G19_SEM)')'],[144 103 167]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax17,[linspace(WP(1),WP(2),size(G14,3)), flipud(linspace(WP(1),WP(2),size(G14,3))')'],[(G14_Mean+G14_SEM), flipud((G14_Mean-G14_SEM)')'],[211 94 96]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax17,[linspace(WP(1),WP(2),size(G16,3)), flipud(linspace(WP(1),WP(2),size(G16,3))')'],[(G16_Mean+G16_SEM), flipud((G16_Mean-G16_SEM)')'],[132 186 91]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax17,[linspace(WP(1),WP(2),size(G18,3)), flipud(linspace(WP(1),WP(2),size(G18,3))')'],[(G18_Mean+G18_SEM), flipud((G18_Mean-G18_SEM)')'],[171 104 87]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax17,[linspace(WP(1),WP(2),size(G20,3)), flipud(linspace(WP(1),WP(2),size(G20,3))')'],[(G20_Mean+G20_SEM), flipud((G20_Mean-G20_SEM)')'],[144 103 167]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            G1_SEM = 2*std(G1,[],1)/sqrt(size(G1,1));
+            G2_SEM = 2*std(G2,[],1)/sqrt(size(G2,1));
+            G3_SEM = 2*std(G3,[],1)/sqrt(size(G3,1));
+            G4_SEM = 2*std(G4,[],1)/sqrt(size(G4,1));
+            G5_SEM = 2*std(G5,[],1)/sqrt(size(G5,1));
+            G6_SEM = 2*std(G6,[],1)/sqrt(size(G6,1));
+            G7_SEM = (reshape(2*std(G7,0,[1 2],'omitnan'),[],1)/sqrt(numel(G7(~isnan(G7)))))';
+            G8_SEM = (reshape(2*std(G8,0,[1 2],'omitnan'),[],1)/sqrt(numel(G8(~isnan(G8)))))';
+            G9_SEM = (reshape(2*std(G9,0,[1 2],'omitnan'),[],1)/sqrt(numel(G9(~isnan(G9)))))';
+            G10_SEM = (reshape(2*std(G10,0,[1 2],'omitnan'),[],1)/sqrt(numel(G10(~isnan(G10)))))';
+            G11_SEM = (reshape(2*std(G11,0,[1 2],'omitnan'),[],1)/sqrt(numel(G11(~isnan(G11)))))';
+            G12_SEM = (reshape(2*std(G12,0,[1 2],'omitnan'),[],1)/sqrt(numel(G12(~isnan(G12)))))';
+            G13_SEM = (reshape(2*std(G13,0,[1 2],'omitnan'),[],1)/sqrt(numel(G13(~isnan(G13)))))';
+            G14_SEM = (reshape(2*std(G14,0,[1 2],'omitnan'),[],1)/sqrt(numel(G14(~isnan(G14)))))';
+            G15_SEM = (reshape(2*std(G15,0,[1 2],'omitnan'),[],1)/sqrt(numel(G15(~isnan(G15)))))';
+            G16_SEM = (reshape(2*std(G16,0,[1 2],'omitnan'),[],1)/sqrt(numel(G16(~isnan(G16)))))';
+            G17_SEM = (reshape(2*std(G17,0,[1 2],'omitnan'),[],1)/sqrt(numel(G17(~isnan(G17)))))';
+            G18_SEM = (reshape(2*std(G18,0,[1 2],'omitnan'),[],1)/sqrt(numel(G18(~isnan(G18)))))';
+            G19_SEM = (reshape(2*std(G19,0,[1 2],'omitnan'),[],1)/sqrt(numel(G19(~isnan(G19)))))';
+            G20_SEM = (reshape(2*std(G20,0,[1 2],'omitnan'),[],1)/sqrt(numel(G20(~isnan(G20)))))';
+            G13FB_SEM = (reshape(2*std(G13_FB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G13_FB(~isnan(G13_FB)))))';
+            G14FB_SEM = (reshape(2*std(G14_FB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G14_FB(~isnan(G14_FB)))))';
+            G15FB_SEM = (reshape(2*std(G15_FB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G15_FB(~isnan(G15_FB)))))';
+            G16FB_SEM = (reshape(2*std(G16_FB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G16_FB(~isnan(G16_FB)))))';
+            G17FB_SEM = (reshape(2*std(G17_FB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G17_FB(~isnan(G17_FB)))))';
+            G18FB_SEM = (reshape(2*std(G18_FB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G18_FB(~isnan(G18_FB)))))';
+            G19FB_SEM = (reshape(2*std(G19_FB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G19_FB(~isnan(G19_FB)))))';
+            G20FB_SEM = (reshape(2*std(G20_FB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G20_FB(~isnan(G20_FB)))))';
+            G13AB_SEM = (reshape(2*std(G13_AB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G13_AB(~isnan(G13_AB)))))';
+            G14AB_SEM = (reshape(2*std(G14_AB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G14_AB(~isnan(G14_AB)))))';
+            G15AB_SEM = (reshape(2*std(G15_AB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G15_AB(~isnan(G15_AB)))))';
+            G16AB_SEM = (reshape(2*std(G16_AB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G16_AB(~isnan(G16_AB)))))';
+            G17AB_SEM = (reshape(2*std(G17_AB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G17_AB(~isnan(G17_AB)))))';
+            G18AB_SEM = (reshape(2*std(G18_AB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G18_AB(~isnan(G18_AB)))))';
+            G19AB_SEM = (reshape(2*std(G19_AB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G19_AB(~isnan(G19_AB)))))';
+            G20AB_SEM = (reshape(2*std(G20_AB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G20_AB(~isnan(G20_AB)))))';
+            plot(ax1,t_Diam(1:size(G1_Mean,2)),G1_Mean,"Color",SColor,"LineWidth",2)
+            plot(ax2,t_Diam(1:size(G2_Mean,2)),G2_Mean,"Color",LColor,"LineWidth",2)
+            plot(ax3,linspace(WP(1),WP(2),size(G3,2)),G3_Mean,"Color",SColor,"LineWidth",2)
+            plot(ax4,linspace(WP(1),WP(2),size(G4,2)),G4_Mean,"Color",LColor,"LineWidth",2)
+            plot(ax5,linspace(WP(1),WP(2),size(G5,2)),G5_Mean,"Color",SColor,"LineWidth",2)
+            plot(ax6,linspace(WP(1),WP(2),size(G6,2)),G6_Mean,"Color",LColor,"LineWidth",2)
+            plot(ax7,linspace(WP(1),WP(2),size(G7,3)),G7_Mean,"Color",SColor,"LineWidth",2)
+            plot(ax8,linspace(WP(1),WP(2),size(G8,3)),G8_Mean,"Color",LColor,"LineWidth",2)
+            plot(ax9,linspace(WP(1),WP(2),size(G9,3)),G9_Mean,"Color",SColor,"LineWidth",2)
+            plot(ax10,linspace(WP(1),WP(2),size(G10,3)),G10_Mean,"Color",LColor,"LineWidth",2)
+            plot(ax11,linspace(WP(1),WP(2),size(G11,3)),G11_Mean,"Color",SColor,"LineWidth",2)
+            plot(ax12,linspace(WP(1),WP(2),size(G12,3)),G12_Mean,"Color",LColor,"LineWidth",2)
+            plot(ax16,linspace(WP(1),WP(2),size(G13,3)),G13_Mean,"Color",QuietColor,"LineWidth",2)
+            plot(ax16,linspace(WP(1),WP(2),size(G15,3)),G15_Mean,"Color",SHLColor,"LineWidth",2)
+            plot(ax16,linspace(WP(1),WP(2),size(G17,3)),G17_Mean,"Color",N60Color,"LineWidth",2)
+            plot(ax16,linspace(WP(1),WP(2),size(G19,3)),G19_Mean,"Color",N70Color,"LineWidth",2)
+            plot(ax17,linspace(WP(1),WP(2),size(G14,3)),G14_Mean,"Color",QuietColor,"LineWidth",2)
+            plot(ax17,linspace(WP(1),WP(2),size(G16,3)),G16_Mean,"Color",SHLColor,"LineWidth",2)
+            plot(ax17,linspace(WP(1),WP(2),size(G18,3)),G18_Mean,"Color",N60Color,"LineWidth",2)
+            plot(ax17,linspace(WP(1),WP(2),size(G20,3)),G20_Mean,"Color",N70Color,"LineWidth",2)
+            plot(ax18,linspace(WP(1),WP(2),size(G13_FB,3)),G13FB_Mean,"Color",QuietColor,"LineWidth",2)
+            plot(ax18,linspace(WP(1),WP(2),size(G15_FB,3)),G15FB_Mean,"Color",SHLColor,"LineWidth",2)
+            plot(ax18,linspace(WP(1),WP(2),size(G17_FB,3)),G17FB_Mean,"Color",N60Color,"LineWidth",2)
+            plot(ax18,linspace(WP(1),WP(2),size(G19_FB,3)),G19FB_Mean,"Color",N70Color,"LineWidth",2)
+            plot(ax19,linspace(WP(1),WP(2),size(G14_FB,3)),G14FB_Mean,"Color",QuietColor,"LineWidth",2)
+            plot(ax19,linspace(WP(1),WP(2),size(G16_FB,3)),G16FB_Mean,"Color",SHLColor,"LineWidth",2)
+            plot(ax19,linspace(WP(1),WP(2),size(G18_FB,3)),G18FB_Mean,"Color",N60Color,"LineWidth",2)
+            plot(ax19,linspace(WP(1),WP(2),size(G20_FB,3)),G20FB_Mean,"Color",N70Color,"LineWidth",2)
+            plot(ax20,linspace(WP(1),WP(2),size(G13_AB,3)),G13AB_Mean,"Color",QuietColor,"LineWidth",2)
+            plot(ax20,linspace(WP(1),WP(2),size(G15_AB,3)),G15AB_Mean,"Color",SHLColor,"LineWidth",2)
+            plot(ax20,linspace(WP(1),WP(2),size(G17_AB,3)),G17AB_Mean,"Color",N60Color,"LineWidth",2)
+            plot(ax20,linspace(WP(1),WP(2),size(G19_AB,3)),G19AB_Mean,"Color",N70Color,"LineWidth",2)
+            plot(ax21,linspace(WP(1),WP(2),size(G14_AB,3)),G14AB_Mean,"Color",QuietColor,"LineWidth",2)
+            plot(ax21,linspace(WP(1),WP(2),size(G16_AB,3)),G16AB_Mean,"Color",SHLColor,"LineWidth",2)
+            plot(ax21,linspace(WP(1),WP(2),size(G18_AB,3)),G18AB_Mean,"Color",N60Color,"LineWidth",2)
+            plot(ax21,linspace(WP(1),WP(2),size(G20_AB,3)),G20AB_Mean,"Color",N70Color,"LineWidth",2)
+            fill(ax1,[t_Diam(1:size(G1_Mean,2)), flipud(t_Diam(1:size(G1_Mean,2))')'],[(G1_Mean+G1_SEM), flipud((G1_Mean-G1_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax2,[t_Diam(1:size(G2_Mean,2)), flipud(t_Diam(1:size(G2_Mean,2))')'],[(G2_Mean+G2_SEM), flipud((G2_Mean-G2_SEM)')'],LColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax3,[linspace(WP(1),WP(2),size(G3,2)), flipud(linspace(WP(1),WP(2),size(G3,2))')'],[(G3_Mean+G3_SEM), flipud((G3_Mean-G3_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax4,[linspace(WP(1),WP(2),size(G4,2)), flipud(linspace(WP(1),WP(2),size(G4,2))')'],[(G4_Mean+G4_SEM), flipud((G4_Mean-G4_SEM)')'],LColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax5,[linspace(WP(1),WP(2),size(G5,2)), flipud(linspace(WP(1),WP(2),size(G5,2))')'],[(G5_Mean+G5_SEM), flipud((G5_Mean-G5_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax6,[linspace(WP(1),WP(2),size(G6,2)), flipud(linspace(WP(1),WP(2),size(G6,2))')'],[(G6_Mean+G6_SEM), flipud((G6_Mean-G6_SEM)')'],LColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax7,[linspace(WP(1),WP(2),size(G7,3)), flipud(linspace(WP(1),WP(2),size(G7,3))')'],[(G7_Mean+G7_SEM), flipud((G7_Mean-G7_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax8,[linspace(WP(1),WP(2),size(G8,3)), flipud(linspace(WP(1),WP(2),size(G8,3))')'],[(G8_Mean+G8_SEM), flipud((G8_Mean-G8_SEM)')'],LColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax9,[linspace(WP(1),WP(2),size(G9,3)), flipud(linspace(WP(1),WP(2),size(G9,3))')'],[(G9_Mean+G9_SEM), flipud((G9_Mean-G9_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax10,[linspace(WP(1),WP(2),size(G10,3)), flipud(linspace(WP(1),WP(2),size(G10,3))')'],[(G10_Mean+G10_SEM), flipud((G10_Mean-G10_SEM)')'],LColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax11,[linspace(WP(1),WP(2),size(G11,3)), flipud(linspace(WP(1),WP(2),size(G11,3))')'],[(G11_Mean+G11_SEM), flipud((G11_Mean-G11_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax12,[linspace(WP(1),WP(2),size(G12,3)), flipud(linspace(WP(1),WP(2),size(G12,3))')'],[(G12_Mean+G12_SEM), flipud((G12_Mean-G12_SEM)')'],LColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax16,[linspace(WP(1),WP(2),size(G13,3)), flipud(linspace(WP(1),WP(2),size(G13,3))')'],[(G13_Mean+G13_SEM), flipud((G13_Mean-G13_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax16,[linspace(WP(1),WP(2),size(G15,3)), flipud(linspace(WP(1),WP(2),size(G15,3))')'],[(G15_Mean+G15_SEM), flipud((G15_Mean-G15_SEM)')'],SHLColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax16,[linspace(WP(1),WP(2),size(G17,3)), flipud(linspace(WP(1),WP(2),size(G17,3))')'],[(G17_Mean+G17_SEM), flipud((G17_Mean-G17_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax16,[linspace(WP(1),WP(2),size(G19,3)), flipud(linspace(WP(1),WP(2),size(G19,3))')'],[(G19_Mean+G19_SEM), flipud((G19_Mean-G19_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax17,[linspace(WP(1),WP(2),size(G14,3)), flipud(linspace(WP(1),WP(2),size(G14,3))')'],[(G14_Mean+G14_SEM), flipud((G14_Mean-G14_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax17,[linspace(WP(1),WP(2),size(G16,3)), flipud(linspace(WP(1),WP(2),size(G16,3))')'],[(G16_Mean+G16_SEM), flipud((G16_Mean-G16_SEM)')'],SHLColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax17,[linspace(WP(1),WP(2),size(G18,3)), flipud(linspace(WP(1),WP(2),size(G18,3))')'],[(G18_Mean+G18_SEM), flipud((G18_Mean-G18_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax17,[linspace(WP(1),WP(2),size(G20,3)), flipud(linspace(WP(1),WP(2),size(G20,3))')'],[(G20_Mean+G20_SEM), flipud((G20_Mean-G20_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
             lgd17=legend(ax17,'Quiet','SHL','N60','N70','Location','southeastoutside');
             lgd17.Title.String = 'Conditions:';
-            fill(ax18,[linspace(WP(1),WP(2),size(G13_FB,3)), flipud(linspace(WP(1),WP(2),size(G13_FB,3))')'],[(G13FB_Mean+G13FB_SEM), flipud((G13FB_Mean-G13FB_SEM)')'],[211 94 96]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax18,[linspace(WP(1),WP(2),size(G15_FB,3)), flipud(linspace(WP(1),WP(2),size(G15_FB,3))')'],[(G15FB_Mean+G15FB_SEM), flipud((G15FB_Mean-G15FB_SEM)')'],[132 186 91]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax18,[linspace(WP(1),WP(2),size(G17_FB,3)), flipud(linspace(WP(1),WP(2),size(G17_FB,3))')'],[(G17FB_Mean+G17FB_SEM), flipud((G17FB_Mean-G17FB_SEM)')'],[171 104 87]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax18,[linspace(WP(1),WP(2),size(G19_FB,3)), flipud(linspace(WP(1),WP(2),size(G19_FB,3))')'],[(G19FB_Mean+G19FB_SEM), flipud((G19FB_Mean-G19FB_SEM)')'],[144 103 167]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax19,[linspace(WP(1),WP(2),size(G14_FB,3)), flipud(linspace(WP(1),WP(2),size(G14_FB,3))')'],[(G14FB_Mean+G14FB_SEM), flipud((G14FB_Mean-G14FB_SEM)')'],[211 94 96]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax19,[linspace(WP(1),WP(2),size(G16_FB,3)), flipud(linspace(WP(1),WP(2),size(G16_FB,3))')'],[(G16FB_Mean+G16FB_SEM), flipud((G16FB_Mean-G16FB_SEM)')'],[132 186 91]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax19,[linspace(WP(1),WP(2),size(G18_FB,3)), flipud(linspace(WP(1),WP(2),size(G18_FB,3))')'],[(G18FB_Mean+G18FB_SEM), flipud((G18FB_Mean-G18FB_SEM)')'],[171 104 87]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax19,[linspace(WP(1),WP(2),size(G20_FB,3)), flipud(linspace(WP(1),WP(2),size(G20_FB,3))')'],[(G20FB_Mean+G20FB_SEM), flipud((G20FB_Mean-G20FB_SEM)')'],[144 103 167]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax18,[linspace(WP(1),WP(2),size(G13_FB,3)), flipud(linspace(WP(1),WP(2),size(G13_FB,3))')'],[(G13FB_Mean+G13FB_SEM), flipud((G13FB_Mean-G13FB_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax18,[linspace(WP(1),WP(2),size(G15_FB,3)), flipud(linspace(WP(1),WP(2),size(G15_FB,3))')'],[(G15FB_Mean+G15FB_SEM), flipud((G15FB_Mean-G15FB_SEM)')'],SHLColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax18,[linspace(WP(1),WP(2),size(G17_FB,3)), flipud(linspace(WP(1),WP(2),size(G17_FB,3))')'],[(G17FB_Mean+G17FB_SEM), flipud((G17FB_Mean-G17FB_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax18,[linspace(WP(1),WP(2),size(G19_FB,3)), flipud(linspace(WP(1),WP(2),size(G19_FB,3))')'],[(G19FB_Mean+G19FB_SEM), flipud((G19FB_Mean-G19FB_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax19,[linspace(WP(1),WP(2),size(G14_FB,3)), flipud(linspace(WP(1),WP(2),size(G14_FB,3))')'],[(G14FB_Mean+G14FB_SEM), flipud((G14FB_Mean-G14FB_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax19,[linspace(WP(1),WP(2),size(G16_FB,3)), flipud(linspace(WP(1),WP(2),size(G16_FB,3))')'],[(G16FB_Mean+G16FB_SEM), flipud((G16FB_Mean-G16FB_SEM)')'],SHLColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax19,[linspace(WP(1),WP(2),size(G18_FB,3)), flipud(linspace(WP(1),WP(2),size(G18_FB,3))')'],[(G18FB_Mean+G18FB_SEM), flipud((G18FB_Mean-G18FB_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax19,[linspace(WP(1),WP(2),size(G20_FB,3)), flipud(linspace(WP(1),WP(2),size(G20_FB,3))')'],[(G20FB_Mean+G20FB_SEM), flipud((G20FB_Mean-G20FB_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
             lgd19=legend(ax19,'Quiet','SHL','N60','N70','Location','southeastoutside');
             lgd19.Title.String = 'Conditions:';
-            fill(ax20,[linspace(WP(1),WP(2),size(G13_AB,3)), flipud(linspace(WP(1),WP(2),size(G13_AB,3))')'],[(G13AB_Mean+G13AB_SEM), flipud((G13AB_Mean-G13AB_SEM)')'],[211 94 96]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax20,[linspace(WP(1),WP(2),size(G15_AB,3)), flipud(linspace(WP(1),WP(2),size(G15_AB,3))')'],[(G15AB_Mean+G15AB_SEM), flipud((G15AB_Mean-G15AB_SEM)')'],[132 186 91]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax20,[linspace(WP(1),WP(2),size(G17_AB,3)), flipud(linspace(WP(1),WP(2),size(G17_AB,3))')'],[(G17AB_Mean+G17AB_SEM), flipud((G17AB_Mean-G17AB_SEM)')'],[171 104 87]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax20,[linspace(WP(1),WP(2),size(G19_AB,3)), flipud(linspace(WP(1),WP(2),size(G19_AB,3))')'],[(G19AB_Mean+G19AB_SEM), flipud((G19AB_Mean-G19AB_SEM)')'],[144 103 167]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax21,[linspace(WP(1),WP(2),size(G14_AB,3)), flipud(linspace(WP(1),WP(2),size(G14_AB,3))')'],[(G14AB_Mean+G14AB_SEM), flipud((G14AB_Mean-G14AB_SEM)')'],[211 94 96]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax21,[linspace(WP(1),WP(2),size(G16_AB,3)), flipud(linspace(WP(1),WP(2),size(G16_AB,3))')'],[(G16AB_Mean+G16AB_SEM), flipud((G16AB_Mean-G16AB_SEM)')'],[132 186 91]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax21,[linspace(WP(1),WP(2),size(G18_AB,3)), flipud(linspace(WP(1),WP(2),size(G18_AB,3))')'],[(G18AB_Mean+G18AB_SEM), flipud((G18AB_Mean-G18AB_SEM)')'],[171 104 87]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax21,[linspace(WP(1),WP(2),size(G20_AB,3)), flipud(linspace(WP(1),WP(2),size(G20_AB,3))')'],[(G20AB_Mean+G20AB_SEM), flipud((G20AB_Mean-G20AB_SEM)')'],[144 103 167]./255,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax20,[linspace(WP(1),WP(2),size(G13_AB,3)), flipud(linspace(WP(1),WP(2),size(G13_AB,3))')'],[(G13AB_Mean+G13AB_SEM), flipud((G13AB_Mean-G13AB_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax20,[linspace(WP(1),WP(2),size(G15_AB,3)), flipud(linspace(WP(1),WP(2),size(G15_AB,3))')'],[(G15AB_Mean+G15AB_SEM), flipud((G15AB_Mean-G15AB_SEM)')'],SHLColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax20,[linspace(WP(1),WP(2),size(G17_AB,3)), flipud(linspace(WP(1),WP(2),size(G17_AB,3))')'],[(G17AB_Mean+G17AB_SEM), flipud((G17AB_Mean-G17AB_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax20,[linspace(WP(1),WP(2),size(G19_AB,3)), flipud(linspace(WP(1),WP(2),size(G19_AB,3))')'],[(G19AB_Mean+G19AB_SEM), flipud((G19AB_Mean-G19AB_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax21,[linspace(WP(1),WP(2),size(G14_AB,3)), flipud(linspace(WP(1),WP(2),size(G14_AB,3))')'],[(G14AB_Mean+G14AB_SEM), flipud((G14AB_Mean-G14AB_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax21,[linspace(WP(1),WP(2),size(G16_AB,3)), flipud(linspace(WP(1),WP(2),size(G16_AB,3))')'],[(G16AB_Mean+G16AB_SEM), flipud((G16AB_Mean-G16AB_SEM)')'],SHLColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax21,[linspace(WP(1),WP(2),size(G18_AB,3)), flipud(linspace(WP(1),WP(2),size(G18_AB,3))')'],[(G18AB_Mean+G18AB_SEM), flipud((G18AB_Mean-G18AB_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax21,[linspace(WP(1),WP(2),size(G20_AB,3)), flipud(linspace(WP(1),WP(2),size(G20_AB,3))')'],[(G20AB_Mean+G20AB_SEM), flipud((G20AB_Mean-G20AB_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
             lgd21=legend(ax21,'Quiet','SHL','N60','N70','Location','southeastoutside');
             lgd21.Title.String = 'Conditions:';
             % Plot features
