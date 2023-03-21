@@ -86,11 +86,26 @@ for i = 1:size(Gaze, 1)
         end
     end
 end
-
+% % 3D Plot
+% tic
+% figure
+% plot3(Gaze(:,1),Gaze(:,2),Gaze(:,3),'b*')
+% hold on
+% plot3(0,0,0,'r*')
+% grid on
+% for j = 1:length(radius)
+%     [x,y,z] = sphere(10);
+%     x = x * radius(j);
+%     y = y * radius(j);
+%     z = z * radius(j);
+%     surf(x+Gaze(j,1),y+Gaze(j,2),z+Gaze(j,3),'FaceColor','none','EdgeColor','r')
+% end
+% toc
+% 
+% % 2D Plot
 % figure
 % plot(Gaze(:,1),Gaze(:,2),'b*')
 % hold on
-% axis equal
 % plot(0,0,'r*')
 % grid on
 % viscircles(Gaze(:, 1:2),radius);

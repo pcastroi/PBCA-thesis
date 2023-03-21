@@ -704,7 +704,7 @@ for q=1:numel(subDirs)
             for e = 1:nbars
                 x13(e,:) = b13(e).XEndPoints;
             end
-            errorbar(ax13,x13',data13,[std(nonzeros(F1_S_Q)),std(nonzeros(F1_L_Q));std(nonzeros(F1_S_SHL)),std(nonzeros(F1_L_SHL));std(nonzeros(F1_S_N60)),std(nonzeros(F1_L_N60));std(nonzeros(F1_S_N70)),std(nonzeros(F1_L_N70))],'k','linestyle','none','handlevisibility' ,'off')
+            errorbar(ax13,x13',data13,[2*std(nonzeros(F1_S_Q))/sqrt(numel(nonzeros(F1_S_Q))),2*std(nonzeros(F1_L_Q))/sqrt(numel(nonzeros(F1_L_Q)));2*std(nonzeros(F1_S_SHL))/sqrt(numel(nonzeros(F1_S_SHL))),2*std(nonzeros(F1_L_SHL))/sqrt(numel(nonzeros(F1_L_SHL)));2*std(nonzeros(F1_S_N60))/sqrt(numel(nonzeros(F1_S_N60))),2*std(nonzeros(F1_L_N60))/sqrt(numel(nonzeros(F1_L_N60)));2*std(nonzeros(F1_S_N70))/sqrt(numel(nonzeros(F1_S_N70))),2*std(nonzeros(F1_L_N70))/sqrt(numel(nonzeros(F1_L_N70)))],'k','linestyle','none','handlevisibility' ,'off')
             data14=[mean(nonzeros(F2_S_Q)),mean(nonzeros(F2_L_Q));mean(nonzeros(F2_S_SHL)),mean(nonzeros(F2_L_SHL));mean(nonzeros(F2_S_N60)),mean(nonzeros(F2_L_N60));mean(nonzeros(F2_S_N70)),mean(nonzeros(F2_L_N70))];
             b14=bar(ax14,data14,'grouped');
             [ngroups,nbars] = size(data14);
@@ -712,7 +712,7 @@ for q=1:numel(subDirs)
             for e = 1:nbars
                 x14(e,:) = b14(e).XEndPoints;
             end
-            errorbar(ax14,x14',data14,[std(nonzeros(F2_S_Q)),std(nonzeros(F2_L_Q));std(nonzeros(F2_S_SHL)),std(nonzeros(F2_L_SHL));std(nonzeros(F2_S_N60)),std(nonzeros(F2_L_N60));std(nonzeros(F2_S_N70)),std(nonzeros(F2_L_N70))],'k','linestyle','none','handlevisibility' ,'off')
+            errorbar(ax14,x14',data14,[2*std(nonzeros(F2_S_Q))/sqrt(numel(nonzeros(F2_S_Q))),2*std(nonzeros(F2_L_Q))/sqrt(numel(nonzeros(F2_L_Q)));2*std(nonzeros(F2_S_SHL))/sqrt(numel(nonzeros(F2_S_SHL))),2*std(nonzeros(F2_L_SHL))/sqrt(numel(nonzeros(F2_L_SHL)));2*std(nonzeros(F2_S_N60))/sqrt(numel(nonzeros(F2_S_N60))),2*std(nonzeros(F2_L_N60))/sqrt(numel(nonzeros(F2_L_N60)));2*std(nonzeros(F2_S_N70))/sqrt(numel(nonzeros(F2_S_N70))),2*std(nonzeros(F2_L_N70))/sqrt(numel(nonzeros(F2_L_N70)))],'k','linestyle','none','handlevisibility' ,'off')
             data15=[mean(nonzeros(F3_S_Q)),mean(nonzeros(F3_L_Q));mean(nonzeros(F3_S_SHL)),mean(nonzeros(F3_L_SHL));mean(nonzeros(F3_S_N60)),mean(nonzeros(F3_L_N60));mean(nonzeros(F3_S_N70)),mean(nonzeros(F3_L_N70))];
             b15=bar(ax15,data15,'grouped');
             [ngroups,nbars] = size(data15);
@@ -720,7 +720,7 @@ for q=1:numel(subDirs)
             for e = 1:nbars
                 x15(e,:) = b15(e).XEndPoints;
             end
-            errorbar(ax15,x15',data15,[std(nonzeros(F3_S_Q)),std(nonzeros(F3_L_Q));std(nonzeros(F3_S_SHL)),std(nonzeros(F3_L_SHL));std(nonzeros(F3_S_N60)),std(nonzeros(F3_L_N60));std(nonzeros(F3_S_N70)),std(nonzeros(F3_L_N70))],'k','linestyle','none','handlevisibility' ,'off')
+            errorbar(ax15,x15',data15,[2*std(nonzeros(F3_S_Q))/sqrt(numel(nonzeros(F3_S_Q))),2*std(nonzeros(F3_L_Q))/sqrt(numel(nonzeros(F3_L_Q)));2*std(nonzeros(F3_S_SHL))/sqrt(numel(nonzeros(F3_S_SHL))),2*std(nonzeros(F3_L_SHL))/sqrt(numel(nonzeros(F3_L_SHL)));2*std(nonzeros(F3_S_N60))/sqrt(numel(nonzeros(F3_S_N60))),2*std(nonzeros(F3_L_N60))/sqrt(numel(nonzeros(F3_L_N60)));2*std(nonzeros(F3_S_N70))/sqrt(numel(nonzeros(F3_S_N70))),2*std(nonzeros(F3_L_N70))/sqrt(numel(nonzeros(F3_L_N70)))],'k','linestyle','none','handlevisibility' ,'off')
             lgd15=legend(ax15,'Speaking','Non-Speaking','Location','southeastoutside');
             lgd15.Title.String = 'Types of Windows:';
             xticks([ax13 ax14 ax15],1:4)
