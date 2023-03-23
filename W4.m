@@ -671,7 +671,7 @@ for q=1:numel(subDirs)
             fill(ax16,[linspace(WP(1),WP(2),size(G17,3)), flipud(linspace(WP(1),WP(2),size(G17,3))')'],[(G17_Mean+G17_SEM), flipud((G17_Mean-G17_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
             fill(ax16,[linspace(WP(1),WP(2),size(G19,3)), flipud(linspace(WP(1),WP(2),size(G19,3))')'],[(G19_Mean+G19_SEM), flipud((G19_Mean-G19_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
             fill(ax17,[linspace(WP(1),WP(2),size(G14,3)), flipud(linspace(WP(1),WP(2),size(G14,3))')'],[(G14_Mean+G14_SEM), flipud((G14_Mean-G14_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax17,[linspace(WP(1),WP(2),size(G16,3)), flipud(linspace(WP(1),WP(2),size(G16,3))')'],[(G16_Mean+G16_SEM), flipud((G16_Mean-G16_SEM)')'],SHLColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+            fill(ax17,[linspace(WP(1),WP(2),sizes(G16,3)), flipud(linspace(WP(1),WP(2),size(G16,3))')'],[(G16_Mean+G16_SEM), flipud((G16_Mean-G16_SEM)')'],SHLColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
             fill(ax17,[linspace(WP(1),WP(2),size(G18,3)), flipud(linspace(WP(1),WP(2),size(G18,3))')'],[(G18_Mean+G18_SEM), flipud((G18_Mean-G18_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
             fill(ax17,[linspace(WP(1),WP(2),size(G20,3)), flipud(linspace(WP(1),WP(2),size(G20,3))')'],[(G20_Mean+G20_SEM), flipud((G20_Mean-G20_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
             lgd17=legend(ax17,'Quiet','SHL','N60','N70','Location','southeastoutside');

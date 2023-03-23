@@ -239,7 +239,8 @@ for q=1:numel(subDirs)
             disp(['Warning: File ', PairFiles(1).folder, '\', cell2mat(FileNames(i)), ' is missing the associated Utterance/Listening data.']);
             continue
         end
-
+        
+        % SAME PROCESSING AS IN W1.m
         % Downsample (rounding) Utt from 250 Hz (1/binRes) to 50 Hz, shift
         % in time to account for the time at which the audio recording
         % started (from 0 to 20 s only eye data) plus delay
