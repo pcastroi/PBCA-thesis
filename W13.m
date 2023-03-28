@@ -32,8 +32,31 @@ NPs = 2; % N of TPs per Pair
 NCond = numel(FileNames)/NPs; % N of conditions
 NTPs = numel(subDirs)*numel(FileNames)/NCond; % Total N of TPs
 TPsOrder = zeros(NTPs,NCond); % Vector that will contain the indexes of trials/file for each TP
-STPsMinMax = zeros(NTPs,2); % Vector with Min and Max pupil size (Speaking) for each TP
-LTPsMinMax = zeros(NTPs,2); % Vector with Min and Max pupil size (Listening) for each TP
+
+GSW_MinMax = zeros(NTPs,2); % Vector with Min and Max pupil size (Speaking) for each TP
+GLW_MinMax = zeros(NTPs,2); % Vector with Min and Max pupil size (Listening) for each TP
+GSW_MPDSTD = zeros(NTPs,2); % Vector with MPD and STD (Speaking) for each TP
+GLW_MPDSTD = zeros(NTPs,2); % Vector with MPD and STD (Listening) for each TP
+
+SW_Quiet_MinMax = zeros(NTPs,2); % Vector with Min and Max pupil size (Speaking) for each TP (Quiet)
+LW_Quiet_MinMax = zeros(NTPs,2); % Vector with Min and Max pupil size (Listening) for each TP (Quiet)
+SW_Quiet_MPDSTD = zeros(NTPs,2); % Vector with MPD and STD (Speaking) for each TP (Quiet)
+LW_Quiet_MPDSTD = zeros(NTPs,2); % Vector with MPD and STD (Listening) for each TP (Quiet)
+
+SW_SHL_MinMax = zeros(NTPs,2); % Vector with Min and Max pupil size (Speaking) for each TP (SHL)
+LW_SHL_MinMax = zeros(NTPs,2); % Vector with Min and Max pupil size (Listening) for each TP (SHL)
+SW_SHL_MPDSTD = zeros(NTPs,2); % Vector with MPD and STD (Speaking) for each TP (SHL)
+LW_SHL_MPDSTD = zeros(NTPs,2); % Vector with MPD and STD (Listening) for each TP (SHL)
+
+SW_N60_MinMax = zeros(NTPs,2); % Vector with Min and Max pupil size (Speaking) for each TP (N60)
+LW_N60_MinMax = zeros(NTPs,2); % Vector with Min and Max pupil size (Listening) for each TP (N60)
+SW_N60_MPDSTD = zeros(NTPs,2); % Vector with MPD and STD (Speaking) for each TP (N60)
+LW_N60_MPDSTD = zeros(NTPs,2); % Vector with MPD and STD (Listening) for each TP (N60)
+
+SW_N70_MinMax = zeros(NTPs,2); % Vector with Min and Max pupil size (Speaking) for each TP (N70)
+LW_N70_MinMax = zeros(NTPs,2); % Vector with Min and Max pupil size (Listening) for each TP (N70)
+SW_N70_MPDSTD = zeros(NTPs,2); % Vector with MPD and STD (Speaking) for each TP (N70)
+LW_N70_MPDSTD = zeros(NTPs,2); % Vector with MPD and STD (Listening) for each TP (N70)
 
 % Colors
 SColor = [53, 155, 67]./255;
@@ -193,19 +216,17 @@ for q=1:numel(subDirs)
             continue
         end
         
-        % Retrieve Utterances + TPs Order
+        % Retrieve Utterances
         if contains(cell2mat(FileNames(i)),'P2')
             SpeakKey = 'utteranceCH1';
             ListenKey = 'utteranceCH2';
             SDelayKey = 'delayCH1';
             LDelayKey = 'delayCH2';
-            TPsOrder(2*q,floor(i/2)) = x;
         elseif contains(cell2mat(FileNames(i)),'P1')
             SpeakKey = 'utteranceCH2';
             ListenKey = 'utteranceCH1';
             SDelayKey = 'delayCH2';
             LDelayKey = 'delayCH1';
-            TPsOrder(2*q-1,i) = x;
         end
 
         if contains(cell2mat(FileNames(i)),'B1')
@@ -281,68 +302,44 @@ for q=1:numel(subDirs)
             for j=1:size(Speak,1)
                 SW_Quiet(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3)-1);NaN*ones(1,length(SW_Quiet)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
                 SW_B_Quiet(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3)-1)-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SW_B_Quiet)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
-                SW_R_Quiet(x,j,:)=[(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)-min(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)))/(max(Diameter(WSpeakIdx(j,1):Speak(j,3)-1))-min(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)));NaN*ones(1,length(SW_R_Quiet)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
-                SW_RB_Quiet(x,j,:)=[(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)))-min(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)))/(max(Diameter(WSpeakIdx(j,1):Speak(j,3)-1))-min(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)));NaN*ones(1,length(SW_RB_Quiet)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
-                SW_Z_Quiet(x,j,:)=[(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)-mean(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)))/std(mean(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)));NaN*ones(1,length(SW_Z_Quiet)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
                 SDur_Quiet(i,j) = Speak(j,1);
             end
             for j=1:size(Listen,1)
                 LW_Quiet(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3)-1);NaN*ones(1,length(LW_Quiet)-length(WListenIdx(j,1):Listen(j,3)-1))'];
                 LW_B_Quiet(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3)-1)-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LW_B_Quiet)-length(WListenIdx(j,1):Listen(j,3)-1))'];
-                LW_R_Quiet(x,j,:)=[(Diameter(WListenIdx(j,1):Listen(j,3)-1)-min(Diameter(WListenIdx(j,1):Listen(j,3)-1)))/(max(Diameter(WListenIdx(j,1):Listen(j,3)-1))-min(Diameter(WListenIdx(j,1):Listen(j,3)-1)));NaN*ones(1,length(LW_R_Quiet)-length(WListenIdx(j,1):Listen(j,3)-1))'];
-                LW_RB_Quiet(x,j,:)=[(Diameter(WListenIdx(j,1):Listen(j,3)-1)-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)))-min(Diameter(WListenIdx(j,1):Listen(j,3)-1)))/(max(Diameter(WListenIdx(j,1):Listen(j,3)-1))-min(Diameter(WListenIdx(j,1):Listen(j,3)-1)));NaN*ones(1,length(LW_RB_Quiet)-length(WListenIdx(j,1):Listen(j,3)-1))'];
-                LW_Z_Quiet(x,j,:)=[(Diameter(WListenIdx(j,1):Listen(j,3)-1)-mean(Diameter(WListenIdx(j,1):Listen(j,3)-1)))/std(mean(Diameter(WListenIdx(j,1):Listen(j,3)-1)));NaN*ones(1,length(LW_Z_Quiet)-length(WListenIdx(j,1):Listen(j,3)-1))'];
                 LDur_Quiet(i,j) = Listen(j,1);
             end
         elseif contains(cell2mat(FileNames(i)),'SHL')
             for j=1:size(Speak,1)
                 SW_SHL(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3)-1);NaN*ones(1,length(SW_SHL)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
                 SW_B_SHL(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3)-1)-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SW_B_SHL)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
-                SW_R_SHL(x,j,:)=[(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)-min(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)))/(max(Diameter(WSpeakIdx(j,1):Speak(j,3)-1))-min(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)));NaN*ones(1,length(SW_R_SHL)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
-                SW_RB_SHL(x,j,:)=[(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)))-min(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)))/(max(Diameter(WSpeakIdx(j,1):Speak(j,3)-1))-min(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)));NaN*ones(1,length(SW_RB_SHL)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
-                SW_Z_SHL(x,j,:)=[(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)-mean(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)))/std(mean(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)));NaN*ones(1,length(SW_Z_SHL)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
                 SDur_SHL(i,j) = Speak(j,1);
             end
             for j=1:size(Listen,1)
                 LW_SHL(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3)-1);NaN*ones(1,length(LW_SHL)-length(WListenIdx(j,1):Listen(j,3)-1))'];
                 LW_B_SHL(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3)-1)-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LW_B_SHL)-length(WListenIdx(j,1):Listen(j,3)-1))'];
-                LW_R_SHL(x,j,:)=[(Diameter(WListenIdx(j,1):Listen(j,3)-1)-min(Diameter(WListenIdx(j,1):Listen(j,3)-1)))/(max(Diameter(WListenIdx(j,1):Listen(j,3)-1))-min(Diameter(WListenIdx(j,1):Listen(j,3)-1)));NaN*ones(1,length(LW_R_SHL)-length(WListenIdx(j,1):Listen(j,3)-1))'];
-                LW_RB_SHL(x,j,:)=[(Diameter(WListenIdx(j,1):Listen(j,3)-1)-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)))-min(Diameter(WListenIdx(j,1):Listen(j,3)-1)))/(max(Diameter(WListenIdx(j,1):Listen(j,3)-1))-min(Diameter(WListenIdx(j,1):Listen(j,3)-1)));NaN*ones(1,length(LW_RB_SHL)-length(WListenIdx(j,1):Listen(j,3)-1))'];
-                LW_Z_SHL(x,j,:)=[(Diameter(WListenIdx(j,1):Listen(j,3)-1)-mean(Diameter(WListenIdx(j,1):Listen(j,3)-1)))/std(mean(Diameter(WListenIdx(j,1):Listen(j,3)-1)));NaN*ones(1,length(LW_Z_SHL)-length(WListenIdx(j,1):Listen(j,3)-1))'];
                 LDur_SHL(i,j) = Listen(j,1);
             end
         elseif contains(cell2mat(FileNames(i)),'Noise60')
             for j=1:size(Speak,1)
                 SW_N60(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3)-1);NaN*ones(1,length(SW_N60)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
                 SW_B_N60(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3)-1)-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SW_B_N60)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
-                SW_R_N60(x,j,:)=[(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)-min(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)))/(max(Diameter(WSpeakIdx(j,1):Speak(j,3)-1))-min(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)));NaN*ones(1,length(SW_R_N60)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
-                SW_RB_N60(x,j,:)=[(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)))-min(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)))/(max(Diameter(WSpeakIdx(j,1):Speak(j,3)-1))-min(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)));NaN*ones(1,length(SW_RB_N60)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
-                SW_Z_N60(x,j,:)=[(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)-mean(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)))/std(mean(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)));NaN*ones(1,length(SW_Z_N60)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
                 SDur_N60(i,j) = Speak(j,1);
             end
             for j=1:size(Listen,1)
                 LW_N60(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3)-1);NaN*ones(1,length(LW_N60)-length(WListenIdx(j,1):Listen(j,3)-1))'];
                 LW_B_N60(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3)-1)-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LW_B_N60)-length(WListenIdx(j,1):Listen(j,3)-1))'];
-                LW_R_N60(x,j,:)=[(Diameter(WListenIdx(j,1):Listen(j,3)-1)-min(Diameter(WListenIdx(j,1):Listen(j,3)-1)))/(max(Diameter(WListenIdx(j,1):Listen(j,3)-1))-min(Diameter(WListenIdx(j,1):Listen(j,3)-1)));NaN*ones(1,length(LW_R_N60)-length(WListenIdx(j,1):Listen(j,3)-1))'];
-                LW_RB_N60(x,j,:)=[(Diameter(WListenIdx(j,1):Listen(j,3)-1)-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)))-min(Diameter(WListenIdx(j,1):Listen(j,3)-1)))/(max(Diameter(WListenIdx(j,1):Listen(j,3)-1))-min(Diameter(WListenIdx(j,1):Listen(j,3)-1)));NaN*ones(1,length(LW_RB_N60)-length(WListenIdx(j,1):Listen(j,3)-1))'];
-                LW_Z_N60(x,j,:)=[(Diameter(WListenIdx(j,1):Listen(j,3)-1)-mean(Diameter(WListenIdx(j,1):Listen(j,3)-1)))/std(mean(Diameter(WListenIdx(j,1):Listen(j,3)-1)));NaN*ones(1,length(LW_Z_N60)-length(WListenIdx(j,1):Listen(j,3)-1))'];
                 LDur_N60(i,j) = Listen(j,1);
             end
         elseif contains(cell2mat(FileNames(i)),'Noise70')
             for j=1:size(Speak,1)
                 SW_N70(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3)-1);NaN*ones(1,length(SW_N70)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
                 SW_B_N70(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3)-1)-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SW_B_N70)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
-                SW_R_N70(x,j,:)=[(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)-min(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)))/(max(Diameter(WSpeakIdx(j,1):Speak(j,3)-1))-min(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)));NaN*ones(1,length(SW_R_N70)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
-                SW_RB_N70(x,j,:)=[(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)))-min(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)))/(max(Diameter(WSpeakIdx(j,1):Speak(j,3)-1))-min(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)));NaN*ones(1,length(SW_RB_N70)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
-                SW_Z_N70(x,j,:)=[(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)-mean(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)))/std(mean(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)));NaN*ones(1,length(SW_Z_N70)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
                 SDur_N70(i,j) = Speak(j,1);
             end
             for j=1:size(Listen,1)
                 LW_N70(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3)-1);NaN*ones(1,length(LW_N70)-length(WListenIdx(j,1):Listen(j,3)-1))'];
                 LW_B_N70(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3)-1)-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LW_B_N70)-length(WListenIdx(j,1):Listen(j,3)-1))'];
-                LW_R_N70(x,j,:)=[(Diameter(WListenIdx(j,1):Listen(j,3)-1)-min(Diameter(WListenIdx(j,1):Listen(j,3)-1)))/(max(Diameter(WListenIdx(j,1):Listen(j,3)-1))-min(Diameter(WListenIdx(j,1):Listen(j,3)-1)));NaN*ones(1,length(LW_R_N70)-length(WListenIdx(j,1):Listen(j,3)-1))'];
-                LW_RB_N70(x,j,:)=[(Diameter(WListenIdx(j,1):Listen(j,3)-1)-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)))-min(Diameter(WListenIdx(j,1):Listen(j,3)-1)))/(max(Diameter(WListenIdx(j,1):Listen(j,3)-1))-min(Diameter(WListenIdx(j,1):Listen(j,3)-1)));NaN*ones(1,length(LW_RB_N70)-length(WListenIdx(j,1):Listen(j,3)-1))'];
-                LW_Z_N70(x,j,:)=[(Diameter(WListenIdx(j,1):Listen(j,3)-1)-mean(Diameter(WListenIdx(j,1):Listen(j,3)-1)))/std(mean(Diameter(WListenIdx(j,1):Listen(j,3)-1)));NaN*ones(1,length(LW_Z_N70)-length(WListenIdx(j,1):Listen(j,3)-1))'];
                 LDur_N70(x,j) = Listen(j,1);
             end
         end
@@ -352,9 +349,6 @@ for q=1:numel(subDirs)
             % Add nan-padding when necessary
             GSW(x,j,:) = [Diameter(WSpeakIdx(j,1):Speak(j,3)-1);NaN*ones(1,length(GSW)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
             GSW_B(x,j,:) = [Diameter(WSpeakIdx(j,1):Speak(j,3)-1)-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(GSW_B)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
-            GSW_R(x,j,:)=[(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)-min(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)))/(max(Diameter(WSpeakIdx(j,1):Speak(j,3)-1))-min(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)));NaN*ones(1,length(GSW_R)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
-            GSW_RB(x,j,:)=[(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)))-min(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)))/(max(Diameter(WSpeakIdx(j,1):Speak(j,3)-1))-min(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)));NaN*ones(1,length(GSW_RB)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
-            GSW_Z(x,j,:)=[(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)-mean(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)))/std(mean(Diameter(WSpeakIdx(j,1):Speak(j,3)-1)));NaN*ones(1,length(GSW_Z)-length(WSpeakIdx(j,1):Speak(j,3)-1))'];
             GSDur(x,j) = Speak(j,1);
         end
         
@@ -362,10 +356,13 @@ for q=1:numel(subDirs)
             % Add nan-padding when necessary
             GLW(x,j,:) = [Diameter(WListenIdx(j,1):Listen(j,3)-1);NaN*ones(1,length(GLW)-length(WListenIdx(j,1):Listen(j,3)-1))'];
             GLW_B(x,j,:) = [Diameter(WListenIdx(j,1):Listen(j,3)-1)-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(GLW_B)-length(WListenIdx(j,1):Listen(j,3)-1))'];
-            GLW_R(x,j,:)=[(Diameter(WListenIdx(j,1):Listen(j,3)-1)-min(Diameter(WListenIdx(j,1):Listen(j,3)-1)))/(max(Diameter(WListenIdx(j,1):Listen(j,3)-1))-min(Diameter(WListenIdx(j,1):Listen(j,3)-1)));NaN*ones(1,length(GLW_R)-length(WListenIdx(j,1):Listen(j,3)-1))'];
-            GLW_RB(x,j,:)=[(Diameter(WListenIdx(j,1):Listen(j,3)-1)-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)))-min(Diameter(WListenIdx(j,1):Listen(j,3)-1)))/(max(Diameter(WListenIdx(j,1):Listen(j,3)-1))-min(Diameter(WListenIdx(j,1):Listen(j,3)-1)));NaN*ones(1,length(GLW_RB)-length(WListenIdx(j,1):Listen(j,3)-1))'];
-            GLW_Z(x,j,:)=[(Diameter(WListenIdx(j,1):Listen(j,3)-1)-mean(Diameter(WListenIdx(j,1):Listen(j,3)-1)))/std(mean(Diameter(WListenIdx(j,1):Listen(j,3)-1)));NaN*ones(1,length(GLW_Z)-length(WListenIdx(j,1):Listen(j,3)-1))'];
             GLDur(x,j) = Listen(j,1);
+        end
+        % Store idx of non-rejected files associated with TPs
+        if contains(cell2mat(FileNames(i)),'P2')
+            TPsOrder(2*q,i-NCond) = x;
+        elseif contains(cell2mat(FileNames(i)),'P1')
+            TPsOrder(2*q-1,i) = x;
         end
         
         % Increase index of num of files used
@@ -386,68 +383,108 @@ grid([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10],'on')
 % Clean empty rows and layers, set 0's to NaN
 GSW(~any(GSW,[2 3]),:,:)=[];GSW(:,~any(GSW,[1 3]),:)=[];GSW(GSW==0)=NaN;
 GSW_B(~any(GSW_B,[2 3]),:,:)=[];GSW_B(:,~any(GSW_B,[1 3]),:)=[];GSW_B(GSW_B==0)=NaN;
-GSW_R(~any(GSW_R,[2 3]),:,:)=[];GSW_R(:,~any(GSW_R,[1 3]),:)=[];GSW_R(GSW_R==0)=NaN;
-GSW_RB(~any(GSW_RB,[2 3]),:,:)=[];GSW_RB(:,~any(GSW_RB,[1 3]),:)=[];GSW_RB(GSW_RB==0)=NaN;
-GSW_Z(~any(GSW_Z,[2 3]),:,:)=[];GSW_Z(:,~any(GSW_Z,[1 3]),:)=[];GSW_Z(GSW_Z==0)=NaN;
 GLW(~any(GLW,[2 3]),:,:)=[];GLW(:,~any(GLW,[1 3]),:)=[];GLW(GLW==0)=NaN;
 GLW_B(~any(GLW_B,[2 3]),:,:)=[];GLW_B(:,~any(GLW_B,[1 3]),:)=[];GLW_B(GLW_B==0)=NaN;
-GLW_R(~any(GLW_R,[2 3]),:,:)=[];GLW_R(:,~any(GLW_R,[1 3]),:)=[];GLW_R(GLW_R==0)=NaN;
-GLW_RB(~any(GLW_RB,[2 3]),:,:)=[];GLW_RB(:,~any(GLW_RB,[1 3]),:)=[];GLW_RB(GLW_RB==0)=NaN;
-GLW_Z(~any(GLW_Z,[2 3]),:,:)=[];GLW_Z(:,~any(GLW_Z,[1 3]),:)=[];GLW_Z(GLW_Z==0)=NaN;
-
-% Retrieve Min and Max from Global Windows for each participant
-for i=1:NTPs
-    if ~isempty(nonzeros(TPsOrder(i,:)))
-        STPsMinMax(i,1) = min(reshape(GSW(min(nonzeros(TPsOrder(i,:))):max(nonzeros(TPsOrder(i,:))),:,:),[],1));
-        LTPsMinMax(i,1) = min(reshape(GLW(min(nonzeros(TPsOrder(i,:))):max(nonzeros(TPsOrder(i,:))),:,:),[],1));
-        STPsMinMax(i,2) = max(reshape(GSW(min(nonzeros(TPsOrder(i,:))):max(nonzeros(TPsOrder(i,:))),:,:),[],1));
-        LTPsMinMax(i,2) = max(reshape(GLW(min(nonzeros(TPsOrder(i,:))):max(nonzeros(TPsOrder(i,:))),:,:),[],1));
-    end
-end
 
 SW_Quiet(~any(SW_Quiet,[2 3]),:,:)=[];SW_Quiet(:,~any(SW_Quiet,[1 3]),:)=[];SW_Quiet(SW_Quiet==0)=NaN;
 SW_B_Quiet(~any(SW_B_Quiet,[2 3]),:,:)=[];SW_B_Quiet(:,~any(SW_B_Quiet,[1 3]),:)=[];SW_B_Quiet(SW_B_Quiet==0)=NaN;
-SW_R_Quiet(~any(SW_R_Quiet,[2 3]),:,:)=[];SW_R_Quiet(:,~any(SW_R_Quiet,[1 3]),:)=[];SW_R_Quiet(SW_R_Quiet==0)=NaN;
-SW_RB_Quiet(~any(SW_RB_Quiet,[2 3]),:,:)=[];SW_RB_Quiet(:,~any(SW_RB_Quiet,[1 3]),:)=[];SW_RB_Quiet(SW_RB_Quiet==0)=NaN;
-SW_Z_Quiet(~any(SW_Z_Quiet,[2 3]),:,:)=[];SW_Z_Quiet(:,~any(SW_Z_Quiet,[1 3]),:)=[];SW_Z_Quiet(SW_Z_Quiet==0)=NaN;
 LW_Quiet(~any(LW_Quiet,[2 3]),:,:)=[];LW_Quiet(:,~any(LW_Quiet,[1 3]),:)=[];LW_Quiet(LW_Quiet==0)=NaN;
 LW_B_Quiet(~any(LW_B_Quiet,[2 3]),:,:)=[];LW_B_Quiet(:,~any(LW_B_Quiet,[1 3]),:)=[];LW_B_Quiet(LW_B_Quiet==0)=NaN;
-LW_R_Quiet(~any(LW_R_Quiet,[2 3]),:,:)=[];LW_R_Quiet(:,~any(LW_R_Quiet,[1 3]),:)=[];LW_R_Quiet(LW_R_Quiet==0)=NaN;
-LW_RB_Quiet(~any(LW_RB_Quiet,[2 3]),:,:)=[];LW_RB_Quiet(:,~any(LW_RB_Quiet,[1 3]),:)=[];LW_RB_Quiet(LW_RB_Quiet==0)=NaN;
-LW_Z_Quiet(~any(LW_Z_Quiet,[2 3]),:,:)=[];LW_Z_Quiet(:,~any(LW_Z_Quiet,[1 3]),:)=[];LW_Z_Quiet(LW_Z_Quiet==0)=NaN;
 
 SW_SHL(~any(SW_SHL,[2 3]),:,:)=[];SW_SHL(:,~any(SW_SHL,[1 3]),:)=[];SW_SHL(SW_SHL==0)=NaN;
 SW_B_SHL(~any(SW_B_SHL,[2 3]),:,:)=[];SW_B_SHL(:,~any(SW_B_SHL,[1 3]),:)=[];SW_B_SHL(SW_B_SHL==0)=NaN;
-SW_R_SHL(~any(SW_R_SHL,[2 3]),:,:)=[];SW_R_SHL(:,~any(SW_R_SHL,[1 3]),:)=[];SW_R_SHL(SW_R_SHL==0)=NaN;
-SW_RB_SHL(~any(SW_RB_SHL,[2 3]),:,:)=[];SW_RB_SHL(:,~any(SW_RB_SHL,[1 3]),:)=[];SW_RB_SHL(SW_RB_SHL==0)=NaN;
-SW_Z_SHL(~any(SW_Z_SHL,[2 3]),:,:)=[];SW_Z_SHL(:,~any(SW_Z_SHL,[1 3]),:)=[];SW_Z_SHL(SW_Z_SHL==0)=NaN;
 LW_SHL(~any(LW_SHL,[2 3]),:,:)=[];LW_SHL(:,~any(LW_SHL,[1 3]),:)=[];LW_SHL(LW_SHL==0)=NaN;
 LW_B_SHL(~any(LW_B_SHL,[2 3]),:,:)=[];LW_B_SHL(:,~any(LW_B_SHL,[1 3]),:)=[];LW_B_SHL(LW_B_SHL==0)=NaN;
-LW_R_SHL(~any(LW_R_SHL,[2 3]),:,:)=[];LW_R_SHL(:,~any(LW_R_SHL,[1 3]),:)=[];LW_R_SHL(LW_R_SHL==0)=NaN;
-LW_RB_SHL(~any(LW_RB_SHL,[2 3]),:,:)=[];LW_RB_SHL(:,~any(LW_RB_SHL,[1 3]),:)=[];LW_RB_SHL(LW_RB_SHL==0)=NaN;
-LW_Z_SHL(~any(LW_Z_SHL,[2 3]),:,:)=[];LW_Z_SHL(:,~any(LW_Z_SHL,[1 3]),:)=[];LW_Z_SHL(LW_Z_SHL==0)=NaN;
 
 SW_N60(~any(SW_N60,[2 3]),:,:)=[];SW_N60(:,~any(SW_N60,[1 3]),:)=[];SW_N60(SW_N60==0)=NaN;
 SW_B_N60(~any(SW_B_N60,[2 3]),:,:)=[];SW_B_N60(:,~any(SW_B_N60,[1 3]),:)=[];SW_B_N60(SW_B_N60==0)=NaN;
-SW_R_N60(~any(SW_R_N60,[2 3]),:,:)=[];SW_R_N60(:,~any(SW_R_N60,[1 3]),:)=[];SW_R_N60(SW_R_N60==0)=NaN;
-SW_RB_N60(~any(SW_RB_N60,[2 3]),:,:)=[];SW_RB_N60(:,~any(SW_RB_N60,[1 3]),:)=[];SW_RB_N60(SW_RB_N60==0)=NaN;
-SW_Z_N60(~any(SW_Z_N60,[2 3]),:,:)=[];SW_Z_N60(:,~any(SW_Z_N60,[1 3]),:)=[];SW_Z_N60(SW_Z_N60==0)=NaN;
 LW_N60(~any(LW_N60,[2 3]),:,:)=[];LW_N60(:,~any(LW_N60,[1 3]),:)=[];LW_N60(LW_N60==0)=NaN;
 LW_B_N60(~any(LW_B_N60,[2 3]),:,:)=[];LW_B_N60(:,~any(LW_B_N60,[1 3]),:)=[];LW_B_N60(LW_B_N60==0)=NaN;
-LW_R_N60(~any(LW_R_N60,[2 3]),:,:)=[];LW_R_N60(:,~any(LW_R_N60,[1 3]),:)=[];LW_R_N60(LW_R_N60==0)=NaN;
-LW_RB_N60(~any(LW_RB_N60,[2 3]),:,:)=[];LW_RB_N60(:,~any(LW_RB_N60,[1 3]),:)=[];LW_RB_N60(LW_RB_N60==0)=NaN;
-LW_Z_N60(~any(LW_Z_N60,[2 3]),:,:)=[];LW_Z_N60(:,~any(LW_Z_N60,[1 3]),:)=[];LW_Z_N60(LW_Z_N60==0)=NaN;
 
 SW_N70(~any(SW_N70,[2 3]),:,:)=[];SW_N70(:,~any(SW_N70,[1 3]),:)=[];SW_N70(SW_N70==0)=NaN;
 SW_B_N70(~any(SW_B_N70,[2 3]),:,:)=[];SW_B_N70(:,~any(SW_B_N70,[1 3]),:)=[];SW_B_N70(SW_B_N70==0)=NaN;
-SW_R_N70(~any(SW_R_N70,[2 3]),:,:)=[];SW_R_N70(:,~any(SW_R_N70,[1 3]),:)=[];SW_R_N70(SW_R_N70==0)=NaN;
-SW_RB_N70(~any(SW_RB_N70,[2 3]),:,:)=[];SW_RB_N70(:,~any(SW_RB_N70,[1 3]),:)=[];SW_RB_N70(SW_RB_N70==0)=NaN;
-SW_Z_N70(~any(SW_Z_N70,[2 3]),:,:)=[];SW_Z_N70(:,~any(SW_Z_N70,[1 3]),:)=[];SW_Z_N70(SW_Z_N70==0)=NaN;
 LW_N70(~any(LW_N70,[2 3]),:,:)=[];LW_N70(:,~any(LW_N70,[1 3]),:)=[];LW_N70(LW_N70==0)=NaN;
 LW_B_N70(~any(LW_B_N70,[2 3]),:,:)=[];LW_B_N70(:,~any(LW_B_N70,[1 3]),:)=[];LW_B_N70(LW_B_N70==0)=NaN;
-LW_R_N70(~any(LW_R_N70,[2 3]),:,:)=[];LW_R_N70(:,~any(LW_R_N70,[1 3]),:)=[];LW_R_N70(LW_R_N70==0)=NaN;
-LW_RB_N70(~any(LW_RB_N70,[2 3]),:,:)=[];LW_RB_N70(:,~any(LW_RB_N70,[1 3]),:)=[];LW_RB_N70(LW_RB_N70==0)=NaN;
-LW_Z_N70(~any(LW_Z_N70,[2 3]),:,:)=[];LW_Z_N70(:,~any(LW_Z_N70,[1 3]),:)=[];LW_Z_N70(LW_Z_N70==0)=NaN;
+
+
+
+% Retrieve Min and Max from Global Windows for each participant
+for i=1:NTPs    
+    if ~isempty(nonzeros(TPsOrder(i,:)))
+        GSW_MinMax(i,1) = min(reshape(GSW(min(nonzeros(TPsOrder(i,:))):max(nonzeros(TPsOrder(i,:))),:,:),[],1));
+        GLW_MinMax(i,1) = min(reshape(GLW(min(nonzeros(TPsOrder(i,:))):max(nonzeros(TPsOrder(i,:))),:,:),[],1));
+        GSW_MinMax(i,2) = max(reshape(GSW(min(nonzeros(TPsOrder(i,:))):max(nonzeros(TPsOrder(i,:))),:,:),[],1));
+        GLW_MinMax(i,2) = max(reshape(GLW(min(nonzeros(TPsOrder(i,:))):max(nonzeros(TPsOrder(i,:))),:,:),[],1));
+        GSW_MPDSTD(i,1) =  mean(reshape(GSW(min(nonzeros(TPsOrder(i,:))):max(nonzeros(TPsOrder(i,:))),:,:),[],1),[1 2],'omitnan');
+        GLW_MPDSTD(i,1) =  mean(reshape(GLW(min(nonzeros(TPsOrder(i,:))):max(nonzeros(TPsOrder(i,:))),:,:),[],1),[1 2],'omitnan');
+        GSW_MPDSTD(i,2) =  std(reshape(GSW(min(nonzeros(TPsOrder(i,:))):max(nonzeros(TPsOrder(i,:))),:,:),[],1),[],'omitnan');
+        GLW_MPDSTD(i,2) =  std(reshape(GLW(min(nonzeros(TPsOrder(i,:))):max(nonzeros(TPsOrder(i,:))),:,:),[],1),[],'omitnan');
+        
+        % Quiet condition
+        if ~isempty(nonzeros(TPsOrder(i,1:2)))
+            TPCondIdx = nonzeros(TPsOrder(i,1:2));
+            if length(TPCondIdx)==1
+                TPCondIdx = TPCondIdx*ones(2,1);
+            end
+            SW_Quiet_MinMax(i,1) = min(reshape(GSW(TPCondIdx(1):TPCondIdx(2),:,:),[],1));
+            LW_Quiet_MinMax(i,1) = min(reshape(GLW(TPCondIdx(1):TPCondIdx(2),:,:),[],1));
+            SW_Quiet_MinMax(i,2) = max(reshape(GSW(TPCondIdx(1):TPCondIdx(2),:,:),[],1));
+            LW_Quiet_MinMax(i,2) = max(reshape(GLW(TPCondIdx(1):TPCondIdx(2),:,:),[],1));
+            SW_Quiet_MPDSTD(i,1) = mean(reshape(GSW(TPCondIdx(1):TPCondIdx(2),:,:),[],1),[1 2],'omitnan');
+            LW_Quiet_MPDSTD(i,1) = mean(reshape(GLW(TPCondIdx(1):TPCondIdx(2),:,:),[],1),[1 2],'omitnan');
+            SW_Quiet_MPDSTD(i,2) = std(reshape(GSW(TPCondIdx(1):TPCondIdx(2),:,:),[],1),[],'omitnan');
+            LW_Quiet_MPDSTD(i,2) = std(reshape(GLW(TPCondIdx(1):TPCondIdx(2),:,:),[],1),[],'omitnan');
+        end
+        
+        % SHL condition
+        if ~isempty(nonzeros(TPsOrder(i,3:4)))
+            TPCondIdx = nonzeros(TPsOrder(i,3:4));
+            if length(TPCondIdx)==1
+                TPCondIdx = TPCondIdx*ones(2,1);
+            end
+            SW_SHL_MinMax(i,1) = min(reshape(GSW(TPCondIdx(1):TPCondIdx(2),:,:),[],1));
+            LW_SHL_MinMax(i,1) = min(reshape(GLW(TPCondIdx(1):TPCondIdx(2),:,:),[],1));
+            SW_SHL_MinMax(i,2) = max(reshape(GSW(TPCondIdx(1):TPCondIdx(2),:,:),[],1));
+            LW_SHL_MinMax(i,2) = max(reshape(GLW(TPCondIdx(1):TPCondIdx(2),:,:),[],1));
+            SW_SHL_MPDSTD(i,1) = mean(reshape(GSW(TPCondIdx(1):TPCondIdx(2),:,:),[],1),[1 2],'omitnan');
+            LW_SHL_MPDSTD(i,1) = mean(reshape(GLW(TPCondIdx(1):TPCondIdx(2),:,:),[],1),[1 2],'omitnan');
+            SW_SHL_MPDSTD(i,2) = std(reshape(GSW(TPCondIdx(1):TPCondIdx(2),:,:),[],1),[],'omitnan');
+            LW_SHL_MPDSTD(i,2) = std(reshape(GLW(TPCondIdx(1):TPCondIdx(2),:,:),[],1),[],'omitnan');
+        end
+        
+        % N60 condition
+        if ~isempty(nonzeros(TPsOrder(i,5:6)))
+            TPCondIdx = nonzeros(TPsOrder(i,5:6));
+            if length(TPCondIdx)==1
+                TPCondIdx = TPCondIdx*ones(2,1);
+            end
+            SW_N60_MinMax(i,1) = min(reshape(GSW(TPCondIdx(1):TPCondIdx(2),:,:),[],1));
+            LW_N60_MinMax(i,1) = min(reshape(GLW(TPCondIdx(1):TPCondIdx(2),:,:),[],1));
+            SW_N60_MinMax(i,2) = max(reshape(GSW(TPCondIdx(1):TPCondIdx(2),:,:),[],1));
+            LW_N60_MinMax(i,2) = max(reshape(GLW(TPCondIdx(1):TPCondIdx(2),:,:),[],1));
+            SW_N60_MPDSTD(i,1) = mean(reshape(GSW(TPCondIdx(1):TPCondIdx(2),:,:),[],1),[1 2],'omitnan');
+            LW_N60_MPDSTD(i,1) = mean(reshape(GLW(TPCondIdx(1):TPCondIdx(2),:,:),[],1),[1 2],'omitnan');
+            SW_N60_MPDSTD(i,2) = std(reshape(GSW(TPCondIdx(1):TPCondIdx(2),:,:),[],1),[],'omitnan');
+            LW_N60_MPDSTD(i,2) = std(reshape(GLW(TPCondIdx(1):TPCondIdx(2),:,:),[],1),[],'omitnan');
+        end
+        
+        % N70 condition
+        if ~isempty(nonzeros(TPsOrder(i,7:8)))
+            TPCondIdx = nonzeros(TPsOrder(i,7:8));
+            if length(TPCondIdx)==1
+                TPCondIdx = TPCondIdx*ones(2,1);
+            end
+            SW_N70_MinMax(i,1) = min(reshape(GSW(TPCondIdx(1):TPCondIdx(2),:,:),[],1));
+            LW_N70_MinMax(i,1) = min(reshape(GLW(TPCondIdx(1):TPCondIdx(2),:,:),[],1));
+            SW_N70_MinMax(i,2) = max(reshape(GSW(TPCondIdx(1):TPCondIdx(2),:,:),[],1));
+            LW_N70_MinMax(i,2) = max(reshape(GLW(TPCondIdx(1):TPCondIdx(2),:,:),[],1));
+            SW_N70_MPDSTD(i,1) = mean(reshape(GSW(TPCondIdx(1):TPCondIdx(2),:,:),[],1),[1 2],'omitnan');
+            LW_N70_MPDSTD(i,1) = mean(reshape(GLW(TPCondIdx(1):TPCondIdx(2),:,:),[],1),[1 2],'omitnan');
+            SW_N70_MPDSTD(i,2) = std(reshape(GSW(TPCondIdx(1):TPCondIdx(2),:,:),[],1),[],'omitnan');
+            LW_N70_MPDSTD(i,2) = std(reshape(GLW(TPCondIdx(1):TPCondIdx(2),:,:),[],1),[],'omitnan');
+        end
+    end
+end
 
 % Calculate means omitting NaNs
 GSW_Mean = reshape(mean(GSW,[1 2],'omitnan'),[],1)';
