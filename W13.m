@@ -93,39 +93,6 @@ LW_B_N60 = zeros(NLayers,NRows,NCols); % N60 Listening Windows Adaptive-Baseline
 SW_B_N70 = zeros(NLayers,NRows,NCols); % N70 Speaking Windows Adaptive-Baseline corrected
 LW_B_N70 = zeros(NLayers,NRows,NCols); % N70 Listening Windows Adaptive-Baseline corrected
 
-GSW_R = zeros(NLayers,NRows,NCols); % Global Speaking Windows Range normalized
-GLW_R = zeros(NLayers,NRows,NCols); % Global Listening Windows Range normalized
-SW_R_Quiet = zeros(NLayers,NRows,NCols); % Quiet Speaking Windows Range normalized
-LW_R_Quiet = zeros(NLayers,NRows,NCols); % Quiet Listening Windows Range normalized
-SW_R_SHL = zeros(NLayers,NRows,NCols); % SHL Speaking Windows Range normalized
-LW_R_SHL = zeros(NLayers,NRows,NCols); % SHL Listening Windows Range normalized
-SW_R_N60 = zeros(NLayers,NRows,NCols); % N60 Speaking Windows Range normalized
-LW_R_N60 = zeros(NLayers,NRows,NCols); % N60 Listening Windows Range normalized
-SW_R_N70 = zeros(NLayers,NRows,NCols); % N70 Speaking Windows Range normalized
-LW_R_N70 = zeros(NLayers,NRows,NCols); % N70 Listening Windows Range normalized
-
-GSW_RB = zeros(NLayers,NRows,NCols); % Global Speaking Windows Baselined Range normalized
-GLW_RB = zeros(NLayers,NRows,NCols); % Global Listening Windows Baselined Range normalized
-SW_RB_Quiet = zeros(NLayers,NRows,NCols); % Quiet Speaking Windows Baselined Range normalized
-LW_RB_Quiet = zeros(NLayers,NRows,NCols); % Quiet Listening Windows Baselined Range normalized
-SW_RB_SHL = zeros(NLayers,NRows,NCols); % SHL Speaking Windows Baselined Range normalized
-LW_RB_SHL = zeros(NLayers,NRows,NCols); % SHL Listening Windows Baselined Range normalized
-SW_RB_N60 = zeros(NLayers,NRows,NCols); % N60 Speaking Windows Baselined Range normalized
-LW_RB_N60 = zeros(NLayers,NRows,NCols); % N60 Listening Windows Baselined Range normalized
-SW_RB_N70 = zeros(NLayers,NRows,NCols); % N70 Speaking Windows Baselined Range normalized
-LW_RB_N70 = zeros(NLayers,NRows,NCols); % N70 Listening Windows Baselined Range normalized
-
-GSW_Z = zeros(NLayers,NRows,NCols); % Global Speaking Windows Z-score normalized
-GLW_Z = zeros(NLayers,NRows,NCols); % Global Listening Windows Z-score normalized
-SW_Z_Quiet = zeros(NLayers,NRows,NCols); % Quiet Speaking Windows Z-score normalized
-LW_Z_Quiet = zeros(NLayers,NRows,NCols); % Quiet Listening Windows Z-score normalized
-SW_Z_SHL = zeros(NLayers,NRows,NCols); % SHL Speaking Windows Z-score normalized
-LW_Z_SHL = zeros(NLayers,NRows,NCols); % SHL Listening Windows Z-score normalized
-SW_Z_N60 = zeros(NLayers,NRows,NCols); % N60 Speaking Windows Z-score normalized
-LW_Z_N60 = zeros(NLayers,NRows,NCols); % N60 Listening Windows Z-score normalized
-SW_Z_N70 = zeros(NLayers,NRows,NCols); % N70 Speaking Windows Z-score normalized
-LW_Z_N70 = zeros(NLayers,NRows,NCols); % N70 Listening Windows Z-score normalized
-
 GSDur = zeros(NLayers,NRows); % Global Speaking Windows Duration
 GLDur = zeros(NLayers,NRows); % Global Listening Windows Duration
 SDur_Quiet = zeros(NLayers,NRows); % Quiet Speaking Windows Duration
@@ -370,16 +337,7 @@ for q=1:numel(subDirs)
         
     end
 end
-%% Global Plots
-figure;tiledlayout(1,2);ax1 = nexttile;ax2 = nexttile;
-figure;tiledlayout(1,2);ax3 = nexttile;ax4 = nexttile;
-figure;tiledlayout(1,2);ax5 = nexttile;ax6 = nexttile;
-figure;tiledlayout(1,2);ax7 = nexttile;ax8 = nexttile;
-figure;tiledlayout(1,2);ax9 = nexttile;ax10 = nexttile;
-
-hold([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10],'on')
-grid([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10],'on')
-
+%% Out-of-files-loop calculations
 % Clean empty rows and layers, set 0's to NaN
 GSW(~any(GSW,[2 3]),:,:)=[];GSW(:,~any(GSW,[1 3]),:)=[];GSW(GSW==0)=NaN;
 GSW_B(~any(GSW_B,[2 3]),:,:)=[];GSW_B(:,~any(GSW_B,[1 3]),:)=[];GSW_B(GSW_B==0)=NaN;
@@ -405,8 +363,6 @@ SW_N70(~any(SW_N70,[2 3]),:,:)=[];SW_N70(:,~any(SW_N70,[1 3]),:)=[];SW_N70(SW_N7
 SW_B_N70(~any(SW_B_N70,[2 3]),:,:)=[];SW_B_N70(:,~any(SW_B_N70,[1 3]),:)=[];SW_B_N70(SW_B_N70==0)=NaN;
 LW_N70(~any(LW_N70,[2 3]),:,:)=[];LW_N70(:,~any(LW_N70,[1 3]),:)=[];LW_N70(LW_N70==0)=NaN;
 LW_B_N70(~any(LW_B_N70,[2 3]),:,:)=[];LW_B_N70(:,~any(LW_B_N70,[1 3]),:)=[];LW_B_N70(LW_B_N70==0)=NaN;
-
-
 
 % Retrieve Min and Max from Global Windows for each participant
 for i=1:NTPs    
@@ -484,6 +440,87 @@ for i=1:NTPs
             LW_N70_MPDSTD(i,2) = std(reshape(GLW(TPCondIdx(1):TPCondIdx(2),:,:),[],1),[],'omitnan');
         end
     end
+end
+
+% Initialize X_R, X_RB and X_Z
+GSW_R = zeros(size(GSW)); % Global Speaking Windows Range normalized
+GLW_R = zeros(size(GLW)); % Global Listening Windows Range normalized
+SW_R_Quiet = zeros(size(SW_Quiet)); % Quiet Speaking Windows Range normalized
+LW_R_Quiet = zeros(size(LW_Quiet)); % Quiet Listening Windows Range normalized
+SW_R_SHL = zeros(size(SW_SHL)); % SHL Speaking Windows Range normalized
+LW_R_SHL = zeros(size(LW_SHL)); % SHL Listening Windows Range normalized
+SW_R_N60 = zeros(size(SW_N60)); % N60 Speaking Windows Range normalized
+LW_R_N60 = zeros(size(LW_N60)); % N60 Listening Windows Range normalized
+SW_R_N70 = zeros(size(SW_N70)); % N70 Speaking Windows Range normalized
+LW_R_N70 = zeros(size(SW_N70)); % N70 Listening Windows Range normalized
+
+GSW_RB = zeros(size(GSW)); % Global Speaking Windows Baselined Range normalized
+GLW_RB = zeros(size(GLW)); % Global Listening Windows Baselined Range normalized
+SW_RB_Quiet = zeros(size(SW_Quiet)); % Quiet Speaking Windows Baselined Range normalized
+LW_RB_Quiet = zeros(size(LW_Quiet)); % Quiet Listening Windows Baselined Range normalized
+SW_RB_SHL = zeros(size(SW_SHL)); % SHL Speaking Windows Baselined Range normalized
+LW_RB_SHL = zeros(size(LW_SHL)); % SHL Listening Windows Baselined Range normalized
+SW_RB_N60 = zeros(size(SW_N60)); % N60 Speaking Windows Baselined Range normalized
+LW_RB_N60 = zeros(size(LW_N60)); % N60 Listening Windows Baselined Range normalized
+SW_RB_N70 = zeros(size(SW_N70)); % N70 Speaking Windows Baselined Range normalized
+LW_RB_N70 = zeros(size(SW_N70)); % N70 Listening Windows Baselined Range normalized
+
+GSW_Z = zeros(size(GSW)); % Global Speaking Windows Z-score normalized
+GLW_Z = zeros(size(GLW)); % Global Listening Windows Z-score normalized
+SW_Z_Quiet = zeros(size(SW_Quiet)); % Quiet Speaking Windows Z-score normalized
+LW_Z_Quiet = zeros(size(LW_Quiet)); % Quiet Listening Windows Z-score normalized
+SW_Z_SHL = zeros(size(SW_SHL)); % SHL Speaking Windows Z-score normalized
+LW_Z_SHL = zeros(size(LW_SHL)); % SHL Listening Windows Z-score normalized
+SW_Z_N60 = zeros(size(SW_N60)); % N60 Speaking Windows Z-score normalized
+LW_Z_N60 = zeros(size(LW_N60)); % N60 Listening Windows Z-score normalized
+SW_Z_N70 = zeros(size(SW_N70)); % N70 Speaking Windows Z-score normalized
+LW_Z_N70 = zeros(size(SW_N70)); % N70 Listening Windows Z-score normalized
+
+% Calculate X_R, X_RB and X_Z
+for j = 1:size(GSW,1)
+    TPRow = ismember(TPsOrder,j);
+    GSW_R(j,:,:) = (GSW(j,:,:)-GSW_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(GSW_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-GSW_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+    GSW_RB(j,:,:) = (GSW_B(j,:,:)-GSW_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(GSW_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-GSW_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+    GSW_Z(j,:,:) = (GSW(j,:,:)-GSW_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./GSW_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
+    GLW_R(j,:,:) = (GLW(j,:,:)-GLW_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(GLW_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-GLW_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+    GLW_RB(j,:,:) = (GLW_B(j,:,:)-GLW_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(GLW_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-GLW_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+    GLW_Z(j,:,:) = (GLW(j,:,:)-GLW_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./GLW_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
+end
+
+for j = 1:size(SW_Quiet,1)
+    SW_R_Quiet(j,:,:) = (SW_Quiet(j,:,:)-SW_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(SW_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-SW_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+    SW_RB_Quiet(j,:,:) = (SW_B_Quiet(j,:,:)-SW_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(SW_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-SW_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+    SW_Z_Quiet(j,:,:) = (SW_Quiet(j,:,:)-SW_Quiet_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./SW_Quiet_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
+    LW_R_Quiet(j,:,:) = (LW_Quiet(j,:,:)-LW_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(LW_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-LW_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+    LW_RB_Quiet(j,:,:) = (LW_B_Quiet(j,:,:)-LW_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(LW_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-LW_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+    LW_Z_Quiet(j,:,:) = (LW_Quiet(j,:,:)-LW_Quiet_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./LW_Quiet_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
+end
+
+for j = 1:size(SW_SHL,1)
+    SW_R_SHL(j,:,:) = (SW_SHL(j,:,:)-SW_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(SW_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-SW_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+    SW_RB_SHL(j,:,:) = (SW_B_SHL(j,:,:)-SW_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(SW_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-SW_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+    SW_Z_SHL(j,:,:) = (SW_SHL(j,:,:)-SW_SHL_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./SW_SHL_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
+    LW_R_SHL(j,:,:) = (LW_SHL(j,:,:)-LW_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(LW_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-LW_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+    LW_RB_SHL(j,:,:) = (LW_B_SHL(j,:,:)-LW_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(LW_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-LW_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+    LW_Z_SHL(j,:,:) = (LW_SHL(j,:,:)-LW_SHL_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./LW_SHL_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
+end
+
+for j = 1:size(SW_N60,1)
+    SW_R_N60(j,:,:) = (SW_N60(j,:,:)-SW_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(SW_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-SW_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+    SW_RB_N60(j,:,:) = (SW_B_N60(j,:,:)-SW_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(SW_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-SW_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+    SW_Z_N60(j,:,:) = (SW_N60(j,:,:)-SW_N60_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./SW_N60_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
+    LW_R_N60(j,:,:) = (LW_N60(j,:,:)-LW_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(LW_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-LW_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+    LW_RB_N60(j,:,:) = (LW_B_N60(j,:,:)-LW_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(LW_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-LW_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+    LW_Z_N60(j,:,:) = (LW_N60(j,:,:)-LW_N60_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./LW_N60_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
+end
+
+for j = 1:size(SW_N70,1)
+    SW_R_N70(j,:,:) = (SW_N70(j,:,:)-SW_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(SW_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-SW_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+    SW_RB_N70(j,:,:) = (SW_B_N70(j,:,:)-SW_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(SW_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-SW_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+    SW_Z_N70(j,:,:) = (SW_N70(j,:,:)-SW_N70_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./SW_N70_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
+    LW_R_N70(j,:,:) = (LW_N70(j,:,:)-LW_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(LW_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-LW_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+    LW_RB_N70(j,:,:) = (LW_B_N70(j,:,:)-LW_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(LW_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-LW_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+    LW_Z_N70(j,:,:) = (LW_N70(j,:,:)-LW_N70_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./LW_N70_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
 end
 
 % Calculate means omitting NaNs
@@ -597,6 +634,16 @@ LW_B_N70_SEM = (reshape(2*std(LW_B_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_B_
 LW_R_N70_SEM = (reshape(2*std(LW_R_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_R_N70(~isnan(LW_R_N70)))))';
 LW_RB_N70_SEM = (reshape(2*std(LW_RB_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_RB_N70(~isnan(LW_RB_N70)))))';
 LW_Z_N70_SEM = (reshape(2*std(LW_Z_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_Z_N70(~isnan(LW_Z_N70)))))';
+
+%% Global Plots
+figure;tiledlayout(1,2);ax1 = nexttile;ax2 = nexttile;
+figure;tiledlayout(1,2);ax3 = nexttile;ax4 = nexttile;
+figure;tiledlayout(1,2);ax5 = nexttile;ax6 = nexttile;
+figure;tiledlayout(1,2);ax7 = nexttile;ax8 = nexttile;
+figure;tiledlayout(1,2);ax9 = nexttile;ax10 = nexttile;
+
+hold([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10],'on')
+grid([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10],'on')
 
 % Plot event onset and baseline markers
 xline(ax1,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
