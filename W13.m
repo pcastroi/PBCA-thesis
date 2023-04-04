@@ -67,7 +67,7 @@ N60Color = [0, 196, 215]./255;
 N70Color = [2, 36, 223]./255;
 
 % Variables
-NCols=3000; % Duration (samples) of each window
+NCols=5000; % Duration (samples) of each window
 NRows=100; % Number of windows per trial
 NLayers=numel(FileNames)*numel(subDirs); % Number of trials
 
@@ -254,16 +254,16 @@ for q=1:numel(subDirs)
         ListenMI = merge_windows(ListenRaw, Param.Fs, TimeInitialMerge);
         
         % Discard windows if duration is < TimeMinWin (500 ms)
-        SpeakD = SpeakMI(SpeakMI(:,1)>TimeMinWin,:);
-        ListenD = ListenMI(ListenMI(:,1)>TimeMinWin,:);
+%         SpeakD = SpeakMI(SpeakMI(:,1)>TimeMinWin,:);
+%         ListenD = ListenMI(ListenMI(:,1)>TimeMinWin,:);
         
         % Merge again if duration between windows <= TimeMerge (2 s)
-        SpeakM = merge_windows(SpeakD, Param.Fs, TimeMerge);
-        ListenM = merge_windows(ListenD, Param.Fs, TimeMerge);
+        Speak = merge_windows(SpeakMI, Param.Fs, TimeMerge);
+        Listen = merge_windows(ListenMI, Param.Fs, TimeMerge);
         
         % Discard windows if duration is < 2*TimeMinWin (1 s)
-        Speak = SpeakM(SpeakM(:,1)>2*TimeMinWin,:);
-        Listen = ListenM(ListenM(:,1)>2*TimeMinWin,:);
+%         Speak = SpeakM(SpeakM(:,1)>2*TimeMinWin,:);
+%         Listen = ListenM(ListenM(:,1)>2*TimeMinWin,:);
         
         % Time-locked indexes (based on Start or End of events)
         WSpeakIdx=[Speak(:,2)-TimeStartW*Param.Fs,Speak(:,2),Speak(:,2)+TimeEndW*Param.Fs];
@@ -465,7 +465,7 @@ LW_R_SHL = zeros(size(LW_SHL)); % SHL Listening Windows Range normalized
 SW_R_N60 = zeros(size(SW_N60)); % N60 Speaking Windows Range normalized
 LW_R_N60 = zeros(size(LW_N60)); % N60 Listening Windows Range normalized
 SW_R_N70 = zeros(size(SW_N70)); % N70 Speaking Windows Range normalized
-LW_R_N70 = zeros(size(SW_N70)); % N70 Listening Windows Range normalized
+LW_R_N70 = zeros(size(LW_N70)); % N70 Listening Windows Range normalized
 
 GSW_RB = zeros(size(GSW)); % Global Speaking Windows Baselined Range normalized
 GLW_RB = zeros(size(GLW)); % Global Listening Windows Baselined Range normalized
@@ -476,7 +476,7 @@ LW_RB_SHL = zeros(size(LW_SHL)); % SHL Listening Windows Baselined Range normali
 SW_RB_N60 = zeros(size(SW_N60)); % N60 Speaking Windows Baselined Range normalized
 LW_RB_N60 = zeros(size(LW_N60)); % N60 Listening Windows Baselined Range normalized
 SW_RB_N70 = zeros(size(SW_N70)); % N70 Speaking Windows Baselined Range normalized
-LW_RB_N70 = zeros(size(SW_N70)); % N70 Listening Windows Baselined Range normalized
+LW_RB_N70 = zeros(size(LW_N70)); % N70 Listening Windows Baselined Range normalized
 
 GSW_Z = zeros(size(GSW)); % Global Speaking Windows Z-score normalized
 GLW_Z = zeros(size(GLW)); % Global Listening Windows Z-score normalized
@@ -487,7 +487,7 @@ LW_Z_SHL = zeros(size(LW_SHL)); % SHL Listening Windows Z-score normalized
 SW_Z_N60 = zeros(size(SW_N60)); % N60 Speaking Windows Z-score normalized
 LW_Z_N60 = zeros(size(LW_N60)); % N60 Listening Windows Z-score normalized
 SW_Z_N70 = zeros(size(SW_N70)); % N70 Speaking Windows Z-score normalized
-LW_Z_N70 = zeros(size(SW_N70)); % N70 Listening Windows Z-score normalized
+LW_Z_N70 = zeros(size(LW_N70)); % N70 Listening Windows Z-score normalized
 
 % Calculate X_R, X_RB and X_Z
 for j = 1:size(GSW,1)
