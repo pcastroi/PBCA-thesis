@@ -587,8 +587,6 @@ end
 
 % Calculate means omitting NaNs
 GSW_Mean = reshape(mean(GSW,[1 2],'omitnan'),[],1)';
-GSW_Mean2 = reshape(mean(mean(GSW,'omitnan'),'omitnan'),[],1)';
-
 GSW_B_Mean = reshape(mean(GSW_B,[1 2],'omitnan'),[],1)';
 GSW_R_Mean = reshape(mean(GSW_R,[1 2],'omitnan'),[],1)';
 GSW_RB_Mean = reshape(mean(GSW_RB,[1 2],'omitnan'),[],1)';
@@ -724,7 +722,6 @@ xline(ax8,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientati
 % xline(ax10,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
 
 plot(ax1,linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)),GSW_Mean,color=SColor,linewidth=2)
-plot(ax1,linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)),GSW_Mean2,color='k',linewidth=2)
 plot(ax1,linspace(-TimeStartW,size(SW_Quiet,3)/Param.Fs,size(SW_Quiet,3)),SW_Quiet_Mean,color=QuietColor)
 plot(ax1,linspace(-TimeStartW,size(SW_SHL,3)/Param.Fs,size(SW_SHL,3)),SW_SHL_Mean,color=SHLColor)
 plot(ax1,linspace(-TimeStartW,size(SW_N60,3)/Param.Fs,size(SW_N60,3)),SW_N60_Mean,color=N60Color)
@@ -926,4 +923,18 @@ title(ax8,'Global range normalized baselined Listening-evoked')
 title(ax9,'Global z-score normalized Speaking-evoked')
 title(ax10,'Global z-score normalized Listening-evoked')
 
-% figure;plot(linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)),GSW_Mean);hold on; plot(linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)),reshape(mean(mean(GSW,'omitnan'),'omitnan'),[],1)')
+% figure;
+% plot(linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)),GSW_Mean);
+% hold on;
+% plot(linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)),squeeze(mean(mean(GSW,'omitnan'),'omitnan')))
+% t_vec=linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3));
+% for i=1:size(GSW,3)
+%    xline(t_vec(i),':')
+% end
+% for i=1:size(GSW,1)
+%     for j=1:size(GSW,2)
+%         plot(linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)),squeeze(GSW(i,j,:)),color=[0 0 0 0.1],linewidth=0.5)
+%     end
+% end
+
+
