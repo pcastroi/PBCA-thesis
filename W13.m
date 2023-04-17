@@ -77,7 +77,7 @@ N60Color = [0, 196, 215]./255;
 N70Color = [2, 36, 223]./255;
 
 % Variables
-NCols=15*Param.Fs; % Duration (samples) of each window
+NCols=60*Param.Fs; % Duration (samples) of each window
 NRows=100; % Number of windows per trial
 NLayers=numel(FileNames)*numel(subDirs); % Number of trials
 
@@ -264,19 +264,19 @@ for q=1:numel(subDirs)
         ListenMI = merge_windows(ListenRaw, Param.Fs, TimeInitialMerge);
         
         % Discard windows if duration is < TimeMinWin (500 ms)
-%         SpeakD = SpeakMI(SpeakMI(:,1)>TimeMinWin,:);
-%         ListenD = ListenMI(ListenMI(:,1)>TimeMinWin,:);
+        SpeakD = SpeakMI(SpeakMI(:,1)>TimeMinWin,:);
+        ListenD = ListenMI(ListenMI(:,1)>TimeMinWin,:);
         
         % Merge again if duration between windows <= TimeMerge (2 s)
-        Speak = merge_windows(SpeakMI, Param.Fs, TimeMerge);
-        Listen = merge_windows(ListenMI, Param.Fs, TimeMerge);
+        SpeakM = merge_windows(SpeakD, Param.Fs, TimeMerge);
+        ListenM = merge_windows(ListenD, Param.Fs, TimeMerge);
         
         % Discard windows if duration is < 2*TimeMinWin (1 s)
-%         Speak = SpeakM(SpeakM(:,1)>2*TimeMinWin,:);
-%         Listen = ListenM(ListenM(:,1)>2*TimeMinWin,:);
+        Speak = SpeakM(SpeakM(:,1)>2*TimeMinWin,:);
+        Listen = ListenM(ListenM(:,1)>2*TimeMinWin,:);
         
-        Speak = SpeakRaw;
-        Listen = ListenRaw;
+%         Speak = SpeakRaw;
+%         Listen = ListenRaw;
                 
         % Time-locked indexes (based on Start or End of events)
         WSpeakIdx=[Speak(:,2)-TimeStartW*Param.Fs,Speak(:,2),Speak(:,3)+TimeEndW*Param.Fs];
@@ -339,8 +339,6 @@ for q=1:numel(subDirs)
             GSW(x,j,:) = [Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(GSW)-length(WSpeakIdx(j,1):Speak(j,3)))'];
             GSW_B(x,j,:) = [Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(GSW_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
             GSDur(x,j) = Speak(j,1);
-            
-%             plot(ax1,linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)),reshape(GSW(x,j,:),[],1),color=[0 0 0 0.2],linewidth=0.5)
         end
         
         for j=1:size(Listen,1)
@@ -348,8 +346,6 @@ for q=1:numel(subDirs)
             GLW(x,j,:) = [Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(GLW)-length(WListenIdx(j,1):Listen(j,3)))'];
             GLW_B(x,j,:) = [Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(GLW_B)-length(WListenIdx(j,1):Listen(j,3)))'];
             GLDur(x,j) = Listen(j,1);
-            
-%             plot(ax2,linspace(-TimeStartW,size(GLW,3)/Param.Fs,size(GLW,3)),reshape(GLW(x,j,:),[],1),color=[0 0 0 0.2],linewidth=0.5)
         end
         % Store idx of non-rejected files associated with TPs
         if contains(cell2mat(FileNames(i)),'P2')
@@ -587,59 +583,170 @@ end
 
 % Calculate means omitting NaNs
 GSW_Mean = reshape(mean(GSW,[1 2],'omitnan'),[],1)';
+GSW_MeanConv = conv(GSW_Mean,LPWindow,'same');
+GSW_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = GSW_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 GSW_B_Mean = reshape(mean(GSW_B,[1 2],'omitnan'),[],1)';
+GSW_B_MeanConv = conv(GSW_B_Mean,LPWindow,'same');
+GSW_B_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = GSW_B_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 GSW_R_Mean = reshape(mean(GSW_R,[1 2],'omitnan'),[],1)';
+GSW_R_MeanConv = conv(GSW_R_Mean,LPWindow,'same');
+GSW_R_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = GSW_R_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 GSW_RB_Mean = reshape(mean(GSW_RB,[1 2],'omitnan'),[],1)';
+GSW_RB_MeanConv = conv(GSW_RB_Mean,LPWindow,'same');
+GSW_RB_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = GSW_RB_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 GSW_Z_Mean = reshape(mean(GSW_Z,[1 2],'omitnan'),[],1)';
+GSW_Z_MeanConv = conv(GSW_Z_Mean,LPWindow,'same');
+GSW_Z_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = GSW_Z_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 GLW_Mean = reshape(mean(GLW,[1 2],'omitnan'),[],1)';
+GLW_MeanConv = conv(GLW_Mean,LPWindow,'same');
+GLW_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = GLW_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 GLW_B_Mean = reshape(mean(GLW_B,[1 2],'omitnan'),[],1)';
+GLW_B_MeanConv = conv(GLW_B_Mean,LPWindow,'same');
+GLW_B_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = GLW_B_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 GLW_R_Mean = reshape(mean(GLW_R,[1 2],'omitnan'),[],1)';
+GLW_R_MeanConv = conv(GLW_R_Mean,LPWindow,'same');
+GLW_R_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = GLW_R_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 GLW_RB_Mean = reshape(mean(GLW_RB,[1 2],'omitnan'),[],1)';
+GLW_RB_MeanConv = conv(GLW_RB_Mean,LPWindow,'same');
+GLW_RB_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = GLW_RB_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 GLW_Z_Mean = reshape(mean(GLW_Z,[1 2],'omitnan'),[],1)';
+GLW_Z_MeanConv = conv(GLW_Z_Mean,LPWindow,'same');
+GLW_Z_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = GLW_Z_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 
 SW_Quiet_Mean = reshape(mean(SW_Quiet,[1 2],'omitnan'),[],1)';
+SW_Quiet_MeanConv = conv(SW_Quiet_Mean,LPWindow,'same');
+SW_Quiet_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = SW_Quiet_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 SW_B_Quiet_Mean = reshape(mean(SW_B_Quiet,[1 2],'omitnan'),[],1)';
+SW_B_Quiet_MeanConv = conv(SW_B_Quiet_Mean,LPWindow,'same');
+SW_B_Quiet_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = SW_B_Quiet_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 SW_R_Quiet_Mean = reshape(mean(SW_R_Quiet,[1 2],'omitnan'),[],1)';
+SW_R_Quiet_MeanConv = conv(SW_R_Quiet_Mean,LPWindow,'same');
+SW_R_Quiet_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = SW_R_Quiet_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 SW_RB_Quiet_Mean = reshape(mean(SW_RB_Quiet,[1 2],'omitnan'),[],1)';
+SW_RB_Quiet_MeanConv = conv(SW_RB_Quiet_Mean,LPWindow,'same');
+SW_RB_Quiet_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = SW_RB_Quiet_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 SW_Z_Quiet_Mean = reshape(mean(SW_Z_Quiet,[1 2],'omitnan'),[],1)';
+SW_Z_Quiet_MeanConv = conv(SW_Z_Quiet_Mean,LPWindow,'same');
+SW_Z_Quiet_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = SW_Z_Quiet_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 LW_Quiet_Mean = reshape(mean(LW_Quiet,[1 2],'omitnan'),[],1)';
+LW_Quiet_MeanConv = conv(LW_Quiet_Mean,LPWindow,'same');
+LW_Quiet_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = LW_Quiet_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 LW_B_Quiet_Mean = reshape(mean(LW_B_Quiet,[1 2],'omitnan'),[],1)';
+LW_B_Quiet_MeanConv = conv(LW_B_Quiet_Mean,LPWindow,'same');
+LW_B_Quiet_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = LW_B_Quiet_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 LW_R_Quiet_Mean = reshape(mean(LW_R_Quiet,[1 2],'omitnan'),[],1)';
+LW_R_Quiet_MeanConv = conv(LW_R_Quiet_Mean,LPWindow,'same');
+LW_R_Quiet_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = LW_R_Quiet_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 LW_RB_Quiet_Mean = reshape(mean(LW_RB_Quiet,[1 2],'omitnan'),[],1)';
+LW_RB_Quiet_MeanConv = conv(LW_RB_Quiet_Mean,LPWindow,'same');
+LW_RB_Quiet_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = LW_RB_Quiet_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 LW_Z_Quiet_Mean = reshape(mean(LW_Z_Quiet,[1 2],'omitnan'),[],1)';
+LW_Z_Quiet_MeanConv = conv(LW_Z_Quiet_Mean,LPWindow,'same');
+LW_Z_Quiet_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = LW_Z_Quiet_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 
 SW_SHL_Mean = reshape(mean(SW_SHL,[1 2],'omitnan'),[],1)';
+SW_SHL_MeanConv = conv(SW_SHL_Mean,LPWindow,'same');
+SW_SHL_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = SW_SHL_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 SW_B_SHL_Mean = reshape(mean(SW_B_SHL,[1 2],'omitnan'),[],1)';
+SW_B_SHL_MeanConv = conv(SW_B_SHL_Mean,LPWindow,'same');
+SW_B_SHL_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = SW_B_SHL_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 SW_R_SHL_Mean = reshape(mean(SW_R_SHL,[1 2],'omitnan'),[],1)';
+SW_R_SHL_MeanConv = conv(SW_R_SHL_Mean,LPWindow,'same');
+SW_R_SHL_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = SW_R_SHL_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 SW_RB_SHL_Mean = reshape(mean(SW_RB_SHL,[1 2],'omitnan'),[],1)';
+SW_RB_SHL_MeanConv = conv(SW_RB_SHL_Mean,LPWindow,'same');
+SW_RB_SHL_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = SW_RB_SHL_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 SW_Z_SHL_Mean = reshape(mean(SW_Z_SHL,[1 2],'omitnan'),[],1)';
+SW_Z_SHL_MeanConv = conv(SW_Z_SHL_Mean,LPWindow,'same');
+SW_Z_SHL_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = SW_Z_SHL_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 LW_SHL_Mean = reshape(mean(LW_SHL,[1 2],'omitnan'),[],1)';
+LW_SHL_MeanConv = conv(LW_SHL_Mean,LPWindow,'same');
+LW_SHL_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = LW_SHL_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 LW_B_SHL_Mean = reshape(mean(LW_B_SHL,[1 2],'omitnan'),[],1)';
+LW_B_SHL_MeanConv = conv(LW_B_SHL_Mean,LPWindow,'same');
+LW_B_SHL_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = LW_B_SHL_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 LW_R_SHL_Mean = reshape(mean(LW_R_SHL,[1 2],'omitnan'),[],1)';
+LW_R_SHL_MeanConv = conv(LW_R_SHL_Mean,LPWindow,'same');
+LW_R_SHL_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = LW_R_SHL_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 LW_RB_SHL_Mean = reshape(mean(LW_RB_SHL,[1 2],'omitnan'),[],1)';
+LW_RB_SHL_MeanConv = conv(LW_RB_SHL_Mean,LPWindow,'same');
+LW_RB_SHL_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = LW_RB_SHL_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 LW_Z_SHL_Mean = reshape(mean(LW_Z_SHL,[1 2],'omitnan'),[],1)';
+LW_Z_SHL_MeanConv = conv(LW_Z_SHL_Mean,LPWindow,'same');
+LW_Z_SHL_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = LW_Z_SHL_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 
 SW_N60_Mean = reshape(mean(SW_N60,[1 2],'omitnan'),[],1)';
+SW_N60_MeanConv = conv(SW_N60_Mean,LPWindow,'same');
+SW_N60_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = SW_N60_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 SW_B_N60_Mean = reshape(mean(SW_B_N60,[1 2],'omitnan'),[],1)';
+SW_B_N60_MeanConv = conv(SW_B_N60_Mean,LPWindow,'same');
+SW_B_N60_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = SW_B_N60_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 SW_R_N60_Mean = reshape(mean(SW_R_N60,[1 2],'omitnan'),[],1)';
+SW_R_N60_MeanConv = conv(SW_R_N60_Mean,LPWindow,'same');
+SW_R_N60_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = SW_R_N60_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 SW_RB_N60_Mean = reshape(mean(SW_RB_N60,[1 2],'omitnan'),[],1)';
+SW_RB_N60_MeanConv = conv(SW_RB_N60_Mean,LPWindow,'same');
+SW_RB_N60_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = SW_RB_N60_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 SW_Z_N60_Mean = reshape(mean(SW_Z_N60,[1 2],'omitnan'),[],1)';
+SW_Z_N60_MeanConv = conv(SW_Z_N60_Mean,LPWindow,'same');
+SW_Z_N60_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = SW_Z_N60_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 LW_N60_Mean = reshape(mean(LW_N60,[1 2],'omitnan'),[],1)';
+LW_N60_MeanConv = conv(LW_N60_Mean,LPWindow,'same');
+LW_N60_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = LW_N60_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 LW_B_N60_Mean = reshape(mean(LW_B_N60,[1 2],'omitnan'),[],1)';
+LW_B_N60_MeanConv = conv(LW_B_N60_Mean,LPWindow,'same');
+LW_B_N60_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = LW_B_N60_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 LW_R_N60_Mean = reshape(mean(LW_R_N60,[1 2],'omitnan'),[],1)';
+LW_R_N60_MeanConv = conv(LW_R_N60_Mean,LPWindow,'same');
+LW_R_N60_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = LW_R_N60_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 LW_RB_N60_Mean = reshape(mean(LW_RB_N60,[1 2],'omitnan'),[],1)';
+LW_RB_N60_MeanConv = conv(LW_RB_N60_Mean,LPWindow,'same');
+LW_RB_N60_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = LW_RB_N60_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 LW_Z_N60_Mean = reshape(mean(LW_Z_N60,[1 2],'omitnan'),[],1)';
+LW_Z_N60_MeanConv = conv(LW_Z_N60_Mean,LPWindow,'same');
+LW_Z_N60_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = LW_Z_N60_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 
 SW_N70_Mean = reshape(mean(SW_N70,[1 2],'omitnan'),[],1)';
+SW_N70_MeanConv = conv(SW_N70_Mean,LPWindow,'same');
+SW_N70_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = SW_N70_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 SW_B_N70_Mean = reshape(mean(SW_B_N70,[1 2],'omitnan'),[],1)';
+SW_B_N70_MeanConv = conv(SW_B_N70_Mean,LPWindow,'same');
+SW_B_N70_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = SW_B_N70_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 SW_R_N70_Mean = reshape(mean(SW_R_N70,[1 2],'omitnan'),[],1)';
+SW_R_N70_MeanConv = conv(SW_R_N70_Mean,LPWindow,'same');
+SW_R_N70_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = SW_R_N70_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 SW_RB_N70_Mean = reshape(mean(SW_RB_N70,[1 2],'omitnan'),[],1)';
+SW_RB_N70_MeanConv = conv(SW_RB_N70_Mean,LPWindow,'same');
+SW_RB_N70_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = SW_RB_N70_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 SW_Z_N70_Mean = reshape(mean(SW_Z_N70,[1 2],'omitnan'),[],1)';
+SW_Z_N70_MeanConv = conv(SW_Z_N70_Mean,LPWindow,'same');
+SW_Z_N70_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = SW_Z_N70_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 LW_N70_Mean = reshape(mean(LW_N70,[1 2],'omitnan'),[],1)';
+LW_N70_MeanConv = conv(LW_N70_Mean,LPWindow,'same');
+LW_N70_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = LW_N70_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 LW_B_N70_Mean = reshape(mean(LW_B_N70,[1 2],'omitnan'),[],1)';
+LW_B_N70_MeanConv = conv(LW_B_N70_Mean,LPWindow,'same');
+LW_B_N70_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = LW_B_N70_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 LW_R_N70_Mean = reshape(mean(LW_R_N70,[1 2],'omitnan'),[],1)';
+LW_R_N70_MeanConv = conv(LW_R_N70_Mean,LPWindow,'same');
+LW_R_N70_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = LW_R_N70_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 LW_RB_N70_Mean = reshape(mean(LW_RB_N70,[1 2],'omitnan'),[],1)';
+LW_RB_N70_MeanConv = conv(LW_RB_N70_Mean,LPWindow,'same');
+LW_RB_N70_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = LW_RB_N70_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
 LW_Z_N70_Mean = reshape(mean(LW_Z_N70,[1 2],'omitnan'),[],1)';
+LW_Z_N70_MeanConv = conv(LW_Z_N70_Mean,LPWindow,'same');
+LW_Z_N70_Mean(round(length(LPWindow)/2):end-round(length(LPWindow)/2)) = LW_Z_N70_MeanConv(round(length(LPWindow)/2):end-round(length(LPWindow)/2));
+
+% SW_N70_Mean = reshape(mean(SW_N70,[1 2],'omitnan'),[],1)';
+% SW_B_N70_Mean = reshape(mean(SW_B_N70,[1 2],'omitnan'),[],1)';
+% SW_R_N70_Mean = reshape(mean(SW_R_N70,[1 2],'omitnan'),[],1)';
+% SW_RB_N70_Mean = reshape(mean(SW_RB_N70,[1 2],'omitnan'),[],1)';
+% SW_Z_N70_Mean = reshape(mean(SW_Z_N70,[1 2],'omitnan'),[],1)';
+% LW_N70_Mean = reshape(mean(LW_N70,[1 2],'omitnan'),[],1)';
+% LW_B_N70_Mean = reshape(mean(LW_B_N70,[1 2],'omitnan'),[],1)';
+% LW_R_N70_Mean = reshape(mean(LW_R_N70,[1 2],'omitnan'),[],1)';
+% LW_RB_N70_Mean = reshape(mean(LW_RB_N70,[1 2],'omitnan'),[],1)';
+% LW_Z_N70_Mean = reshape(mean(LW_Z_N70,[1 2],'omitnan'),[],1)';
 
 % Calculate SEM as: 2*std(X)/sqrt(numel(X(~isnan(X)))
 GSW_SEM = (reshape(2*std(GSW,0,[1 2],'omitnan'),[],1)/sqrt(numel(GSW(~isnan(GSW)))))';
@@ -924,7 +1031,7 @@ title(ax9,'Global z-score normalized Speaking-evoked')
 title(ax10,'Global z-score normalized Listening-evoked')
 
 % figure;
-% plot(linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)),GSW_Mean);
+% plot(linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)),squeeze(mean(GSW,[1 2],'omitnan')));
 % hold on;
 % plot(linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)),squeeze(mean(mean(GSW,'omitnan'),'omitnan')))
 % t_vec=linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3));
@@ -937,4 +1044,6 @@ title(ax10,'Global z-score normalized Listening-evoked')
 %     end
 % end
 
-
+% figure;hold on;for i=1:size(GSW,1)
+% plot(linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)),squeeze(mean(GSW(i,:,:),'omitnan')),color=[0 0 0 0.1],linewidth=0.5)
+% end;plot(linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)),squeeze(mean(GSW,[1 2],'omitnan')),color=[1 0 0],linewidth=1);plot(linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)),squeeze(mean(mean(GSW,'omitnan'),'omitnan')),color=[0 0 1],linewidth=1)
