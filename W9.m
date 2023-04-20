@@ -16,10 +16,13 @@ Param.Preblink = 0.1; % [s], set to NaN, time before blink
 Param.Postblink = 0.2; % [s], set to NaN, time after blink
 Param.BlinkThresh = 3; % [samples], threshold of samples in between artifacts or blinks
 MaxVisualAngle = 0.5; % [degrees], critical visual angle for fixation definition
-FilterWidth = 30; % Width of hamming filter used for fixation duration
+LPWinSize = 0.5; % [s]: Window size of hamming-window for low-pass filtering
+FilterWidth = round((LPWinSize*Param.Fs)/2); % [samples]: Width of hamming filter used for fixation duration
+LPWindow = hamming(round(LPWinSize*Param.Fs));
+LPWindow = LPWindow/sum(LPWindow); % Hamming-window
 
 TimeStartW = 0.5; % [s], time before Utt/Lis starts
-AdapBL = 1/50; % [s], Baseline period
+AdapBL = 0.3; % [s], Baseline period
 TimeEndW = 0; % [s], time after Utt/Lis starts
 TimeStart = 20; % [s], time at which simultaneous recording started
 TimeMinWin = 0.5; % [s], Minimum time of a window
@@ -156,9 +159,9 @@ for q=1:numel(subDirs)
 %         end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % Preprocessing - Setting outliers as NaNs (remove artifacts)
-        XThresh = [mean(GazeX,'omitnan')-2*std(GazeX,'omitnan'),mean(GazeX,'omitnan')+2*std(GazeX,'omitnan')];
-        YThresh = [mean(GazeY,'omitnan')-2*std(GazeY,'omitnan'),mean(GazeY,'omitnan')+2*std(GazeY,'omitnan')];
-        ZThresh = [mean(GazeZ,'omitnan')-2*std(GazeZ,'omitnan'),mean(GazeZ,'omitnan')+2*std(GazeZ,'omitnan')];
+        XThresh = [mean(GazeX,'omitnan')-std(GazeX,'omitnan'),mean(GazeX,'omitnan')+std(GazeX,'omitnan')];
+        YThresh = [mean(GazeY,'omitnan')-std(GazeY,'omitnan'),mean(GazeY,'omitnan')+std(GazeY,'omitnan')];
+        ZThresh = [mean(GazeZ,'omitnan')-std(GazeZ,'omitnan'),mean(GazeZ,'omitnan')+std(GazeZ,'omitnan')];
         F_NOutl = 1; % number of outliers per file
 
         for s=1:length(GazeX)
@@ -366,7 +369,7 @@ end
 for t = 1:length(ColBarW)
     b5.CData(t,:) = cell2mat(ColBarW(t));
 end
-errorbar(ax5,x5',data5,[2*std(nonzeros(GSDur))/sqrt(numel(nonzeros(GSDur)));2*std(nonzeros(GLDur))/sqrt(numel(nonzeros(GLDur)))],'k','linestyle','none','handlevisibility' ,'off')
+errorbar(ax5,x5',data5,[std(nonzeros(GSDur))/sqrt(numel(nonzeros(GSDur)));std(nonzeros(GLDur))/sqrt(numel(nonzeros(GLDur)))],'k','linestyle','none','handlevisibility' ,'off')
 text(ax5,x5,y5,num2str(data5,'%0.2f'),'HorizontalAlignment','center','VerticalAlignment','top','Color',[1 1 1 1],'FontWeight','bold')
 
 bar(ax6,nan,'FaceColor',SColor);bar(ax6,nan,'FaceColor',LColor)
@@ -381,7 +384,7 @@ end
 for t = 1:length(ColBarCond)
     b6(t).FaceColor = cell2mat(ColBarCond(t));
 end
-errorbar(ax6,x6',data6,[2*std(nonzeros(SDur_Quiet))/sqrt(numel(nonzeros(SDur_Quiet))),2*std(nonzeros(SDur_SHL))/sqrt(numel(nonzeros(SDur_SHL))),2*std(nonzeros(SDur_N60))/sqrt(numel(nonzeros(SDur_N60))),2*std(nonzeros(SDur_N70))/sqrt(numel(nonzeros(SDur_N70)));2*std(nonzeros(LDur_Quiet))/sqrt(numel(nonzeros(LDur_Quiet))),2*std(nonzeros(LDur_SHL))/sqrt(numel(nonzeros(LDur_SHL))),2*std(nonzeros(LDur_N60))/sqrt(numel(nonzeros(LDur_N60))),2*std(nonzeros(LDur_N70))/sqrt(numel(nonzeros(LDur_N70)))],'k','linestyle','none','handlevisibility' ,'off')
+errorbar(ax6,x6',data6,[std(nonzeros(SDur_Quiet))/sqrt(numel(nonzeros(SDur_Quiet))),std(nonzeros(SDur_SHL))/sqrt(numel(nonzeros(SDur_SHL))),std(nonzeros(SDur_N60))/sqrt(numel(nonzeros(SDur_N60))),std(nonzeros(SDur_N70))/sqrt(numel(nonzeros(SDur_N70)));std(nonzeros(LDur_Quiet))/sqrt(numel(nonzeros(LDur_Quiet))),std(nonzeros(LDur_SHL))/sqrt(numel(nonzeros(LDur_SHL))),std(nonzeros(LDur_N60))/sqrt(numel(nonzeros(LDur_N60))),std(nonzeros(LDur_N70))/sqrt(numel(nonzeros(LDur_N70)))],'k','linestyle','none','handlevisibility' ,'off')
 
 xticks([ax5 ax6],1:2)
 xticklabels([ax5 ax6],{'Speaking','Listening'})
@@ -416,47 +419,48 @@ LWB_N60(~any(LWB_N60,[2 3]),:,:)=[];LWB_N60(:,~any(LWB_N60,[1 3]),:)=[];LWB_N60(
 SWB_N70(~any(SWB_N70,[2 3]),:,:)=[];SWB_N70(:,~any(SWB_N70,[1 3]),:)=[];SWB_N70(SWB_N70==0)=NaN;
 LWB_N70(~any(LWB_N70,[2 3]),:,:)=[];LWB_N70(:,~any(LWB_N70,[1 3]),:)=[];LWB_N70(LWB_N70==0)=NaN;
 
-GSW_Mean = reshape(mean(GSW,[1 2],'omitnan'),[],1)';
-GLW_Mean = reshape(mean(GLW,[1 2],'omitnan'),[],1)';
-SW_Quiet_Mean = reshape(mean(SW_Quiet,[1 2],'omitnan'),[],1)';
-LW_Quiet_Mean = reshape(mean(LW_Quiet,[1 2],'omitnan'),[],1)';
-SW_SHL_Mean = reshape(mean(SW_SHL,[1 2],'omitnan'),[],1)';
-LW_SHL_Mean = reshape(mean(LW_SHL,[1 2],'omitnan'),[],1)';
-SW_N60_Mean = reshape(mean(SW_N60,[1 2],'omitnan'),[],1)';
-LW_N60_Mean = reshape(mean(LW_N60,[1 2],'omitnan'),[],1)';
-SW_N70_Mean = reshape(mean(SW_N70,[1 2],'omitnan'),[],1)';
-LW_N70_Mean = reshape(mean(LW_N70,[1 2],'omitnan'),[],1)';
-GSWB_Mean = reshape(mean(GSWB,[1 2],'omitnan'),[],1)';
-GLWB_Mean = reshape(mean(GLWB,[1 2],'omitnan'),[],1)';
-SWB_Quiet_Mean = reshape(mean(SWB_Quiet,[1 2],'omitnan'),[],1)';
-LWB_Quiet_Mean = reshape(mean(LWB_Quiet,[1 2],'omitnan'),[],1)';
-SWB_SHL_Mean = reshape(mean(SWB_SHL,[1 2],'omitnan'),[],1)';
-LWB_SHL_Mean = reshape(mean(LWB_SHL,[1 2],'omitnan'),[],1)';
-SWB_N60_Mean = reshape(mean(SWB_N60,[1 2],'omitnan'),[],1)';
-LWB_N60_Mean = reshape(mean(LWB_N60,[1 2],'omitnan'),[],1)';
-SWB_N70_Mean = reshape(mean(SWB_N70,[1 2],'omitnan'),[],1)';
-LWB_N70_Mean = reshape(mean(LWB_N70,[1 2],'omitnan'),[],1)';
+% Derive mean and LP filter (hamming - 0.5 s) - omitting NaNs
+GSW_Mean = ndnanfilter(reshape(mean(GSW,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+GLW_Mean = ndnanfilter(reshape(mean(GLW,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_Quiet_Mean = ndnanfilter(reshape(mean(SW_Quiet,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_Quiet_Mean = ndnanfilter(reshape(mean(LW_Quiet,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_SHL_Mean = ndnanfilter(reshape(mean(SW_SHL,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_SHL_Mean = ndnanfilter(reshape(mean(LW_SHL,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_N60_Mean = ndnanfilter(reshape(mean(SW_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_N60_Mean = ndnanfilter(reshape(mean(LW_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_N70_Mean = ndnanfilter(reshape(mean(SW_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_N70_Mean = ndnanfilter(reshape(mean(LW_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+GSWB_Mean = ndnanfilter(reshape(mean(GSWB,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+GLWB_Mean = ndnanfilter(reshape(mean(GLWB,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SWB_Quiet_Mean = ndnanfilter(reshape(mean(SWB_Quiet,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LWB_Quiet_Mean = ndnanfilter(reshape(mean(LWB_Quiet,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SWB_SHL_Mean = ndnanfilter(reshape(mean(SWB_SHL,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LWB_SHL_Mean = ndnanfilter(reshape(mean(LWB_SHL,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SWB_N60_Mean = ndnanfilter(reshape(mean(SWB_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LWB_N60_Mean = ndnanfilter(reshape(mean(LWB_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SWB_N70_Mean = ndnanfilter(reshape(mean(SWB_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LWB_N70_Mean = ndnanfilter(reshape(mean(LWB_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
 
-GSW_SEM = (reshape(2*std(GSW,0,[1 2],'omitnan'),[],1)/sqrt(numel(GSW(~isnan(GSW)))))';
-GLW_SEM = (reshape(2*std(GLW,0,[1 2],'omitnan'),[],1)/sqrt(numel(GLW(~isnan(GLW)))))';
-SW_Quiet_SEM = (reshape(2*std(SW_Quiet,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_Quiet(~isnan(SW_Quiet)))))';
-LW_Quiet_SEM = (reshape(2*std(LW_Quiet,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_Quiet(~isnan(LW_Quiet)))))';
-SW_SHL_SEM = (reshape(2*std(SW_SHL,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_SHL(~isnan(SW_SHL)))))';
-LW_SHL_SEM = (reshape(2*std(LW_SHL,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_SHL(~isnan(LW_SHL)))))';
-SW_N60_SEM = (reshape(2*std(SW_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_N60(~isnan(SW_N60)))))';
-LW_N60_SEM = (reshape(2*std(LW_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_N60(~isnan(LW_N60)))))';
-SW_N70_SEM = (reshape(2*std(SW_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_N70(~isnan(SW_N70)))))';
-LW_N70_SEM = (reshape(2*std(LW_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_N70(~isnan(LW_N70)))))';
-GSWB_SEM = (reshape(2*std(GSWB,0,[1 2],'omitnan'),[],1)/sqrt(numel(GSWB(~isnan(GSWB)))))';
-GLWB_SEM = (reshape(2*std(GLWB,0,[1 2],'omitnan'),[],1)/sqrt(numel(GLWB(~isnan(GLWB)))))';
-SWB_Quiet_SEM = (reshape(2*std(SWB_Quiet,0,[1 2],'omitnan'),[],1)/sqrt(numel(SWB_Quiet(~isnan(SWB_Quiet)))))';
-LWB_Quiet_SEM = (reshape(2*std(LWB_Quiet,0,[1 2],'omitnan'),[],1)/sqrt(numel(LWB_Quiet(~isnan(LWB_Quiet)))))';
-SWB_SHL_SEM = (reshape(2*std(SWB_SHL,0,[1 2],'omitnan'),[],1)/sqrt(numel(SWB_SHL(~isnan(SWB_SHL)))))';
-LWB_SHL_SEM = (reshape(2*std(LWB_SHL,0,[1 2],'omitnan'),[],1)/sqrt(numel(LWB_SHL(~isnan(LWB_SHL)))))';
-SWB_N60_SEM = (reshape(2*std(SWB_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(SWB_N60(~isnan(SWB_N60)))))';
-LWB_N60_SEM = (reshape(2*std(LWB_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(LWB_N60(~isnan(LWB_N60)))))';
-SWB_N70_SEM = (reshape(2*std(SWB_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(SWB_N70(~isnan(SWB_N70)))))';
-LWB_N70_SEM = (reshape(2*std(LWB_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(LWB_N70(~isnan(LWB_N70)))))';
+GSW_SEM = (reshape(std(GSW,0,[1 2],'omitnan'),[],1)/sqrt(numel(GSW(~isnan(GSW)))))';
+GLW_SEM = (reshape(std(GLW,0,[1 2],'omitnan'),[],1)/sqrt(numel(GLW(~isnan(GLW)))))';
+SW_Quiet_SEM = (reshape(std(SW_Quiet,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_Quiet(~isnan(SW_Quiet)))))';
+LW_Quiet_SEM = (reshape(std(LW_Quiet,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_Quiet(~isnan(LW_Quiet)))))';
+SW_SHL_SEM = (reshape(std(SW_SHL,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_SHL(~isnan(SW_SHL)))))';
+LW_SHL_SEM = (reshape(std(LW_SHL,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_SHL(~isnan(LW_SHL)))))';
+SW_N60_SEM = (reshape(std(SW_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_N60(~isnan(SW_N60)))))';
+LW_N60_SEM = (reshape(std(LW_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_N60(~isnan(LW_N60)))))';
+SW_N70_SEM = (reshape(std(SW_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_N70(~isnan(SW_N70)))))';
+LW_N70_SEM = (reshape(std(LW_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_N70(~isnan(LW_N70)))))';
+GSWB_SEM = (reshape(std(GSWB,0,[1 2],'omitnan'),[],1)/sqrt(numel(GSWB(~isnan(GSWB)))))';
+GLWB_SEM = (reshape(std(GLWB,0,[1 2],'omitnan'),[],1)/sqrt(numel(GLWB(~isnan(GLWB)))))';
+SWB_Quiet_SEM = (reshape(std(SWB_Quiet,0,[1 2],'omitnan'),[],1)/sqrt(numel(SWB_Quiet(~isnan(SWB_Quiet)))))';
+LWB_Quiet_SEM = (reshape(std(LWB_Quiet,0,[1 2],'omitnan'),[],1)/sqrt(numel(LWB_Quiet(~isnan(LWB_Quiet)))))';
+SWB_SHL_SEM = (reshape(std(SWB_SHL,0,[1 2],'omitnan'),[],1)/sqrt(numel(SWB_SHL(~isnan(SWB_SHL)))))';
+LWB_SHL_SEM = (reshape(std(LWB_SHL,0,[1 2],'omitnan'),[],1)/sqrt(numel(LWB_SHL(~isnan(LWB_SHL)))))';
+SWB_N60_SEM = (reshape(std(SWB_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(SWB_N60(~isnan(SWB_N60)))))';
+LWB_N60_SEM = (reshape(std(LWB_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(LWB_N60(~isnan(LWB_N60)))))';
+SWB_N70_SEM = (reshape(std(SWB_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(SWB_N70(~isnan(SWB_N70)))))';
+LWB_N70_SEM = (reshape(std(LWB_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(LWB_N70(~isnan(LWB_N70)))))';
 
 xline(ax1,0,'--','handlevisibility','off')
 xline(ax2,0,'--','handlevisibility','off')
