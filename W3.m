@@ -15,12 +15,12 @@ x=1;
 
 for q=1:numel(subDirs)
     PairIn = q;
-    PairFiles=dir(['data\Main',sprintf('%d',PairIn),'\*.mat']);
-    AudFiles=dir(['audio\Main',sprintf('%d',PairIn),'\*.mat']);
+    PairFiles=dir(['data\AMEND_I\Main',sprintf('%d',PairIn),'\*.mat']);
+    AudFiles=dir(['audio\AMEND_I\Main',sprintf('%d',PairIn),'\*.mat']);
     if isempty(AudFiles)
        continue 
     end
-    PairUtt=load('data\utterances1110.mat');
+    PairUtt=load('data\AMEND_I\utterances1110.mat');
     PairUtt=PairUtt.Utterances(PairIn,:);
     
     for i=1:numel(PairFiles)

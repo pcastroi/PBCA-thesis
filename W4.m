@@ -81,13 +81,14 @@ F2_L_N70=F1_S_Q; % Feature 2 (N70): Mean slope (Listening)
 F3_S_N70=F1_S_Q; % Feature 3 (N70): Mean Peak Pupil Size (Speaking)
 F3_L_N70=F1_S_Q; % Feature 3 (N70): Mean Peak Pupil Size (Listening)
 x=1;
-[subDirs] = GetSubDirsFirstLevelOnly('data');
-LoadDelays=load('data\delays1110.mat');
+[subDirs] = GetSubDirsFirstLevelOnly('data\AMEND_I');
+FileNames={'P1_Quiet_B1.mat','P1_Quiet_B2.mat','P1_SHL_B1.mat','P1_SHL_B2.mat','P1_Noise60_B1.mat','P1_Noise60_B2.mat','P1_Noise70_B1.mat','P1_Noise70_B2.mat','P2_Quiet_B1.mat','P2_Quiet_B2.mat','P2_SHL_B1.mat','P2_SHL_B2.mat','P2_Noise60_B1.mat','P2_Noise60_B2.mat','P2_Noise70_B1.mat','P2_Noise70_B2.mat'};
+LoadDelays=load('data\AMEND_I\delays1110.mat');
 
 for q=1:numel(subDirs)
     PairIn = q;
-    PairFiles=dir(['data\Main',sprintf('%d',PairIn),'\*.mat']);
-    PairUtt=load('data\utterances1110.mat');
+    PairFiles=dir(['data\AMEND_I\Main',sprintf('%d',PairIn),'\*.mat']);
+    PairUtt=load('data\AMEND_I\utterances1110.mat');
     PairUtt=PairUtt.Utterances(PairIn,:);
     PairDelay=LoadDelays.TobAudDelay(PairIn,:);
     

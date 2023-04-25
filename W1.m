@@ -1,6 +1,6 @@
 %% PBCA-Thesis - Week 1, 2, 3 - Processing existing pupil data
 % Pathing
-% clear all; clc; close all;
+clear all; clc; close all;
 BPath = strsplit(pwd,'PBCA-thesis');
 addpath('tools')
 addpath([BPath{1} 'Pupil-preprocessing-tools\tools']) % For preprocessing
@@ -14,9 +14,9 @@ addpath([BPath{1} 'Pupil-preprocessing-tools\tools']) % For preprocessing
 %     disp('Number must be an integer between 1 and 12.');
 % end
 
-[subDirs] = GetSubDirsFirstLevelOnly('data');
-LoadUtt=load('data\utterances1110.mat');
-LoadDelays=load('data\delays1110.mat');
+[subDirs] = GetSubDirsFirstLevelOnly('data\AMEND_I');
+LoadUtt=load('data\AMEND_I\utterances1110.mat');
+LoadDelays=load('data\AMEND_I\delays1110.mat');
 
 % Parameters for processing
 Param.Fs = 50; % Sampling frequency of pupil data
@@ -32,6 +32,8 @@ TimeBL = [10,15]; % [s], time chosen for baseline
 TimeMinWin = 0.5; % [s], Minimum time of a window
 TimeInitialMerge = 0.3; % [s], Time threshold for merging windows initially
 TimeMerge = 2; % [s], Time threshold for merging windows after rejecting small windows
+AdapBL = 0.3; % [s], Duration of baseline prior to event
+FilterWidth = round((LPWinSize*Param.Fs)/2); % [samples]: Width of hamming filter used for fixation duration
 RejectRatio = 0.4; % Rejection threshold based on the ratio of NaNs in data
 RejectDelay = 0.5; % [s], Rejection threshold based on delay between timestamps and n-samples
 NFilesMax = 16; % Max number of files
@@ -49,7 +51,7 @@ for q=1:numel(subDirs)
     PairIn = q;
     
     % Files and Utterances: different conditions
-    PairFiles=dir(['data\Main',sprintf('%d',PairIn),'\*.mat']);
+    PairFiles=dir(['data\AMEND_I\Main',sprintf('%d',PairIn),'\*.mat']);
     PairUtt=LoadUtt.Utterances(PairIn,:);
     PairDelay=LoadDelays.TobAudDelay(PairIn,:);
     
@@ -275,6 +277,7 @@ for q=1:numel(subDirs)
         subplot(2,2,[1 2])
         plot(t_Diam,Diameter,color='black');
         hold on
+        grid on
         xline(TimeStart,"--",'HandleVisibility','off')
         yl=ylim();
         ylim(yl);
@@ -289,46 +292,45 @@ for q=1:numel(subDirs)
         sgtitle(strrep(PairFiles(i).name,'_','-'))
 %         xticks([0:TimeStart:t_Diam(end)])
         xlabel('Time [s]')
-        ylabel('Pupil baseline difference [mm]');
+        ylabel('Pupil diameter [mm]');
 
+        % Speak-Diam-Window Adaptive Baselined
         subplot(2,2,3)
-        % Speak-Diam-Window
-        SDW = zeros(size(Speak,1),ceil(Param.Fs*(TimeStartW+max(Speak(:,1)))));
-        for j=1:size(Speak,1)
-            if SWSpeakIdx(j,3)-1 <= length(BLDiam)
-                plot(linspace(-TimeStartW,Speak(j,1),length(SWSpeakIdx(j,1):Speak(j,3)-1)),...
-                    BLDiam(SWSpeakIdx(j,1):Speak(j,3)-1),color=[0 1 0 .2],LineWidth=0.3)
-                hold on
-                % Add nan-padding when necessary
-                SDW(j,:)=[BLDiam(SWSpeakIdx(j,1):Speak(j,3)-1);NaN*ones(1,length(SDW)-length(SWSpeakIdx(j,1):Speak(j,3)-1))'];
-            end
-        end
-        plot(linspace(-TimeStartW,max(Speak(:,1)),length(SDW)),...
-             mean(SDW,1,'omitnan'),color=[1 0 0 0.8],LineWidth=1.5)
-        xline(0,"--")
-        xticks([-TimeStartW:TimeStartW:max(Speak(:,1))])
-        title('Baselined speaking-evoked pupil response')
-        xlabel('Time [s]')
-        ylabel('Pupil baseline difference [mm]');
-        
-        subplot(2,2,4)
-        % Listen-Diam-Window SUM
-        LDW = zeros(size(Listen,1),ceil(Param.Fs*(TimeStartW+max(Listen(:,1)))));
         hold on
-        for j=1:size(Listen,1)
-            if SWListenIdx(j,3)-1 <= length(BLDiam)
-                plot(linspace(-TimeStartW,Listen(j,1),length(SWListenIdx(j,1):Listen(j,3)-1)),...
-                    BLDiam(SWListenIdx(j,1):Listen(j,3)-1),color=[1 0 1 .2],LineWidth=0.3)
-                LDW(j,:)=[BLDiam(SWListenIdx(j,1):Listen(j,3)-1);NaN*ones(1,length(LDW)-length(SWListenIdx(j,1):Listen(j,3)-1))'];
+        SDW = zeros(size(Speak,1),ceil(Param.Fs*(TimeStartW+max(Speak(:,1))))+1);
+        for j=1:size(Speak,1)
+            if SWSpeakIdx(j,3)-1 <= length(Diameter)
+                % Add nan-padding when necessary
+                SDW(j,:)=[Diameter(SWSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SDW)-length(SWSpeakIdx(j,1):Speak(j,3)))'];
+                plot(linspace(-TimeStartW,Speak(j,1),length(SDW)),SDW(j,:),color=[0 1 0 .2],LineWidth=0.3)
             end
         end
-        plot(linspace(-TimeStartW,max(Listen(:,1)),length(LDW)),...
-             mean(LDW,1,'omitnan'),color=[1 0 0 0.8],LineWidth=1.5)
+        plot(linspace(-TimeStartW,max(Speak(:,1)),length(SDW)),ndnanfilter(mean(SDW,1,'omitnan'),'hamming',FilterWidth),color=[1 0 0 0.8],LineWidth=1.5)
         xline(0,"--")
-        xticks([-TimeStartW:TimeStartW:max(Listen(:,1))])
-        title('Baselined listening-evoked pupil response')
+        grid on
+%         xticks([-TimeStartW:TimeStartW:max(Speak(:,1))])
+        title('Baselined Speaking Windows')
         xlabel('Time [s]')
-        ylabel('Pupil baseline difference [mm]');
+        ylabel('Pupil baseline difference [mm]')
+        
+        % Listen-Diam-Window Adaptive Baselined
+        subplot(2,2,4)
+        hold on
+        LDW = zeros(size(Listen,1),ceil(Param.Fs*(TimeStartW+max(Listen(:,1))))+1);
+        for j=1:size(Listen,1)
+            if SWListenIdx(j,3)-1 <= length(Diameter)
+                % Add nan-padding when necessary
+                LDW(j,:)=[Diameter(SWListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LDW)-length(SWListenIdx(j,1):Listen(j,3)))'];
+                plot(linspace(-TimeStartW,Listen(j,1),length(LDW)),LDW(j,:),color=[0 1 0 .2],LineWidth=0.3)
+            end
+        end
+        plot(linspace(-TimeStartW,max(Listen(:,1)),length(LDW)),ndnanfilter(mean(LDW,1,'omitnan'),'hamming',FilterWidth),color=[1 0 0 0.8],LineWidth=1.5)
+        xline(0,"--")
+        grid on
+%         xticks([-TimeStartW:TimeStartW:max(Listen(:,1))])
+        title('Baselined Listening Windows')
+        xlabel('Time [s]')
+        ylabel('Pupil baseline difference [mm]')
     end
 end
 

@@ -61,5 +61,4 @@ end
 
 % Output the list of merged windows
 Merge = merged_windows;
-
 end
