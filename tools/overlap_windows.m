@@ -4,33 +4,48 @@ function [SpeakOut, ListenOut] = overlap_windows(SpeakIn, ListenIn, Fs)
 SpeakOut = SpeakIn;
 ListenOut = ListenIn;
 
+NumSW = size(SpeakIn,1);
+NumLW = size(ListenIn,1);
+
 % Loop over all pairs of speaking and listening windows
-for i = 1:size(SpeakIn,1)
-    for j = 1:size(ListenIn,1)
-        if SpeakIn(i,2) <= ListenIn(j,2) && SpeakIn(i,2) <= ListenIn(j,3) && SpeakIn(i,3) >= ListenIn(j,2) && SpeakIn(i,3) >= ListenIn(j,3)
-            % Speaking window entirely contains the listening window
-            SpeakOut(i,3) = ListenIn(j,2);
-            
-            % Add the new speaking window to the end of output array
-            SpeakOut(end+1,:) = [(SpeakIn(i,3)-ListenIn(j,3))/Fs, ListenIn(j,3), SpeakIn(i,3)];
-            
+i=1;
+while i <= NumSW
+    j=1;
+    while j <= NumLW
+        % CASE 1: Speaking window contains at least 1 listening window
+        if SpeakIn(i,2) <= ListenIn(j,2) && SpeakIn(i,2) <= ListenIn(j,3) && SpeakIn(i,3) >= ListenIn(j,2) && SpeakIn(i,3) >= ListenIn(j,3)      
+            SWCont=sum(SpeakIn(i,2) <= ListenIn(:,2) & SpeakIn(i,3) >= ListenIn(:,3));
+            SWCFind=find(SpeakIn(i,2) <= ListenIn(:,2) & SpeakIn(i,3) >= ListenIn(:,3));
+            for k = 1:SWCont
+                if k == 1
+                    SpeakOut(i,3) = ListenIn(SWCFind(k),2);
+                end
+                ClosestW = ListenIn(SWCFind(k),3) + min(abs([SpeakIn(:,2:3);ListenIn(1:end ~= SWCFind(k),2:3)]-ListenIn(SWCFind(k),3)),[],1:2);
+                SpeakOut(end+1,:) = [(ClosestW-ListenIn(SWCFind(k),3))/Fs, ListenIn(SWCFind(k),3), ClosestW];
+            end
+            i=i+k;
+        % CASE 2: Listening window contains at least 1 speaking window
         elseif ListenIn(j,2) <= SpeakIn(i,2) && ListenIn(j,2) <= SpeakIn(i,3) && ListenIn(j,3) >= SpeakIn(i,2) && ListenIn(j,3) >= SpeakIn(i,3)
-            % Speaking window entirely contains the listening window
-            ListenOut(i,3) = SpeakIn(i,2);
-            
-            % Add the new speaking window to the end of output array
-            ListenOut(end+1,:) = [(ListenIn(j,3)-SpeakIn(i,3))/Fs, SpeakIn(i,3), ListenIn(j,3)];
-            
-        elseif SpeakIn(i,3) >= ListenIn(j,2) && SpeakIn(i,3) <= ListenIn(j,3)
-            % If there is an overlap, set the end of the speaking window to the start of the listening window
+            LWCont=sum(ListenIn(j,2) <= SpeakIn(:,2) & ListenIn(j,3) >= SpeakIn(:,3));
+            LWCFind=find(ListenIn(j,2) <= SpeakIn(:,2) & ListenIn(j,3) >= SpeakIn(:,3));
+            for k = 1:LWCont
+                if k == 1
+                    ListenOut(j,3) = SpeakIn(LWCFind(k),2);
+                end
+                ClosestW = SpeakIn(LWCFind(k),3) + min(abs([ListenIn(:,2:3);SpeakIn(1:end ~= LWCFind(k),2:3)]-SpeakIn(LWCFind(k),3)),[],1:2);
+                ListenOut(end+1,:) = [(ClosestW-SpeakIn(LWCFind(k),3))/Fs, SpeakIn(LWCFind(k),3), ClosestW];
+            end
+            j=j+k;
+        % CASE 3: Overlap, first Speaking, then Listening
+        elseif SpeakIn(i,3) >= ListenIn(j,2) && SpeakIn(i,3) <= ListenIn(j,3) && SpeakIn(i,2) <= ListenIn(j,2) && SpeakIn(i,2) <= ListenIn(j,3)
             SpeakOut(i,3) = ListenIn(j,2);
-            
-        elseif ListenIn(j,3) >= SpeakIn(i,2) && ListenIn(j,3) <= SpeakIn(i,3)
-            % If there is an overlap, set the end of the listening window to the start of the speaking window
-            ListenOut(i,3) = SpeakIn(i,2); 
-            
+        % CASE 4: Overlap, first Listening, then Speaking
+        elseif ListenIn(j,3) >= SpeakIn(i,2) && ListenIn(j,3) <= SpeakIn(i,3) && ListenIn(j,2) <= SpeakIn(i,2) && ListenIn(j,2) <= SpeakIn(i,3)
+            ListenOut(j,3) = SpeakIn(i,2);
         end
+        j=j+1;
     end
+    i=i+1;
 end
 
 
