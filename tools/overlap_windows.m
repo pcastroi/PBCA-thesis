@@ -22,13 +22,17 @@ while i <= NumSW
                     if k == 1
                         SpeakOut(i,3) = ListenIn(SWCFind(k),2);
                     end
-
-%                     if k == SWCont
-%                         SpeakOut(end+1,:) = [(SpeakIn(i,3)-ListenIn(SWCFind(k),3))/Fs, ListenIn(SWCFind(k),3), SpeakIn(i,3)];
-%                     else
-                        ClosestW = ListenIn(SWCFind(k),3) + min(abs([SpeakIn(:,2:3);ListenIn(1:end ~= SWCFind(k),2:3)]-ListenIn(SWCFind(k),3)),[],1:2);
-                        SpeakOut(end+1,:) = [(ClosestW-ListenIn(SWCFind(k),3))/Fs, ListenIn(SWCFind(k),3), ClosestW];
-%                     end
+                    if k < SWCont
+                        ClosestW = ListenIn(SWCFind(k+1),2);
+%                         ClosestW = ListenIn(SWCFind(k),3) + min(abs([SpeakIn(:,2:3);ListenIn(1:end ~= SWCFind(k),2:3)]-ListenIn(SWCFind(k),3)),[],1:2);
+                    else
+                        if j < NumLW % FIND MIN HERE
+                            ClosestW = SpeakIn(i,3);
+                        else
+                            ClosestW = ListenIn(j+1,2);
+                        end
+                    end
+                    SpeakOut(end+1,:) = [(ClosestW-ListenIn(SWCFind(k),3))/Fs, ListenIn(SWCFind(k),3), ClosestW];
                 end
                 j=j+k;
             % CASE 2: Listening window contains at least 1 speaking window
@@ -40,14 +44,17 @@ while i <= NumSW
                         ListenOut(j,3) = SpeakIn(LWCFind(k),2);
                     end
 
-%                     if k == LWCont
-%                         ListenOut(end+1,:) = [(ListenIn(j,3)-SpeakIn(LWCFind(k),3))/Fs, SpeakIn(LWCFind(k),3), ListenIn(j,3)];
-%                     else
-%                         [ClosestWRow,ClosestWCol] = find((ListenIn(:,2:3)>=SpeakIn(LWCFind(k),3)));
-                        ClosestW = min(ListenIn(ListenIn>=SpeakIn(LWCFind(k),3)));
+                    if k < LWCont
+                        ClosestW = SpeakIn(LWCFind(k+1),2);
 %                         ClosestW = SpeakIn(LWCFind(k),3) + min(abs([ListenIn(:,2:3);SpeakIn(1:end ~= LWCFind(k),2:3)]-SpeakIn(LWCFind(k),3)),[],1:2);
-                        ListenOut(end+1,:) = [(ClosestW-SpeakIn(LWCFind(k),3))/Fs, SpeakIn(LWCFind(k),3), ClosestW];
-%                     end
+                    else
+                        if i < NumSW
+                            ClosestW = ListenIn(i,3);
+                        else
+                            ClosestW = SpeakIn(i+1,2);
+                        end
+                    end
+                    ListenOut(end+1,:) = [(ClosestW-SpeakIn(LWCFind(k),3))/Fs, SpeakIn(LWCFind(k),3), ClosestW];
                 end
                 i=i+k;
             % CASE 3: Overlap, first Speaking, then Listening
@@ -60,7 +67,7 @@ while i <= NumSW
         end
         j=j+1;
     end
-        i=i+1;
+    i=i+1;
 end
 
 
