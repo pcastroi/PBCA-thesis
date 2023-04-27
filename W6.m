@@ -43,7 +43,6 @@ ListenDurRaw=GapDurRaw;
 SpeakDur=GapDurRaw;
 ListenDur=GapDurRaw;
 
-TimeMinWin = 0; % [s], Minimum time of a window
 nbins=50;
 x=1;
 
@@ -144,7 +143,6 @@ for q=1:numel(subDirs)
         SpeakD = SpeakM(SpeakM(:,1)>2*TimeMinWin,:);
         ListenD = ListenM(ListenM(:,1)>2*TimeMinWin,:);
         
-        [SpeakO,ListenO] = overlap_windows(SpeakRaw,ListenRaw,Param.Fs);
         [SpeakOM,ListenOM] = overlap_windows(SpeakD,ListenD,Param.Fs);
         
 %         SpeakRaw(:,2:3)=round((SpeakRaw(:,2:3)*binResUtt+BLPeriod(2)+0.36)*Param.Fs+SDelayRaw(1)/2);
@@ -192,15 +190,13 @@ for q=1:numel(subDirs)
         startStop = ListenM(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),3,width(i),1],'EdgeColor', 'none', 'FaceColor', ListenColor), 1:size(startStop,1));
         startStop = SpeakD(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),4,width(i),1],'EdgeColor', 'none', 'FaceColor', SpeakColor), 1:size(startStop,1));
         startStop = ListenD(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),4,width(i),1],'EdgeColor', 'none', 'FaceColor', ListenColor), 1:size(startStop,1));
-        startStop = SpeakO(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),5,width(i),1],'EdgeColor', 'none', 'FaceColor', SpeakColor), 1:size(startStop,1));
-        startStop = ListenO(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),5,width(i),1],'EdgeColor', 'none', 'FaceColor', ListenColor), 1:size(startStop,1));
-        startStop = SpeakOM(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),6,width(i),1],'EdgeColor', 'none', 'FaceColor', SpeakColor), 1:size(startStop,1));
-        startStop = ListenOM(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),6,width(i),1],'EdgeColor', 'none', 'FaceColor', ListenColor), 1:size(startStop,1));
-        startStop = GapRaw(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),7,width(i),1],'EdgeColor', 'none', 'FaceColor', GapColor), 1:size(startStop,1))
-        startStop = OLWRaw(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),7,width(i),1],'EdgeColor', 'none', 'FaceColor', OLWColor), 1:size(startStop,1))
-        startStop = OLBRaw(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),7,width(i),1],'EdgeColor', 'none', 'FaceColor', OLBColor), 1:size(startStop,1))
-        startStop = TurnRaw(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),7,width(i),1],'EdgeColor', 'none', 'FaceColor', TurnColor), 1:size(startStop,1))
-        startStop = PauseRaw(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),7,width(i),1],'EdgeColor', 'none', 'FaceColor', PauseColor), 1:size(startStop,1))
+        startStop = SpeakOM(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),5,width(i),1],'EdgeColor', 'none', 'FaceColor', SpeakColor), 1:size(startStop,1));
+        startStop = ListenOM(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),5,width(i),1],'EdgeColor', 'none', 'FaceColor', ListenColor), 1:size(startStop,1));
+        startStop = GapRaw(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),6,width(i),1],'EdgeColor', 'none', 'FaceColor', GapColor), 1:size(startStop,1))
+        startStop = OLWRaw(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),6,width(i),1],'EdgeColor', 'none', 'FaceColor', OLWColor), 1:size(startStop,1))
+        startStop = OLBRaw(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),6,width(i),1],'EdgeColor', 'none', 'FaceColor', OLBColor), 1:size(startStop,1))
+        startStop = TurnRaw(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),6,width(i),1],'EdgeColor', 'none', 'FaceColor', TurnColor), 1:size(startStop,1))
+        startStop = PauseRaw(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),6,width(i),1],'EdgeColor', 'none', 'FaceColor', PauseColor), 1:size(startStop,1))
         grid on
         yline(1,"--",'HandleVisibility','off')
         yline(2,"--",'HandleVisibility','off')
@@ -217,7 +213,7 @@ for q=1:numel(subDirs)
         line(NaN,NaN,'linewidth',5,'Color',OLBColor);
         line(NaN,NaN,'linewidth',5,'Color',TurnColor);
         line(NaN,NaN,'linewidth',5,'Color',PauseColor);
-        title(strrep([PairFiles(i).folder(25:end),'\',PairFiles(i).name],'_','-'))
+        title(strrep(strrep([PairFiles(i).folder(25:end),'\',PairFiles(i).name],'_','-'),'\','\\'))
         legend('Speak','Listen','Gap','Overlap-Within','Overlap-Between','Turn','Pause')
         
         if contains([PairFiles(i).folder, '\', PairFiles(i).name],'\Main12\P2_SHL_B2.mat')
