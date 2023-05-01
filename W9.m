@@ -75,7 +75,7 @@ LDur_N70 = zeros(200,400);
 
 for q=1:numel(subDirs)
     PairIn = q;
-    PairFiles=dir(['data\Main',sprintf('%d',PairIn),'\*.mat']);
+    PairFiles=dir(['data\AMEND_I\Main',sprintf('%d',PairIn),'\*.mat']);
     PairUtt=LoadUtt.Utterances(PairIn,:);
     PairDelay=LoadDelays.TobAudDelay(PairIn,:);
     

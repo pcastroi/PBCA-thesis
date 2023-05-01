@@ -19,8 +19,8 @@ LoadDelays=load('data\AMEND_I\delays1110.mat');
 
 for q=1:numel(subDirs)
     PairIn = q;
-    PairFiles=dir(['data\Main',sprintf('%d',PairIn),'\*.mat']);
-    AudFiles=dir(['audio\Main',sprintf('%d',PairIn),'\*.mat']);
+    PairFiles=dir(['data\AMEND_I\Main',sprintf('%d',PairIn),'\*.mat']);
+    AudFiles=dir(['audio\AMEND_I\Main',sprintf('%d',PairIn),'\*.mat']);
     if isempty(AudFiles)
         disp(['Warning: No associated Audio for file ', PairFiles(i).folder, '\', PairFiles(i).name, '.']);
        continue 

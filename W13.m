@@ -126,7 +126,7 @@ grid([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10],'on')
 
 for q=1:numel(subDirs)
     PairIn = q;
-    PairFiles=dir(['data\Main',sprintf('%d',PairIn),'\*.mat']);
+    PairFiles=dir(['data\AMEND_I\Main',sprintf('%d',PairIn),'\*.mat']);
     PairUtt=LoadUtt.Utterances(PairIn,:);
     PairDelay=LoadDelays.TobAudDelay(PairIn,:);
     
@@ -266,16 +266,19 @@ for q=1:numel(subDirs)
         ListenMI = merge_windows(ListenRaw, Param.Fs, TimeInitialMerge);
         
         % Discard windows if duration is < TimeMinWin (500 ms)
-        SpeakD = SpeakMI(SpeakMI(:,1)>TimeMinWin,:);
-        ListenD = ListenMI(ListenMI(:,1)>TimeMinWin,:);
+        SpeakDI = SpeakMI(SpeakMI(:,1)>TimeMinWin,:);
+        ListenDI = ListenMI(ListenMI(:,1)>TimeMinWin,:);
         
         % Merge again if duration between windows <= TimeMerge (2 s)
-        SpeakM = merge_windows(SpeakD, Param.Fs, TimeMerge);
-        ListenM = merge_windows(ListenD, Param.Fs, TimeMerge);
+        SpeakM = merge_windows(SpeakDI, Param.Fs, TimeMerge);
+        ListenM = merge_windows(ListenDI, Param.Fs, TimeMerge);
         
         % Discard windows if duration is < 2*TimeMinWin (1 s)
-        Speak = SpeakM(SpeakM(:,1)>2*TimeMinWin,:);
-        Listen = ListenM(ListenM(:,1)>2*TimeMinWin,:);
+        SpeakD = SpeakM(SpeakM(:,1)>2*TimeMinWin,:);
+        ListenD = ListenM(ListenM(:,1)>2*TimeMinWin,:);
+        
+        % Added from W6.m -> Cut/Split overlaps
+        [Speak,Listen] = overlap_windows(SpeakD,ListenD,Param.Fs);
         
 %         Speak = SpeakRaw;
 %         Listen = ListenRaw;
