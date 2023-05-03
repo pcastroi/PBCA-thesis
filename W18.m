@@ -37,11 +37,16 @@ TimeInitialMerge = 0.3; % [s], Time threshold for merging windows initially
 TimeMerge = 2; % [s], Time threshold for merging windows after rejecting small windows
 RejectRatio = 0.4; % Rejection threshold based on the ratio of NaNs in data
 RejectDelay = 0.5; % [s], Rejection threshold based on delay between timestamps and n-samples
+TimeStartW = 0.5; % [s], time before Utt/Lis starts
+TimeEndW = 0; % [s], time after Utt/Lis starts
+x = 1; % idx to store global values
+% NCond_II = numel(FileNames_II)/NPs; % N of conditions
+% NTPs = numel(subDirs)*numel(FileNames)/NCond; % Total N of TPs
+% TPsOrder = zeros(NTPs,NCond_II); % Vector that will contain the indexes of trials/file for each TP
 
-% Variables
 NCols=60*Param.Fs; % Duration (samples) of each window
 NRows=100; % Number of windows per trial
-NLayers=numel(FileNames)*numel(subDirs); % Number of trials
+NLayers=numel(FileNames_II)*numel(subDirs_II); % Number of trials
 
 GSW = zeros(NLayers,NRows,NCols); GLW = GSW; % Global Speaking/Listening Windows
 SW_NH = GSW; LW_NH = GSW; % NH Speaking/Listening Windows
@@ -62,7 +67,7 @@ SW_HI_AB_N0 = GSW; LW_HI_AB_N0 = GSW; % HI AB N0 Speaking/Listening Windows
 SW_HI_AB_N60 = GSW; LW_HI_AB_N60 = GSW; % HI AB N60 Speaking/Listening Windows
 SW_HI_AB_N70 = GSW; LW_HI_AB_N70 = GSW; % HI AB N70 Speaking/Listening Windows
 
-GSW_B = zeros(NLayers,NRows,NCols); GLW_B = GSW; % Global Speaking/Listening Windows Adaptive-Baseline corrected
+GSW_B = GSW; GLW_B = GSW; % Global Speaking/Listening Windows Adaptive-Baseline corrected
 SW_NH_B = GSW; LW_NH_B = GSW; % NH Speaking/Listening Windows Adaptive-Baseline corrected
 SW_HI_B = GSW; LW_HI_B = GSW; % HI Speaking/Listening Windows Adaptive-Baseline corrected
 SW_N0_B = GSW; LW_N0_B = GSW; % N0 Speaking/Listening Windows Adaptive-Baseline corrected
@@ -81,13 +86,10 @@ SW_HI_AB_N0_B = GSW; LW_HI_AB_N0_B = GSW; % HI AB N0 Speaking/Listening Windows 
 SW_HI_AB_N60_B = GSW; LW_HI_AB_N60_B = GSW; % HI AB N60 Speaking/Listening Windows Adaptive-Baseline corrected
 SW_HI_AB_N70_B = GSW; LW_HI_AB_N70_B = GSW; % HI AB N70 Speaking/Listening Windows Adaptive-Baseline corrected
 
-
 GSDur = zeros(NLayers,NRows); % Global Speaking Windows Duration
 GLDur = zeros(NLayers,NRows); % Global Listening Windows Duration
 SDur_N0 = zeros(NLayers,NRows); % N0 Speaking Windows Duration
 LDur_N0 = zeros(NLayers,NRows); % N0 Listening Windows Duration
-SDur_N60 = zeros(NLayers,NRows); % SHL Speaking Windows Duration
-LDur_N60 = zeros(NLayers,NRows); % SHL Listening Windows Duration
 SDur_N60 = zeros(NLayers,NRows); % N60 Speaking Windows Duration
 LDur_N60 = zeros(NLayers,NRows); % N60 Listening Windows Duration
 SDur_N70 = zeros(NLayers,NRows); % N70 Speaking Windows Duration
@@ -95,12 +97,9 @@ LDur_N70 = zeros(NLayers,NRows); % N70 Listening Windows Duration
 
 figure;tiledlayout(1,2);ax1 = nexttile;ax2 = nexttile;
 figure;tiledlayout(1,2);ax3 = nexttile;ax4 = nexttile;
-figure;tiledlayout(1,2);ax5 = nexttile;ax6 = nexttile;
-figure;tiledlayout(1,2);ax7 = nexttile;ax8 = nexttile;
-figure;tiledlayout(1,2);ax9 = nexttile;ax10 = nexttile;
 
-hold([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10],'on')
-grid([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10],'on')
+hold([ax1 ax2 ax3 ax4],'on')
+grid([ax1 ax2 ax3 ax4],'on')
 
 % Loop for AMEND II
 for q=1:numel(subDirs_II)
@@ -229,11 +228,10 @@ for q=1:numel(subDirs_II)
             end
 
             % SAME PROCESSING AS IN W1.m
-            % Downsample (rounding) Utt from 250 Hz (1/binRes) to 50 Hz, shift
-            % in time to account for the time at which the audio recording
-            % started (from 0 to 20 s only eye data) plus delay
-            SpeakRaw(:,2:3)=round((SpeakRaw(:,2:3)*binResUtt+TimeStart)*Param.Fs+SDelayRaw(1)/2);
-            ListenRaw(:,2:3)=round((ListenRaw(:,2:3)*binResUtt+TimeStart)*Param.Fs+LDelayRaw(1)/2);
+            % Downsample (rounding) Utt from 250 Hz (1/binRes) to 50 Hz, no
+            % shift in time nor delay added this time
+            SpeakRaw(:,2:3)=round((SpeakRaw(:,2:3)*binResUtt)*Param.Fs);
+            ListenRaw(:,2:3)=round((ListenRaw(:,2:3)*binResUtt)*Param.Fs);
 
             % Merge windows if duration between windows <= TimeInitialMerge (300 ms)
             SpeakMI = merge_windows(SpeakRaw, Param.Fs, TimeInitialMerge);
@@ -263,48 +261,178 @@ for q=1:numel(subDirs_II)
         %         t_Diam = linspace(0,length(Diameter)./Param.Fs,length(Diameter));
 
             % Storing Speaking/Listening by conditions
-            if contains(cell2mat(FileNames_II(i)),'UN')
+            if contains(cell2mat(FileNames_II(i)),'N0')
+                for j=1:size(Speak,1)
+                    SW_N0(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(SW_N0)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                    SW_N0_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SW_N0_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                    SDur_N0(i,j) = Speak(j,1);
+                end
+                for j=1:size(Listen,1)
+                    LW_N0(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(LW_N0)-length(WListenIdx(j,1):Listen(j,3)))'];
+                    LW_N0_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LW_N0_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                    LDur_N0(i,j) = Listen(j,1);
+                end
+            elseif contains(cell2mat(FileNames_II(i)),'N60')
+                for j=1:size(Speak,1)
+                    SW_N60(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(SW_N60)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                    SW_N60_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SW_N60_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                    SDur_N60(i,j) = Speak(j,1);
+                end
+                for j=1:size(Listen,1)
+                    LW_N60(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(LW_N60)-length(WListenIdx(j,1):Listen(j,3)))'];
+                    LW_N60_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LW_N60_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                    LDur_N60(i,j) = Listen(j,1);
+                end
+            elseif contains(cell2mat(FileNames_II(i)),'N70')
+                for j=1:size(Speak,1)
+                    SW_N70(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(SW_N70)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                    SW_N70_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SW_N70_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                    SDur_N70(i,j) = Speak(j,1);
+                end
+                for j=1:size(Listen,1)
+                    LW_N70(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(LW_N70)-length(WListenIdx(j,1):Listen(j,3)))'];
+                    LW_N70_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LW_N70_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                    LDur_N70(i,j) = Listen(j,1);
+                end
+            end
+            % Either NH or HI
+            if contains(ChosenFolder,'NH')
+                for j=1:size(Speak,1)
+                    SW_NH(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(SW_NH)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                    SW_NH_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SW_NH_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                end
+                for j=1:size(Listen,1)
+                    LW_NH(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(LW_NH)-length(WListenIdx(j,1):Listen(j,3)))'];
+                    LW_NH_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LW_NH_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                end
                 if contains(cell2mat(FileNames_II(i)),'N0')
                     for j=1:size(Speak,1)
-                        SW_N0(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(SW_N0)-length(WSpeakIdx(j,1):Speak(j,3)))'];
-                        SW_B_N0(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SW_B_N0)-length(WSpeakIdx(j,1):Speak(j,3)))'];
-                        SDur_N0(i,j) = Speak(j,1);
+                        SW_NH_N0(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(SW_NH_N0)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        SW_NH_N0_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SW_NH_N0_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
                     end
                     for j=1:size(Listen,1)
-                        LW_N0(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(LW_N0)-length(WListenIdx(j,1):Listen(j,3)))'];
-                        LW_B_N0(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LW_B_N0)-length(WListenIdx(j,1):Listen(j,3)))'];
-                        LDur_N0(i,j) = Listen(j,1);
+                        LW_NH_N0(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(LW_NH_N0)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        LW_NH_N0_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LW_NH_N0_B)-length(WListenIdx(j,1):Listen(j,3)))'];
                     end
                 elseif contains(cell2mat(FileNames_II(i)),'N60')
                     for j=1:size(Speak,1)
-                        SW_N60(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(SW_N60)-length(WSpeakIdx(j,1):Speak(j,3)))'];
-                        SW_B_N60(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SW_B_N60)-length(WSpeakIdx(j,1):Speak(j,3)))'];
-                        SDur_N60(i,j) = Speak(j,1);
+                        SW_NH_N60(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(SW_NH_N60)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        SW_NH_N60_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SW_NH_N60_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
                     end
                     for j=1:size(Listen,1)
-                        LW_N60(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(LW_N60)-length(WListenIdx(j,1):Listen(j,3)))'];
-                        LW_B_N60(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LW_B_N60)-length(WListenIdx(j,1):Listen(j,3)))'];
-                        LDur_N60(i,j) = Listen(j,1);
+                        LW_NH_N60(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(LW_NH_N60)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        LW_NH_N60_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LW_NH_N60_B)-length(WListenIdx(j,1):Listen(j,3)))'];
                     end
                 elseif contains(cell2mat(FileNames_II(i)),'N70')
                     for j=1:size(Speak,1)
-                        SW_N70(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(SW_N70)-length(WSpeakIdx(j,1):Speak(j,3)))'];
-                        SW_B_N70(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SW_B_N70)-length(WSpeakIdx(j,1):Speak(j,3)))'];
-                        SDur_N70(i,j) = Speak(j,1);
+                        SW_NH_N70(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(SW_NH_N70)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        SW_NH_N70_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SW_NH_N70_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
                     end
                     for j=1:size(Listen,1)
-                        LW_N70(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(LW_N70)-length(WListenIdx(j,1):Listen(j,3)))'];
-                        LW_B_N70(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LW_B_N70)-length(WListenIdx(j,1):Listen(j,3)))'];
-                        LDur_N70(i,j) = Listen(j,1);
+                        LW_NH_N70(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(LW_NH_N70)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        LW_NH_N70_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LW_NH_N70_B)-length(WListenIdx(j,1):Listen(j,3)))'];
                     end
                 end
-            elseif contains(cell2mat(FileNames_II(i)),'AA')
-                
-            elseif contains(cell2mat(FileNames_II(i)),'AB')
-                    
+            elseif contains(ChosenFolder,'HI')
+                for j=1:size(Speak,1)
+                    SW_HI(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(SW_HI)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                    SW_HI_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SW_HI_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                end
+                for j=1:size(Listen,1)
+                    LW_HI(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(LW_HI)-length(WListenIdx(j,1):Listen(j,3)))'];
+                    LW_HI_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LW_HI_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                end
+                if contains(cell2mat(FileNames_II(i)),'UN')
+                    if contains(cell2mat(FileNames_II(i)),'N0')
+                        for j=1:size(Speak,1)
+                            SW_HI_UN_N0(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(SW_HI_UN_N0)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                            SW_HI_UN_N0_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SW_HI_UN_N0_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        end
+                        for j=1:size(Listen,1)
+                            LW_HI_UN_N0(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(LW_HI_UN_N0)-length(WListenIdx(j,1):Listen(j,3)))'];
+                            LW_HI_UN_N0_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LW_HI_UN_N0_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        end
+                    elseif contains(cell2mat(FileNames_II(i)),'N60')
+                        for j=1:size(Speak,1)
+                            SW_HI_UN_N60(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(SW_HI_UN_N60)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                            SW_HI_UN_N60_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SW_HI_UN_N60_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        end
+                        for j=1:size(Listen,1)
+                            LW_HI_UN_N60(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(LW_HI_UN_N60)-length(WListenIdx(j,1):Listen(j,3)))'];
+                            LW_HI_UN_N60_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LW_HI_UN_N60_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        end
+                    elseif contains(cell2mat(FileNames_II(i)),'N70')
+                        for j=1:size(Speak,1)
+                            SW_HI_UN_N70(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(SW_HI_UN_N70)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                            SW_HI_UN_N70_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SW_HI_UN_N70_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        end
+                        for j=1:size(Listen,1)
+                            LW_HI_UN_N70(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(LW_HI_UN_N70)-length(WListenIdx(j,1):Listen(j,3)))'];
+                            LW_HI_UN_N70_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LW_HI_UN_N70_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        end
+                    end
+                elseif contains(cell2mat(FileNames_II(i)),'AA')
+                    if contains(cell2mat(FileNames_II(i)),'N0')
+                        for j=1:size(Speak,1)
+                            SW_HI_AA_N0(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(SW_HI_AA_N0)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                            SW_HI_AA_N0_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SW_HI_AA_N0_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        end
+                        for j=1:size(Listen,1)
+                            LW_HI_AA_N0(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(LW_HI_AA_N0)-length(WListenIdx(j,1):Listen(j,3)))'];
+                            LW_HI_AA_N0_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LW_HI_AA_N0_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        end
+                    elseif contains(cell2mat(FileNames_II(i)),'N60')
+                        for j=1:size(Speak,1)
+                            SW_HI_AA_N60(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(SW_HI_AA_N60)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                            SW_HI_AA_N60_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SW_HI_AA_N60_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        end
+                        for j=1:size(Listen,1)
+                            LW_HI_AA_N60(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(LW_HI_AA_N60)-length(WListenIdx(j,1):Listen(j,3)))'];
+                            LW_HI_AA_N60_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LW_HI_AA_N60_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        end
+                    elseif contains(cell2mat(FileNames_II(i)),'N70')
+                        for j=1:size(Speak,1)
+                            SW_HI_AA_N70(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(SW_HI_AA_N70)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                            SW_HI_AA_N70_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SW_HI_AA_N70_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        end
+                        for j=1:size(Listen,1)
+                            LW_HI_AA_N70(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(LW_HI_AA_N70)-length(WListenIdx(j,1):Listen(j,3)))'];
+                            LW_HI_AA_N70_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LW_HI_AA_N70_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        end
+                    end
+                elseif contains(cell2mat(FileNames_II(i)),'AB')
+                    if contains(cell2mat(FileNames_II(i)),'N0')
+                        for j=1:size(Speak,1)
+                            SW_HI_AB_N0(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(SW_HI_AB_N0)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                            SW_HI_AB_N0_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SW_HI_AB_N0_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        end
+                        for j=1:size(Listen,1)
+                            LW_HI_AB_N0(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(LW_HI_AB_N0)-length(WListenIdx(j,1):Listen(j,3)))'];
+                            LW_HI_AB_N0_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LW_HI_AB_N0_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        end
+                    elseif contains(cell2mat(FileNames_II(i)),'N60')
+                        for j=1:size(Speak,1)
+                            SW_HI_AB_N60(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(SW_HI_AB_N60)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                            SW_HI_AB_N60_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SW_HI_AB_N60_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        end
+                        for j=1:size(Listen,1)
+                            LW_HI_AB_N60(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(LW_HI_AB_N60)-length(WListenIdx(j,1):Listen(j,3)))'];
+                            LW_HI_AB_N60_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LW_HI_AB_N60_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        end
+                    elseif contains(cell2mat(FileNames_II(i)),'N70')
+                        for j=1:size(Speak,1)
+                            SW_HI_AB_N70(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(SW_HI_AB_N70)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                            SW_HI_AB_N70_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(SW_HI_AB_N70_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        end
+                        for j=1:size(Listen,1)
+                            LW_HI_AB_N70(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(LW_HI_AB_N70)-length(WListenIdx(j,1):Listen(j,3)))'];
+                            LW_HI_AB_N70_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(LW_HI_AB_N70_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        end
+                    end
+                end
             end
 
-            % Storing Global Speaking/Listening pupil sizes
+            % Storing Global Speaking/Listening windows
             for j=1:size(Speak,1)
                 % Add nan-padding when necessary
                 GSW(x,j,:) = [Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(GSW)-length(WSpeakIdx(j,1):Speak(j,3)))'];
@@ -319,33 +447,476 @@ for q=1:numel(subDirs_II)
                 GLDur(x,j) = Listen(j,1);
             end
             % Store idx of non-rejected files associated with TPs
-            if contains(cell2mat(FileNames_II(i)),'P2')
-                TPsOrder(2*q,i-NCond) = x;
-            elseif contains(cell2mat(FileNames_II(i)),'P1')
-                TPsOrder(2*q-1,i) = x;
-            end
+%             if contains(cell2mat(FileNames_II(i)),'P2')
+%                 TPsOrder(2*q,i-NCond) = x;
+%             elseif contains(cell2mat(FileNames_II(i)),'P1')
+%                 TPsOrder(2*q-1,i) = x;
+%             end
 
             % Increase index of num of files used
             x=x+1;
             
-            % Plots
-            figure
-            plot(linspace(0,size(Diameter,1)/Param.Fs,size(Diameter,1)),Diameter,color='black');
-            grid on
-            yl=ylim();
-            ylim(yl);
-            % Plot rectangles (Utterance and listening time windows)
-%             arrayfun(@(i)rectangle('Position', [startStopS(i,1),yl(1),widthS(i),range(yl)], ...
-%             'EdgeColor', 'none', 'FaceColor', [0 1 0 .2]), 1:size(startStopS,1))
-%             arrayfun(@(i)rectangle('Position', [startStopL(i,1),yl(1),widthL(i),range(yl)], ...
-%             'EdgeColor', 'none', 'FaceColor', [1 0 1 .2]), 1:size(startStopL,1))
-%             eline1=line(NaN,NaN,'LineWidth',2,'Color',[0 1 0 .2]);
-%             eline2=line(NaN,NaN,'LineWidth',2,'Color',[1 0 1 .2]);
-%             legend(['Baselined diameter (', eyeChosen,' Eye)'],'Speaking windows','Listening windows')
-            sgtitle(strrep(strrep([PairFiles_II(1).folder,'\',PairFiles_II(i).name],'_','-'),'\','\\'))
-            xlabel('Time [s]')
-            ylabel('Pupil diameter [mm]');
-
         end
     end
 end
+%% Out-of-files-loop calculations
+% Clean empty rows and layers, set 0's to NaN
+GSW(~any(GSW,[2 3]),:,:)=[];GSW(:,~any(GSW,[1 3]),:)=[];GSW(GSW==0)=NaN;
+GSW_B(~any(GSW_B,[2 3]),:,:)=[];GSW_B(:,~any(GSW_B,[1 3]),:)=[];GSW_B(GSW_B==0)=NaN;
+GLW(~any(GLW,[2 3]),:,:)=[];GLW(:,~any(GLW,[1 3]),:)=[];GLW(GLW==0)=NaN;
+GLW_B(~any(GLW_B,[2 3]),:,:)=[];GLW_B(:,~any(GLW_B,[1 3]),:)=[];GLW_B(GLW_B==0)=NaN;
+
+SW_NH(~any(SW_NH,[2 3]),:,:)=[];SW_NH(:,~any(SW_NH,[1 3]),:)=[];SW_NH(SW_NH==0)=NaN;
+SW_NH_B(~any(SW_NH_B,[2 3]),:,:)=[];SW_NH_B(:,~any(SW_NH_B,[1 3]),:)=[];SW_NH_B(SW_NH_B==0)=NaN;
+LW_NH(~any(LW_NH,[2 3]),:,:)=[];LW_NH(:,~any(LW_NH,[1 3]),:)=[];LW_NH(LW_NH==0)=NaN;
+LW_NH_B(~any(LW_NH_B,[2 3]),:,:)=[];LW_NH_B(:,~any(LW_NH_B,[1 3]),:)=[];LW_NH_B(LW_NH_B==0)=NaN;
+SW_HI(~any(SW_HI,[2 3]),:,:)=[];SW_HI(:,~any(SW_HI,[1 3]),:)=[];SW_HI(SW_HI==0)=NaN;
+SW_HI_B(~any(SW_HI_B,[2 3]),:,:)=[];SW_HI_B(:,~any(SW_HI_B,[1 3]),:)=[];SW_HI_B(SW_HI_B==0)=NaN;
+LW_HI(~any(LW_HI,[2 3]),:,:)=[];LW_HI(:,~any(LW_HI,[1 3]),:)=[];LW_HI(LW_HI==0)=NaN;
+LW_HI_B(~any(LW_HI_B,[2 3]),:,:)=[];LW_HI_B(:,~any(LW_HI_B,[1 3]),:)=[];LW_HI_B(LW_HI_B==0)=NaN;
+
+SW_N0(~any(SW_N0,[2 3]),:,:)=[];SW_N0(:,~any(SW_N0,[1 3]),:)=[];SW_N0(SW_N0==0)=NaN;
+SW_N0_B(~any(SW_N0_B,[2 3]),:,:)=[];SW_N0_B(:,~any(SW_N0_B,[1 3]),:)=[];SW_N0_B(SW_N0_B==0)=NaN;
+LW_N0(~any(LW_N0,[2 3]),:,:)=[];LW_N0(:,~any(LW_N0,[1 3]),:)=[];LW_N0(LW_N0==0)=NaN;
+LW_N0_B(~any(LW_N0_B,[2 3]),:,:)=[];LW_N0_B(:,~any(LW_N0_B,[1 3]),:)=[];LW_N0_B(LW_N0_B==0)=NaN;
+SW_N60(~any(SW_N60,[2 3]),:,:)=[];SW_N60(:,~any(SW_N60,[1 3]),:)=[];SW_N60(SW_N60==0)=NaN;
+SW_N60_B(~any(SW_N60_B,[2 3]),:,:)=[];SW_N60_B(:,~any(SW_N60_B,[1 3]),:)=[];SW_N60_B(SW_N60_B==0)=NaN;
+LW_N60(~any(LW_N60,[2 3]),:,:)=[];LW_N60(:,~any(LW_N60,[1 3]),:)=[];LW_N60(LW_N60==0)=NaN;
+LW_N60_B(~any(LW_N60_B,[2 3]),:,:)=[];LW_N60_B(:,~any(LW_N60_B,[1 3]),:)=[];LW_N60_B(LW_N60_B==0)=NaN;
+SW_N70(~any(SW_N70,[2 3]),:,:)=[];SW_N70(:,~any(SW_N70,[1 3]),:)=[];SW_N70(SW_N70==0)=NaN;
+SW_N70_B(~any(SW_N70_B,[2 3]),:,:)=[];SW_N70_B(:,~any(SW_N70_B,[1 3]),:)=[];SW_N70_B(SW_N70_B==0)=NaN;
+LW_N70(~any(LW_N70,[2 3]),:,:)=[];LW_N70(:,~any(LW_N70,[1 3]),:)=[];LW_N70(LW_N70==0)=NaN;
+LW_N70_B(~any(LW_N70_B,[2 3]),:,:)=[];LW_N70_B(:,~any(LW_N70_B,[1 3]),:)=[];LW_N70_B(LW_N70_B==0)=NaN;
+
+SW_NH_N0(~any(SW_NH_N0,[2 3]),:,:)=[];SW_NH_N0(:,~any(SW_NH_N0,[1 3]),:)=[];SW_NH_N0(SW_NH_N0==0)=NaN;
+SW_NH_N0_B(~any(SW_NH_N0_B,[2 3]),:,:)=[];SW_NH_N0_B(:,~any(SW_NH_N0_B,[1 3]),:)=[];SW_NH_N0_B(SW_NH_N0_B==0)=NaN;
+LW_NH_N0(~any(LW_NH_N0,[2 3]),:,:)=[];LW_NH_N0(:,~any(LW_NH_N0,[1 3]),:)=[];LW_NH_N0(LW_NH_N0==0)=NaN;
+LW_NH_N0_B(~any(LW_NH_N0_B,[2 3]),:,:)=[];LW_NH_N0_B(:,~any(LW_NH_N0_B,[1 3]),:)=[];LW_NH_N0_B(LW_NH_N0_B==0)=NaN;
+SW_NH_N60(~any(SW_NH_N60,[2 3]),:,:)=[];SW_NH_N60(:,~any(SW_NH_N60,[1 3]),:)=[];SW_NH_N60(SW_NH_N60==0)=NaN;
+SW_NH_N60_B(~any(SW_NH_N60_B,[2 3]),:,:)=[];SW_NH_N60_B(:,~any(SW_NH_N60_B,[1 3]),:)=[];SW_NH_N60_B(SW_NH_N60_B==0)=NaN;
+LW_NH_N60(~any(LW_NH_N60,[2 3]),:,:)=[];LW_NH_N60(:,~any(LW_NH_N60,[1 3]),:)=[];LW_NH_N60(LW_NH_N60==0)=NaN;
+LW_NH_N60_B(~any(LW_NH_N60_B,[2 3]),:,:)=[];LW_NH_N60_B(:,~any(LW_NH_N60_B,[1 3]),:)=[];LW_NH_N60_B(LW_NH_N60_B==0)=NaN;
+SW_NH_N70(~any(SW_NH_N70,[2 3]),:,:)=[];SW_NH_N70(:,~any(SW_NH_N70,[1 3]),:)=[];SW_NH_N70(SW_NH_N70==0)=NaN;
+SW_NH_N70_B(~any(SW_NH_N70_B,[2 3]),:,:)=[];SW_NH_N70_B(:,~any(SW_NH_N70_B,[1 3]),:)=[];SW_NH_N70_B(SW_NH_N70_B==0)=NaN;
+LW_NH_N70(~any(LW_NH_N70,[2 3]),:,:)=[];LW_NH_N70(:,~any(LW_NH_N70,[1 3]),:)=[];LW_NH_N70(LW_NH_N70==0)=NaN;
+LW_NH_N70_B(~any(LW_NH_N70_B,[2 3]),:,:)=[];LW_NH_N70_B(:,~any(LW_NH_N70_B,[1 3]),:)=[];LW_NH_N70_B(LW_NH_N70_B==0)=NaN;
+
+SW_HI_UN_N0(~any(SW_HI_UN_N0,[2 3]),:,:)=[];SW_HI_UN_N0(:,~any(SW_HI_UN_N0,[1 3]),:)=[];SW_HI_UN_N0(SW_HI_UN_N0==0)=NaN;
+SW_HI_UN_N0_B(~any(SW_HI_UN_N0_B,[2 3]),:,:)=[];SW_HI_UN_N0_B(:,~any(SW_HI_UN_N0_B,[1 3]),:)=[];SW_HI_UN_N0_B(SW_HI_UN_N0_B==0)=NaN;
+LW_HI_UN_N0(~any(LW_HI_UN_N0,[2 3]),:,:)=[];LW_HI_UN_N0(:,~any(LW_HI_UN_N0,[1 3]),:)=[];LW_HI_UN_N0(LW_HI_UN_N0==0)=NaN;
+LW_HI_UN_N0_B(~any(LW_HI_UN_N0_B,[2 3]),:,:)=[];LW_HI_UN_N0_B(:,~any(LW_HI_UN_N0_B,[1 3]),:)=[];LW_HI_UN_N0_B(LW_HI_UN_N0_B==0)=NaN;
+SW_HI_UN_N60(~any(SW_HI_UN_N60,[2 3]),:,:)=[];SW_HI_UN_N60(:,~any(SW_HI_UN_N60,[1 3]),:)=[];SW_HI_UN_N60(SW_HI_UN_N60==0)=NaN;
+SW_HI_UN_N60_B(~any(SW_HI_UN_N60_B,[2 3]),:,:)=[];SW_HI_UN_N60_B(:,~any(SW_HI_UN_N60_B,[1 3]),:)=[];SW_HI_UN_N60_B(SW_HI_UN_N60_B==0)=NaN;
+LW_HI_UN_N60(~any(LW_HI_UN_N60,[2 3]),:,:)=[];LW_HI_UN_N60(:,~any(LW_HI_UN_N60,[1 3]),:)=[];LW_HI_UN_N60(LW_HI_UN_N60==0)=NaN;
+LW_HI_UN_N60_B(~any(LW_HI_UN_N60_B,[2 3]),:,:)=[];LW_HI_UN_N60_B(:,~any(LW_HI_UN_N60_B,[1 3]),:)=[];LW_HI_UN_N60_B(LW_HI_UN_N60_B==0)=NaN;
+SW_HI_UN_N70(~any(SW_HI_UN_N70,[2 3]),:,:)=[];SW_HI_UN_N70(:,~any(SW_HI_UN_N70,[1 3]),:)=[];SW_HI_UN_N70(SW_HI_UN_N70==0)=NaN;
+SW_HI_UN_N70_B(~any(SW_HI_UN_N70_B,[2 3]),:,:)=[];SW_HI_UN_N70_B(:,~any(SW_HI_UN_N70_B,[1 3]),:)=[];SW_HI_UN_N70_B(SW_HI_UN_N70_B==0)=NaN;
+LW_HI_UN_N70(~any(LW_HI_UN_N70,[2 3]),:,:)=[];LW_HI_UN_N70(:,~any(LW_HI_UN_N70,[1 3]),:)=[];LW_HI_UN_N70(LW_HI_UN_N70==0)=NaN;
+LW_HI_UN_N70_B(~any(LW_HI_UN_N70_B,[2 3]),:,:)=[];LW_HI_UN_N70_B(:,~any(LW_HI_UN_N70_B,[1 3]),:)=[];LW_HI_UN_N70_B(LW_HI_UN_N70_B==0)=NaN;
+SW_HI_AA_N0(~any(SW_HI_AA_N0,[2 3]),:,:)=[];SW_HI_AA_N0(:,~any(SW_HI_AA_N0,[1 3]),:)=[];SW_HI_AA_N0(SW_HI_AA_N0==0)=NaN;
+SW_HI_AA_N0_B(~any(SW_HI_AA_N0_B,[2 3]),:,:)=[];SW_HI_AA_N0_B(:,~any(SW_HI_AA_N0_B,[1 3]),:)=[];SW_HI_AA_N0_B(SW_HI_AA_N0_B==0)=NaN;
+LW_HI_AA_N0(~any(LW_HI_AA_N0,[2 3]),:,:)=[];LW_HI_AA_N0(:,~any(LW_HI_AA_N0,[1 3]),:)=[];LW_HI_AA_N0(LW_HI_AA_N0==0)=NaN;
+LW_HI_AA_N0_B(~any(LW_HI_AA_N0_B,[2 3]),:,:)=[];LW_HI_AA_N0_B(:,~any(LW_HI_AA_N0_B,[1 3]),:)=[];LW_HI_AA_N0_B(LW_HI_AA_N0_B==0)=NaN;
+SW_HI_AA_N60(~any(SW_HI_AA_N60,[2 3]),:,:)=[];SW_HI_AA_N60(:,~any(SW_HI_AA_N60,[1 3]),:)=[];SW_HI_AA_N60(SW_HI_AA_N60==0)=NaN;
+SW_HI_AA_N60_B(~any(SW_HI_AA_N60_B,[2 3]),:,:)=[];SW_HI_AA_N60_B(:,~any(SW_HI_AA_N60_B,[1 3]),:)=[];SW_HI_AA_N60_B(SW_HI_AA_N60_B==0)=NaN;
+LW_HI_AA_N60(~any(LW_HI_AA_N60,[2 3]),:,:)=[];LW_HI_AA_N60(:,~any(LW_HI_AA_N60,[1 3]),:)=[];LW_HI_AA_N60(LW_HI_AA_N60==0)=NaN;
+LW_HI_AA_N60_B(~any(LW_HI_AA_N60_B,[2 3]),:,:)=[];LW_HI_AA_N60_B(:,~any(LW_HI_AA_N60_B,[1 3]),:)=[];LW_HI_AA_N60_B(LW_HI_AA_N60_B==0)=NaN;
+SW_HI_AA_N70(~any(SW_HI_AA_N70,[2 3]),:,:)=[];SW_HI_AA_N70(:,~any(SW_HI_AA_N70,[1 3]),:)=[];SW_HI_AA_N70(SW_HI_AA_N70==0)=NaN;
+SW_HI_AA_N70_B(~any(SW_HI_AA_N70_B,[2 3]),:,:)=[];SW_HI_AA_N70_B(:,~any(SW_HI_AA_N70_B,[1 3]),:)=[];SW_HI_AA_N70_B(SW_HI_AA_N70_B==0)=NaN;
+LW_HI_AA_N70(~any(LW_HI_AA_N70,[2 3]),:,:)=[];LW_HI_AA_N70(:,~any(LW_HI_AA_N70,[1 3]),:)=[];LW_HI_AA_N70(LW_HI_AA_N70==0)=NaN;
+LW_HI_AA_N70_B(~any(LW_HI_AA_N70_B,[2 3]),:,:)=[];LW_HI_AA_N70_B(:,~any(LW_HI_AA_N70_B,[1 3]),:)=[];LW_HI_AA_N70_B(LW_HI_AA_N70_B==0)=NaN;
+SW_HI_AB_N0(~any(SW_HI_AB_N0,[2 3]),:,:)=[];SW_HI_AB_N0(:,~any(SW_HI_AB_N0,[1 3]),:)=[];SW_HI_AB_N0(SW_HI_AB_N0==0)=NaN;
+SW_HI_AB_N0_B(~any(SW_HI_AB_N0_B,[2 3]),:,:)=[];SW_HI_AB_N0_B(:,~any(SW_HI_AB_N0_B,[1 3]),:)=[];SW_HI_AB_N0_B(SW_HI_AB_N0_B==0)=NaN;
+LW_HI_AB_N0(~any(LW_HI_AB_N0,[2 3]),:,:)=[];LW_HI_AB_N0(:,~any(LW_HI_AB_N0,[1 3]),:)=[];LW_HI_AB_N0(LW_HI_AB_N0==0)=NaN;
+LW_HI_AB_N0_B(~any(LW_HI_AB_N0_B,[2 3]),:,:)=[];LW_HI_AB_N0_B(:,~any(LW_HI_AB_N0_B,[1 3]),:)=[];LW_HI_AB_N0_B(LW_HI_AB_N0_B==0)=NaN;
+SW_HI_AB_N60(~any(SW_HI_AB_N60,[2 3]),:,:)=[];SW_HI_AB_N60(:,~any(SW_HI_AB_N60,[1 3]),:)=[];SW_HI_AB_N60(SW_HI_AB_N60==0)=NaN;
+SW_HI_AB_N60_B(~any(SW_HI_AB_N60_B,[2 3]),:,:)=[];SW_HI_AB_N60_B(:,~any(SW_HI_AB_N60_B,[1 3]),:)=[];SW_HI_AB_N60_B(SW_HI_AB_N60_B==0)=NaN;
+LW_HI_AB_N60(~any(LW_HI_AB_N60,[2 3]),:,:)=[];LW_HI_AB_N60(:,~any(LW_HI_AB_N60,[1 3]),:)=[];LW_HI_AB_N60(LW_HI_AB_N60==0)=NaN;
+LW_HI_AB_N60_B(~any(LW_HI_AB_N60_B,[2 3]),:,:)=[];LW_HI_AB_N60_B(:,~any(LW_HI_AB_N60_B,[1 3]),:)=[];LW_HI_AB_N60_B(LW_HI_AB_N60_B==0)=NaN;
+SW_HI_AB_N70(~any(SW_HI_AB_N70,[2 3]),:,:)=[];SW_HI_AB_N70(:,~any(SW_HI_AB_N70,[1 3]),:)=[];SW_HI_AB_N70(SW_HI_AB_N70==0)=NaN;
+SW_HI_AB_N70_B(~any(SW_HI_AB_N70_B,[2 3]),:,:)=[];SW_HI_AB_N70_B(:,~any(SW_HI_AB_N70_B,[1 3]),:)=[];SW_HI_AB_N70_B(SW_HI_AB_N70_B==0)=NaN;
+LW_HI_AB_N70(~any(LW_HI_AB_N70,[2 3]),:,:)=[];LW_HI_AB_N70(:,~any(LW_HI_AB_N70,[1 3]),:)=[];LW_HI_AB_N70(LW_HI_AB_N70==0)=NaN;
+LW_HI_AB_N70_B(~any(LW_HI_AB_N70_B,[2 3]),:,:)=[];LW_HI_AB_N70_B(:,~any(LW_HI_AB_N70_B,[1 3]),:)=[];LW_HI_AB_N70_B(LW_HI_AB_N70_B==0)=NaN;
+
+% Calculate means omitting NaNs, LP filtering with mean-padding at start
+% end of each group of Speaking/Listening windows
+GSW_Mean = ndnanfilter(reshape(mean(GSW,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+GSW_B_Mean = ndnanfilter(reshape(mean(GSW_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+GLW_Mean = ndnanfilter(reshape(mean(GLW,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+GLW_B_Mean = ndnanfilter(reshape(mean(GLW_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+
+SW_NH_Mean = ndnanfilter(reshape(mean(SW_NH,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_NH_B_Mean = ndnanfilter(reshape(mean(SW_NH_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_NH_Mean = ndnanfilter(reshape(mean(LW_NH,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_NH_B_Mean = ndnanfilter(reshape(mean(LW_NH_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_HI_Mean = ndnanfilter(reshape(mean(SW_HI,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_HI_B_Mean = ndnanfilter(reshape(mean(SW_HI_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_HI_Mean = ndnanfilter(reshape(mean(LW_HI,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_HI_B_Mean = ndnanfilter(reshape(mean(LW_HI_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+
+SW_N0_Mean = ndnanfilter(reshape(mean(SW_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_N0_B_Mean = ndnanfilter(reshape(mean(SW_N0_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_N0_Mean = ndnanfilter(reshape(mean(LW_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_N0_B_Mean = ndnanfilter(reshape(mean(LW_N0_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_N60_Mean = ndnanfilter(reshape(mean(SW_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_N60_B_Mean = ndnanfilter(reshape(mean(SW_N60_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_N60_Mean = ndnanfilter(reshape(mean(LW_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_N60_B_Mean = ndnanfilter(reshape(mean(LW_N60_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_N70_Mean = ndnanfilter(reshape(mean(SW_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_N70_B_Mean = ndnanfilter(reshape(mean(SW_N70_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_N70_Mean = ndnanfilter(reshape(mean(LW_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_N70_B_Mean = ndnanfilter(reshape(mean(LW_N70_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+
+SW_NH_N0_Mean = ndnanfilter(reshape(mean(SW_NH_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_NH_N0_B_Mean = ndnanfilter(reshape(mean(SW_NH_N0_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_NH_N0_Mean = ndnanfilter(reshape(mean(LW_NH_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_NH_N0_B_Mean = ndnanfilter(reshape(mean(LW_NH_N0_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_NH_N60_Mean = ndnanfilter(reshape(mean(SW_NH_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_NH_N60_B_Mean = ndnanfilter(reshape(mean(SW_NH_N60_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_NH_N60_Mean = ndnanfilter(reshape(mean(LW_NH_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_NH_N60_B_Mean = ndnanfilter(reshape(mean(LW_NH_N60_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_NH_N70_Mean = ndnanfilter(reshape(mean(SW_NH_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_NH_N70_B_Mean = ndnanfilter(reshape(mean(SW_NH_N70_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_NH_N70_Mean = ndnanfilter(reshape(mean(LW_NH_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_NH_N70_B_Mean = ndnanfilter(reshape(mean(LW_NH_N70_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+
+SW_HI_UN_N0_Mean = ndnanfilter(reshape(mean(SW_HI_UN_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_HI_UN_N0_B_Mean = ndnanfilter(reshape(mean(SW_HI_UN_N0_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_HI_UN_N0_Mean = ndnanfilter(reshape(mean(LW_HI_UN_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_HI_UN_N0_B_Mean = ndnanfilter(reshape(mean(LW_HI_UN_N0_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_HI_UN_N60_Mean = ndnanfilter(reshape(mean(SW_HI_UN_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_HI_UN_N60_B_Mean = ndnanfilter(reshape(mean(SW_HI_UN_N60_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_HI_UN_N60_Mean = ndnanfilter(reshape(mean(LW_HI_UN_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_HI_UN_N60_B_Mean = ndnanfilter(reshape(mean(LW_HI_UN_N60_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_HI_UN_N70_Mean = ndnanfilter(reshape(mean(SW_HI_UN_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_HI_UN_N70_B_Mean = ndnanfilter(reshape(mean(SW_HI_UN_N70_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_HI_UN_N70_Mean = ndnanfilter(reshape(mean(LW_HI_UN_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_HI_UN_N70_B_Mean = ndnanfilter(reshape(mean(LW_HI_UN_N70_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_HI_AA_N0_Mean = ndnanfilter(reshape(mean(SW_HI_AA_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_HI_AA_N0_B_Mean = ndnanfilter(reshape(mean(SW_HI_AA_N0_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_HI_AA_N0_Mean = ndnanfilter(reshape(mean(LW_HI_AA_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_HI_AA_N0_B_Mean = ndnanfilter(reshape(mean(LW_HI_AA_N0_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_HI_AA_N60_Mean = ndnanfilter(reshape(mean(SW_HI_AA_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_HI_AA_N60_B_Mean = ndnanfilter(reshape(mean(SW_HI_AA_N60_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_HI_AA_N60_Mean = ndnanfilter(reshape(mean(LW_HI_AA_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_HI_AA_N60_B_Mean = ndnanfilter(reshape(mean(LW_HI_AA_N60_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_HI_AA_N70_Mean = ndnanfilter(reshape(mean(SW_HI_AA_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_HI_AA_N70_B_Mean = ndnanfilter(reshape(mean(SW_HI_AA_N70_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_HI_AA_N70_Mean = ndnanfilter(reshape(mean(LW_HI_AA_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_HI_AA_N70_B_Mean = ndnanfilter(reshape(mean(LW_HI_AA_N70_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_HI_AB_N0_Mean = ndnanfilter(reshape(mean(SW_HI_AB_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_HI_AB_N0_B_Mean = ndnanfilter(reshape(mean(SW_HI_AB_N0_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_HI_AB_N0_Mean = ndnanfilter(reshape(mean(LW_HI_AB_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_HI_AB_N0_B_Mean = ndnanfilter(reshape(mean(LW_HI_AB_N0_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_HI_AB_N60_Mean = ndnanfilter(reshape(mean(SW_HI_AB_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_HI_AB_N60_B_Mean = ndnanfilter(reshape(mean(SW_HI_AB_N60_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_HI_AB_N60_Mean = ndnanfilter(reshape(mean(LW_HI_AB_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_HI_AB_N60_B_Mean = ndnanfilter(reshape(mean(LW_HI_AB_N60_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_HI_AB_N70_Mean = ndnanfilter(reshape(mean(SW_HI_AB_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+SW_HI_AB_N70_B_Mean = ndnanfilter(reshape(mean(SW_HI_AB_N70_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_HI_AB_N70_Mean = ndnanfilter(reshape(mean(LW_HI_AB_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+LW_HI_AB_N70_B_Mean = ndnanfilter(reshape(mean(LW_HI_AB_N70_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+
+% Calculate SEM as: std(X)/sqrt(numel(X(~isnan(X)))
+GSW_SEM = (reshape(std(GSW,0,[1 2],'omitnan'),[],1)/sqrt(numel(GSW(~isnan(GSW)))))';
+GSW_B_SEM = (reshape(std(GSW_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(GSW_B(~isnan(GSW_B)))))';
+GLW_SEM = (reshape(std(GLW,0,[1 2],'omitnan'),[],1)/sqrt(numel(GLW(~isnan(GLW)))))';
+GLW_B_SEM = (reshape(std(GLW_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(GLW_B(~isnan(GLW_B)))))';
+
+SW_NH_SEM = (reshape(std(SW_NH,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_NH(~isnan(SW_NH)))))';
+SW_NH_B_SEM = (reshape(std(SW_NH_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_NH_B(~isnan(SW_NH_B)))))';
+LW_NH_SEM = (reshape(std(LW_NH,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_NH(~isnan(LW_NH)))))';
+LW_NH_B_SEM = (reshape(std(LW_NH_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_NH_B(~isnan(LW_NH_B)))))';
+SW_HI_SEM = (reshape(std(SW_HI,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_HI(~isnan(SW_HI)))))';
+SW_HI_B_SEM = (reshape(std(SW_HI_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_HI_B(~isnan(SW_HI_B)))))';
+LW_HI_SEM = (reshape(std(LW_HI,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_HI(~isnan(LW_HI)))))';
+LW_HI_B_SEM = (reshape(std(LW_HI_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_HI_B(~isnan(LW_HI_B)))))';
+
+SW_N0_SEM = (reshape(std(SW_N0,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_N0(~isnan(SW_N0)))))';
+SW_N0_B_SEM = (reshape(std(SW_N0_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_N0_B(~isnan(SW_N0_B)))))';
+LW_N0_SEM = (reshape(std(LW_N0,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_N0(~isnan(LW_N0)))))';
+LW_N0_B_SEM = (reshape(std(LW_N0_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_N0_B(~isnan(LW_N0_B)))))';
+SW_N60_SEM = (reshape(std(SW_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_N60(~isnan(SW_N60)))))';
+SW_N60_B_SEM = (reshape(std(SW_N60_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_N60_B(~isnan(SW_N60_B)))))';
+LW_N60_SEM = (reshape(std(LW_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_N60(~isnan(LW_N60)))))';
+LW_N60_B_SEM = (reshape(std(LW_N60_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_N60_B(~isnan(LW_N60_B)))))';
+SW_N70_SEM = (reshape(std(SW_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_N70(~isnan(SW_N70)))))';
+SW_N70_B_SEM = (reshape(std(SW_N70_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_N70_B(~isnan(SW_N70_B)))))';
+LW_N70_SEM = (reshape(std(LW_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_N70(~isnan(LW_N70)))))';
+LW_N70_B_SEM = (reshape(std(LW_N70_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_N70_B(~isnan(LW_N70_B)))))';
+
+SW_NH_N0_SEM = (reshape(std(SW_NH_N0,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_NH_N0(~isnan(SW_NH_N0)))))';
+SW_NH_N0_B_SEM = (reshape(std(SW_NH_N0_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_NH_N0_B(~isnan(SW_NH_N0_B)))))';
+LW_NH_N0_SEM = (reshape(std(LW_NH_N0,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_NH_N0(~isnan(LW_NH_N0)))))';
+LW_NH_N0_B_SEM = (reshape(std(LW_NH_N0_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_NH_N0_B(~isnan(LW_NH_N0_B)))))';
+SW_NH_N60_SEM = (reshape(std(SW_NH_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_NH_N60(~isnan(SW_NH_N60)))))';
+SW_NH_N60_B_SEM = (reshape(std(SW_NH_N60_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_NH_N60_B(~isnan(SW_NH_N60_B)))))';
+LW_NH_N60_SEM = (reshape(std(LW_NH_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_NH_N60(~isnan(LW_NH_N60)))))';
+LW_NH_N60_B_SEM = (reshape(std(LW_NH_N60_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_NH_N60_B(~isnan(LW_NH_N60_B)))))';
+SW_NH_N70_SEM = (reshape(std(SW_NH_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_NH_N70(~isnan(SW_NH_N70)))))';
+SW_NH_N70_B_SEM = (reshape(std(SW_NH_N70_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_NH_N70_B(~isnan(SW_NH_N70_B)))))';
+LW_NH_N70_SEM = (reshape(std(LW_NH_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_NH_N70(~isnan(LW_NH_N70)))))';
+LW_NH_N70_B_SEM = (reshape(std(LW_NH_N70_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_NH_N70_B(~isnan(LW_NH_N70_B)))))';
+
+SW_HI_UN_N0_SEM = (reshape(std(SW_HI_UN_N0,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_HI_UN_N0(~isnan(SW_HI_UN_N0)))))';
+SW_HI_UN_N0_B_SEM = (reshape(std(SW_HI_UN_N0_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_HI_UN_N0_B(~isnan(SW_HI_UN_N0_B)))))';
+LW_HI_UN_N0_SEM = (reshape(std(LW_HI_UN_N0,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_HI_UN_N0(~isnan(LW_HI_UN_N0)))))';
+LW_HI_UN_N0_B_SEM = (reshape(std(LW_HI_UN_N0_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_HI_UN_N0_B(~isnan(LW_HI_UN_N0_B)))))';
+SW_HI_UN_N60_SEM = (reshape(std(SW_HI_UN_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_HI_UN_N60(~isnan(SW_HI_UN_N60)))))';
+SW_HI_UN_N60_B_SEM = (reshape(std(SW_HI_UN_N60_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_HI_UN_N60_B(~isnan(SW_HI_UN_N60_B)))))';
+LW_HI_UN_N60_SEM = (reshape(std(LW_HI_UN_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_HI_UN_N60(~isnan(LW_HI_UN_N60)))))';
+LW_HI_UN_N60_B_SEM = (reshape(std(LW_HI_UN_N60_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_HI_UN_N60_B(~isnan(LW_HI_UN_N60_B)))))';
+SW_HI_UN_N70_SEM = (reshape(std(SW_HI_UN_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_HI_UN_N70(~isnan(SW_HI_UN_N70)))))';
+SW_HI_UN_N70_B_SEM = (reshape(std(SW_HI_UN_N70_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_HI_UN_N70_B(~isnan(SW_HI_UN_N70_B)))))';
+LW_HI_UN_N70_SEM = (reshape(std(LW_HI_UN_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_HI_UN_N70(~isnan(LW_HI_UN_N70)))))';
+LW_HI_UN_N70_B_SEM = (reshape(std(LW_HI_UN_N70_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_HI_UN_N70_B(~isnan(LW_HI_UN_N70_B)))))';
+SW_HI_AA_N0_SEM = (reshape(std(SW_HI_AA_N0,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_HI_AA_N0(~isnan(SW_HI_AA_N0)))))';
+SW_HI_AA_N0_B_SEM = (reshape(std(SW_HI_AA_N0_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_HI_AA_N0_B(~isnan(SW_HI_AA_N0_B)))))';
+LW_HI_AA_N0_SEM = (reshape(std(LW_HI_AA_N0,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_HI_AA_N0(~isnan(LW_HI_AA_N0)))))';
+LW_HI_AA_N0_B_SEM = (reshape(std(LW_HI_AA_N0_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_HI_AA_N0_B(~isnan(LW_HI_AA_N0_B)))))';
+SW_HI_AA_N60_SEM = (reshape(std(SW_HI_AA_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_HI_AA_N60(~isnan(SW_HI_AA_N60)))))';
+SW_HI_AA_N60_B_SEM = (reshape(std(SW_HI_AA_N60_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_HI_AA_N60_B(~isnan(SW_HI_AA_N60_B)))))';
+LW_HI_AA_N60_SEM = (reshape(std(LW_HI_AA_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_HI_AA_N60(~isnan(LW_HI_AA_N60)))))';
+LW_HI_AA_N60_B_SEM = (reshape(std(LW_HI_AA_N60_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_HI_AA_N60_B(~isnan(LW_HI_AA_N60_B)))))';
+SW_HI_AA_N70_SEM = (reshape(std(SW_HI_AA_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_HI_AA_N70(~isnan(SW_HI_AA_N70)))))';
+SW_HI_AA_N70_B_SEM = (reshape(std(SW_HI_AA_N70_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_HI_AA_N70_B(~isnan(SW_HI_AA_N70_B)))))';
+LW_HI_AA_N70_SEM = (reshape(std(LW_HI_AA_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_HI_AA_N70(~isnan(LW_HI_AA_N70)))))';
+LW_HI_AA_N70_B_SEM = (reshape(std(LW_HI_AA_N70_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_HI_AA_N70_B(~isnan(LW_HI_AA_N70_B)))))';
+SW_HI_AB_N0_SEM = (reshape(std(SW_HI_AB_N0,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_HI_AB_N0(~isnan(SW_HI_AB_N0)))))';
+SW_HI_AB_N0_B_SEM = (reshape(std(SW_HI_AB_N0_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_HI_AB_N0_B(~isnan(SW_HI_AB_N0_B)))))';
+LW_HI_AB_N0_SEM = (reshape(std(LW_HI_AB_N0,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_HI_AB_N0(~isnan(LW_HI_AB_N0)))))';
+LW_HI_AB_N0_B_SEM = (reshape(std(LW_HI_AB_N0_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_HI_AB_N0_B(~isnan(LW_HI_AB_N0_B)))))';
+SW_HI_AB_N60_SEM = (reshape(std(SW_HI_AB_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_HI_AB_N60(~isnan(SW_HI_AB_N60)))))';
+SW_HI_AB_N60_B_SEM = (reshape(std(SW_HI_AB_N60_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_HI_AB_N60_B(~isnan(SW_HI_AB_N60_B)))))';
+LW_HI_AB_N60_SEM = (reshape(std(LW_HI_AB_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_HI_AB_N60(~isnan(LW_HI_AB_N60)))))';
+LW_HI_AB_N60_B_SEM = (reshape(std(LW_HI_AB_N60_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_HI_AB_N60_B(~isnan(LW_HI_AB_N60_B)))))';
+SW_HI_AB_N70_SEM = (reshape(std(SW_HI_AB_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_HI_AB_N70(~isnan(SW_HI_AB_N70)))))';
+SW_HI_AB_N70_B_SEM = (reshape(std(SW_HI_AB_N70_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_HI_AB_N70_B(~isnan(SW_HI_AB_N70_B)))))';
+LW_HI_AB_N70_SEM = (reshape(std(LW_HI_AB_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_HI_AB_N70(~isnan(LW_HI_AB_N70)))))';
+LW_HI_AB_N70_B_SEM = (reshape(std(LW_HI_AB_N70_B,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_HI_AB_N70_B(~isnan(LW_HI_AB_N70_B)))))';
+
+%% Global Plots
+% Plot event onset and baseline markers
+xline(ax1,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax2,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax3,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax4,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
+
+% xline(ax1,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
+% xline(ax2,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax3,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax4,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
+
+plot(ax1,linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)),GSW_Mean,color=SColor,linewidth=2)
+plot(ax1,linspace(-TimeStartW,size(SW_N0,3)/Param.Fs,size(SW_N0,3)),SW_N0_Mean,color=QuietColor)
+plot(ax1,linspace(-TimeStartW,size(SW_N60,3)/Param.Fs,size(SW_N60,3)),SW_N60_Mean,color=N60Color)
+plot(ax1,linspace(-TimeStartW,size(SW_N70,3)/Param.Fs,size(SW_N70,3)),SW_N70_Mean,color=N70Color)
+plot(ax1,linspace(-TimeStartW,size(SW_NH_N0,3)/Param.Fs,size(SW_NH_N0,3)),SW_NH_N0_Mean,color=QuietColor,linestyle=':')
+plot(ax1,linspace(-TimeStartW,size(SW_NH_N60,3)/Param.Fs,size(SW_NH_N60,3)),SW_NH_N60_Mean,color=N60Color,linestyle=':')
+plot(ax1,linspace(-TimeStartW,size(SW_NH_N70,3)/Param.Fs,size(SW_NH_N70,3)),SW_NH_N70_Mean,color=N70Color,linestyle=':')
+plot(ax1,linspace(-TimeStartW,size(SW_HI_UN_N0,3)/Param.Fs,size(SW_HI_UN_N0,3)),SW_HI_UN_N0_Mean,color=QuietColor,linestyle='--')
+plot(ax1,linspace(-TimeStartW,size(SW_HI_UN_N60,3)/Param.Fs,size(SW_HI_UN_N60,3)),SW_HI_UN_N60_Mean,color=N60Color,linestyle='--')
+plot(ax1,linspace(-TimeStartW,size(SW_HI_UN_N70,3)/Param.Fs,size(SW_HI_UN_N70,3)),SW_HI_UN_N70_Mean,color=N70Color,linestyle='--')
+plot(ax1,linspace(-TimeStartW,size(SW_HI_AA_N0,3)/Param.Fs,size(SW_HI_AA_N0,3)),SW_HI_AA_N0_Mean,color=QuietColor,linestyle='-.')
+plot(ax1,linspace(-TimeStartW,size(SW_HI_AA_N60,3)/Param.Fs,size(SW_HI_AA_N60,3)),SW_HI_AA_N60_Mean,color=N60Color,linestyle='-.')
+plot(ax1,linspace(-TimeStartW,size(SW_HI_AA_N70,3)/Param.Fs,size(SW_HI_AA_N70,3)),SW_HI_AA_N70_Mean,color=N70Color,linestyle='-.')
+plot(ax1,linspace(-TimeStartW,size(SW_HI_AB_N0,3)/Param.Fs,size(SW_HI_AB_N0,3)),SW_HI_AB_N0_Mean,color=QuietColor,linestyle='-.')
+plot(ax1,linspace(-TimeStartW,size(SW_HI_AB_N60,3)/Param.Fs,size(SW_HI_AB_N60,3)),SW_HI_AB_N60_Mean,color=N60Color,linestyle='-.')
+plot(ax1,linspace(-TimeStartW,size(SW_HI_AB_N70,3)/Param.Fs,size(SW_HI_AB_N70,3)),SW_HI_AB_N70_Mean,color=N70Color,linestyle='-.')
+plot(ax2,nan,color=SColor,linewidth=2) % plot nans to show color in legend
+plot(ax2,linspace(-TimeStartW,size(GLW,3)/Param.Fs,size(GLW,3)),GLW_Mean,color=LColor,linewidth=2)
+plot(ax2,linspace(-TimeStartW,size(LW_N0,3)/Param.Fs,size(LW_N0,3)),LW_N0_Mean,color=QuietColor)
+plot(ax2,linspace(-TimeStartW,size(LW_N60,3)/Param.Fs,size(LW_N60,3)),LW_N60_Mean,color=N60Color)
+plot(ax2,linspace(-TimeStartW,size(LW_N70,3)/Param.Fs,size(LW_N70,3)),LW_N70_Mean,color=N70Color)
+plot(ax2,linspace(-TimeStartW,size(LW_NH_N0,3)/Param.Fs,size(LW_NH_N0,3)),LW_NH_N0_Mean,color=QuietColor,linestyle=':')
+plot(ax2,linspace(-TimeStartW,size(LW_NH_N60,3)/Param.Fs,size(LW_NH_N60,3)),LW_NH_N60_Mean,color=N60Color,linestyle=':')
+plot(ax2,linspace(-TimeStartW,size(LW_NH_N70,3)/Param.Fs,size(LW_NH_N70,3)),LW_NH_N70_Mean,color=N70Color,linestyle=':')
+plot(ax2,linspace(-TimeStartW,size(LW_HI_UN_N0,3)/Param.Fs,size(LW_HI_UN_N0,3)),LW_HI_UN_N0_Mean,color=QuietColor,linestyle='--')
+plot(ax2,linspace(-TimeStartW,size(LW_HI_UN_N60,3)/Param.Fs,size(LW_HI_UN_N60,3)),LW_HI_UN_N60_Mean,color=N60Color,linestyle='--')
+plot(ax2,linspace(-TimeStartW,size(LW_HI_UN_N70,3)/Param.Fs,size(LW_HI_UN_N70,3)),LW_HI_UN_N70_Mean,color=N70Color,linestyle='--')
+plot(ax2,linspace(-TimeStartW,size(LW_HI_AA_N0,3)/Param.Fs,size(LW_HI_AA_N0,3)),LW_HI_AA_N0_Mean,color=QuietColor,linestyle='-.')
+plot(ax2,linspace(-TimeStartW,size(LW_HI_AA_N60,3)/Param.Fs,size(LW_HI_AA_N60,3)),LW_HI_AA_N60_Mean,color=N60Color,linestyle='-.')
+plot(ax2,linspace(-TimeStartW,size(LW_HI_AA_N70,3)/Param.Fs,size(LW_HI_AA_N70,3)),LW_HI_AA_N70_Mean,color=N70Color,linestyle='-.')
+plot(ax2,linspace(-TimeStartW,size(LW_HI_AB_N0,3)/Param.Fs,size(LW_HI_AB_N0,3)),LW_HI_AB_N0_Mean,color=QuietColor,linestyle='-.')
+plot(ax2,linspace(-TimeStartW,size(LW_HI_AB_N60,3)/Param.Fs,size(LW_HI_AB_N60,3)),LW_HI_AB_N60_Mean,color=N60Color,linestyle='-.')
+plot(ax2,linspace(-TimeStartW,size(LW_HI_AB_N70,3)/Param.Fs,size(LW_HI_AB_N70,3)),LW_HI_AB_N70_Mean,color=N70Color,linestyle='-.')
+
+plot(ax3,linspace(-TimeStartW,size(GSW_B,3)/Param.Fs,size(GSW_B,3)),GSW_B_Mean,color=SColor,linewidth=2)
+plot(ax3,linspace(-TimeStartW,size(SW_N0_B,3)/Param.Fs,size(SW_N0_B,3)),SW_N0_B_Mean,color=QuietColor)
+plot(ax3,linspace(-TimeStartW,size(SW_N60_B,3)/Param.Fs,size(SW_N60_B,3)),SW_N60_B_Mean,color=N60Color)
+plot(ax3,linspace(-TimeStartW,size(SW_N70_B,3)/Param.Fs,size(SW_N70_B,3)),SW_N70_B_Mean,color=N70Color)
+plot(ax3,linspace(-TimeStartW,size(SW_NH_N0_B,3)/Param.Fs,size(SW_NH_N0_B,3)),SW_NH_N0_B_Mean,color=QuietColor,linestyle=':')
+plot(ax3,linspace(-TimeStartW,size(SW_NH_N60_B,3)/Param.Fs,size(SW_NH_N60_B,3)),SW_NH_N60_B_Mean,color=N60Color,linestyle=':')
+plot(ax3,linspace(-TimeStartW,size(SW_NH_N70_B,3)/Param.Fs,size(SW_NH_N70_B,3)),SW_NH_N70_B_Mean,color=N70Color,linestyle=':')
+plot(ax3,linspace(-TimeStartW,size(SW_HI_UN_N0_B,3)/Param.Fs,size(SW_HI_UN_N0_B,3)),SW_HI_UN_N0_B_Mean,color=QuietColor,linestyle='--')
+plot(ax3,linspace(-TimeStartW,size(SW_HI_UN_N60_B,3)/Param.Fs,size(SW_HI_UN_N60_B,3)),SW_HI_UN_N60_B_Mean,color=N60Color,linestyle='--')
+plot(ax3,linspace(-TimeStartW,size(SW_HI_UN_N70_B,3)/Param.Fs,size(SW_HI_UN_N70_B,3)),SW_HI_UN_N70_B_Mean,color=N70Color,linestyle='--')
+plot(ax3,linspace(-TimeStartW,size(SW_HI_AA_N0_B,3)/Param.Fs,size(SW_HI_AA_N0_B,3)),SW_HI_AA_N0_B_Mean,color=QuietColor,linestyle='-.')
+plot(ax3,linspace(-TimeStartW,size(SW_HI_AA_N60_B,3)/Param.Fs,size(SW_HI_AA_N60_B,3)),SW_HI_AA_N60_B_Mean,color=N60Color,linestyle='-.')
+plot(ax3,linspace(-TimeStartW,size(SW_HI_AA_N70_B,3)/Param.Fs,size(SW_HI_AA_N70_B,3)),SW_HI_AA_N70_B_Mean,color=N70Color,linestyle='-.')
+plot(ax3,linspace(-TimeStartW,size(SW_HI_AB_N0_B,3)/Param.Fs,size(SW_HI_AB_N0_B,3)),SW_HI_AB_N0_B_Mean,color=QuietColor,linestyle='-.')
+plot(ax3,linspace(-TimeStartW,size(SW_HI_AB_N60_B,3)/Param.Fs,size(SW_HI_AB_N60_B,3)),SW_HI_AB_N60_B_Mean,color=N60Color,linestyle='-.')
+plot(ax3,linspace(-TimeStartW,size(SW_HI_AB_N70_B,3)/Param.Fs,size(SW_HI_AB_N70_B,3)),SW_HI_AB_N70_B_Mean,color=N70Color,linestyle='-.')
+plot(ax4,nan,color=SColor,linewidth=2) % plot nans to show color in legend
+plot(ax4,linspace(-TimeStartW,size(GLW_B,3)/Param.Fs,size(GLW_B,3)),GLW_B_Mean,color=LColor,linewidth=2)
+plot(ax4,linspace(-TimeStartW,size(LW_N0_B,3)/Param.Fs,size(LW_N0_B,3)),LW_N0_B_Mean,color=QuietColor)
+plot(ax4,linspace(-TimeStartW,size(LW_N60_B,3)/Param.Fs,size(LW_N60_B,3)),LW_N60_B_Mean,color=N60Color)
+plot(ax4,linspace(-TimeStartW,size(LW_N70_B,3)/Param.Fs,size(LW_N70_B,3)),LW_N70_B_Mean,color=N70Color)
+plot(ax4,linspace(-TimeStartW,size(LW_NH_N0_B,3)/Param.Fs,size(LW_NH_N0_B,3)),LW_NH_N0_B_Mean,color=QuietColor,linestyle=':')
+plot(ax4,linspace(-TimeStartW,size(LW_NH_N60_B,3)/Param.Fs,size(LW_NH_N60_B,3)),LW_NH_N60_B_Mean,color=N60Color,linestyle=':')
+plot(ax4,linspace(-TimeStartW,size(LW_NH_N70_B,3)/Param.Fs,size(LW_NH_N70_B,3)),LW_NH_N70_B_Mean,color=N70Color,linestyle=':')
+plot(ax4,linspace(-TimeStartW,size(LW_HI_UN_N0_B,3)/Param.Fs,size(LW_HI_UN_N0_B,3)),LW_HI_UN_N0_B_Mean,color=QuietColor,linestyle='--')
+plot(ax4,linspace(-TimeStartW,size(LW_HI_UN_N60_B,3)/Param.Fs,size(LW_HI_UN_N60_B,3)),LW_HI_UN_N60_B_Mean,color=N60Color,linestyle='--')
+plot(ax4,linspace(-TimeStartW,size(LW_HI_UN_N70_B,3)/Param.Fs,size(LW_HI_UN_N70_B,3)),LW_HI_UN_N70_B_Mean,color=N70Color,linestyle='--')
+plot(ax4,linspace(-TimeStartW,size(LW_HI_AA_N0_B,3)/Param.Fs,size(LW_HI_AA_N0_B,3)),LW_HI_AA_N0_B_Mean,color=QuietColor,linestyle='-.')
+plot(ax4,linspace(-TimeStartW,size(LW_HI_AA_N60_B,3)/Param.Fs,size(LW_HI_AA_N60_B,3)),LW_HI_AA_N60_B_Mean,color=N60Color,linestyle='-.')
+plot(ax4,linspace(-TimeStartW,size(LW_HI_AA_N70_B,3)/Param.Fs,size(LW_HI_AA_N70_B,3)),LW_HI_AA_N70_B_Mean,color=N70Color,linestyle='-.')
+plot(ax4,linspace(-TimeStartW,size(LW_HI_AB_N0_B,3)/Param.Fs,size(LW_HI_AB_N0_B,3)),LW_HI_AB_N0_B_Mean,color=QuietColor,linestyle='-.')
+plot(ax4,linspace(-TimeStartW,size(LW_HI_AB_N60_B,3)/Param.Fs,size(LW_HI_AB_N60_B,3)),LW_HI_AB_N60_B_Mean,color=N60Color,linestyle='-.')
+plot(ax4,linspace(-TimeStartW,size(LW_HI_AB_N70_B,3)/Param.Fs,size(LW_HI_AB_N70_B,3)),LW_HI_AB_N70_B_Mean,color=N70Color,linestyle='-.')
+
+% Mean and SEM: Set NaNs to 0 in order to use "fill" correctly
+GSW_Mean(isnan(GSW_Mean))=0;GSW_SEM(isnan(GSW_SEM))=0;
+GLW_Mean(isnan(GLW_Mean))=0;GLW_SEM(isnan(GLW_SEM))=0;
+SW_N0_Mean(isnan(SW_N0_Mean))=0;SW_N0_SEM(isnan(SW_N0_SEM))=0;
+SW_N60_Mean(isnan(SW_N60_Mean))=0;SW_N60_SEM(isnan(SW_N60_SEM))=0;
+SW_N70_Mean(isnan(SW_N70_Mean))=0;SW_N70_SEM(isnan(SW_N70_SEM))=0;
+LW_N0_Mean(isnan(LW_N0_Mean))=0;LW_N0_SEM(isnan(LW_N0_SEM))=0;
+LW_N60_Mean(isnan(LW_N60_Mean))=0;LW_N60_SEM(isnan(LW_N60_SEM))=0;
+LW_N70_Mean(isnan(LW_N70_Mean))=0;LW_N70_SEM(isnan(LW_N70_SEM))=0;
+SW_NH_N0_Mean(isnan(SW_NH_N0_Mean))=0;SW_NH_N0_SEM(isnan(SW_NH_N0_SEM))=0;
+SW_NH_N60_Mean(isnan(SW_NH_N60_Mean))=0;SW_NH_N60_SEM(isnan(SW_NH_N60_SEM))=0;
+SW_NH_N70_Mean(isnan(SW_NH_N70_Mean))=0;SW_NH_N70_SEM(isnan(SW_NH_N70_SEM))=0;
+LW_NH_N0_Mean(isnan(LW_NH_N0_Mean))=0;LW_NH_N0_SEM(isnan(LW_NH_N0_SEM))=0;
+LW_NH_N60_Mean(isnan(LW_NH_N60_Mean))=0;LW_NH_N60_SEM(isnan(LW_NH_N60_SEM))=0;
+LW_NH_N70_Mean(isnan(LW_NH_N70_Mean))=0;LW_NH_N70_SEM(isnan(LW_NH_N70_SEM))=0;
+SW_HI_UN_N0_Mean(isnan(SW_HI_UN_N0_Mean))=0;SW_HI_UN_N0_SEM(isnan(SW_HI_UN_N0_SEM))=0;
+SW_HI_UN_N60_Mean(isnan(SW_HI_UN_N60_Mean))=0;SW_HI_UN_N60_SEM(isnan(SW_HI_UN_N60_SEM))=0;
+SW_HI_UN_N70_Mean(isnan(SW_HI_UN_N70_Mean))=0;SW_HI_UN_N70_SEM(isnan(SW_HI_UN_N70_SEM))=0;
+LW_HI_UN_N0_Mean(isnan(LW_HI_UN_N0_Mean))=0;LW_HI_UN_N0_SEM(isnan(LW_HI_UN_N0_SEM))=0;
+LW_HI_UN_N60_Mean(isnan(LW_HI_UN_N60_Mean))=0;LW_HI_UN_N60_SEM(isnan(LW_HI_UN_N60_SEM))=0;
+LW_HI_UN_N70_Mean(isnan(LW_HI_UN_N70_Mean))=0;LW_HI_UN_N70_SEM(isnan(LW_HI_UN_N70_SEM))=0;
+SW_HI_AA_N0_Mean(isnan(SW_HI_AA_N0_Mean))=0;SW_HI_AA_N0_SEM(isnan(SW_HI_AA_N0_SEM))=0;
+SW_HI_AA_N60_Mean(isnan(SW_HI_AA_N60_Mean))=0;SW_HI_AA_N60_SEM(isnan(SW_HI_AA_N60_SEM))=0;
+SW_HI_AA_N70_Mean(isnan(SW_HI_AA_N70_Mean))=0;SW_HI_AA_N70_SEM(isnan(SW_HI_AA_N70_SEM))=0;
+LW_HI_AA_N0_Mean(isnan(LW_HI_AA_N0_Mean))=0;LW_HI_AA_N0_SEM(isnan(LW_HI_AA_N0_SEM))=0;
+LW_HI_AA_N60_Mean(isnan(LW_HI_AA_N60_Mean))=0;LW_HI_AA_N60_SEM(isnan(LW_HI_AA_N60_SEM))=0;
+LW_HI_AA_N70_Mean(isnan(LW_HI_AA_N70_Mean))=0;LW_HI_AA_N70_SEM(isnan(LW_HI_AA_N70_SEM))=0;
+SW_HI_AB_N0_Mean(isnan(SW_HI_AB_N0_Mean))=0;SW_HI_AB_N0_SEM(isnan(SW_HI_AB_N0_SEM))=0;
+SW_HI_AB_N60_Mean(isnan(SW_HI_AB_N60_Mean))=0;SW_HI_AB_N60_SEM(isnan(SW_HI_AB_N60_SEM))=0;
+SW_HI_AB_N70_Mean(isnan(SW_HI_AB_N70_Mean))=0;SW_HI_AB_N70_SEM(isnan(SW_HI_AB_N70_SEM))=0;
+LW_HI_AB_N0_Mean(isnan(LW_HI_AB_N0_Mean))=0;LW_HI_AB_N0_SEM(isnan(LW_HI_AB_N0_SEM))=0;
+LW_HI_AB_N60_Mean(isnan(LW_HI_AB_N60_Mean))=0;LW_HI_AB_N60_SEM(isnan(LW_HI_AB_N60_SEM))=0;
+LW_HI_AB_N70_Mean(isnan(LW_HI_AB_N70_Mean))=0;LW_HI_AB_N70_SEM(isnan(LW_HI_AB_N70_SEM))=0;
+
+GSW_B_Mean(isnan(GSW_B_Mean))=0;GSW_B_SEM(isnan(GSW_B_SEM))=0;
+GLW_B_Mean(isnan(GLW_B_Mean))=0;GLW_B_SEM(isnan(GLW_B_SEM))=0;
+SW_N0_B_Mean(isnan(SW_N0_B_Mean))=0;SW_N0_B_SEM(isnan(SW_N0_B_SEM))=0;
+SW_N60_B_Mean(isnan(SW_N60_B_Mean))=0;SW_N60_B_SEM(isnan(SW_N60_B_SEM))=0;
+SW_N70_B_Mean(isnan(SW_N70_B_Mean))=0;SW_N70_B_SEM(isnan(SW_N70_B_SEM))=0;
+LW_N0_B_Mean(isnan(LW_N0_B_Mean))=0;LW_N0_B_SEM(isnan(LW_N0_B_SEM))=0;
+LW_N60_B_Mean(isnan(LW_N60_B_Mean))=0;LW_N60_B_SEM(isnan(LW_N60_B_SEM))=0;
+LW_N70_B_Mean(isnan(LW_N70_B_Mean))=0;LW_N70_B_SEM(isnan(LW_N70_B_SEM))=0;
+SW_NH_N0_B_Mean(isnan(SW_NH_N0_B_Mean))=0;SW_NH_N0_B_SEM(isnan(SW_NH_N0_B_SEM))=0;
+SW_NH_N60_B_Mean(isnan(SW_NH_N60_B_Mean))=0;SW_NH_N60_B_SEM(isnan(SW_NH_N60_B_SEM))=0;
+SW_NH_N70_B_Mean(isnan(SW_NH_N70_B_Mean))=0;SW_NH_N70_B_SEM(isnan(SW_NH_N70_B_SEM))=0;
+LW_NH_N0_B_Mean(isnan(LW_NH_N0_B_Mean))=0;LW_NH_N0_B_SEM(isnan(LW_NH_N0_B_SEM))=0;
+LW_NH_N60_B_Mean(isnan(LW_NH_N60_B_Mean))=0;LW_NH_N60_B_SEM(isnan(LW_NH_N60_B_SEM))=0;
+LW_NH_N70_B_Mean(isnan(LW_NH_N70_B_Mean))=0;LW_NH_N70_B_SEM(isnan(LW_NH_N70_B_SEM))=0;
+SW_HI_UN_N0_B_Mean(isnan(SW_HI_UN_N0_B_Mean))=0;SW_HI_UN_N0_B_SEM(isnan(SW_HI_UN_N0_B_SEM))=0;
+SW_HI_UN_N60_B_Mean(isnan(SW_HI_UN_N60_B_Mean))=0;SW_HI_UN_N60_B_SEM(isnan(SW_HI_UN_N60_B_SEM))=0;
+SW_HI_UN_N70_B_Mean(isnan(SW_HI_UN_N70_B_Mean))=0;SW_HI_UN_N70_B_SEM(isnan(SW_HI_UN_N70_B_SEM))=0;
+LW_HI_UN_N0_B_Mean(isnan(LW_HI_UN_N0_B_Mean))=0;LW_HI_UN_N0_B_SEM(isnan(LW_HI_UN_N0_B_SEM))=0;
+LW_HI_UN_N60_B_Mean(isnan(LW_HI_UN_N60_B_Mean))=0;LW_HI_UN_N60_B_SEM(isnan(LW_HI_UN_N60_B_SEM))=0;
+LW_HI_UN_N70_B_Mean(isnan(LW_HI_UN_N70_B_Mean))=0;LW_HI_UN_N70_B_SEM(isnan(LW_HI_UN_N70_B_SEM))=0;
+SW_HI_AA_N0_B_Mean(isnan(SW_HI_AA_N0_B_Mean))=0;SW_HI_AA_N0_B_SEM(isnan(SW_HI_AA_N0_B_SEM))=0;
+SW_HI_AA_N60_B_Mean(isnan(SW_HI_AA_N60_B_Mean))=0;SW_HI_AA_N60_B_SEM(isnan(SW_HI_AA_N60_B_SEM))=0;
+SW_HI_AA_N70_B_Mean(isnan(SW_HI_AA_N70_B_Mean))=0;SW_HI_AA_N70_B_SEM(isnan(SW_HI_AA_N70_B_SEM))=0;
+LW_HI_AA_N0_B_Mean(isnan(LW_HI_AA_N0_B_Mean))=0;LW_HI_AA_N0_B_SEM(isnan(LW_HI_AA_N0_B_SEM))=0;
+LW_HI_AA_N60_B_Mean(isnan(LW_HI_AA_N60_B_Mean))=0;LW_HI_AA_N60_B_SEM(isnan(LW_HI_AA_N60_B_SEM))=0;
+LW_HI_AA_N70_B_Mean(isnan(LW_HI_AA_N70_B_Mean))=0;LW_HI_AA_N70_B_SEM(isnan(LW_HI_AA_N70_B_SEM))=0;
+SW_HI_AB_N0_B_Mean(isnan(SW_HI_AB_N0_B_Mean))=0;SW_HI_AB_N0_B_SEM(isnan(SW_HI_AB_N0_B_SEM))=0;
+SW_HI_AB_N60_B_Mean(isnan(SW_HI_AB_N60_B_Mean))=0;SW_HI_AB_N60_B_SEM(isnan(SW_HI_AB_N60_B_SEM))=0;
+SW_HI_AB_N70_B_Mean(isnan(SW_HI_AB_N70_B_Mean))=0;SW_HI_AB_N70_B_SEM(isnan(SW_HI_AB_N70_B_SEM))=0;
+LW_HI_AB_N0_B_Mean(isnan(LW_HI_AB_N0_B_Mean))=0;LW_HI_AB_N0_B_SEM(isnan(LW_HI_AB_N0_B_SEM))=0;
+LW_HI_AB_N60_B_Mean(isnan(LW_HI_AB_N60_B_Mean))=0;LW_HI_AB_N60_B_SEM(isnan(LW_HI_AB_N60_B_SEM))=0;
+LW_HI_AB_N70_B_Mean(isnan(LW_HI_AB_N70_B_Mean))=0;LW_HI_AB_N70_B_SEM(isnan(LW_HI_AB_N70_B_SEM))=0;
+
+fill(ax1,[linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)), flipud(linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3))')'],[(GSW_Mean+GSW_SEM), flipud((GSW_Mean-GSW_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax1,[linspace(-TimeStartW,size(SW_N0,3)/Param.Fs,size(SW_N0,3)), flipud(linspace(-TimeStartW,size(SW_N0,3)/Param.Fs,size(SW_N0,3))')'],[(SW_N0_Mean+SW_N0_SEM), flipud((SW_N0_Mean-SW_N0_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax1,[linspace(-TimeStartW,size(SW_N60,3)/Param.Fs,size(SW_N60,3)), flipud(linspace(-TimeStartW,size(SW_N60,3)/Param.Fs,size(SW_N60,3))')'],[(SW_N60_Mean+SW_N60_SEM), flipud((SW_N60_Mean-SW_N60_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax1,[linspace(-TimeStartW,size(SW_N70,3)/Param.Fs,size(SW_N70,3)), flipud(linspace(-TimeStartW,size(SW_N70,3)/Param.Fs,size(SW_N70,3))')'],[(SW_N70_Mean+SW_N70_SEM), flipud((SW_N70_Mean-SW_N70_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax1,[linspace(-TimeStartW,size(SW_NH_N0,3)/Param.Fs,size(SW_NH_N0,3)), flipud(linspace(-TimeStartW,size(SW_NH_N0,3)/Param.Fs,size(SW_NH_N0,3))')'],[(SW_NH_N0_Mean+SW_NH_N0_SEM), flipud((SW_NH_N0_Mean-SW_NH_N0_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax1,[linspace(-TimeStartW,size(SW_NH_N60,3)/Param.Fs,size(SW_NH_N60,3)), flipud(linspace(-TimeStartW,size(SW_NH_N60,3)/Param.Fs,size(SW_NH_N60,3))')'],[(SW_NH_N60_Mean+SW_NH_N60_SEM), flipud((SW_NH_N60_Mean-SW_NH_N60_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax1,[linspace(-TimeStartW,size(SW_NH_N70,3)/Param.Fs,size(SW_NH_N70,3)), flipud(linspace(-TimeStartW,size(SW_NH_N70,3)/Param.Fs,size(SW_NH_N70,3))')'],[(SW_NH_N70_Mean+SW_NH_N70_SEM), flipud((SW_NH_N70_Mean-SW_NH_N70_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax1,[linspace(-TimeStartW,size(SW_HI_UN_N0,3)/Param.Fs,size(SW_HI_UN_N0,3)), flipud(linspace(-TimeStartW,size(SW_HI_UN_N0,3)/Param.Fs,size(SW_HI_UN_N0,3))')'],[(SW_HI_UN_N0_Mean+SW_HI_UN_N0_SEM), flipud((SW_HI_UN_N0_Mean-SW_HI_UN_N0_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax1,[linspace(-TimeStartW,size(SW_HI_UN_N60,3)/Param.Fs,size(SW_HI_UN_N60,3)), flipud(linspace(-TimeStartW,size(SW_HI_UN_N60,3)/Param.Fs,size(SW_HI_UN_N60,3))')'],[(SW_HI_UN_N60_Mean+SW_HI_UN_N60_SEM), flipud((SW_HI_UN_N60_Mean-SW_HI_UN_N60_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax1,[linspace(-TimeStartW,size(SW_HI_UN_N70,3)/Param.Fs,size(SW_HI_UN_N70,3)), flipud(linspace(-TimeStartW,size(SW_HI_UN_N70,3)/Param.Fs,size(SW_HI_UN_N70,3))')'],[(SW_HI_UN_N70_Mean+SW_HI_UN_N70_SEM), flipud((SW_HI_UN_N70_Mean-SW_HI_UN_N70_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax1,[linspace(-TimeStartW,size(SW_HI_AA_N0,3)/Param.Fs,size(SW_HI_AA_N0,3)), flipud(linspace(-TimeStartW,size(SW_HI_AA_N0,3)/Param.Fs,size(SW_HI_AA_N0,3))')'],[(SW_HI_AA_N0_Mean+SW_HI_AA_N0_SEM), flipud((SW_HI_AA_N0_Mean-SW_HI_AA_N0_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax1,[linspace(-TimeStartW,size(SW_HI_AA_N60,3)/Param.Fs,size(SW_HI_AA_N60,3)), flipud(linspace(-TimeStartW,size(SW_HI_AA_N60,3)/Param.Fs,size(SW_HI_AA_N60,3))')'],[(SW_HI_AA_N60_Mean+SW_HI_AA_N60_SEM), flipud((SW_HI_AA_N60_Mean-SW_HI_AA_N60_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax1,[linspace(-TimeStartW,size(SW_HI_AA_N70,3)/Param.Fs,size(SW_HI_AA_N70,3)), flipud(linspace(-TimeStartW,size(SW_HI_AA_N70,3)/Param.Fs,size(SW_HI_AA_N70,3))')'],[(SW_HI_AA_N70_Mean+SW_HI_AA_N70_SEM), flipud((SW_HI_AA_N70_Mean-SW_HI_AA_N70_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax1,[linspace(-TimeStartW,size(SW_HI_AB_N0,3)/Param.Fs,size(SW_HI_AB_N0,3)), flipud(linspace(-TimeStartW,size(SW_HI_AB_N0,3)/Param.Fs,size(SW_HI_AB_N0,3))')'],[(SW_HI_AB_N0_Mean+SW_HI_AB_N0_SEM), flipud((SW_HI_AB_N0_Mean-SW_HI_AB_N0_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax1,[linspace(-TimeStartW,size(SW_HI_AB_N60,3)/Param.Fs,size(SW_HI_AB_N60,3)), flipud(linspace(-TimeStartW,size(SW_HI_AB_N60,3)/Param.Fs,size(SW_HI_AB_N60,3))')'],[(SW_HI_AB_N60_Mean+SW_HI_AB_N60_SEM), flipud((SW_HI_AB_N60_Mean-SW_HI_AB_N60_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax1,[linspace(-TimeStartW,size(SW_HI_AB_N70,3)/Param.Fs,size(SW_HI_AB_N70,3)), flipud(linspace(-TimeStartW,size(SW_HI_AB_N70,3)/Param.Fs,size(SW_HI_AB_N70,3))')'],[(SW_HI_AB_N70_Mean+SW_HI_AB_N70_SEM), flipud((SW_HI_AB_N70_Mean-SW_HI_AB_N70_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax2,[linspace(-TimeStartW,size(GLW,3)/Param.Fs,size(GLW,3)), flipud(linspace(-TimeStartW,size(GLW,3)/Param.Fs,size(GLW,3))')'],[(GLW_Mean+GLW_SEM), flipud((GLW_Mean-GLW_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax2,[linspace(-TimeStartW,size(LW_N0,3)/Param.Fs,size(LW_N0,3)), flipud(linspace(-TimeStartW,size(LW_N0,3)/Param.Fs,size(LW_N0,3))')'],[(LW_N0_Mean+LW_N0_SEM), flipud((LW_N0_Mean-LW_N0_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax2,[linspace(-TimeStartW,size(LW_N60,3)/Param.Fs,size(LW_N60,3)), flipud(linspace(-TimeStartW,size(LW_N60,3)/Param.Fs,size(LW_N60,3))')'],[(LW_N60_Mean+LW_N60_SEM), flipud((LW_N60_Mean-LW_N60_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax2,[linspace(-TimeStartW,size(LW_N70,3)/Param.Fs,size(LW_N70,3)), flipud(linspace(-TimeStartW,size(LW_N70,3)/Param.Fs,size(LW_N70,3))')'],[(LW_N70_Mean+LW_N70_SEM), flipud((LW_N70_Mean-LW_N70_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax2,[linspace(-TimeStartW,size(LW_NH_N0,3)/Param.Fs,size(LW_NH_N0,3)), flipud(linspace(-TimeStartW,size(LW_NH_N0,3)/Param.Fs,size(LW_NH_N0,3))')'],[(LW_NH_N0_Mean+LW_NH_N0_SEM), flipud((LW_NH_N0_Mean-LW_NH_N0_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax2,[linspace(-TimeStartW,size(LW_NH_N60,3)/Param.Fs,size(LW_NH_N60,3)), flipud(linspace(-TimeStartW,size(LW_NH_N60,3)/Param.Fs,size(LW_NH_N60,3))')'],[(LW_NH_N60_Mean+LW_NH_N60_SEM), flipud((LW_NH_N60_Mean-LW_NH_N60_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax2,[linspace(-TimeStartW,size(LW_NH_N70,3)/Param.Fs,size(LW_NH_N70,3)), flipud(linspace(-TimeStartW,size(LW_NH_N70,3)/Param.Fs,size(LW_NH_N70,3))')'],[(LW_NH_N70_Mean+LW_NH_N70_SEM), flipud((LW_NH_N70_Mean-LW_NH_N70_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax2,[linspace(-TimeStartW,size(LW_HI_UN_N0,3)/Param.Fs,size(LW_HI_UN_N0,3)), flipud(linspace(-TimeStartW,size(LW_HI_UN_N0,3)/Param.Fs,size(LW_HI_UN_N0,3))')'],[(LW_HI_UN_N0_Mean+LW_HI_UN_N0_SEM), flipud((LW_HI_UN_N0_Mean-LW_HI_UN_N0_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax2,[linspace(-TimeStartW,size(LW_HI_UN_N60,3)/Param.Fs,size(LW_HI_UN_N60,3)), flipud(linspace(-TimeStartW,size(LW_HI_UN_N60,3)/Param.Fs,size(LW_HI_UN_N60,3))')'],[(LW_HI_UN_N60_Mean+LW_HI_UN_N60_SEM), flipud((LW_HI_UN_N60_Mean-LW_HI_UN_N60_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax2,[linspace(-TimeStartW,size(LW_HI_UN_N70,3)/Param.Fs,size(LW_HI_UN_N70,3)), flipud(linspace(-TimeStartW,size(LW_HI_UN_N70,3)/Param.Fs,size(LW_HI_UN_N70,3))')'],[(LW_HI_UN_N70_Mean+LW_HI_UN_N70_SEM), flipud((LW_HI_UN_N70_Mean-LW_HI_UN_N70_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax2,[linspace(-TimeStartW,size(LW_HI_AA_N0,3)/Param.Fs,size(LW_HI_AA_N0,3)), flipud(linspace(-TimeStartW,size(LW_HI_AA_N0,3)/Param.Fs,size(LW_HI_AA_N0,3))')'],[(LW_HI_AA_N0_Mean+LW_HI_AA_N0_SEM), flipud((LW_HI_AA_N0_Mean-LW_HI_AA_N0_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax2,[linspace(-TimeStartW,size(LW_HI_AA_N60,3)/Param.Fs,size(LW_HI_AA_N60,3)), flipud(linspace(-TimeStartW,size(LW_HI_AA_N60,3)/Param.Fs,size(LW_HI_AA_N60,3))')'],[(LW_HI_AA_N60_Mean+LW_HI_AA_N60_SEM), flipud((LW_HI_AA_N60_Mean-LW_HI_AA_N60_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax2,[linspace(-TimeStartW,size(LW_HI_AA_N70,3)/Param.Fs,size(LW_HI_AA_N70,3)), flipud(linspace(-TimeStartW,size(LW_HI_AA_N70,3)/Param.Fs,size(LW_HI_AA_N70,3))')'],[(LW_HI_AA_N70_Mean+LW_HI_AA_N70_SEM), flipud((LW_HI_AA_N70_Mean-LW_HI_AA_N70_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax2,[linspace(-TimeStartW,size(LW_HI_AB_N0,3)/Param.Fs,size(LW_HI_AB_N0,3)), flipud(linspace(-TimeStartW,size(LW_HI_AB_N0,3)/Param.Fs,size(LW_HI_AB_N0,3))')'],[(LW_HI_AB_N0_Mean+LW_HI_AB_N0_SEM), flipud((LW_HI_AB_N0_Mean-LW_HI_AB_N0_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax2,[linspace(-TimeStartW,size(LW_HI_AB_N60,3)/Param.Fs,size(LW_HI_AB_N60,3)), flipud(linspace(-TimeStartW,size(LW_HI_AB_N60,3)/Param.Fs,size(LW_HI_AB_N60,3))')'],[(LW_HI_AB_N60_Mean+LW_HI_AB_N60_SEM), flipud((LW_HI_AB_N60_Mean-LW_HI_AB_N60_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax2,[linspace(-TimeStartW,size(LW_HI_AB_N70,3)/Param.Fs,size(LW_HI_AB_N70,3)), flipud(linspace(-TimeStartW,size(LW_HI_AB_N70,3)/Param.Fs,size(LW_HI_AB_N70,3))')'],[(LW_HI_AB_N70_Mean+LW_HI_AB_N70_SEM), flipud((LW_HI_AB_N70_Mean-LW_HI_AB_N70_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+
+fill(ax3,[linspace(-TimeStartW,size(GSW_B,3)/Param.Fs,size(GSW_B,3)), flipud(linspace(-TimeStartW,size(GSW_B,3)/Param.Fs,size(GSW_B,3))')'],[(GSW_B_Mean+GSW_B_SEM), flipud((GSW_B_Mean-GSW_B_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax3,[linspace(-TimeStartW,size(SW_N0_B,3)/Param.Fs,size(SW_N0_B,3)), flipud(linspace(-TimeStartW,size(SW_N0_B,3)/Param.Fs,size(SW_N0_B,3))')'],[(SW_N0_B_Mean+SW_N0_B_SEM), flipud((SW_N0_B_Mean-SW_N0_B_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax3,[linspace(-TimeStartW,size(SW_N60_B,3)/Param.Fs,size(SW_N60_B,3)), flipud(linspace(-TimeStartW,size(SW_N60_B,3)/Param.Fs,size(SW_N60_B,3))')'],[(SW_N60_B_Mean+SW_N60_B_SEM), flipud((SW_N60_B_Mean-SW_N60_B_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax3,[linspace(-TimeStartW,size(SW_N70_B,3)/Param.Fs,size(SW_N70_B,3)), flipud(linspace(-TimeStartW,size(SW_N70_B,3)/Param.Fs,size(SW_N70_B,3))')'],[(SW_N70_B_Mean+SW_N70_B_SEM), flipud((SW_N70_B_Mean-SW_N70_B_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax3,[linspace(-TimeStartW,size(SW_NH_N0_B,3)/Param.Fs,size(SW_NH_N0_B,3)), flipud(linspace(-TimeStartW,size(SW_NH_N0_B,3)/Param.Fs,size(SW_NH_N0_B,3))')'],[(SW_NH_N0_B_Mean+SW_NH_N0_B_SEM), flipud((SW_NH_N0_B_Mean-SW_NH_N0_B_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax3,[linspace(-TimeStartW,size(SW_NH_N60_B,3)/Param.Fs,size(SW_NH_N60_B,3)), flipud(linspace(-TimeStartW,size(SW_NH_N60_B,3)/Param.Fs,size(SW_NH_N60_B,3))')'],[(SW_NH_N60_B_Mean+SW_NH_N60_B_SEM), flipud((SW_NH_N60_B_Mean-SW_NH_N60_B_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax3,[linspace(-TimeStartW,size(SW_NH_N70_B,3)/Param.Fs,size(SW_NH_N70_B,3)), flipud(linspace(-TimeStartW,size(SW_NH_N70_B,3)/Param.Fs,size(SW_NH_N70_B,3))')'],[(SW_NH_N70_B_Mean+SW_NH_N70_B_SEM), flipud((SW_NH_N70_B_Mean-SW_NH_N70_B_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax3,[linspace(-TimeStartW,size(SW_HI_UN_N0_B,3)/Param.Fs,size(SW_HI_UN_N0_B,3)), flipud(linspace(-TimeStartW,size(SW_HI_UN_N0_B,3)/Param.Fs,size(SW_HI_UN_N0_B,3))')'],[(SW_HI_UN_N0_B_Mean+SW_HI_UN_N0_B_SEM), flipud((SW_HI_UN_N0_B_Mean-SW_HI_UN_N0_B_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax3,[linspace(-TimeStartW,size(SW_HI_UN_N60_B,3)/Param.Fs,size(SW_HI_UN_N60_B,3)), flipud(linspace(-TimeStartW,size(SW_HI_UN_N60_B,3)/Param.Fs,size(SW_HI_UN_N60_B,3))')'],[(SW_HI_UN_N60_B_Mean+SW_HI_UN_N60_B_SEM), flipud((SW_HI_UN_N60_B_Mean-SW_HI_UN_N60_B_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax3,[linspace(-TimeStartW,size(SW_HI_UN_N70_B,3)/Param.Fs,size(SW_HI_UN_N70_B,3)), flipud(linspace(-TimeStartW,size(SW_HI_UN_N70_B,3)/Param.Fs,size(SW_HI_UN_N70_B,3))')'],[(SW_HI_UN_N70_B_Mean+SW_HI_UN_N70_B_SEM), flipud((SW_HI_UN_N70_B_Mean-SW_HI_UN_N70_B_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax3,[linspace(-TimeStartW,size(SW_HI_AA_N0_B,3)/Param.Fs,size(SW_HI_AA_N0_B,3)), flipud(linspace(-TimeStartW,size(SW_HI_AA_N0_B,3)/Param.Fs,size(SW_HI_AA_N0_B,3))')'],[(SW_HI_AA_N0_B_Mean+SW_HI_AA_N0_B_SEM), flipud((SW_HI_AA_N0_B_Mean-SW_HI_AA_N0_B_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax3,[linspace(-TimeStartW,size(SW_HI_AA_N60_B,3)/Param.Fs,size(SW_HI_AA_N60_B,3)), flipud(linspace(-TimeStartW,size(SW_HI_AA_N60_B,3)/Param.Fs,size(SW_HI_AA_N60_B,3))')'],[(SW_HI_AA_N60_B_Mean+SW_HI_AA_N60_B_SEM), flipud((SW_HI_AA_N60_B_Mean-SW_HI_AA_N60_B_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax3,[linspace(-TimeStartW,size(SW_HI_AA_N70_B,3)/Param.Fs,size(SW_HI_AA_N70_B,3)), flipud(linspace(-TimeStartW,size(SW_HI_AA_N70_B,3)/Param.Fs,size(SW_HI_AA_N70_B,3))')'],[(SW_HI_AA_N70_B_Mean+SW_HI_AA_N70_B_SEM), flipud((SW_HI_AA_N70_B_Mean-SW_HI_AA_N70_B_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax3,[linspace(-TimeStartW,size(SW_HI_AB_N0_B,3)/Param.Fs,size(SW_HI_AB_N0_B,3)), flipud(linspace(-TimeStartW,size(SW_HI_AB_N0_B,3)/Param.Fs,size(SW_HI_AB_N0_B,3))')'],[(SW_HI_AB_N0_B_Mean+SW_HI_AB_N0_B_SEM), flipud((SW_HI_AB_N0_B_Mean-SW_HI_AB_N0_B_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax3,[linspace(-TimeStartW,size(SW_HI_AB_N60_B,3)/Param.Fs,size(SW_HI_AB_N60_B,3)), flipud(linspace(-TimeStartW,size(SW_HI_AB_N60_B,3)/Param.Fs,size(SW_HI_AB_N60_B,3))')'],[(SW_HI_AB_N60_B_Mean+SW_HI_AB_N60_B_SEM), flipud((SW_HI_AB_N60_B_Mean-SW_HI_AB_N60_B_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax3,[linspace(-TimeStartW,size(SW_HI_AB_N70_B,3)/Param.Fs,size(SW_HI_AB_N70_B,3)), flipud(linspace(-TimeStartW,size(SW_HI_AB_N70_B,3)/Param.Fs,size(SW_HI_AB_N70_B,3))')'],[(SW_HI_AB_N70_B_Mean+SW_HI_AB_N70_B_SEM), flipud((SW_HI_AB_N70_B_Mean-SW_HI_AB_N70_B_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax4,[linspace(-TimeStartW,size(GLW_B,3)/Param.Fs,size(GLW_B,3)), flipud(linspace(-TimeStartW,size(GLW_B,3)/Param.Fs,size(GLW_B,3))')'],[(GLW_B_Mean+GLW_B_SEM), flipud((GLW_B_Mean-GLW_B_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax4,[linspace(-TimeStartW,size(LW_N0_B,3)/Param.Fs,size(LW_N0_B,3)), flipud(linspace(-TimeStartW,size(LW_N0_B,3)/Param.Fs,size(LW_N0_B,3))')'],[(LW_N0_B_Mean+LW_N0_B_SEM), flipud((LW_N0_B_Mean-LW_N0_B_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax4,[linspace(-TimeStartW,size(LW_N60_B,3)/Param.Fs,size(LW_N60_B,3)), flipud(linspace(-TimeStartW,size(LW_N60_B,3)/Param.Fs,size(LW_N60_B,3))')'],[(LW_N60_B_Mean+LW_N60_B_SEM), flipud((LW_N60_B_Mean-LW_N60_B_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax4,[linspace(-TimeStartW,size(LW_N70_B,3)/Param.Fs,size(LW_N70_B,3)), flipud(linspace(-TimeStartW,size(LW_N70_B,3)/Param.Fs,size(LW_N70_B,3))')'],[(LW_N70_B_Mean+LW_N70_B_SEM), flipud((LW_N70_B_Mean-LW_N70_B_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax4,[linspace(-TimeStartW,size(LW_NH_N0_B,3)/Param.Fs,size(LW_NH_N0_B,3)), flipud(linspace(-TimeStartW,size(LW_NH_N0_B,3)/Param.Fs,size(LW_NH_N0_B,3))')'],[(LW_NH_N0_B_Mean+LW_NH_N0_B_SEM), flipud((LW_NH_N0_B_Mean-LW_NH_N0_B_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax4,[linspace(-TimeStartW,size(LW_NH_N60_B,3)/Param.Fs,size(LW_NH_N60_B,3)), flipud(linspace(-TimeStartW,size(LW_NH_N60_B,3)/Param.Fs,size(LW_NH_N60_B,3))')'],[(LW_NH_N60_B_Mean+LW_NH_N60_B_SEM), flipud((LW_NH_N60_B_Mean-LW_NH_N60_B_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax4,[linspace(-TimeStartW,size(LW_NH_N70_B,3)/Param.Fs,size(LW_NH_N70_B,3)), flipud(linspace(-TimeStartW,size(LW_NH_N70_B,3)/Param.Fs,size(LW_NH_N70_B,3))')'],[(LW_NH_N70_B_Mean+LW_NH_N70_B_SEM), flipud((LW_NH_N70_B_Mean-LW_NH_N70_B_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax4,[linspace(-TimeStartW,size(LW_HI_UN_N0_B,3)/Param.Fs,size(LW_HI_UN_N0_B,3)), flipud(linspace(-TimeStartW,size(LW_HI_UN_N0_B,3)/Param.Fs,size(LW_HI_UN_N0_B,3))')'],[(LW_HI_UN_N0_B_Mean+LW_HI_UN_N0_B_SEM), flipud((LW_HI_UN_N0_B_Mean-LW_HI_UN_N0_B_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax4,[linspace(-TimeStartW,size(LW_HI_UN_N60_B,3)/Param.Fs,size(LW_HI_UN_N60_B,3)), flipud(linspace(-TimeStartW,size(LW_HI_UN_N60_B,3)/Param.Fs,size(LW_HI_UN_N60_B,3))')'],[(LW_HI_UN_N60_B_Mean+LW_HI_UN_N60_B_SEM), flipud((LW_HI_UN_N60_B_Mean-LW_HI_UN_N60_B_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax4,[linspace(-TimeStartW,size(LW_HI_UN_N70_B,3)/Param.Fs,size(LW_HI_UN_N70_B,3)), flipud(linspace(-TimeStartW,size(LW_HI_UN_N70_B,3)/Param.Fs,size(LW_HI_UN_N70_B,3))')'],[(LW_HI_UN_N70_B_Mean+LW_HI_UN_N70_B_SEM), flipud((LW_HI_UN_N70_B_Mean-LW_HI_UN_N70_B_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax4,[linspace(-TimeStartW,size(LW_HI_AA_N0_B,3)/Param.Fs,size(LW_HI_AA_N0_B,3)), flipud(linspace(-TimeStartW,size(LW_HI_AA_N0_B,3)/Param.Fs,size(LW_HI_AA_N0_B,3))')'],[(LW_HI_AA_N0_B_Mean+LW_HI_AA_N0_B_SEM), flipud((LW_HI_AA_N0_B_Mean-LW_HI_AA_N0_B_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax4,[linspace(-TimeStartW,size(LW_HI_AA_N60_B,3)/Param.Fs,size(LW_HI_AA_N60_B,3)), flipud(linspace(-TimeStartW,size(LW_HI_AA_N60_B,3)/Param.Fs,size(LW_HI_AA_N60_B,3))')'],[(LW_HI_AA_N60_B_Mean+LW_HI_AA_N60_B_SEM), flipud((LW_HI_AA_N60_B_Mean-LW_HI_AA_N60_B_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax4,[linspace(-TimeStartW,size(LW_HI_AA_N70_B,3)/Param.Fs,size(LW_HI_AA_N70_B,3)), flipud(linspace(-TimeStartW,size(LW_HI_AA_N70_B,3)/Param.Fs,size(LW_HI_AA_N70_B,3))')'],[(LW_HI_AA_N70_B_Mean+LW_HI_AA_N70_B_SEM), flipud((LW_HI_AA_N70_B_Mean-LW_HI_AA_N70_B_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax4,[linspace(-TimeStartW,size(LW_HI_AB_N0_B,3)/Param.Fs,size(LW_HI_AB_N0_B,3)), flipud(linspace(-TimeStartW,size(LW_HI_AB_N0_B,3)/Param.Fs,size(LW_HI_AB_N0_B,3))')'],[(LW_HI_AB_N0_B_Mean+LW_HI_AB_N0_B_SEM), flipud((LW_HI_AB_N0_B_Mean-LW_HI_AB_N0_B_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax4,[linspace(-TimeStartW,size(LW_HI_AB_N60_B,3)/Param.Fs,size(LW_HI_AB_N60_B,3)), flipud(linspace(-TimeStartW,size(LW_HI_AB_N60_B,3)/Param.Fs,size(LW_HI_AB_N60_B,3))')'],[(LW_HI_AB_N60_B_Mean+LW_HI_AB_N60_B_SEM), flipud((LW_HI_AB_N60_B_Mean-LW_HI_AB_N60_B_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax4,[linspace(-TimeStartW,size(LW_HI_AB_N70_B,3)/Param.Fs,size(LW_HI_AB_N70_B,3)), flipud(linspace(-TimeStartW,size(LW_HI_AB_N70_B,3)/Param.Fs,size(LW_HI_AB_N70_B,3))')'],[(LW_HI_AB_N70_B_Mean+LW_HI_AB_N70_B_SEM), flipud((LW_HI_AB_N70_B_Mean-LW_HI_AB_N70_B_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+
+xlabel([ax1 ax2 ax3 ax4],'Time [s]')
+ylabel([ax1 ax2],'Pupil diameter [mm]')
+ylabel([ax3 ax4],'Pupil baseline difference [mm]')
+xlim([ax1 ax2 ax3 ax4],[-TimeStartW 3])
+lgd2=legend(ax2,'Speaking','Listening','Speaking','Listening','N0','N60','N70','NH_N0','NH_N60','NH_N70','HI_UN_N0','HI_UN_N60','HI_UN_N70','HI_AA_N0','HI_AA_N60','HI_AA_N70','HI_AB_N0','HI_AB_N60','HI_AB_N70','Location','southeastoutside');
+lgd2.Title.String = 'Types of windows:';
+lgd4=legend(ax4,'Speaking','Listening','Speaking','Listening','N0','N60','N70','NH_N0','NH_N60','NH_N70','HI_UN_N0','HI_UN_N60','HI_UN_N70','HI_AA_N0','HI_AA_N60','HI_AA_N70','HI_AB_N0','HI_AB_N60','HI_AB_N70','Location','southeastoutside');
+lgd4.Title.String = 'Types of windows:';
+title(ax1,'Global Speaking-evoked')
+title(ax2,'Global Listening-evoked')
+title(ax3,'Global adaptive baselined Speaking-evoked')
+title(ax4,'Global adaptive baselined Listening-evoked')
