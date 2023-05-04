@@ -107,19 +107,15 @@ for q=1:numel(subDirs_II)
     for ChosenFolder = {'\NH\','\HI\'}
         PairFolder_II=[pwd,'\data\AMEND_II\',cell2mat(subDirs_II(q)),cell2mat(ChosenFolder)]; % Folder naming changed
         PairFiles_II=dir(PairFolder_II); % Folder naming changed
-        try
-            PairUtt_II=LoadUtt_II.Utterances(PairIn_II,:);
-        catch ME
-            disp(['Warning: No Utterance found for folder "',cell2mat(subDirs_II(q)),'"'])
+        PairUtt_II=LoadUtt_II.Utterances(PairIn_II,:);
+        
+        if isempty(PairUtt_II{1})
+            disp(['Warning: No Utterance found for folder "',cell2mat(ChosenFolder),cell2mat(subDirs_II(q)),'"'])
             continue
         end
 %         PairDelay_II=LoadDelays_II.TobAudDelay(PairIn_II,:);
     
         for i=1:numel(FileNames_II)
-            if isempty(PairUtt_II{q})
-                disp(['Warning: File ', PairFiles_II(1).folder, '\', cell2mat(FileNames_II(i)), ' was skipped, utterance not found.'])
-            end
-            
             try
                 alldata = load([PairFiles_II(1).folder, '\', cell2mat(FileNames_II(i))]);
             catch ME
@@ -218,15 +214,15 @@ for q=1:numel(subDirs_II)
                 SpeCond = SpeAid + 3;
             end
             
-            try
-                SpeakRaw = PairUtt_II{1,SpeCond}.(SpeakKey);
-                ListenRaw = PairUtt_II{1,SpeCond}.(ListenKey);
-                binResUtt = PairUtt_II{1,SpeCond}.binRes;
-            catch ME % if isempty(SpeakRaw) && isempty(ListenRaw)
+            SpeakRaw = PairUtt_II{1,SpeCond}.(SpeakKey);
+            ListenRaw = PairUtt_II{1,SpeCond}.(ListenKey);
+            binResUtt = PairUtt_II{1,SpeCond}.binRes;
+
+            if isempty(SpeakRaw) && isempty(ListenRaw)
                 disp(['Warning: File ',PairFiles_II(1).folder, '\', cell2mat(FileNames_II(i)),' was rejected for not having associated Utterance windows.']);
                 continue
             end
-
+            
             % SAME PROCESSING AS IN W1.m
             % Downsample (rounding) Utt from 250 Hz (1/binRes) to 50 Hz, no
             % shift in time nor delay added this time
