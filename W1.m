@@ -99,7 +99,8 @@ for q=1:numel(subDirs)
         for s=1:length(alldata_mat)
             if LDiamRaw(1,s) < LThreshOut(1) || LDiamRaw(1,s) > LThreshOut(2)
                 LDiamRaw(1,s)=NaN;
-            elseif RDiamRaw(1,s) < RThreshOut(1) || RDiamRaw(1,s) > RThreshOut(2)
+            end
+            if RDiamRaw(1,s) < RThreshOut(1) || RDiamRaw(1,s) > RThreshOut(2)
                 RDiamRaw(1,s)=NaN;
             end
         end
@@ -282,10 +283,8 @@ for q=1:numel(subDirs)
         yl=ylim();
         ylim(yl);
         % Plot rectangles (Utterance and listening time windows)
-        arrayfun(@(i)rectangle('Position', [startStopS(i,1),yl(1),widthS(i),range(yl)], ...
-        'EdgeColor', 'none', 'FaceColor', [0 1 0 .2]), 1:size(startStopS,1))
-        arrayfun(@(i)rectangle('Position', [startStopL(i,1),yl(1),widthL(i),range(yl)], ...
-        'EdgeColor', 'none', 'FaceColor', [1 0 1 .2]), 1:size(startStopL,1))
+        arrayfun(@(i)rectangle('Position', [startStopS(i,1),yl(1),widthS(i),range(yl)],'EdgeColor', 'none', 'FaceColor', [0 1 0 .2]), 1:size(startStopS,1))
+        arrayfun(@(i)rectangle('Position', [startStopL(i,1),yl(1),widthL(i),range(yl)],'EdgeColor', 'none', 'FaceColor', [1 0 1 .2]), 1:size(startStopL,1))
         eline1=line(NaN,NaN,'LineWidth',2,'Color',[0 1 0 .2]);
         eline2=line(NaN,NaN,'LineWidth',2,'Color',[1 0 1 .2]);
         legend(['Baselined diameter (', eyeChosen,' Eye)'],'Speaking windows','Listening windows')

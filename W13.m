@@ -157,12 +157,13 @@ for q=1:numel(subDirs)
         RDiamRaw = [alldata_mat.diameterRight];
         
         % Preprocessing - Setting outliers as NaNs (remove artifacts)
-        LThreshOut = [mean(LDiamRaw,'omitnan')-std(LDiamRaw,'omitnan'),mean(LDiamRaw,'omitnan')+std(LDiamRaw,'omitnan')];
-        RThreshOut = [mean(RDiamRaw,'omitnan')-std(RDiamRaw,'omitnan'),mean(RDiamRaw,'omitnan')+std(RDiamRaw,'omitnan')];
+        LThreshOut = [mean(LDiamRaw,'omitnan')-2*std(LDiamRaw,'omitnan'),mean(LDiamRaw,'omitnan')+2*std(LDiamRaw,'omitnan')];
+        RThreshOut = [mean(RDiamRaw,'omitnan')-2*std(RDiamRaw,'omitnan'),mean(RDiamRaw,'omitnan')+2*std(RDiamRaw,'omitnan')];
         for s=1:length(alldata_mat)
             if LDiamRaw(1,s) < LThreshOut(1) || LDiamRaw(1,s) > LThreshOut(2)
                 LDiamRaw(1,s)=NaN;
-            elseif RDiamRaw(1,s) < RThreshOut(1) || RDiamRaw(1,s) > RThreshOut(2)
+            end
+            if RDiamRaw(1,s) < RThreshOut(1) || RDiamRaw(1,s) > RThreshOut(2)
                 RDiamRaw(1,s)=NaN;
             end
         end

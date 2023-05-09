@@ -168,10 +168,12 @@ for q=1:numel(subDirs)
             if GazeX(s) < XThresh(1) || GazeX(s) > XThresh(2)
                 GazeX(s)=NaN;
                 F_NOutl = F_NOutl + 1;
-            elseif GazeY(s) < YThresh(1) || GazeY(s) > YThresh(2)
+            end
+            if GazeY(s) < YThresh(1) || GazeY(s) > YThresh(2)
                 GazeY(s)=NaN;
                 F_NOutl = F_NOutl + 1;
-            elseif GazeZ(s) < ZThresh(1) || GazeZ(s) > ZThresh(2)
+            end
+            if GazeZ(s) < ZThresh(1) || GazeZ(s) > ZThresh(2)
                 GazeZ(s)=NaN;
                 F_NOutl = F_NOutl + 1;
             end

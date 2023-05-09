@@ -119,7 +119,8 @@ for q=1:numel(subDirs)
         for s=1:length(alldata_mat)
             if LDiamRaw(1,s) < LThreshOut(1) || LDiamRaw(1,s) > LThreshOut(2)
                 LDiamRaw(1,s)=NaN;
-            elseif RDiamRaw(1,s) < RThreshOut(1) || RDiamRaw(1,s) > RThreshOut(2)
+            end
+            if RDiamRaw(1,s) < RThreshOut(1) || RDiamRaw(1,s) > RThreshOut(2)
                 RDiamRaw(1,s)=NaN;
             end
         end
