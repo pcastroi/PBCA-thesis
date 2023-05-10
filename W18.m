@@ -733,7 +733,7 @@ SW_HI_AB_N70_B_Mean = ndnanfilter(reshape(mean(SW_HI_AB_N70_B,[1 2],'omitnan'),[
 LW_HI_AB_N70_Mean = ndnanfilter(reshape(mean(LW_HI_AB_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
 LW_HI_AB_N70_B_Mean = ndnanfilter(reshape(mean(LW_HI_AB_N70_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
 
-% Calculate SEM as: std(X)/sqrt(numel(X(~isnan(X)))
+% Calculate SEM as: std(X)/sqrt(squeeze(sum(~isnan(X),[1 2]))))
 GSW_SEM = (squeeze(std(GSW,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(GSW),[1 2]))))';
 GSW_B_SEM = (squeeze(std(GSW_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(GSW_B),[1 2]))))';
 GLW_SEM = (squeeze(std(GLW,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(GLW),[1 2]))))';
@@ -860,10 +860,9 @@ xline(ax6,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientati
 xline(ax7,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
 xline(ax8,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
 
-plot(linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)),GSW_Mean,color=SColor,linewidth=2)
-GSW_Mean(isnan(GSW_Mean))=0;GSW_SEM(isnan(GSW_SEM))=0;
-fill([linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)), flipud(linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3))')'],[(GSW_Mean+GSW_SEM), flipud((GSW_Mean-GSW_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-
+% plot(linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)),GSW_Mean,color=SColor,linewidth=2);hold on;
+% GSW_Mean(isnan(GSW_Mean))=0;GSW_SEM(isnan(GSW_SEM))=0;
+% fill([linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)), flipud(linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3))')'],[(GSW_Mean+GSW_SEM), flipud((GSW_Mean-GSW_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
 
 plot(ax1,linspace(-TimeStartW,size(SW_NH,3)/Param.Fs,size(SW_NH,3)),SW_NH_Mean,color=SColor,linewidth=2)
 plot(ax1,linspace(-TimeStartW,size(SW_NH_N0,3)/Param.Fs,size(SW_NH_N0,3)),SW_NH_N0_Mean,color=QuietColor)

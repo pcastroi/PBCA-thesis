@@ -443,26 +443,27 @@ LWB_N60_Mean = ndnanfilter(reshape(mean(LWB_N60,[1 2],'omitnan'),[],1)','hamming
 SWB_N70_Mean = ndnanfilter(reshape(mean(SWB_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
 LWB_N70_Mean = ndnanfilter(reshape(mean(LWB_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
 
-GSW_SEM = (reshape(std(GSW,0,[1 2],'omitnan'),[],1)/sqrt(numel(GSW(~isnan(GSW)))))';
-GLW_SEM = (reshape(std(GLW,0,[1 2],'omitnan'),[],1)/sqrt(numel(GLW(~isnan(GLW)))))';
-SW_Quiet_SEM = (reshape(std(SW_Quiet,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_Quiet(~isnan(SW_Quiet)))))';
-LW_Quiet_SEM = (reshape(std(LW_Quiet,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_Quiet(~isnan(LW_Quiet)))))';
-SW_SHL_SEM = (reshape(std(SW_SHL,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_SHL(~isnan(SW_SHL)))))';
-LW_SHL_SEM = (reshape(std(LW_SHL,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_SHL(~isnan(LW_SHL)))))';
-SW_N60_SEM = (reshape(std(SW_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_N60(~isnan(SW_N60)))))';
-LW_N60_SEM = (reshape(std(LW_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_N60(~isnan(LW_N60)))))';
-SW_N70_SEM = (reshape(std(SW_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(SW_N70(~isnan(SW_N70)))))';
-LW_N70_SEM = (reshape(std(LW_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(LW_N70(~isnan(LW_N70)))))';
-GSWB_SEM = (reshape(std(GSWB,0,[1 2],'omitnan'),[],1)/sqrt(numel(GSWB(~isnan(GSWB)))))';
-GLWB_SEM = (reshape(std(GLWB,0,[1 2],'omitnan'),[],1)/sqrt(numel(GLWB(~isnan(GLWB)))))';
-SWB_Quiet_SEM = (reshape(std(SWB_Quiet,0,[1 2],'omitnan'),[],1)/sqrt(numel(SWB_Quiet(~isnan(SWB_Quiet)))))';
-LWB_Quiet_SEM = (reshape(std(LWB_Quiet,0,[1 2],'omitnan'),[],1)/sqrt(numel(LWB_Quiet(~isnan(LWB_Quiet)))))';
-SWB_SHL_SEM = (reshape(std(SWB_SHL,0,[1 2],'omitnan'),[],1)/sqrt(numel(SWB_SHL(~isnan(SWB_SHL)))))';
-LWB_SHL_SEM = (reshape(std(LWB_SHL,0,[1 2],'omitnan'),[],1)/sqrt(numel(LWB_SHL(~isnan(LWB_SHL)))))';
-SWB_N60_SEM = (reshape(std(SWB_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(SWB_N60(~isnan(SWB_N60)))))';
-LWB_N60_SEM = (reshape(std(LWB_N60,0,[1 2],'omitnan'),[],1)/sqrt(numel(LWB_N60(~isnan(LWB_N60)))))';
-SWB_N70_SEM = (reshape(std(SWB_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(SWB_N70(~isnan(SWB_N70)))))';
-LWB_N70_SEM = (reshape(std(LWB_N70,0,[1 2],'omitnan'),[],1)/sqrt(numel(LWB_N70(~isnan(LWB_N70)))))';
+% Calculate SEM as: std(X)/sqrt(squeeze(sum(~isnan(X),[1 2]))))
+GSW_SEM = (squeeze(std(GSW,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(GSW),[1 2]))))';
+GLW_SEM = (squeeze(std(GLW,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(GLW),[1 2]))))';
+SW_Quiet_SEM = (squeeze(std(SW_Quiet,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(SW_Quiet),[1 2]))))';
+LW_Quiet_SEM = (squeeze(std(LW_Quiet,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(LW_Quiet),[1 2]))))';
+SW_SHL_SEM = (squeeze(std(SW_SHL,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(SW_SHL),[1 2]))))';
+LW_SHL_SEM = (squeeze(std(LW_SHL,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(LW_SHL),[1 2]))))';
+SW_N60_SEM = (squeeze(std(SW_N60,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(SW_N60),[1 2]))))';
+LW_N60_SEM = (squeeze(std(LW_N60,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(LW_N60),[1 2]))))';
+SW_N70_SEM = (squeeze(std(SW_N70,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(SW_N70),[1 2]))))';
+LW_N70_SEM = (squeeze(std(LW_N70,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(LW_N70),[1 2]))))';
+GSWB_SEM = (squeeze(std(GSWB,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(GSWB),[1 2]))))';
+GLWB_SEM = (squeeze(std(GLWB,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(GLWB),[1 2]))))';
+SWB_Quiet_SEM = (squeeze(std(SWB_Quiet,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(SWB_Quiet),[1 2]))))';
+LWB_Quiet_SEM = (squeeze(std(LWB_Quiet,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(LWB_Quiet),[1 2]))))';
+SWB_SHL_SEM = (squeeze(std(SWB_SHL,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(SWB_SHL),[1 2]))))';
+LWB_SHL_SEM = (squeeze(std(LWB_SHL,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(LWB_SHL),[1 2]))))';
+SWB_N60_SEM = (squeeze(std(SWB_N60,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(SWB_N60),[1 2]))))';
+LWB_N60_SEM = (squeeze(std(LWB_N60,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(LWB_N60),[1 2]))))';
+SWB_N70_SEM = (squeeze(std(SWB_N70,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(SWB_N70),[1 2]))))';
+LWB_N70_SEM = (squeeze(std(LWB_N70,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(LWB_N70),[1 2]))))';
 
 xline(ax1,0,'--','handlevisibility','off')
 xline(ax2,0,'--','handlevisibility','off')
