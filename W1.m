@@ -93,17 +93,25 @@ for q=1:numel(subDirs)
         LDiamRaw = [alldata_mat.diameterLeft];
         RDiamRaw = [alldata_mat.diameterRight];
         
-        % Preprocessing - Setting outliers as NaNs (remove artifacts)
-        LThreshOut = [mean(LDiamRaw,'omitnan')-2*std(LDiamRaw,'omitnan'),mean(LDiamRaw,'omitnan')+2*std(LDiamRaw,'omitnan')];
-        RThreshOut = [mean(RDiamRaw,'omitnan')-2*std(RDiamRaw,'omitnan'),mean(RDiamRaw,'omitnan')+2*std(RDiamRaw,'omitnan')];
-        for s=1:length(alldata_mat)
-            if LDiamRaw(1,s) < LThreshOut(1) || LDiamRaw(1,s) > LThreshOut(2)
-                LDiamRaw(1,s)=NaN;
-            end
-            if RDiamRaw(1,s) < RThreshOut(1) || RDiamRaw(1,s) > RThreshOut(2)
-                RDiamRaw(1,s)=NaN;
-            end
-        end
+         % Preprocessing - Setting outliers as NaNs (remove artifacts)
+%             LThreshOut = [mean(LDiamRaw,'omitnan')-2*std(LDiamRaw,'omitnan'),mean(LDiamRaw,'omitnan')+2*std(LDiamRaw,'omitnan')];
+%             RThreshOut = [mean(RDiamRaw,'omitnan')-2*std(RDiamRaw,'omitnan'),mean(RDiamRaw,'omitnan')+2*std(RDiamRaw,'omitnan')];
+%             for s=1:length(alldata_mat)
+%                 if LDiamRaw(1,s) < LThreshOut(1) || LDiamRaw(1,s) > LThreshOut(2)
+%                     LDiamRaw(1,s)=NaN;
+%                 end
+%                 if RDiamRaw(1,s) < RThreshOut(1) || RDiamRaw(1,s) > RThreshOut(2)
+%                     RDiamRaw(1,s)=NaN;
+%                 end
+%             end
+
+        % New artifact-removal method
+        standardRawSettings = rawDataFilter();
+        [LvalOut,LspeedFiltData,LdevFiltData] = rawDataFilter(linspace(0,length(LDiamRaw)./Param.Fs,length(LDiamRaw))',LDiamRaw',standardRawSettings);
+        [RvalOut,RspeedFiltData,RdevFiltData] = rawDataFilter(linspace(0,length(RDiamRaw)./Param.Fs,length(RDiamRaw))',RDiamRaw',standardRawSettings);
+
+        LDiamRaw(~LvalOut)=NaN;
+        RDiamRaw(~RvalOut)=NaN;
         
         % Processing - Interpolating NaNs
         [LDiam,LMetadata] = preprocpupil(LDiamRaw,Param);
