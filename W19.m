@@ -169,12 +169,12 @@ for q=1:numel(subDirs_II)
             [LvalOut,LspeedFiltData,LdevFiltData] = rawDataFilter(linspace(0,length(LDiamRaw)./Param.Fs,length(LDiamRaw))',LDiamRaw',standardRawSettings);
             [RvalOut,RspeedFiltData,RdevFiltData] = rawDataFilter(linspace(0,length(RDiamRaw)./Param.Fs,length(RDiamRaw))',RDiamRaw',standardRawSettings);
             
-            LDiamRaw(~LvalOut)=NaN;
-            RDiamRaw(~RvalOut)=NaN;
+            LDiamPre=LDiamRaw;LDiamPre(~LvalOut)=NaN;
+            RDiamPre=RDiamRaw;RDiamPre(~RvalOut)=NaN;
 
             % Processing - Interpolating NaNs
-            [LDiam,LMetadata] = preprocpupil(LDiamRaw,Param);
-            [RDiam,RMetadata] = preprocpupil(RDiamRaw,Param);
+            [LDiam,LMetadata] = preprocpupil(LDiamPre,Param);
+            [RDiam,RMetadata] = preprocpupil(RDiamPre,Param);
 
             % Low-Pass Filtering
             LDiamConv = conv(LDiam,LPWindow,'same'); 
@@ -194,15 +194,15 @@ for q=1:numel(subDirs_II)
             if idx_decision == 1
                 Diameter = LDiam;
                 DiameterRaw = LDiamRaw';
+                DiameterPre = LDiamPre';
                 eyeChosen = 'Left';
                 DiamNaN = sum(LMetadata.Isnan);
-                ThreshOut = LThreshOut;
             elseif idx_decision == 2
                 Diameter = RDiam;
                 DiameterRaw = RDiamRaw';
+                DiameterPre = RDiamPre';
                 eyeChosen = 'Right';
                 DiamNaN = sum(RMetadata.Isnan);
-                ThreshOut = RThreshOut;
             end
 
             if DiamNaN/length(Diameter) >= RejectRatio
@@ -214,6 +214,7 @@ for q=1:numel(subDirs_II)
             NaNPadS = 2*TimeStartW*Param.Fs;
             Diameter = [nan*ones(NaNPadS,1);Diameter];
             DiameterRaw = [nan*ones(NaNPadS,1);DiameterRaw];
+            DiameterPre = [nan*ones(NaNPadS,1);DiameterPre];
             
             % Retrieve Utterances
             if contains(ChosenFolder,'NH')
@@ -289,8 +290,9 @@ for q=1:numel(subDirs_II)
             hold on
             grid on
             plot(t_Diam,Diameter,color='black');
-            plot(t_Diam,DiameterRaw,color='black',linestyle='--')
-            yline(ThreshOut,'--','handlevisibility','off')
+%             plot(t_Diam,DiameterRaw,color='black',linestyle='.')
+            scatter(t_Diam,DiameterPre,'k*')
+            scatter(t_Diam,DiameterRaw,'r.')
             startStopS = t_Diam(Speak(:,2:3));widthS = startStopS(:,2)-startStopS(:,1);
             startStopL = t_Diam(Listen(:,2:3));widthL = startStopL(:,2)-startStopL(:,1);
             ylim('tight')
