@@ -50,9 +50,9 @@ RejectDelay = 0.5; % [s], Rejection threshold based on delay between timestamps 
 TimeStartW = 0.5; % [s], time before Utt/Lis starts
 TimeEndW = 0; % [s], time after Utt/Lis starts
 x = 1; % idx to store global values
-% NCond_II = numel(FileNames_II)/NPs; % N of conditions
-% NTPs = numel(subDirs)*numel(FileNames)/NCond; % Total N of TPs
-% TPsOrder = zeros(NTPs,NCond_II); % Vector that will contain the indexes of trials/file for each TP
+NCond_II = numel(FileNames_II); % N of conditions - AMEND II
+NTPs_II = 2*numel(subDirs_II); % Total N of TPs - AMEND II
+TPsOrder_II = zeros(NTPs_II,NCond_II); % Vector that will contain the indexes of trials/file for each TP - AMEND II
 
 NCols=60*Param.Fs; % Duration (samples) of each window
 NRows=100; % Number of windows per trial
@@ -263,17 +263,6 @@ for q=1:numel(subDirs_II)
             RDiamRaw = [alldata_mat.diameterRight];
 
             % Preprocessing - Setting outliers as NaNs (remove artifacts)
-%             LThreshOut = [mean(LDiamRaw,'omitnan')-2*std(LDiamRaw,'omitnan'),mean(LDiamRaw,'omitnan')+2*std(LDiamRaw,'omitnan')];
-%             RThreshOut = [mean(RDiamRaw,'omitnan')-2*std(RDiamRaw,'omitnan'),mean(RDiamRaw,'omitnan')+2*std(RDiamRaw,'omitnan')];
-%             for s=1:length(alldata_mat)
-%                 if LDiamRaw(1,s) < LThreshOut(1) || LDiamRaw(1,s) > LThreshOut(2)
-%                     LDiamRaw(1,s)=NaN;
-%                 end
-%                 if RDiamRaw(1,s) < RThreshOut(1) || RDiamRaw(1,s) > RThreshOut(2)
-%                     RDiamRaw(1,s)=NaN;
-%                 end
-%             end
-
             % New artifact-removal method
             standardRawSettings = rawDataFilter();
             [LvalOut,LspeedFiltData,LdevFiltData] = rawDataFilter(linspace(0,length(LDiamRaw)./Param.Fs,length(LDiamRaw))',LDiamRaw',standardRawSettings);
@@ -315,7 +304,7 @@ for q=1:numel(subDirs_II)
             end
 
             if DiamNaN/length(Diameter) >= RejectRatio
-                disp(['Warning: File ', PairFiles_II(1).folder, '\', cell2mat(FileNames_II(i)), ' was rejected because it contains too many NaNs (',sprintf('%0.2f',100*DiamNaN/length(Diameter)),'%).'])
+                disp(['Warning: File ', PairFiles_II(1).folder, '\', cell2mat(FileNames_II(i)), ' was rejected because pupil size contains too many NaNs (',sprintf('%0.2f',100*DiamNaN/length(Diameter)),'%).'])
                 continue
             end
             
@@ -724,12 +713,13 @@ for q=1:numel(subDirs_II)
                 FGLW_B(x,j,:) = [Fixation(WListenIdx(j,1):Listen(j,3))-mean(Fixation(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(FGLW_B)-length(WListenIdx(j,1):Listen(j,3)))'];
                 GLDur(x,j) = Listen(j,1);
             end
+            
             % Store idx of non-rejected files associated with TPs
-%             if contains(cell2mat(FileNames_II(i)),'P2')
-%                 TPsOrder(2*q,i-NCond) = x;
-%             elseif contains(cell2mat(FileNames_II(i)),'P1')
-%                 TPsOrder(2*q-1,i) = x;
-%             end
+            if contains(ChosenFolder,'HI')
+                TPsOrder_II(2*q,i) = x;
+            elseif contains(ChosenFolder,'NH')
+                TPsOrder_II(2*q-1,i) = x;
+            end
 
             % Increase index of num of files used
             x=x+1;
@@ -945,8 +935,8 @@ FSW_HI_AB_N70_B(~any(FSW_HI_AB_N70_B,[2 3]),:,:)=[];FSW_HI_AB_N70_B(:,~any(FSW_H
 FLW_HI_AB_N70(~any(FLW_HI_AB_N70,[2 3]),:,:)=[];FLW_HI_AB_N70(:,~any(FLW_HI_AB_N70,[1 3]),:)=[];FLW_HI_AB_N70(FLW_HI_AB_N70==0)=NaN;
 FLW_HI_AB_N70_B(~any(FLW_HI_AB_N70_B,[2 3]),:,:)=[];FLW_HI_AB_N70_B(:,~any(FLW_HI_AB_N70_B,[1 3]),:)=[];FLW_HI_AB_N70_B(FLW_HI_AB_N70_B==0)=NaN;
 
-% Calculate means omitting NaNs, LP filtering with mean-padding at start
-% end of each group of Speaking/Listening windows
+% Calculate global means omitting NaNs, LP filtering with mean-padding at 
+% start/end of each group of Speaking/Listening windows
 DGSW_Mean = ndnanfilter(reshape(mean(DGSW,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
 DGSW_B_Mean = ndnanfilter(reshape(mean(DGSW_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
 DGLW_Mean = ndnanfilter(reshape(mean(DGLW,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
@@ -1152,6 +1142,310 @@ FSW_HI_AB_N70_Mean = ndnanfilter(reshape(mean(FSW_HI_AB_N70,[1 2],'omitnan'),[],
 FSW_HI_AB_N70_B_Mean = ndnanfilter(reshape(mean(FSW_HI_AB_N70_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
 FLW_HI_AB_N70_Mean = ndnanfilter(reshape(mean(FLW_HI_AB_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
 FLW_HI_AB_N70_B_Mean = ndnanfilter(reshape(mean(FLW_HI_AB_N70_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+
+% Calculate Grand Average over the mean of the participants
+TPsUN = nonzeros(TPsOrder_II(2:2:NTPs_II,1:3));
+TPsAA = nonzeros(TPsOrder_II(2:2:NTPs_II,4:6));
+TPsAB = nonzeros(TPsOrder_II(2:2:NTPs_II,7:9));
+TPsN0 = nonzeros(TPsOrder_II(:,1:3:NCond_II));
+TPsN60 = nonzeros(TPsOrder_II(:,2:3:NCond_II));
+TPsN70 = nonzeros(TPsOrder_II(:,3:3:NCond_II));
+
+TP_DGSW = zeros(NTPs_II,NCols); TP_DGLW = TP_DGSW; % Global TP_Diameter Speaking/Listening Windows
+TP_DSW_NH = TP_DGSW; TP_DLW_NH = TP_DGSW; % NH TP_Diameter Speaking/Listening Windows
+TP_DSW_HI = TP_DGSW; TP_DLW_HI = TP_DGSW; % HI TP_Diameter Speaking/Listening Windows
+TP_DSW_N0 = TP_DGSW; TP_DLW_N0 = TP_DGSW; % N0 TP_Diameter Speaking/Listening Windows
+TP_DSW_N60 = TP_DGSW; TP_DLW_N60 = TP_DGSW; % N60 TP_Diameter Speaking/Listening Windows
+TP_DSW_N70 = TP_DGSW; TP_DLW_N70 = TP_DGSW; % N70 TP_Diameter Speaking/Listening Windows
+TP_DSW_NH_N0 = TP_DGSW; TP_DLW_NH_N0 = TP_DGSW; % NH N0 TP_Diameter Speaking/Listening Windows
+TP_DSW_NH_N60 = TP_DGSW; TP_DLW_NH_N60 = TP_DGSW; % NH N60 TP_Diameter Speaking/Listening Windows
+TP_DSW_NH_N70 = TP_DGSW; TP_DLW_NH_N70 = TP_DGSW; % NH N70 TP_Diameter Speaking/Listening Windows
+TP_DSW_HI_N0 = TP_DGSW; TP_DLW_HI_N0 = TP_DGSW; % HI N0 TP_Diameter Speaking/Listening Windows
+TP_DSW_HI_N60 = TP_DGSW; TP_DLW_HI_N60 = TP_DGSW; % HI N60 TP_Diameter Speaking/Listening Windows
+TP_DSW_HI_N70 = TP_DGSW; TP_DLW_HI_N70 = TP_DGSW; % HI N70 TP_Diameter Speaking/Listening Windows
+TP_DSW_HI_UN = TP_DGSW; TP_DLW_HI_UN = TP_DGSW; % HI UN TP_Diameter Speaking/Listening Windows
+TP_DSW_HI_AA = TP_DGSW; TP_DLW_HI_AA = TP_DGSW; % HI AA TP_Diameter Speaking/Listening Windows
+TP_DSW_HI_AB = TP_DGSW; TP_DLW_HI_AB = TP_DGSW; % HI AB TP_Diameter Speaking/Listening Windows
+TP_DSW_HI_UN_N0 = TP_DGSW; TP_DLW_HI_UN_N0 = TP_DGSW; % HI UN N0 TP_Diameter Speaking/Listening Windows
+TP_DSW_HI_UN_N60 = TP_DGSW; TP_DLW_HI_UN_N60 = TP_DGSW; % HI UN N60 TP_Diameter Speaking/Listening Windows
+TP_DSW_HI_UN_N70 = TP_DGSW; TP_DLW_HI_UN_N70 = TP_DGSW; % HI UN N70 TP_Diameter Speaking/Listening Windows
+TP_DSW_HI_AA_N0 = TP_DGSW; TP_DLW_HI_AA_N0 = TP_DGSW; % HI AA N0 TP_Diameter Speaking/Listening Windows
+TP_DSW_HI_AA_N60 = TP_DGSW; TP_DLW_HI_AA_N60 = TP_DGSW; % HI AA N60 TP_Diameter Speaking/Listening Windows
+TP_DSW_HI_AA_N70 = TP_DGSW; TP_DLW_HI_AA_N70 = TP_DGSW; % HI AA N70 TP_Diameter Speaking/Listening Windows
+TP_DSW_HI_AB_N0 = TP_DGSW; TP_DLW_HI_AB_N0 = TP_DGSW; % HI AB N0 TP_Diameter Speaking/Listening Windows
+TP_DSW_HI_AB_N60 = TP_DGSW; TP_DLW_HI_AB_N60 = TP_DGSW; % HI AB N60 TP_Diameter Speaking/Listening Windows
+TP_DSW_HI_AB_N70 = TP_DGSW; TP_DLW_HI_AB_N70 = TP_DGSW; % HI AB N70 TP_Diameter Speaking/Listening Windows
+
+TP_DGSW_B = TP_DGSW; TP_DGLW_B = TP_DGSW; % Global TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_NH_B = TP_DGSW; TP_DLW_NH_B = TP_DGSW; % NH TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_HI_B = TP_DGSW; TP_DLW_HI_B = TP_DGSW; % HI TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_N0_B = TP_DGSW; TP_DLW_N0_B = TP_DGSW; % N0 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_N60_B = TP_DGSW; TP_DLW_N60_B = TP_DGSW; % N60 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_N70_B = TP_DGSW; TP_DLW_N70_B = TP_DGSW; % N70 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_NH_N0_B = TP_DGSW; TP_DLW_NH_N0_B = TP_DGSW; % NH N0 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_NH_N60_B = TP_DGSW; TP_DLW_NH_N60_B = TP_DGSW; % NH N60 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_NH_N70_B = TP_DGSW; TP_DLW_NH_N70_B = TP_DGSW; % NH N70 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_HI_N0_B = TP_DGSW; TP_DLW_HI_N0_B = TP_DGSW; % HI N0 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_HI_N60_B = TP_DGSW; TP_DLW_HI_N60_B = TP_DGSW; % HI N60 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_HI_N70_B = TP_DGSW; TP_DLW_HI_N70_B = TP_DGSW; % HI N70 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_HI_UN_B = TP_DGSW; TP_DLW_HI_UN_B = TP_DGSW; % HI UN TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_HI_AA_B = TP_DGSW; TP_DLW_HI_AA_B = TP_DGSW; % HI AA TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_HI_AB_B = TP_DGSW; TP_DLW_HI_AB_B = TP_DGSW; % HI AB TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_HI_UN_N0_B = TP_DGSW; TP_DLW_HI_UN_N0_B = TP_DGSW; % HI UN N0 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_HI_UN_N60_B = TP_DGSW; TP_DLW_HI_UN_N60_B = TP_DGSW; % HI UN N60 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_HI_UN_N70_B = TP_DGSW; TP_DLW_HI_UN_N70_B = TP_DGSW; % HI UN N70 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_HI_AA_N0_B = TP_DGSW; TP_DLW_HI_AA_N0_B = TP_DGSW; % HI AA N0 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_HI_AA_N60_B = TP_DGSW; TP_DLW_HI_AA_N60_B = TP_DGSW; % HI AA N60 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_HI_AA_N70_B = TP_DGSW; TP_DLW_HI_AA_N70_B = TP_DGSW; % HI AA N70 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_HI_AB_N0_B = TP_DGSW; TP_DLW_HI_AB_N0_B = TP_DGSW; % HI AB N0 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_HI_AB_N60_B = TP_DGSW; TP_DLW_HI_AB_N60_B = TP_DGSW; % HI AB N60 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_HI_AB_N70_B = TP_DGSW; TP_DLW_HI_AB_N70_B = TP_DGSW; % HI AB N70 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+
+TP_FGSW = TP_DGSW; TP_FGLW = TP_DGSW; % Global TP_Fixation Speaking/Listening Windows
+TP_FSW_NH = TP_DGSW; TP_FLW_NH = TP_DGSW; % NH TP_Fixation Speaking/Listening Windows
+TP_FSW_HI = TP_DGSW; TP_FLW_HI = TP_DGSW; % HI TP_Fixation Speaking/Listening Windows
+TP_FSW_N0 = TP_DGSW; TP_FLW_N0 = TP_DGSW; % N0 TP_Fixation Speaking/Listening Windows
+TP_FSW_N60 = TP_DGSW; TP_FLW_N60 = TP_DGSW; % N60 TP_Fixation Speaking/Listening Windows
+TP_FSW_N70 = TP_DGSW; TP_FLW_N70 = TP_DGSW; % N70 TP_Fixation Speaking/Listening Windows
+TP_FSW_NH_N0 = TP_DGSW; TP_FLW_NH_N0 = TP_DGSW; % NH N0 TP_Fixation Speaking/Listening Windows
+TP_FSW_NH_N60 = TP_DGSW; TP_FLW_NH_N60 = TP_DGSW; % NH N60 TP_Fixation Speaking/Listening Windows
+TP_FSW_NH_N70 = TP_DGSW; TP_FLW_NH_N70 = TP_DGSW; % NH N70 TP_Fixation Speaking/Listening Windows
+TP_FSW_HI_N0 = TP_DGSW; TP_FLW_HI_N0 = TP_DGSW; % HI N0 TP_Fixation Speaking/Listening Windows
+TP_FSW_HI_N60 = TP_DGSW; TP_FLW_HI_N60 = TP_DGSW; % HI N60 TP_Fixation Speaking/Listening Windows
+TP_FSW_HI_N70 = TP_DGSW; TP_FLW_HI_N70 = TP_DGSW; % HI N70 TP_Fixation Speaking/Listening Windows
+TP_FSW_HI_UN = TP_DGSW; TP_FLW_HI_UN = TP_DGSW; % HI UN TP_Fixation Speaking/Listening Windows
+TP_FSW_HI_AA = TP_DGSW; TP_FLW_HI_AA = TP_DGSW; % HI AA TP_Fixation Speaking/Listening Windows
+TP_FSW_HI_AB = TP_DGSW; TP_FLW_HI_AB = TP_DGSW; % HI AB TP_Fixation Speaking/Listening Windows
+TP_FSW_HI_UN_N0 = TP_DGSW; TP_FLW_HI_UN_N0 = TP_DGSW; % HI UN N0 TP_Fixation Speaking/Listening Windows
+TP_FSW_HI_UN_N60 = TP_DGSW; TP_FLW_HI_UN_N60 = TP_DGSW; % HI UN N60 TP_Fixation Speaking/Listening Windows
+TP_FSW_HI_UN_N70 = TP_DGSW; TP_FLW_HI_UN_N70 = TP_DGSW; % HI UN N70 TP_Fixation Speaking/Listening Windows
+TP_FSW_HI_AA_N0 = TP_DGSW; TP_FLW_HI_AA_N0 = TP_DGSW; % HI AA N0 TP_Fixation Speaking/Listening Windows
+TP_FSW_HI_AA_N60 = TP_DGSW; TP_FLW_HI_AA_N60 = TP_DGSW; % HI AA N60 TP_Fixation Speaking/Listening Windows
+TP_FSW_HI_AA_N70 = TP_DGSW; TP_FLW_HI_AA_N70 = TP_DGSW; % HI AA N70 TP_Fixation Speaking/Listening Windows
+TP_FSW_HI_AB_N0 = TP_DGSW; TP_FLW_HI_AB_N0 = TP_DGSW; % HI AB N0 TP_Fixation Speaking/Listening Windows
+TP_FSW_HI_AB_N60 = TP_DGSW; TP_FLW_HI_AB_N60 = TP_DGSW; % HI AB N60 TP_Fixation Speaking/Listening Windows
+TP_FSW_HI_AB_N70 = TP_DGSW; TP_FLW_HI_AB_N70 = TP_DGSW; % HI AB N70 TP_Fixation Speaking/Listening Windows
+
+TP_FGSW_B = TP_DGSW; TP_FGLW_B = TP_DGSW; % Global TP_Fixation Speaking/Listening Windows Adaptive_Baseline corrected
+TP_FSW_NH_B = TP_DGSW; TP_FLW_NH_B = TP_DGSW; % NH TP_Fixation Speaking/Listening Windows Adaptive_Baseline corrected
+TP_FSW_HI_B = TP_DGSW; TP_FLW_HI_B = TP_DGSW; % HI TP_Fixation Speaking/Listening Windows Adaptive_Baseline corrected
+TP_FSW_N0_B = TP_DGSW; TP_FLW_N0_B = TP_DGSW; % N0 TP_Fixation Speaking/Listening Windows Adaptive_Baseline corrected
+TP_FSW_N60_B = TP_DGSW; TP_FLW_N60_B = TP_DGSW; % N60 TP_Fixation Speaking/Listening Windows Adaptive_Baseline corrected
+TP_FSW_N70_B = TP_DGSW; TP_FLW_N70_B = TP_DGSW; % N70 TP_Fixation Speaking/Listening Windows Adaptive_Baseline corrected
+TP_FSW_NH_N0_B = TP_DGSW; TP_FLW_NH_N0_B = TP_DGSW; % NH N0 TP_Fixation Speaking/Listening Windows Adaptive_Baseline corrected
+TP_FSW_NH_N60_B = TP_DGSW; TP_FLW_NH_N60_B = TP_DGSW; % NH N60 TP_Fixation Speaking/Listening Windows Adaptive_Baseline corrected
+TP_FSW_NH_N70_B = TP_DGSW; TP_FLW_NH_N70_B = TP_DGSW; % NH N70 TP_Fixation Speaking/Listening Windows Adaptive_Baseline corrected
+TP_FSW_HI_N0_B = TP_DGSW; TP_FLW_HI_N0_B = TP_DGSW; % HI N0 TP_Fixation Speaking/Listening Windows Adaptive_Baseline corrected
+TP_FSW_HI_N60_B = TP_DGSW; TP_FLW_HI_N60_B = TP_DGSW; % HI N60 TP_Fixation Speaking/Listening Windows Adaptive_Baseline corrected
+TP_FSW_HI_N70_B = TP_DGSW; TP_FLW_HI_N70_B = TP_DGSW; % HI N70 TP_Fixation Speaking/Listening Windows Adaptive_Baseline corrected
+TP_FSW_HI_UN_B = TP_DGSW; TP_FLW_HI_UN_B = TP_DGSW; % HI UN TP_Fixation Speaking/Listening Windows Adaptive_Baseline corrected
+TP_FSW_HI_AA_B = TP_DGSW; TP_FLW_HI_AA_B = TP_DGSW; % HI AA TP_Fixation Speaking/Listening Windows Adaptive_Baseline corrected
+TP_FSW_HI_AB_B = TP_DGSW; TP_FLW_HI_AB_B = TP_DGSW; % HI AB TP_Fixation Speaking/Listening Windows Adaptive_Baseline corrected
+TP_FSW_HI_UN_N0_B = TP_DGSW; TP_FLW_HI_UN_N0_B = TP_DGSW; % HI UN N0 TP_Fixation Speaking/Listening Windows Adaptive_Baseline corrected
+TP_FSW_HI_UN_N60_B = TP_DGSW; TP_FLW_HI_UN_N60_B = TP_DGSW; % HI UN N60 TP_Fixation Speaking/Listening Windows Adaptive_Baseline corrected
+TP_FSW_HI_UN_N70_B = TP_DGSW; TP_FLW_HI_UN_N70_B = TP_DGSW; % HI UN N70 TP_Fixation Speaking/Listening Windows Adaptive_Baseline corrected
+TP_FSW_HI_AA_N0_B = TP_DGSW; TP_FLW_HI_AA_N0_B = TP_DGSW; % HI AA N0 TP_Fixation Speaking/Listening Windows Adaptive_Baseline corrected
+TP_FSW_HI_AA_N60_B = TP_DGSW; TP_FLW_HI_AA_N60_B = TP_DGSW; % HI AA N60 TP_Fixation Speaking/Listening Windows Adaptive_Baseline corrected
+TP_FSW_HI_AA_N70_B = TP_DGSW; TP_FLW_HI_AA_N70_B = TP_DGSW; % HI AA N70 TP_Fixation Speaking/Listening Windows Adaptive_Baseline corrected
+TP_FSW_HI_AB_N0_B = TP_DGSW; TP_FLW_HI_AB_N0_B = TP_DGSW; % HI AB N0 TP_Fixation Speaking/Listening Windows Adaptive_Baseline corrected
+TP_FSW_HI_AB_N60_B = TP_DGSW; TP_FLW_HI_AB_N60_B = TP_DGSW; % HI AB N60 TP_Fixation Speaking/Listening Windows Adaptive_Baseline corrected
+TP_FSW_HI_AB_N70_B = TP_DGSW; TP_FLW_HI_AB_N70_B = TP_DGSW; % HI AB N70 TP_Fixation Speaking/Listening Windows Adaptive_Baseline corrected
+
+for i=1:NTPs_II
+    TP_DGSW(i,:) = ndnanfilter(reshape(mean(DGSW(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DGSW_B(i,:) = ndnanfilter(reshape(mean(TP_DGSW_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DGLW(i,:) = ndnanfilter(reshape(mean(TP_DGLW(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DGLW_B(i,:) = ndnanfilter(reshape(mean(TP_DGLW_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_NH(i,:) = ndnanfilter(reshape(mean(TP_DSW_NH(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_NH_B(i,:) = ndnanfilter(reshape(mean(TP_DSW_NH_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_NH(i,:) = ndnanfilter(reshape(mean(TP_DLW_NH(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_NH_B(i,:) = ndnanfilter(reshape(mean(TP_DLW_NH_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_B(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_B(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_N0(i,:) = ndnanfilter(reshape(mean(TP_DSW_N0(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_N0_B(i,:) = ndnanfilter(reshape(mean(TP_DSW_N0_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_N0(i,:) = ndnanfilter(reshape(mean(TP_DLW_N0(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_N0_B(i,:) = ndnanfilter(reshape(mean(TP_DLW_N0_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_N60(i,:) = ndnanfilter(reshape(mean(TP_DSW_N60(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_N60_B(i,:) = ndnanfilter(reshape(mean(TP_DSW_N60_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_N60(i,:) = ndnanfilter(reshape(mean(TP_DLW_N60(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_N60_B(i,:) = ndnanfilter(reshape(mean(TP_DLW_N60_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_N70(i,:) = ndnanfilter(reshape(mean(TP_DSW_N70(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_N70_B(i,:) = ndnanfilter(reshape(mean(TP_DSW_N70_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_N70(i,:) = ndnanfilter(reshape(mean(TP_DLW_N70(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_N70_B(i,:) = ndnanfilter(reshape(mean(TP_DLW_N70_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_NH_N0(i,:) = ndnanfilter(reshape(mean(TP_DSW_NH_N0(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_NH_N0_B(i,:) = ndnanfilter(reshape(mean(TP_DSW_NH_N0_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_NH_N0(i,:) = ndnanfilter(reshape(mean(TP_DLW_NH_N0(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_NH_N0_B(i,:) = ndnanfilter(reshape(mean(TP_DLW_NH_N0_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_NH_N60(i,:) = ndnanfilter(reshape(mean(TP_DSW_NH_N60(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_NH_N60_B(i,:) = ndnanfilter(reshape(mean(TP_DSW_NH_N60_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_NH_N60(i,:) = ndnanfilter(reshape(mean(TP_DLW_NH_N60(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_NH_N60_B(i,:) = ndnanfilter(reshape(mean(TP_DLW_NH_N60_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_NH_N70(i,:) = ndnanfilter(reshape(mean(TP_DSW_NH_N70(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_NH_N70_B(i,:) = ndnanfilter(reshape(mean(TP_DSW_NH_N70_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_NH_N70(i,:) = ndnanfilter(reshape(mean(TP_DLW_NH_N70(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_NH_N70_B(i,:) = ndnanfilter(reshape(mean(TP_DLW_NH_N70_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_N0(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_N0(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_N0_B(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_N0_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_N0(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_N0(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_N0_B(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_N0_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_N60(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_N60(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_N60_B(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_N60_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_N60(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_N60(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_N60_B(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_N60_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_N70(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_N70(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_N70_B(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_N70_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_N70(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_N70(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_N70_B(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_N70_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_UN(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_UN(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_UN_B(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_UN_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_UN(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_UN(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_UN_B(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_UN_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_AA(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_AA(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_AA_B(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_AA_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_AA(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_AA(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_AA_B(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_AA_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_AB(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_AB(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_AB_B(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_AB_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_AB(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_AB(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_AB_B(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_AB_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_UN_N0(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_UN_N0(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_UN_N0_B(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_UN_N0_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_UN_N0(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_UN_N0(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_UN_N0_B(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_UN_N0_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_UN_N60(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_UN_N60(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_UN_N60_B(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_UN_N60_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_UN_N60(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_UN_N60(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_UN_N60_B(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_UN_N60_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_UN_N70(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_UN_N70(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_UN_N70_B(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_UN_N70_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_UN_N70(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_UN_N70(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_UN_N70_B(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_UN_N70_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_AA_N0(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_AA_N0(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_AA_N0_B(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_AA_N0_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_AA_N0(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_AA_N0(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_AA_N0_B(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_AA_N0_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_AA_N60(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_AA_N60(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_AA_N60_B(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_AA_N60_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_AA_N60(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_AA_N60(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_AA_N60_B(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_AA_N60_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_AA_N70(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_AA_N70(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_AA_N70_B(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_AA_N70_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_AA_N70(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_AA_N70(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_AA_N70_B(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_AA_N70_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_AB_N0(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_AB_N0(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_AB_N0_B(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_AB_N0_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_AB_N0(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_AB_N0(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_AB_N0_B(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_AB_N0_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_AB_N60(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_AB_N60(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_AB_N60_B(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_AB_N60_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_AB_N60(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_AB_N60(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_AB_N60_B(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_AB_N60_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_AB_N70(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_AB_N70(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DSW_HI_AB_N70_B(i,:) = ndnanfilter(reshape(mean(TP_DSW_HI_AB_N70_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_AB_N70(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_AB_N70(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_DLW_HI_AB_N70_B(i,:) = ndnanfilter(reshape(mean(TP_DLW_HI_AB_N70_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+
+    TP_FGSW(i,:) = ndnanfilter(reshape(mean(TP_FGSW(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FGSW_B(i,:) = ndnanfilter(reshape(mean(TP_FGSW_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FGLW(i,:) = ndnanfilter(reshape(mean(TP_FGLW(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FGLW_B(i,:) = ndnanfilter(reshape(mean(TP_FGLW_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_NH(i,:) = ndnanfilter(reshape(mean(TP_FSW_NH(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_NH_B(i,:) = ndnanfilter(reshape(mean(TP_FSW_NH_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_NH(i,:) = ndnanfilter(reshape(mean(TP_FLW_NH(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_NH_B(i,:) = ndnanfilter(reshape(mean(TP_FLW_NH_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_B(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_B(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_N0(i,:) = ndnanfilter(reshape(mean(TP_FSW_N0(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_N0_B(i,:) = ndnanfilter(reshape(mean(TP_FSW_N0_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_N0(i,:) = ndnanfilter(reshape(mean(TP_FLW_N0(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_N0_B(i,:) = ndnanfilter(reshape(mean(TP_FLW_N0_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_N60(i,:) = ndnanfilter(reshape(mean(TP_FSW_N60(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_N60_B(i,:) = ndnanfilter(reshape(mean(TP_FSW_N60_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_N60(i,:) = ndnanfilter(reshape(mean(TP_FLW_N60(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_N60_B(i,:) = ndnanfilter(reshape(mean(TP_FLW_N60_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_N70(i,:) = ndnanfilter(reshape(mean(TP_FSW_N70(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_N70_B(i,:) = ndnanfilter(reshape(mean(TP_FSW_N70_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_N70(i,:) = ndnanfilter(reshape(mean(TP_FLW_N70(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_N70_B(i,:) = ndnanfilter(reshape(mean(TP_FLW_N70_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_NH_N0(i,:) = ndnanfilter(reshape(mean(TP_FSW_NH_N0(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_NH_N0_B(i,:) = ndnanfilter(reshape(mean(TP_FSW_NH_N0_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_NH_N0(i,:) = ndnanfilter(reshape(mean(TP_FLW_NH_N0(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_NH_N0_B(i,:) = ndnanfilter(reshape(mean(TP_FLW_NH_N0_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_NH_N60(i,:) = ndnanfilter(reshape(mean(TP_FSW_NH_N60(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_NH_N60_B(i,:) = ndnanfilter(reshape(mean(TP_FSW_NH_N60_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_NH_N60(i,:) = ndnanfilter(reshape(mean(TP_FLW_NH_N60(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_NH_N60_B(i,:) = ndnanfilter(reshape(mean(TP_FLW_NH_N60_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_NH_N70(i,:) = ndnanfilter(reshape(mean(TP_FSW_NH_N70(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_NH_N70_B(i,:) = ndnanfilter(reshape(mean(TP_FSW_NH_N70_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_NH_N70(i,:) = ndnanfilter(reshape(mean(TP_FLW_NH_N70(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_NH_N70_B(i,:) = ndnanfilter(reshape(mean(TP_FLW_NH_N70_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_N0(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_N0(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_N0_B(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_N0_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_N0(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_N0(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_N0_B(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_N0_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_N60(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_N60(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_N60_B(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_N60_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_N60(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_N60(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_N60_B(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_N60_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_N70(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_N70(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_N70_B(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_N70_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_N70(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_N70(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_N70_B(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_N70_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_UN(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_UN(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_UN_B(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_UN_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_UN(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_UN(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_UN_B(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_UN_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_AA(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_AA(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_AA_B(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_AA_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_AA(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_AA(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_AA_B(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_AA_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_AB(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_AB(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_AB_B(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_AB_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_AB(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_AB(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_AB_B(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_AB_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_UN_N0(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_UN_N0(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_UN_N0_B(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_UN_N0_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_UN_N0(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_UN_N0(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_UN_N0_B(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_UN_N0_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_UN_N60(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_UN_N60(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_UN_N60_B(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_UN_N60_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_UN_N60(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_UN_N60(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_UN_N60_B(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_UN_N60_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_UN_N70(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_UN_N70(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_UN_N70_B(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_UN_N70_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_UN_N70(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_UN_N70(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_UN_N70_B(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_UN_N70_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_AA_N0(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_AA_N0(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_AA_N0_B(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_AA_N0_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_AA_N0(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_AA_N0(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_AA_N0_B(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_AA_N0_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_AA_N60(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_AA_N60(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_AA_N60_B(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_AA_N60_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_AA_N60(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_AA_N60(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_AA_N60_B(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_AA_N60_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_AA_N70(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_AA_N70(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_AA_N70_B(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_AA_N70_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_AA_N70(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_AA_N70(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_AA_N70_B(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_AA_N70_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_AB_N0(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_AB_N0(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_AB_N0_B(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_AB_N0_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_AB_N0(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_AB_N0(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_AB_N0_B(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_AB_N0_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_AB_N60(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_AB_N60(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_AB_N60_B(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_AB_N60_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_AB_N60(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_AB_N60(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_AB_N60_B(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_AB_N60_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_AB_N70(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_AB_N70(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FSW_HI_AB_N70_B(i,:) = ndnanfilter(reshape(mean(TP_FSW_HI_AB_N70_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_AB_N70(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_AB_N70(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+    TP_FLW_HI_AB_N70_B(i,:) = ndnanfilter(reshape(mean(TP_FLW_HI_AB_N70_B(nonzeros(TPsOrder_II(i,:)),:,:),[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+end
 
 % Calculate SEM as: std(X)/sqrt(squeeze(sum(~isnan(X),[1 2]))))
 DGSW_SEM = (squeeze(std(DGSW,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DGSW),[1 2]))))';
