@@ -5,6 +5,7 @@ addpath(genpath('C:\git'));
 Param.Fs=50;
 alldata=load('C:\git\PBCA-thesis\data\AMEND_II\Pair03\HI\AAHI_N0.mat');
 alldata_mat = cell2mat(alldata.data);
+timestamps = vertcat(alldata_mat.timeStamp);
 
 %% GAZE
 % In case gaze3d is transposed from origin [x;y;z] -> transpose to [x,y,z]
@@ -43,253 +44,179 @@ RDiamRaw(~RvalOut)=NaN;
 % Decide 'better' eye results
 [Min, idx_decision] = min([isnan(LDiamRaw) isnan(RDiamRaw)]);
 if idx_decision == 1
-    Diameter = LDiamRaw;
+    Diameter = LDiamRaw';
     eyeChosen = 'Left';
 elseif idx_decision == 2
-    Diameter = RDiamRaw;
+    Diameter = RDiamRaw';
     eyeChosen = 'Right';
 end
 %% EXAMPLE
 
 t_Gaze = linspace(0,length(alldata_mat)/Param.Fs,length(alldata_mat));
 
-% common parameters
-nTrials = 120;
-sample_window = 0.02; %2ms i.e., 500Hz tracking
-nEdgeSamples = 50; %number of samples to discard either side of blink
-tVelocity = 30; %threshold velocity for saccades (deg/s)
-tAcceleration = 8000; %threshold acceleration for saccades (deg/s^2)
-tDist = 0.5; %threshold (Euclidean) distance for saccades (deg)
+data = [timestamps*Param.Fs GazeX GazeY Diameter];
 
-WExt = 10;
+% This script shows an example of how to call the PUPILS preprocessing
+% pipeline and define its options, 
 
-%%%%%%% (0) %%%%%%%%%%
+options = struct;
+options.fs = Param.Fs;            % sampling frequency (Hz)
+options.blink_rule = 'std';       % Rule for blink detection 'std' / 'vel'
+options.pre_blink_t   = 100;      % region to interpolate before blink (ms)
+options.post_blink_t  = 200;      % region to interpolate after blink (ms)
+options.xy_units = 'mm';          % xy coordinate units 'px' / 'mm' / 'cm'
+options.vel_threshold =  30;      % velocity threshold for saccade detection
+options.min_sacc_duration = 10;   % minimum saccade duration (ms)
+options.interpolate_saccades = 0; % Specify whether saccadic distortions should be interpolated 1-yes 0-noB
+options.pre_sacc_t   = 50;        % Region to interpolate before saccade (ms)
+options.post_sacc_t  = 100;       % Region to interpolate after saccade (ms)
+options.low_pass_fc   = 10;       % Low-pass filter cut-off frequency (Hz)
+options.screen_distance = 500;    % Screen distance in mm
+options.dpi = 120;                % pixels/inches
 
-% find start and end times
-t0 = t_Gaze(WExt); %start time 
-tEnd = t_Gaze(end-WExt); %end time
+% Inputs:
+%  - data     :   dataframe (samples x categories) minimum dataframe should
+%                 include [time stamps, x-coordinate, y-coordinate,
+%                 pupilsize] in that order. In addition, x and y velocity
+%                 values might be included.
+%  - options  :   structure defining the options for the event detection
+%                 algorithms, missing data interpolation and noise removal. 
+%
+% Outputs:
+%  - data_out :   dataframe that contains the original data with appended
+%                 information, in the following order: [blink information,
+%                 saccade information, interpolated data, denoised data]
+% 
+%  - info     :   structure containing metadata regarding events and
+%                 quality of the pre-processed data
 
-% ...and sample indices closest t0/tEnd
-t0_time = abs(t_Gaze - t0); %t_Gaze is common to all trials
-tEnd_time = abs(t_Gaze - tEnd);
-[~, t0_ind] = min(t0_time);
-[~, tEnd_ind] = min(tEnd_time);
-t0_ind = t0_ind - 4;
-tEnd_ind = tEnd_ind + 4;
-% ...extend window by 4 samples either side to ensure velocity
-% and acceleration calculation below covers entire stimulation
-% period (vel/acc sliding windows chop off 2 samples each
-% at either end of calculation)
+[proc_data, proc_info] = processPupilData(data, options);
 
-%%%%%%%%%%%%%%%%%%%%%%
+options.screen_distance = 100000;    % Screen distance in mm
+options.dpi = 10;                % pixels/inches
 
-%%%%%%% (1) %%%%%%%%%%
+[proc_data2, proc_info2] = processPupilData(data, options);
 
-% find baseline eye position (must remove NaNs from xPos
-% samples later for calculation of median, but not for
-% subtraction from and extraction of relevant samples below)
-baselineX = GazeX(1:(t0_ind - 1));
-baselineY = GazeY(1:(t0_ind - 1));
-baselineX_NaN = isnan(baselineX);
-baselineY_NaN = isnan(baselineY);
-baselineX(baselineX_NaN) = [];
-baselineY(baselineY_NaN) = [];
+%% Fixation duration
+% wsiz=50;for i = 1:size(proc_data,1);ends(i,:)=find(proc_info.fixation_ends_idx>i-wsiz/2 & proc_info.fixation_ends_idx<i+wsiz/2);starts(i,:)=find(proc_info.fixation_starts_idx>i-wsiz/2 & proc_info.fixation_starts_idx<i+wsiz/2);end
 
-% get relevant eye position data aligned to baseline, and
-% also relevant pupil samples
-xPos = GazeX(t0_ind:tEnd_ind) - median(baselineX);
-yPos = GazeY(t0_ind:tEnd_ind) - median(baselineY);
-pupil = Diameter(t0_ind:tEnd_ind);
+%% Data visualization
 
-%%%%%%%%%%%%%%%%%%%%%%
+info_blinks = sprintf('blink loss: %.2f %%', proc_info.percentage_blinks );
+info_sacc = sprintf('saccadic movements: %.2f %%',proc_info.percentage_saccades);
+info_interp = sprintf('Interpolated data: %.2f %%',proc_info.percentage_interpolated );
 
-%%%%%%% (2) %%%%%%%%%%
+cols = [110 87 115;
+        212 93 121;
+        234 144 133;
+        233 226 208;
+        112 108 97]./255;
 
-% blink detection/removal
-noPupil = isnan(pupil);
-eyedat.blink = 0;
+    fs = options.fs;
 
-% if trial has blink
-if max(noPupil) == 1
+N = length(proc_data);
+T = N/fs;
+t = 0:(1/fs):T-(1/fs); % Define time vector
 
-    % note instance of blink
-    eyedat.blink = 1;
 
-    % find blink boundaries
-    blinkStart = find(diff(noPupil) == 1) + 1; %(index+1 was first NaN, due to differentiation
-    blinkEnd = find(diff(noPupil) == -1);
+figure('Position', [100 100 1000 600])
 
-    % blink that started before first interval will not show up
-    % in blinkStart boundary search above
-    if isempty(blinkStart) == 1
-        blinkStart = 1;
-    end
-    % blink that ended after second interval will not show up
-    % in blinkEnd boundary search above
-    if isempty(blinkEnd) == 1
-        blinkEnd = length(noPupil);
-    end
+subplot(3,2, [1,3,5])
+sacc_col = size(proc_data, 2) - 3; 
+sacc_idx = find(proc_data(:,sacc_col) ~=0);
 
-    % include samples just before/after blink,
-    % accounting for timepoints that move outside analysis
-    % window
-    blinkStart = blinkStart - nEdgeSamples;
-    blinkEnd = blinkEnd + nEdgeSamples;
-    for blink = 1:length(blinkStart)
-        if blinkStart(blink) < 1
-            blinkStart(blink) = 1;
-        end
-    end
-    for blink = 1:length(blinkEnd)
-        if blinkEnd(blink) > length(noPupil)
-            blinkEnd(blink) = length(noPupil);
-        end
-    end
+saccades_x = proc_data(sacc_idx , 2);
+saccades_y = proc_data(sacc_idx , 3);
 
-    % set samples within the boundaries defined above to NaN;
-    % code below should handle both single and multi-blink trials, and
-    % trials in which the first or last blink extends outside
-    % boundaries
-    if length(blinkStart) == length(blinkEnd)
+fixations_x =  proc_data(:, 2);
+fixations_x(sacc_idx) = [];
 
-        for blink = 1:length(blinkStart)
-            noPupil(blinkStart(blink):blinkEnd(blink)) = 1;
-        end
+fixations_y = proc_data(:, 3);
+fixations_y(sacc_idx) = [];
 
-    elseif length(blinkStart) > length(blinkEnd)
+scatter(saccades_x, saccades_y, 'o',...
+     'markerfacecolor', cols(3, :),...
+     'markeredgecolor', cols(3, :),...
+     'MarkerFaceAlpha',.5,'MarkerEdgeAlpha',.1); 
 
-        for blink = 1:(length(blinkStart) - 1) % all but final blink in trial
-            noPupil(blinkStart(blink):blinkEnd(blink)) = 1;
-        end
-        for blink = length(blinkStart) % final blink
-            noPupil(blinkStart(blink):length(noPupil)) = 1;
-        end
+ hold on
+ scatter(fixations_x, fixations_y, 'o',...
+     'markerfacecolor', cols(1, :),...
+     'markeredgecolor', cols(1, :),...
+     'MarkerFaceAlpha',.5,'MarkerEdgeAlpha',.1);
 
-    elseif length(blinkStart) < length(blinkEnd)
 
-        for blink = 1 % first blink in trial
-            noPupil(1:blinkEnd(blink)) = 1;
-        end
-        for blink = 2:(length(blinkEnd)) % any additional blinks
-            noPupil(blinkStart(blink - 1):blinkEnd(blink)) = 1;
-        end
+le = legend('saccades', 'fixations');
+set(le, 'box', 'on', 'location', 'southwest')
 
-    end
 
-    %...and blink samples are removed below (after velocity
-    %and acceleration calculation). Removing prior to this
-    %would create possibility of blink window edges being
-    %accidentally marked as saccades.
+title('Gaze')
+xlabel('x coordinates (pixels)')
+ylabel('y coordinates (pixels)')
 
+
+subplot(3,2,2)
+
+plot(t, proc_data(:, 4), 'k')
+ylims = get(gca, 'YLim');
+axis([t(1) t(end) ylims(1) ylims(2)])
+
+title('Original pupil traze')
+xlabel('t(s)')
+ylabel('Pupil diameter (\mum)')
+
+
+subplot(3,2,4)
+
+p = plot(t, proc_data(:, 4), 'k');
+ylims = get(gca, 'YLim');
+
+height = ylims(2) - ylims(1);
+
+hold on
+
+for i = 1:proc_info.number_of_saccades
+    h(i) = rectangle('position', [proc_info.saccade_starts_s(i) ylims(1) proc_info.saccade_durations(i)  height ],...
+        'facecolor', [cols(3, :) 0.4],...
+        'edgecolor', 'none');
 end
 
-%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%% (3) %%%%%%%%%%
-
-% calculate velocity/acceleration using 5-sample window. See
-% Engbert and Kliegl, 2003. Denominator accounts for the
-% six sample 'differences' used in numerator (i.e., n-2 to
-% n+2 = 4 samples, n-1 to n+1 = 2 samples).
-xVel = zeros(size(xPos)); yVel = zeros(size(yPos));
-for ii = 3:(size(xPos, 1) - 2) % 2 additional samples chopped off either end (see ~line 230 above)
-    xVel(ii) = (xPos(ii + 2) + xPos(ii + 1) - xPos(ii - 1) - xPos(ii - 2))/(6*sample_window);
-    yVel(ii) = (yPos(ii + 2) + yPos(ii + 1) - yPos(ii - 1) - yPos(ii - 2))/(6*sample_window);
-end
-euclidVel = sqrt((xVel.*xVel) + (yVel.*yVel));
-
-xAcc = zeros(size(xPos)); yAcc = zeros(size(yPos));
-for ii = 3:(size(xVel, 1) - 2) % 2 additional samples chopped off either end (see ~line 230 above)
-    xAcc(ii) = (xVel(ii + 2) + xVel(ii + 1) - xVel(ii - 1) - xVel(ii - 2))/(6*sample_window);
-    yAcc(ii) = (yVel(ii + 2) + yVel(ii + 1) - yVel(ii - 1) - yVel(ii - 2))/(6*sample_window);
-end
-euclidAcc = sqrt((xAcc.*xAcc) + (yAcc.*yAcc));
-
-% remove blink samples from pos/velocity/acceleration
-% variables, so that blink edges are not accidentally
-% marked as saccades below
-xPos(noPupil == 1) = [];
-yPos(noPupil == 1) = [];
-xVel(noPupil == 1) = [];
-yVel(noPupil == 1) = [];
-xAcc(noPupil == 1) = [];
-yAcc(noPupil == 1) = [];
-euclidVel(noPupil == 1) = [];
-euclidAcc(noPupil == 1) = [];
-
-% save to post-processed eye data structure (pupil
-% variables may now contain more samples than the others)
-eyedat.pupil = pupil;
-eyedat.xPos = xPos;
-eyedat.yPos = yPos;
-eyedat.xVel = xVel;
-eyedat.yVel = yVel;
-eyedat.xAcc = xAcc;
-eyedat.yAcc = yAcc;
-eyedat.euclidAcc = euclidAcc;
-eyedat.euclidVel = euclidVel;
-eyedat.noPupil = noPupil;
-
-%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%% (4) %%%%%%%%%%
-
-% saccade detection
-eyedat.saccades = [];
-candidates = find(euclidVel > tVelocity);
-if candidates
-
-    % check for multiple candidate saccades in single
-    % trial, using threshold parameters defined at top
-    % (see Engbert & Kliegl papers, and Eyelink manual)
-    saccades = [];
-    diffCandidates = diff(candidates);
-    breaks = [0 find(diffCandidates > 1) size(candidates, 2)];
-    for jj = 1:(size(breaks, 2) - 1)
-
-        % find individual candidate saccades
-        saccade = [candidates(breaks(jj) + 1) candidates(breaks(jj + 1))];
-
-        % exceeds acceleration threshold?
-        peakAcceleration = max(euclidAcc(saccade(1):saccade(2)));
-        if peakAcceleration > tAcceleration
-
-            % exceeds amplitude threshold?
-            xDist = xPos(saccade(2)) - xPos(saccade(1));
-            yDist = yPos(saccade(2)) - yPos(saccade(1));
-            euclidDist = sqrt((xDist*xDist) + (yDist*yDist));
-            if euclidDist > tDist
-
-                % store saccade info
-                peakVelocity = max(euclidVel(saccade(1):saccade(2)));
-                saccades = [saccades; saccade xDist yDist euclidDist peakVelocity];
-            end
-
-        end
-
-    end
-
-    % save saccade data
-    eyedat.saccades = saccades;
+for i = 1:proc_info.number_of_blinks
+    h2(i) = rectangle('position', [proc_info.blink_starts_s(i) ylims(1) proc_info.blink_durations(i) height ],...
+        'facecolor', [cols(5, :) 1],...
+        'edgecolor', 'none');
 end
 
-%% Plot
-figure(1)
+axis([t(1) t(end) ylims(1) ylims(2)])
 
-subplot(3,1,1)
-plot(eyedat.euclidVel, 'b', 'LineWidth', 2);
-ylabel('Velocity (deg/s)')
-ylim([0 150]);
-line([0 700], [30 30], 'LineStyle', '--', 'Color', 'r')
+hg = hggroup;
+% set(h2,'Parent',hg) 
+set(hg,'Displayname','Blinks')
+hg2 = hggroup();
+% set(h,'Parent',hg) 
+set(hg2,'Displayname','Saccades')
 
-subplot(3,1,2)
-plot(eyedat.euclidAcc, 'm', 'LineWidth', 2);
-ylabel('Acceleration (deg/s^2)')
-ylim([0 15000]);
-line([0 700], [8000 8000], 'LineStyle', '--', 'Color', 'r')
+axP = get(gca,'Position');
+le = legend([hg hg2]);
+set(le,'location', 'eastoutside', 'box', 'on');
+set(gca, 'Position', axP)
 
-subplot(3,1,3)
-plot(eyedat.xPos, 'k', 'LineWidth', 2);
-xlabel('Sample')
-ylabel('Position (deg)')
-ylim([-2 2]);
+text(5, 600, info_blinks)
+text(5, 1200, info_sacc)
+
+title('Events')
+xlabel('t(s)')
+ylabel('Pupil diameter (\mum)')
+
+subplot(3,2,6)
+
+plot(t, proc_data(:, size(proc_data, 2)), 'color', cols(2, :), 'linewidth', 1)
+ylims = get(gca, 'YLim');
+axis([t(1) t(end) ylims(1) ylims(2)])
+
+text(5, 1500, info_interp)
+
+title('Processed pupil traze')
+
+xlabel('time (s)');
+ylabel('Pupil Diameter (\mum)');

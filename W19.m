@@ -281,7 +281,7 @@ for q=1:numel(subDirs_II)
         %         EWSpeakIdx=[Speak(:,3)-TimeStartW*Param.Fs,Speak(:,3),Speak(:,3)+TimeEndW*Param.Fs];
         %         EWListenIdx=[Listen(:,3)-TimeStartW*Param.Fs,Listen(:,3),Listen(:,3)+TimeEndW*Param.Fs];
 
-            t_Diam = linspace(0,length(Diameter)./Param.Fs,length(Diameter));
+            s_Diam = linspace(1,length(Diameter),length(Diameter));
 
             % Increase index of num of files used
             x=x+1;
@@ -289,23 +289,35 @@ for q=1:numel(subDirs_II)
             figure('Position',[10 10 1500 400],'Name',strrep(strrep([PairFiles_II(1).folder, '\', cell2mat(FileNames_II(i))],'_','-'),'\','\\'))
             hold on
             grid on
-            plot(t_Diam,Diameter,color='black');
-%             plot(t_Diam,DiameterRaw,color='black',linestyle='.')
-            scatter(t_Diam,DiameterPre,'k*')
-            scatter(t_Diam,DiameterRaw,'r.')
-            startStopS = t_Diam(Speak(:,2:3));widthS = startStopS(:,2)-startStopS(:,1);
-            startStopL = t_Diam(Listen(:,2:3));widthL = startStopL(:,2)-startStopL(:,1);
+            plot(s_Diam,Diameter,color='black')
+%             scatter(s_Diam,DiameterPre,'k*')
+            scatter(s_Diam,DiameterRaw,'k.')
+
+            ABC_cases=[8425,2140,6540];
+            figure;tiledlayout(1,3);ax1 = nexttile;ax2 = nexttile;ax3 = nexttile;
+            hold([ax1 ax2 ax3],'on')
+            set([ax1 ax2 ax3],'xminorgrid','on','yminorgrid','on')
+            w=50;
+            plot(ax2,s_Diam(ABC_cases(2)-w/2:ABC_cases(2)+w/2),Diameter(ABC_cases(2)-w/2:ABC_cases(2)+w/2),color='black');
+
+            scatter(ax1,s_Diam(ABC_cases(1)-w/2:ABC_cases(1)+w/2),DiameterRaw(ABC_cases(2)-w/2:ABC_cases(2)+w/2),'k.')
+            xd = find(DiameterRaw(ABC_cases(2)-w/2:ABC_cases(2)+w/2,:)>4.5);
+            scatter(ax2,s_Diam(ABC_cases(2)-w/2:ABC_cases(2)+w/2),DiameterRaw(ABC_cases(2)-w/2:ABC_cases(2)+w/2),'k.')
+            scatter(ax2,s_Diam(xd+ABC_cases(2)-w/2-1),DiameterRaw(xd+ABC_cases(2)+w/2-1),'r.')
+            scatter(ax3,s_Diam(ABC_cases(3)-w/2:ABC_cases(3)+w/2),DiameterRaw(ABC_cases(2)-w/2:ABC_cases(2)+w/2),'k.')
+            startStopS = s_Diam(Speak(:,2:3));widthS = startStopS(:,2)-startStopS(:,1);
+            startStopL = s_Diam(Listen(:,2:3));widthL = startStopL(:,2)-startStopL(:,1);
             ylim('tight')
             yl=ylim();
             xlim('tight')
-            arrayfun(@(i)rectangle('Position', [startStopS(i,1),yl(1),widthS(i),range(yl)],'EdgeColor', 'none', 'FaceColor', [0 1 0 .2]), 1:size(startStopS,1))
-            arrayfun(@(i)rectangle('Position', [startStopL(i,1),yl(1),widthL(i),range(yl)],'EdgeColor', 'none', 'FaceColor', [1 0 1 .2]), 1:size(startStopL,1))
-            eline1=line(NaN,NaN,'LineWidth',4,'Color',[0 1 0 .2]);
-            eline2=line(NaN,NaN,'LineWidth',4,'Color',[1 0 1 .2]);
+%             arrayfun(@(i)rectangle('Position', [startStopS(i,1),yl(1),widthS(i),range(yl)],'EdgeColor', 'none', 'FaceColor', [0 1 0 .2]), 1:size(startStopS,1))
+%             arrayfun(@(i)rectangle('Position', [startStopL(i,1),yl(1),widthL(i),range(yl)],'EdgeColor', 'none', 'FaceColor', [1 0 1 .2]), 1:size(startStopL,1))
+%             eline1=line(NaN,NaN,'LineWidth',4,'Color',[0 1 0 .2]);
+%             eline2=line(NaN,NaN,'LineWidth',4,'Color',[1 0 1 .2]);
             legend(['Diameter (', eyeChosen,' Eye)'],['Diameter Raw (', eyeChosen,' Eye)'],'Speaking windows','Listening windows','Location','southeastoutside')
             title(['Delay = ', sprintf('%0.2f',EyeAudDelay), 's | NaNs = ', sprintf('%0.2f',100*DiamNaN/length(Diameter)), '%'])
-            xlabel('Time [s]')
-            ylabel('Pupil diameter [mm]');
+%             xlabel([ax1 ax2 ax3],'Time [s]')
+%             ylabel(ax1,'Pupil diameter [mm]');
             
         end
     end
