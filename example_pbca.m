@@ -54,7 +54,14 @@ end
 
 t_Gaze = linspace(0,length(alldata_mat)/Param.Fs,length(alldata_mat));
 
-data = [timestamps*Param.Fs GazeX GazeY Diameter];
+%calculate angular velocity
+[az, el] = calcAngular(GazeX,GazeY,GazeZ);
+gazeAz_velocity = [0;diff(az)/(1/Param.Fs)];
+gazeEl_velocity = [0;diff(el)/(1/Param.Fs)];
+
+gaze_vel=sqrt(gazeAz_velocity.^2.*cosd(el).^2+gazeEl_velocity.^2);
+
+data = [timestamps*Param.Fs GazeX GazeY Diameter gaze_vel];
 
 % This script shows an example of how to call the PUPILS preprocessing
 % pipeline and define its options, 
@@ -112,7 +119,7 @@ cols = [110 87 115;
         233 226 208;
         112 108 97]./255;
 
-    fs = options.fs;
+fs = options.fs;
 
 N = length(proc_data);
 T = N/fs;

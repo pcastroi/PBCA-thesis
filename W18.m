@@ -346,7 +346,7 @@ for q=1:numel(subDirs_II)
                 continue
             end
             
-            % SAME PROCESSING AS IN W1.m
+            % DIFFERENT PROCESSING FOR AMEND II (NanPadS)
             % Downsample (rounding) Utt from 250 Hz (1/binRes) to 50 Hz
             SpeakRaw(:,2:3)=round((SpeakRaw(:,2:3)*binResUtt)*Param.Fs)+NaNPadS;
             ListenRaw(:,2:3)=round((ListenRaw(:,2:3)*binResUtt)*Param.Fs)+NaNPadS;

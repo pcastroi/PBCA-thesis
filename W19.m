@@ -113,25 +113,29 @@ SDur_N70 = zeros(NLayers,NRows); % N70 Speaking Windows Duration
 LDur_N70 = zeros(NLayers,NRows); % N70 Listening Windows Duration
 
 % Loop for AMEND II
-for q=1:numel(subDirs_II)
+ChosenFolder = {'\NH\'};
+% for q=1:numel(subDirs_II)
+q=4;
+i=9;
     PairIn_II = q;
-    for ChosenFolder = {'\NH\','\HI\'}
+%     for ChosenFolder = {'\NH\','\HI\'}
         PairFolder_II=[pwd,'\data\AMEND_II\',cell2mat(subDirs_II(q)),cell2mat(ChosenFolder)]; % Folder naming changed
         PairFiles_II=dir(PairFolder_II); % Folder naming changed
         PairUtt_II=LoadUtt_II.Utterances(PairIn_II,:);
         
         if isempty(PairUtt_II{1})
             disp(['Warning: No Utterance found for folder "',cell2mat(ChosenFolder),cell2mat(subDirs_II(q)),'"'])
-            continue
+%             continue
         end
 %         PairDelay_II=LoadDelays_II.TobAudDelay(PairIn_II,:);
     
-        for i=1:numel(FileNames_II)
+%         for i=1:numel(FileNames_II)
             try
-                alldata = load([PairFiles_II(1).folder, '\', cell2mat(FileNames_II(i))]);
+%                 alldata = load([PairFiles_II(1).folder, '\', cell2mat(FileNames_II(i))]);
+                alldata = load(['C:\git\PBCA-thesis\data\AMEND_II\Pair05\NH', '\', 'ABHI_N70.mat']);             
             catch ME
                 disp(['Warning: File ', PairFiles_II(1).folder, '\', cell2mat(FileNames_II(i)), ' not found (no Gaze data).']);
-                continue
+%                 continue
             end
             alldata_mat = cell2mat(alldata.data);
 
@@ -146,7 +150,7 @@ for q=1:numel(subDirs_II)
             % samples and the duration given by timestamps is bigger than 0.5 s
             if EyeAudDelay > RejectDelay
                 disp(['Warning: File ',PairFiles_II(1).folder, '\', cell2mat(FileNames_II(i)), ' was rejected, too much delay (',sprintf('%0.2f',EyeAudDelay),'s).']);
-                continue
+%                 continue
             end
 
             LDiamRaw = [alldata_mat.diameterLeft];
@@ -207,7 +211,7 @@ for q=1:numel(subDirs_II)
 
             if DiamNaN/length(Diameter) >= RejectRatio
                 disp(['Warning: File ',PairFiles_II(1).folder, '\', cell2mat(FileNames_II(i)), ' was rejected because it contains too many NaNs (',sprintf('%0.2f',100*DiamNaN/length(Diameter)),'%).'])
-                continue
+%                 continue
             end
             
             % Add nan padding - Diameter
@@ -247,10 +251,10 @@ for q=1:numel(subDirs_II)
 
             if isempty(SpeakRaw) && isempty(ListenRaw)
                 disp(['Warning: File ',PairFiles_II(1).folder, '\', cell2mat(FileNames_II(i)),' was rejected for not having associated Utterance windows.']);
-                continue
+%                 continue
             end
             
-            % SAME PROCESSING AS IN W1.m
+            % DIFFERENT PROCESSING FOR AMEND II (NanPadS)
             % Downsample (rounding) Utt from 250 Hz (1/binRes) to 50 Hz
             SpeakRaw(:,2:3)=round((SpeakRaw(:,2:3)*binResUtt)*Param.Fs)+NaNPadS;
             ListenRaw(:,2:3)=round((ListenRaw(:,2:3)*binResUtt)*Param.Fs)+NaNPadS;
@@ -290,35 +294,48 @@ for q=1:numel(subDirs_II)
             hold on
             grid on
             plot(s_Diam,Diameter,color='black')
-%             scatter(s_Diam,DiameterPre,'k*')
-            scatter(s_Diam,DiameterRaw,'k.')
-
-            ABC_cases=[8425,2140,6540];
-            figure;tiledlayout(1,3);ax1 = nexttile;ax2 = nexttile;ax3 = nexttile;
-            hold([ax1 ax2 ax3],'on')
-            set([ax1 ax2 ax3],'xminorgrid','on','yminorgrid','on')
-            w=50;
-            plot(ax2,s_Diam(ABC_cases(2)-w/2:ABC_cases(2)+w/2),Diameter(ABC_cases(2)-w/2:ABC_cases(2)+w/2),color='black');
-
-            scatter(ax1,s_Diam(ABC_cases(1)-w/2:ABC_cases(1)+w/2),DiameterRaw(ABC_cases(2)-w/2:ABC_cases(2)+w/2),'k.')
-            xd = find(DiameterRaw(ABC_cases(2)-w/2:ABC_cases(2)+w/2,:)>4.5);
-            scatter(ax2,s_Diam(ABC_cases(2)-w/2:ABC_cases(2)+w/2),DiameterRaw(ABC_cases(2)-w/2:ABC_cases(2)+w/2),'k.')
-            scatter(ax2,s_Diam(xd+ABC_cases(2)-w/2-1),DiameterRaw(xd+ABC_cases(2)+w/2-1),'r.')
-            scatter(ax3,s_Diam(ABC_cases(3)-w/2:ABC_cases(3)+w/2),DiameterRaw(ABC_cases(2)-w/2:ABC_cases(2)+w/2),'k.')
+            scatter(s_Diam,DiameterPre,'k*')
+            scatter(s_Diam,DiameterRaw,'r.')
             startStopS = s_Diam(Speak(:,2:3));widthS = startStopS(:,2)-startStopS(:,1);
             startStopL = s_Diam(Listen(:,2:3));widthL = startStopL(:,2)-startStopL(:,1);
             ylim('tight')
-            yl=ylim();
             xlim('tight')
-%             arrayfun(@(i)rectangle('Position', [startStopS(i,1),yl(1),widthS(i),range(yl)],'EdgeColor', 'none', 'FaceColor', [0 1 0 .2]), 1:size(startStopS,1))
-%             arrayfun(@(i)rectangle('Position', [startStopL(i,1),yl(1),widthL(i),range(yl)],'EdgeColor', 'none', 'FaceColor', [1 0 1 .2]), 1:size(startStopL,1))
-%             eline1=line(NaN,NaN,'LineWidth',4,'Color',[0 1 0 .2]);
-%             eline2=line(NaN,NaN,'LineWidth',4,'Color',[1 0 1 .2]);
+            yl=ylim();
+            arrayfun(@(i)rectangle('Position', [startStopS(i,1),yl(1),widthS(i),range(yl)],'EdgeColor', 'none', 'FaceColor', [0 1 0 .2]), 1:size(startStopS,1))
+            arrayfun(@(i)rectangle('Position', [startStopL(i,1),yl(1),widthL(i),range(yl)],'EdgeColor', 'none', 'FaceColor', [1 0 1 .2]), 1:size(startStopL,1))
+            eline1=line(NaN,NaN,'LineWidth',4,'Color',[0 1 0 .2]);
+            eline2=line(NaN,NaN,'LineWidth',4,'Color',[1 0 1 .2]);
             legend(['Diameter (', eyeChosen,' Eye)'],['Diameter Raw (', eyeChosen,' Eye)'],'Speaking windows','Listening windows','Location','southeastoutside')
             title(['Delay = ', sprintf('%0.2f',EyeAudDelay), 's | NaNs = ', sprintf('%0.2f',100*DiamNaN/length(Diameter)), '%'])
-%             xlabel([ax1 ax2 ax3],'Time [s]')
-%             ylabel(ax1,'Pupil diameter [mm]');
             
-        end
-    end
-end
+            ABC_cases=[11080,6605,3025];
+            figure;tiledlayout(1,3);ax1 = nexttile;ax2 = nexttile;ax3 = nexttile;
+            hold([ax1 ax2 ax3],'on')
+            grid([ax1 ax2 ax3],'on')
+            w=50;
+            DiameterRaw(3015)=NaN;DiameterRaw(3024)=NaN;DiameterRaw(3025)=NaN;DiameterRaw(3026)=NaN;
+            t1 = linspace(0,1,length(ABC_cases(1)-w:ABC_cases(1)+w));
+            scatter(ax1,t1,DiameterRaw(ABC_cases(1)-w:ABC_cases(1)+w),100,'k.')
+            xd1 = find(DiameterRaw(ABC_cases(1)-w:ABC_cases(1)+w,:)>3.0995);
+            scatter(ax1,t1(xd1),DiameterRaw(xd1+ABC_cases(1)-w-1),100,'r.')
+            
+            t2 = linspace(0,1,length(ABC_cases(2)-w:ABC_cases(2)+w));
+            plot(ax2,t2,Diameter(ABC_cases(2)-w:ABC_cases(2)+w),color='black',Linewidth=1);
+            scatter(ax2,linspace(0,1,length(ABC_cases(2)-w:ABC_cases(2)+w)),DiameterRaw(ABC_cases(2)-w:ABC_cases(2)+w),100,'k.')
+            xd2 = find(DiameterRaw(ABC_cases(2)-w:ABC_cases(2)+w,:)>3.8);
+            scatter(ax2,t2(xd2),DiameterRaw(xd2+ABC_cases(2)-w-1),100,'r.')
+            
+            t3 = linspace(0,1,length(ABC_cases(3)-w:ABC_cases(3)+w));
+            scatter(ax3,t3,DiameterRaw(ABC_cases(3)-w:ABC_cases(3)+w),100,'k.')
+            xd3 = find(DiameterRaw(ABC_cases(3)-w:ABC_cases(3)+w,:)>3.4);
+            scatter(ax3,t3(xd3),DiameterRaw(xd3+ABC_cases(3)-w-1),100,'r.')
+            
+            title(ax1,'(1)')
+            title(ax2,'(2)')
+            title(ax3,'(3)')
+            xlabel([ax1 ax2 ax3],'Time [s]')
+            ylabel(ax1,'Pupil diameter [mm]');
+            
+%         end
+%     end
+% end
