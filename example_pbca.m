@@ -25,6 +25,38 @@ GazeZRaw = gaze3d(:,3);
 GazeX = GazeXRaw;
 GazeY = GazeYRaw;
 GazeZ = GazeZRaw;
+
+% % Preprocessing gaze3d - Setting outliers as NaNs (remove artifacts)
+% XThresh = [mean(GazeX,'omitnan')-std(GazeX,'omitnan'),mean(GazeX,'omitnan')+std(GazeX,'omitnan')];
+% YThresh = [mean(GazeY,'omitnan')-std(GazeY,'omitnan'),mean(GazeY,'omitnan')+std(GazeY,'omitnan')];
+% ZThresh = [mean(GazeZ,'omitnan')-std(GazeZ,'omitnan'),mean(GazeZ,'omitnan')+std(GazeZ,'omitnan')];
+% F_NOutl = 1; % number of outliers per file
+% 
+% for s=1:length(GazeX)
+%     if GazeX(s) < XThresh(1) || GazeX(s) > XThresh(2)
+%         GazeX(s)=NaN;
+%         F_NOutl = F_NOutl + 1;
+%     end
+%     if GazeY(s) < YThresh(1) || GazeY(s) > YThresh(2)
+%         GazeY(s)=NaN;
+%         F_NOutl = F_NOutl + 1;
+%     end
+%     if GazeZ(s) < ZThresh(1) || GazeZ(s) > ZThresh(2)
+%         GazeZ(s)=NaN;
+%         F_NOutl = F_NOutl + 1;
+%     end
+% end
+
+MaxVisualAngle = 2; % [degrees], critical visual angle for fixation definition
+LPWinSize = 0.5; % [s]: Window size of hamming-window for low-pass filtering
+FilterWidth = round((LPWinSize*Param.Fs)/2); % [samples]: Width of hamming filter used for fixation duration
+
+% Fixation duration
+Fixation = fix_duration([GazeX,GazeY,GazeZ],MaxVisualAngle,Param.Fs);
+
+% Filtering - Fixation duration with hamming window (F = 3)
+Fixation = ndnanfilter(Fixation,'hamming',FilterWidth);
+
 %% PUPIL
 % Replace blanks '[]' for 'NaN' in fields diameterLeft and diameterRight
 [alldata_mat(cellfun(@isempty,{alldata_mat.diameterLeft})).diameterLeft] = deal(NaN);
@@ -42,7 +74,7 @@ LDiamRaw(~LvalOut)=NaN;
 RDiamRaw(~RvalOut)=NaN;
 
 % Decide 'better' eye results
-[Min, idx_decision] = min([isnan(LDiamRaw) isnan(RDiamRaw)]);
+[Min, idx_decision] = min([sum(isnan(LDiamRaw)) sum(isnan(RDiamRaw))]);
 if idx_decision == 1
     Diameter = LDiamRaw';
     eyeChosen = 'Left';
@@ -51,17 +83,11 @@ elseif idx_decision == 2
     eyeChosen = 'Right';
 end
 %% EXAMPLE
-
-t_Gaze = linspace(0,length(alldata_mat)/Param.Fs,length(alldata_mat));
-
 %calculate angular velocity
 [az, el] = calcAngular(GazeX,GazeY,GazeZ);
 gazeAz_velocity = [0;diff(az)/(1/Param.Fs)];
 gazeEl_velocity = [0;diff(el)/(1/Param.Fs)];
-
 gaze_vel=sqrt(gazeAz_velocity.^2.*cosd(el).^2+gazeEl_velocity.^2);
-
-data = [timestamps*Param.Fs GazeX GazeY Diameter gaze_vel];
 
 % This script shows an example of how to call the PUPILS preprocessing
 % pipeline and define its options, 
@@ -78,13 +104,11 @@ options.interpolate_saccades = 0; % Specify whether saccadic distortions should 
 options.pre_sacc_t   = 50;        % Region to interpolate before saccade (ms)
 options.post_sacc_t  = 100;       % Region to interpolate after saccade (ms)
 options.low_pass_fc   = 10;       % Low-pass filter cut-off frequency (Hz)
-options.screen_distance = 500;    % Screen distance in mm
-options.dpi = 120;                % pixels/inches
 
 % Inputs:
 %  - data     :   dataframe (samples x categories) minimum dataframe should
 %                 include [time stamps, x-coordinate, y-coordinate,
-%                 pupilsize] in that order. In addition, x and y velocity
+%                 pupilsize, ] in that order. In addition, x and y velocity
 %                 values might be included.
 %  - options  :   structure defining the options for the event detection
 %                 algorithms, missing data interpolation and noise removal. 
@@ -97,16 +121,26 @@ options.dpi = 120;                % pixels/inches
 %  - info     :   structure containing metadata regarding events and
 %                 quality of the pre-processed data
 
+data = [timestamps*Param.Fs GazeX GazeY Diameter gaze_vel];
 [proc_data, proc_info] = processPupilData(data, options);
 
-options.screen_distance = 100000;    % Screen distance in mm
-options.dpi = 10;                % pixels/inches
-
-[proc_data2, proc_info2] = processPupilData(data, options);
-
 %% Fixation duration
-% wsiz=50;for i = 1:size(proc_data,1);ends(i,:)=find(proc_info.fixation_ends_idx>i-wsiz/2 & proc_info.fixation_ends_idx<i+wsiz/2);starts(i,:)=find(proc_info.fixation_starts_idx>i-wsiz/2 & proc_info.fixation_starts_idx<i+wsiz/2);end
+FixWDur=2;
+FixWN=FixWDur*Param.Fs;
+FixData = [zeros(ceil(FixWN/2),1); proc_data(:,8) ; zeros(ceil(FixWN/2),1)];
+fix_hel = zeros(length(proc_data(:,8)),1);
+j = ceil(FixWN/2):length(FixData)-ceil(FixWN/2);
+for i = 1:size(proc_data,1)
+    fix_hel(i,1)=nnz(FixData(j(i)-ceil(FixWN/2)+1:j(i)+ceil(FixWN/2)-1))/Param.Fs; % Count non-zero elements
+end
 
+GazeX_fix = GazeX; GazeY_fix = GazeY; GazeZ_fix = GazeZ;
+GazeX_fix(proc_data(:,8)==0)=NaN; GazeY_fix(proc_data(:,8)==0)=NaN; GazeZ_fix(proc_data(:,8)==0)=NaN;
+Combined_Fixation = fix_duration([GazeX_fix,GazeY_fix,GazeZ_fix],MaxVisualAngle,Param.Fs);
+Combined_Fixation = ndnanfilter(Combined_Fixation,'hamming',FilterWidth);
+% plot(fix_hel/max(fix_hel))
+figure;grid on;hold on;plot(Fixation/max(Fixation));plot(Combined_Fixation/max(Combined_Fixation));title(['Difference between Fix and Combined fix = ',sprintf('%2f',mean(Fixation-Combined_Fixation,'omitnan'))])
+figure;grid on;hold on;plot(Diameter);plot(proc_data(:,10))
 %% Data visualization
 
 info_blinks = sprintf('blink loss: %.2f %%', proc_info.percentage_blinks );

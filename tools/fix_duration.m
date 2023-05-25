@@ -42,11 +42,12 @@ for i = 1:size(Gaze, 1)
         % Calculate the distance between the current gaze sample and the previous sample
         distance = norm(current_gaze_xy - Gaze(j, 1:2));
         
-        % If a data value of any pre- or post sample within the 0.5° visual angle location had been coded NaN (i.e., was missing), the fixation duration of the corresponding time point was set to NaN
-        if isnan(distance)
-            fixation(i) = NaN;
-            break;
-        end
+        % If a data value of any pre- or post sample within the visual angle location had been coded NaN (i.e., was missing), the fixation duration of the corresponding time point was set to NaN
+        % COMMENTED BECAUSE OF THE USE OF "PUPILS" FIXATION OUTPUTS
+%         if isnan(distance)
+%             fixation(i) = NaN;
+%             break;
+%         end
         
         % If the distance is greater than the sphere radius, stop counting pre-samples
         if distance > radius(i)
@@ -62,11 +63,12 @@ for i = 1:size(Gaze, 1)
         % Calculate the distance between the current gaze sample and the subsequent sample
         distance = norm(current_gaze_xy - Gaze(j, 1:2));
 
-        % If a data value of any pre- or post sample within the 0.5° visual angle location had been coded NaN (i.e., was missing), the fixation duration of the corresponding time point was set to NaN
-        if isnan(distance)
-            fixation(i) = NaN;
-            break;
-        end
+        % If a data value of any pre- or post sample within the visual angle location had been coded NaN (i.e., was missing), the fixation duration of the corresponding time point was set to NaN
+        % COMMENTED BECAUSE OF THE USE OF "PUPILS" FIXATION OUTPUTS
+%         if isnan(distance)
+%             fixation(i) = NaN;
+%             break;
+%         end
         
         % If the distance is greater than the sphere radius, stop counting post-samples
         if distance > radius(i)
