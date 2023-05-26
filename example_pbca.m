@@ -147,7 +147,7 @@ info_blinks = sprintf('blink loss: %.2f %%', proc_info.percentage_blinks );
 info_sacc = sprintf('saccadic movements: %.2f %%',proc_info.percentage_saccades);
 info_interp = sprintf('Interpolated data: %.2f %%',proc_info.percentage_interpolated );
 
-cols = [110 87 115;
+cols = [53 155 67;
         212 93 121;
         234 144 133;
         233 226 208;
@@ -162,7 +162,6 @@ t = 0:(1/fs):T-(1/fs); % Define time vector
 
 figure('Position', [100 100 1000 600])
 
-subplot(3,2, [1,3,5])
 sacc_col = size(proc_data, 2) - 3; 
 sacc_idx = find(proc_data(:,sacc_col) ~=0);
 
@@ -196,68 +195,77 @@ xlabel('x coordinates (pixels)')
 ylabel('y coordinates (pixels)')
 
 
-subplot(3,2,2)
-
-plot(t, proc_data(:, 4), 'k')
-ylims = get(gca, 'YLim');
-axis([t(1) t(end) ylims(1) ylims(2)])
-
-title('Original pupil traze')
-xlabel('t(s)')
-ylabel('Pupil diameter (\mum)')
-
-
-subplot(3,2,4)
-
-p = plot(t, proc_data(:, 4), 'k');
-ylims = get(gca, 'YLim');
-
-height = ylims(2) - ylims(1);
-
+figure('Position', [100 100 1000 600])
+% blinks
+subplot(3,1,1)
 hold on
+plot(t, proc_data(:, 4), 'k')
+% yline(mean(proc_data(:, 4),'omitnan'), '--k')
+% yline(proc_info.blink_thresh,':r','Threshold','LabelHorizontalAlignment', 'center')
+axis([t(1) t(Param.Fs*10) min(proc_data(1:Param.Fs*10, 4))-0.1 max(proc_data(1:Param.Fs*10, 4))+0.1])
+ylims = get(gca, 'YLim');
+height = ylims(2) - ylims(1);
+for i = 1:proc_info.number_of_blinks
+    rectangle('position', [proc_info.blink_starts_s(i) ylims(1) proc_info.blink_durations(i) height ],...
+        'facecolor', [cols(5, :) 0.4],...
+        'edgecolor', 'none');
+end
+title('Blink detection')
+xlabel('Time [s]')
+ylabel('Pupil diameter [mm]')
+grid on
+line(NaN,NaN,'linewidth',3,'Color',[cols(5, :) 0.4])
+legend('Raw data', 'Blink events')
 
+% saccades
+subplot(3,1,2)
+hold on
+plot(t,gaze_vel);
+% yline(options.vel_threshold,':r','Threshold','LabelHorizontalAlignment', 'center')
+axis([t(1) t(Param.Fs*10) min(gaze_vel(1:Param.Fs*10))-10 max(gaze_vel(1:Param.Fs*10))+10])
+ylims = get(gca, 'YLim');
+height = ylims(2) - ylims(1);
 for i = 1:proc_info.number_of_saccades
-    h(i) = rectangle('position', [proc_info.saccade_starts_s(i) ylims(1) proc_info.saccade_durations(i)  height ],...
+        rectangle('position', [proc_info.saccade_starts_s(i) ylims(1) proc_info.saccade_durations(i)  height ],...
         'facecolor', [cols(3, :) 0.4],...
         'edgecolor', 'none');
 end
+title('Saccade detection')
+xlabel('Time [s]')
+ylabel('Angular velocity [°/s]')
+grid on
+line(NaN,NaN,'linewidth',3,'Color',[cols(3, :) 0.4])
+legend('Angular velocity','Saccade events')
+% legend('$\textsf{Angular velocity: } \: v_{gaze}$','$\textsf{Saccade events}$','Interpreter','latex')
 
-for i = 1:proc_info.number_of_blinks
-    h2(i) = rectangle('position', [proc_info.blink_starts_s(i) ylims(1) proc_info.blink_durations(i) height ],...
-        'facecolor', [cols(5, :) 1],...
+% Combined events
+subplot(3,1,3)
+hold on
+plot(t, proc_data(:, size(proc_data, 2)), 'color', cols(2, :), 'linewidth', 1)
+axis([t(1) t(Param.Fs*10) min(proc_data(1:Param.Fs*10, size(proc_data, 2)))-0.1 max(proc_data(1:Param.Fs*10, size(proc_data, 2)))+0.1])
+ylims = get(gca, 'YLim');
+height = ylims(2) - ylims(1);
+% for i = 1:proc_info.number_of_blinks
+%     rectangle('position', [proc_info.blink_starts_s(i) ylims(1) proc_info.blink_durations(i) height ],...
+%         'facecolor', [cols(5, :) 0.4],...
+%         'edgecolor', 'none');
+% end
+% for i = 1:proc_info.number_of_saccades
+%         rectangle('position', [proc_info.saccade_starts_s(i) ylims(1) proc_info.saccade_durations(i)  height ],...
+%         'facecolor', [cols(3, :) 0.4],...
+%         'edgecolor', 'none');
+% end
+for i = 1:proc_info.number_of_fixations
+    rectangle('position', [proc_info.fixation_starts_s(i) ylims(1) proc_info.fixation_durations(i) height ],...
+        'facecolor', [cols(1, :) 0.2],...
         'edgecolor', 'none');
 end
-
-axis([t(1) t(end) ylims(1) ylims(2)])
-
-hg = hggroup;
-% set(h2,'Parent',hg) 
-set(hg,'Displayname','Blinks')
-hg2 = hggroup();
-% set(h,'Parent',hg) 
-set(hg2,'Displayname','Saccades')
-
-axP = get(gca,'Position');
-le = legend([hg hg2]);
-set(le,'location', 'eastoutside', 'box', 'on');
-set(gca, 'Position', axP)
-
-text(5, 600, info_blinks)
-text(5, 1200, info_sacc)
-
-title('Events')
-xlabel('t(s)')
-ylabel('Pupil diameter (\mum)')
-
-subplot(3,2,6)
-
-plot(t, proc_data(:, size(proc_data, 2)), 'color', cols(2, :), 'linewidth', 1)
-ylims = get(gca, 'YLim');
-axis([t(1) t(end) ylims(1) ylims(2)])
-
 text(5, 1500, info_interp)
-
-title('Processed pupil traze')
-
-xlabel('time (s)');
-ylabel('Pupil Diameter (\mum)');
+grid on
+% line(NaN,NaN,'linewidth',3,'Color',[cols(5, :) 0.4])
+% line(NaN,NaN,'linewidth',3,'Color',[cols(3, :) 0.4])
+line(NaN,NaN,'linewidth',3,'Color',[cols(1, :) 0.4])
+legend('Preprocessed data','Fixation events')
+title('Fixation detection')
+xlabel('Time [s]')
+ylabel('Pupil diameter [mm]')
