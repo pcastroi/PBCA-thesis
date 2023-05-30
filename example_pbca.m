@@ -201,8 +201,8 @@ subplot(3,1,1)
 hold on
 plot(t, proc_data(:, 4), 'k')
 % yline(mean(proc_data(:, 4),'omitnan'), '--k')
-% yline(proc_info.blink_thresh,':r','Threshold','LabelHorizontalAlignment', 'center')
-axis([t(1) t(Param.Fs*10) min(proc_data(1:Param.Fs*10, 4))-0.1 max(proc_data(1:Param.Fs*10, 4))+0.1])
+yline((nanmean(proc_data(1:500, 4))-3*nanstd(proc_data(1:500, 4))),'--','color',"#555555") %,'Threshold','LabelHorizontalAlignment', 'center'
+axis([t(1) t(Param.Fs*10) nanmean(proc_data(1:500, 4))-3*nanstd(proc_data(1:500, 4))-0.1 max(proc_data(1:Param.Fs*10, 4))+0.1])
 ylims = get(gca, 'YLim');
 height = ylims(2) - ylims(1);
 for i = 1:proc_info.number_of_blinks
@@ -215,13 +215,13 @@ xlabel('Time [s]')
 ylabel('Pupil diameter [mm]')
 grid on
 line(NaN,NaN,'linewidth',3,'Color',[cols(5, :) 0.4])
-legend('Raw data', 'Blink events')
+legend('Raw data','Threshold', 'Blink events')
 
 % saccades
 subplot(3,1,2)
 hold on
-plot(t,gaze_vel);
-% yline(options.vel_threshold,':r','Threshold','LabelHorizontalAlignment', 'center')
+plot(t,gaze_vel,'k');
+yline(options.vel_threshold,'--','color',"#555555") %,'Threshold','LabelHorizontalAlignment', 'center'
 axis([t(1) t(Param.Fs*10) min(gaze_vel(1:Param.Fs*10))-10 max(gaze_vel(1:Param.Fs*10))+10])
 ylims = get(gca, 'YLim');
 height = ylims(2) - ylims(1);
@@ -235,13 +235,13 @@ xlabel('Time [s]')
 ylabel('Angular velocity [°/s]')
 grid on
 line(NaN,NaN,'linewidth',3,'Color',[cols(3, :) 0.4])
-legend('Angular velocity','Saccade events')
+legend('Angular velocity','Threshold','Saccade events')
 % legend('$\textsf{Angular velocity: } \: v_{gaze}$','$\textsf{Saccade events}$','Interpreter','latex')
 
 % Combined events
 subplot(3,1,3)
 hold on
-plot(t, proc_data(:, size(proc_data, 2)), 'color', cols(2, :), 'linewidth', 1)
+plot(t, proc_data(:, size(proc_data, 2)),'Color', cols(2, :),'linewidth',1)
 axis([t(1) t(Param.Fs*10) min(proc_data(1:Param.Fs*10, size(proc_data, 2)))-0.1 max(proc_data(1:Param.Fs*10, size(proc_data, 2)))+0.1])
 ylims = get(gca, 'YLim');
 height = ylims(2) - ylims(1);

@@ -190,6 +190,10 @@ for q=1:numel(subDirs_II)
             end
             alldata_mat = cell2mat(alldata.data);
 
+            % Extract Timestamps [s]
+            timestamps = vertcat(alldata_mat.timeStamp);
+            
+            % GAZE 3D
             % In case gaze3d is transposed from origin [x;y;z] -> transpose to [x,y,z]
             if size([alldata_mat(:,cellfun(@(xd) ~any(isnan(xd)),{alldata_mat.gaze3d})).gaze3d],1) == 3
                 for k=1:size(alldata_mat,2)
@@ -205,13 +209,9 @@ for q=1:numel(subDirs_II)
             
             gaze3d = vertcat(alldata_mat.gaze3d);
         
-            GazeXRaw = gaze3d(:,1);
-            GazeYRaw = gaze3d(:,2);
-            GazeZRaw = gaze3d(:,3);
-
-            GazeX = GazeXRaw;
-            GazeY = GazeYRaw;
-            GazeZ = GazeZRaw;
+            GazeX = gaze3d(:,1);
+            GazeY = gaze3d(:,2);
+            GazeZ = gaze3d(:,3);
 
             % NaN's appear at the same time at [X,Y,Z], we only look at X.
             XNan = find(isnan(GazeXRaw));
@@ -222,39 +222,42 @@ for q=1:numel(subDirs_II)
                 continue
             end
             
-            % Preprocessing gaze3d - Setting outliers as NaNs (remove artifacts)
-            XThresh = [mean(GazeX,'omitnan')-std(GazeX,'omitnan'),mean(GazeX,'omitnan')+std(GazeX,'omitnan')];
-            YThresh = [mean(GazeY,'omitnan')-std(GazeY,'omitnan'),mean(GazeY,'omitnan')+std(GazeY,'omitnan')];
-            ZThresh = [mean(GazeZ,'omitnan')-std(GazeZ,'omitnan'),mean(GazeZ,'omitnan')+std(GazeZ,'omitnan')];
-            F_NOutl = 1; % number of outliers per file
+            % Preprocessing - PUPILS pipeline
+            % 1) Calculate angular velocity
+            [az, el] = calcAngular(GazeX,GazeY,GazeZ);
+            gazeAz_velocity = [0;diff(az)/(1/Param.Fs)];
+            gazeEl_velocity = [0;diff(el)/(1/Param.Fs)];
+            gaze_vel=sqrt(gazeAz_velocity.^2.*cosd(el).^2+gazeEl_velocity.^2);
 
-            for s=1:length(GazeX)
-                if GazeX(s) < XThresh(1) || GazeX(s) > XThresh(2)
-                    GazeX(s)=NaN;
-                    F_NOutl = F_NOutl + 1;
-                end
-                if GazeY(s) < YThresh(1) || GazeY(s) > YThresh(2)
-                    GazeY(s)=NaN;
-                    F_NOutl = F_NOutl + 1;
-                end
-                if GazeZ(s) < ZThresh(1) || GazeZ(s) > ZThresh(2)
-                    GazeZ(s)=NaN;
-                    F_NOutl = F_NOutl + 1;
-                end
-            end
+            % 2) Select preprocessing options
+            options = struct;
+            options.fs = Param.Fs;            % sampling frequency (Hz)
+            options.blink_rule = 'std';       % Rule for blink detection 'std' / 'vel'
+            options.pre_blink_t   = 100;      % region to interpolate before blink (ms)
+            options.post_blink_t  = 200;      % region to interpolate after blink (ms)
+            options.xy_units = 'mm';          % xy coordinate units 'px' / 'mm' / 'cm'
+            options.vel_threshold =  30;      % velocity threshold for saccade detection
+            options.min_sacc_duration = 10;   % minimum saccade duration (ms)
+            options.interpolate_saccades = 0; % Specify whether saccadic distortions should be interpolated 1-yes 0-noB
+            options.pre_sacc_t   = 50;        % Region to interpolate before saccade (ms)
+            options.post_sacc_t  = 100;       % Region to interpolate after saccade (ms)
+            options.low_pass_fc   = 10;       % Low-pass filter cut-off frequency (Hz)
 
-            % Reject a file if its fixation contains too many outliers
-            if F_NOutl/numel(gaze3d) >= RejectRatio
-                disp(['Warning: File ', PairFiles_II(1).folder, '\', cell2mat(FileNames_II(i)), ' was rejected because its fixation duration contains too many outliers (',sprintf('%0.2f',(100*F_NOutl)/numel(gaze3d)),'%).'])
-                continue
-            end
+            % 3) Using PUPILS toolbox 
+            %   -IN [samples]: [timestamps, X, Y, Z, Diameter, gaze_vel]
+            %   -OUT[samples]: [timestamps, X, Y, Z, Diameter, gaze_vel, blinks, saccades, fixations, interpolated, denoised]
+            data = [timestamps*Param.Fs GazeX GazeY Diameter gaze_vel];
+            [proc_data, proc_info] = processPupilData(data, options);
 
-            % Fixation duration
-            Fixation = fix_duration([GazeX,GazeY,GazeZ],MaxVisualAngle,Param.Fs);
+            % 4) Fixation duration - from fixation samples (from PUPILS)
+            GazeX_fix = GazeX; GazeY_fix = GazeY; GazeZ_fix = GazeZ;
+            GazeX_fix(proc_data(:,8)==0)=NaN; GazeY_fix(proc_data(:,8)==0)=NaN; GazeZ_fix(proc_data(:,8)==0)=NaN;
+            fixation = fix_duration([GazeX_fix,GazeY_fix,GazeZ_fix],MaxVisualAngle,Param.Fs);        
 
-            % Filtering - Fixation duration with hamming window (F = 3)
-            Fixation = ndnanfilter(Fixation,'hamming',FilterWidth);
+            % 5) Filtering - Fixation duration with hamming window (F = 3)
+            fixation = ndnanfilter(fixation,'hamming',FilterWidth);
             
+            % DIAMETER
             % Replace blanks '[]' for 'NaN' in fields diameterLeft and diameterRight
             [alldata_mat(cellfun(@isempty,{alldata_mat.diameterLeft})).diameterLeft] = deal(NaN);
             [alldata_mat(cellfun(@isempty,{alldata_mat.diameterRight})).diameterRight] = deal(NaN);
