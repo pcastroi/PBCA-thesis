@@ -13,7 +13,7 @@ LPWinSize = 0.5; % [s]: Window size of hamming-window for low-pass filtering
 LPWindow = hamming(round(LPWinSize*Param.Fs));
 LPWindow = LPWindow/sum(LPWindow); % Hamming-window
 AudFs = 48000;
-WP = [-0.5,3]; % [s], Duration of analysis window
+WP = [-0.5,4]; % [s], Duration of analysis window
 AdapBL = 0.3; % [s], Duration of baseline prior to event
 BL = [15,20]; % [s]
 BLPeriod = [0,20]; % [s]
@@ -113,26 +113,13 @@ for q=1:numel(subDirs)
         LDiamRaw = [alldata_mat.diameterLeft];
         RDiamRaw = [alldata_mat.diameterRight];
         
-         % Preprocessing - Setting outliers as NaNs (remove artifacts)
-%             LThreshOut = [mean(LDiamRaw,'omitnan')-2*std(LDiamRaw,'omitnan'),mean(LDiamRaw,'omitnan')+2*std(LDiamRaw,'omitnan')];
-%             RThreshOut = [mean(RDiamRaw,'omitnan')-2*std(RDiamRaw,'omitnan'),mean(RDiamRaw,'omitnan')+2*std(RDiamRaw,'omitnan')];
-%             for s=1:length(alldata_mat)
-%                 if LDiamRaw(1,s) < LThreshOut(1) || LDiamRaw(1,s) > LThreshOut(2)
-%                     LDiamRaw(1,s)=NaN;
-%                 end
-%                 if RDiamRaw(1,s) < RThreshOut(1) || RDiamRaw(1,s) > RThreshOut(2)
-%                     RDiamRaw(1,s)=NaN;
-%                 end
-%             end
+        % New artifact-removal method
+        standardRawSettings = rawDataFilter();
+        [LvalOut,LspeedFiltData,LdevFiltData] = rawDataFilter(linspace(0,length(LDiamRaw)./Param.Fs,length(LDiamRaw))',LDiamRaw',standardRawSettings);
+        [RvalOut,RspeedFiltData,RdevFiltData] = rawDataFilter(linspace(0,length(RDiamRaw)./Param.Fs,length(RDiamRaw))',RDiamRaw',standardRawSettings);
 
-            % New artifact-removal method
-            standardRawSettings = rawDataFilter();
-            [LvalOut,LspeedFiltData,LdevFiltData] = rawDataFilter(linspace(0,length(LDiamRaw)./Param.Fs,length(LDiamRaw))',LDiamRaw',standardRawSettings);
-            [RvalOut,RspeedFiltData,RdevFiltData] = rawDataFilter(linspace(0,length(RDiamRaw)./Param.Fs,length(RDiamRaw))',RDiamRaw',standardRawSettings);
-            
-            LDiamRaw(~LvalOut)=NaN;
-            RDiamRaw(~RvalOut)=NaN;
-        end
+        LDiamRaw(~LvalOut)=NaN;
+        RDiamRaw(~RvalOut)=NaN;
         
         % Processing - Interpolating NaNs
         [LDiam,LMetadata] = preprocpupil(LDiamRaw,Param);
@@ -244,40 +231,6 @@ for q=1:numel(subDirs)
         Med_S=Med_S+median(Speak(:,1));
         
         t_Diam = linspace(0,length(Diameter)./Param.Fs,length(Diameter));
-        
-        %% Plots
-        if x==1
-            figure;tiledlayout(1,2);
-            ax1 = nexttile;
-            ax2 = nexttile;
-            figure;tiledlayout(2,2);
-            ax3 = nexttile;
-            ax4 = nexttile;
-            ax5 = nexttile;
-            ax6 = nexttile;
-            figure;tiledlayout(3,2);
-            ax7 = nexttile;
-            ax8 = nexttile;
-            ax9 = nexttile;
-            ax10 = nexttile;
-            ax11 = nexttile;
-            ax12 = nexttile;
-            figure;tiledlayout(1,3);
-            ax13 = nexttile;
-            ax14 = nexttile;
-            ax15 = nexttile;
-            figure;tiledlayout(1,2);
-            ax16 = nexttile;
-            ax17 = nexttile;
-            figure;tiledlayout(1,2);
-            ax18 = nexttile;
-            ax19 = nexttile;
-            figure;tiledlayout(1,2);
-            ax20 = nexttile;
-            ax21 = nexttile;
-        end
-        x=x+1;
-        hold([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10 ax11 ax12 ax13 ax14 ax15 ax16 ax17 ax18 ax19 ax20 ax21],'on')
         
         if isempty(Speak)  % Could be empty
             Speak=Listen(1,:)+1;
@@ -443,300 +396,327 @@ for q=1:numel(subDirs)
             F2_L_N70(x)=mean(nonzeros(temp2(:,2)));
             F3_L_N70(x)=mean(nonzeros(temp3));
         end
-        
-        % Last file = \Main12\P1_SHL_B2.mat -> default rejection criteria
-        if contains([PairFiles(i).folder, '\', PairFiles(i).name],'\Main12\P1_SHL_B2.mat')  
-            title(ax1,'G1: BL Period Initially Speaking')
-            title(ax2,'G2: BL Period Initially Listening')
-            title(ax3,'G3: Speaking-Evoked')
-            title(ax4,'G4: Listening-Evoked')
-            title(ax5,'G5: Baselined Speaking-Evoked')
-            title(ax6,'G6: Baselined Listening-Evoked')
-            title(ax7,'G7: Global Speaking-evoked response')
-            title(ax8,'G8: Global Listening-evoked response')
-            title(ax9,['G9: Baselined [',num2str(BL(1)),',',num2str(BL(2)),'] global Speaking-evoked response'])
-            title(ax10,['G10: Baselined [',num2str(BL(1)),',',num2str(BL(2)),'] global Listening-evoked response'])
-            title(ax11,'G11: Baselined (adaptive) global Speaking-evoked response')
-            title(ax12,'G12: Baselined (adaptive) global Listening-evoked response')
-            title(ax13,'Feature 1: Mean Pupil Size')
-            title(ax14,'Feature 2: Mean Slope')
-            title(ax15,'Feature 3: Mean Peak Pupil Size')
-            title(ax16,'Global Speaking-evoked response')
-            title(ax17,'Global Listening-evoked response')
-            title(ax18,'Global fixed [15,20] s baselined Speaking-evoked response')
-            title(ax19,'Global fixed [15,20] s baselined Listening-evoked response')
-            title(ax20,'Global adaptive baselined Speaking-evoked response')
-            title(ax21,'Global adaptive baselined Listening-evoked response')
-            xlabel([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10 ax11 ax12 ax16 ax17 ax18 ax19 ax20 ax21],'Time [s]')
-            xlabel([ax13 ax14 ax15],'Conditions')
-            ylabel([ax1 ax2 ax3 ax4 ax7 ax8 ax13 ax15 ax16 ax17],'Pupil diameter [mm]')
-            ylabel([ax5 ax6 ax9 ax10 ax11 ax12 ax18 ax19 ax20 ax21],'Pupil baseline difference [mm]')
-            ylabel(ax14,'Slope [mm/s]')
-            xlim([ax1 ax2],[0, 20])
-            xlim([ax3 ax4 ax5 ax6 ax16 ax17 ax18 ax19 ax20 ax21],[WP(1), WP(2)])
-            grid([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10 ax11 ax12 ax13 ax14 ax15 ax16 ax17 ax18 ax19 ax20 ax21],'on')
-            xline(ax3,0,'--')
-            xline(ax4,0,'--')
-            xline(ax5,0,'--')
-            xline(ax6,0,'--')
-            xline(ax7,0,'--')
-            xline(ax8,0,'--')
-            xline(ax9,0,'--')
-            xline(ax10,0,'--')
-            xline(ax11,0,'--')
-            xline(ax12,0,'--')
-            xline(ax16,0,'--','handlevisibility' ,'off')
-            xline(ax17,0,'--','handlevisibility' ,'off')
-            xline(ax18,0,'--','handlevisibility' ,'off')
-            xline(ax19,0,'--','handlevisibility' ,'off')
-            xline(ax20,0,'--','handlevisibility' ,'off')
-            xline(ax21,0,'--','handlevisibility' ,'off')
-            G1(~any(G1,2),:)=[];
-            G2(~any(G2,2),:)=[];
-            G3(~any(G3,2),:)=[];
-            G4(~any(G4,2),:)=[];
-            G5(~any(G5,2),:)=[];
-            G6(~any(G6,2),:)=[];
-            G7(~any(G7,[2 3]),:,:)=[];G7(:,~any(G7,[1 3]),:)=[];
-            G8(~any(G8,[2 3]),:,:)=[];G8(:,~any(G8,[1 3]),:)=[];
-            G9(~any(G9,[2 3]),:,:)=[];G9(:,~any(G9,[1 3]),:)=[];
-            G10(~any(G10,[2 3]),:,:)=[];G10(:,~any(G10,[1 3]),:)=[];
-            G11(~any(G11,[2 3]),:,:)=[];G11(:,~any(G11,[1 3]),:)=[];
-            G12(~any(G12,[2 3]),:,:)=[];G12(:,~any(G12,[1 3]),:)=[];
-            G13(~any(G13,[2 3]),:,:)=[];G13(:,~any(G13,[1 3]),:)=[];
-            G14(~any(G14,[2 3]),:,:)=[];G14(:,~any(G14,[1 3]),:)=[];
-            G15(~any(G15,[2 3]),:,:)=[];G15(:,~any(G15,[1 3]),:)=[];
-            G16(~any(G16,[2 3]),:,:)=[];G16(:,~any(G16,[1 3]),:)=[];
-            G17(~any(G17,[2 3]),:,:)=[];G17(:,~any(G17,[1 3]),:)=[];
-            G18(~any(G18,[2 3]),:,:)=[];G18(:,~any(G18,[1 3]),:)=[];
-            G19(~any(G19,[2 3]),:,:)=[];G19(:,~any(G19,[1 3]),:)=[];
-            G20(~any(G20,[2 3]),:,:)=[];G20(:,~any(G20,[1 3]),:)=[];
-            G13_FB(~any(G13_FB,[2 3]),:,:)=[];G13_FB(:,~any(G13_FB,[1 3]),:)=[];
-            G14_FB(~any(G14_FB,[2 3]),:,:)=[];G14_FB(:,~any(G14_FB,[1 3]),:)=[];
-            G15_FB(~any(G15_FB,[2 3]),:,:)=[];G15_FB(:,~any(G15_FB,[1 3]),:)=[];
-            G16_FB(~any(G16_FB,[2 3]),:,:)=[];G16_FB(:,~any(G16_FB,[1 3]),:)=[];
-            G17_FB(~any(G17_FB,[2 3]),:,:)=[];G17_FB(:,~any(G17_FB,[1 3]),:)=[];
-            G18_FB(~any(G18_FB,[2 3]),:,:)=[];G18_FB(:,~any(G18_FB,[1 3]),:)=[];
-            G19_FB(~any(G19_FB,[2 3]),:,:)=[];G19_FB(:,~any(G19_FB,[1 3]),:)=[];
-            G20_FB(~any(G20_FB,[2 3]),:,:)=[];G20_FB(:,~any(G20_FB,[1 3]),:)=[];
-            G13_AB(~any(G13_AB,[2 3]),:,:)=[];G13_AB(:,~any(G13_AB,[1 3]),:)=[];
-            G14_AB(~any(G14_AB,[2 3]),:,:)=[];G14_AB(:,~any(G14_AB,[1 3]),:)=[];
-            G15_AB(~any(G15_AB,[2 3]),:,:)=[];G15_AB(:,~any(G15_AB,[1 3]),:)=[];
-            G16_AB(~any(G16_AB,[2 3]),:,:)=[];G16_AB(:,~any(G16_AB,[1 3]),:)=[];
-            G17_AB(~any(G17_AB,[2 3]),:,:)=[];G17_AB(:,~any(G17_AB,[1 3]),:)=[];
-            G18_AB(~any(G18_AB,[2 3]),:,:)=[];G18_AB(:,~any(G18_AB,[1 3]),:)=[];
-            G19_AB(~any(G19_AB,[2 3]),:,:)=[];G19_AB(:,~any(G19_AB,[1 3]),:)=[];
-            G20_AB(~any(G20_AB,[2 3]),:,:)=[];G20_AB(:,~any(G20_AB,[1 3]),:)=[];
-            G7(G7==0)=NaN;
-            G8(G8==0)=NaN;
-            G9(G9==0)=NaN;
-            G10(G10==0)=NaN;
-            G11(G11==0)=NaN;
-            G12(G12==0)=NaN;
-            G13(G13==0)=NaN;
-            G14(G14==0)=NaN;
-            G15(G15==0)=NaN;
-            G16(G16==0)=NaN;
-            G17(G17==0)=NaN;
-            G18(G18==0)=NaN;
-            G19(G19==0)=NaN;
-            G20(G20==0)=NaN;
-            G13_FB(G13_FB==0)=NaN;
-            G14_FB(G14_FB==0)=NaN;
-            G15_FB(G15_FB==0)=NaN;
-            G16_FB(G16_FB==0)=NaN;
-            G17_FB(G17_FB==0)=NaN;
-            G18_FB(G18_FB==0)=NaN;
-            G19_FB(G19_FB==0)=NaN;
-            G20_FB(G20_FB==0)=NaN;
-            G13_AB(G13_AB==0)=NaN;
-            G14_AB(G14_AB==0)=NaN;
-            G15_AB(G15_AB==0)=NaN;
-            G16_AB(G16_AB==0)=NaN;
-            G17_AB(G17_AB==0)=NaN;
-            G18_AB(G18_AB==0)=NaN;
-            G19_AB(G19_AB==0)=NaN;
-            G20_AB(G20_AB==0)=NaN;
-            G1_Mean = mean(G1,1);
-            G2_Mean = mean(G2,1);
-            G3_Mean = mean(G3,1);
-            G4_Mean = mean(G4,1);
-            G5_Mean = mean(G5,1);
-            G6_Mean = mean(G6,1);
-            G7_Mean = reshape(mean(mean(G7,'omitnan'),'omitnan'),[],1)';
-            G8_Mean = reshape(mean(mean(G8,'omitnan'),'omitnan'),[],1)';
-            G9_Mean = reshape(mean(mean(G9,'omitnan'),'omitnan'),[],1)';
-            G10_Mean = reshape(mean(mean(G10,'omitnan'),'omitnan'),[],1)';
-            G11_Mean = reshape(mean(mean(G11,'omitnan'),'omitnan'),[],1)';
-            G12_Mean = reshape(mean(mean(G12,'omitnan'),'omitnan'),[],1)';
-            G13_Mean = reshape(mean(mean(G13,'omitnan'),'omitnan'),[],1)';
-            G14_Mean = reshape(mean(mean(G14,'omitnan'),'omitnan'),[],1)';
-            G15_Mean = reshape(mean(mean(G15,'omitnan'),'omitnan'),[],1)';
-            G16_Mean = reshape(mean(mean(G16,'omitnan'),'omitnan'),[],1)';
-            G17_Mean = reshape(mean(mean(G17,'omitnan'),'omitnan'),[],1)';
-            G18_Mean = reshape(mean(mean(G18,'omitnan'),'omitnan'),[],1)';
-            G19_Mean = reshape(mean(mean(G19,'omitnan'),'omitnan'),[],1)';
-            G20_Mean = reshape(mean(mean(G20,'omitnan'),'omitnan'),[],1)';
-            G13FB_Mean = reshape(mean(mean(G13_FB,'omitnan'),'omitnan'),[],1)';
-            G14FB_Mean = reshape(mean(mean(G14_FB,'omitnan'),'omitnan'),[],1)';
-            G15FB_Mean = reshape(mean(mean(G15_FB,'omitnan'),'omitnan'),[],1)';
-            G16FB_Mean = reshape(mean(mean(G16_FB,'omitnan'),'omitnan'),[],1)';
-            G17FB_Mean = reshape(mean(mean(G17_FB,'omitnan'),'omitnan'),[],1)';
-            G18FB_Mean = reshape(mean(mean(G18_FB,'omitnan'),'omitnan'),[],1)';
-            G19FB_Mean = reshape(mean(mean(G19_FB,'omitnan'),'omitnan'),[],1)';
-            G20FB_Mean = reshape(mean(mean(G20_FB,'omitnan'),'omitnan'),[],1)';
-            G13AB_Mean = reshape(mean(mean(G13_AB,'omitnan'),'omitnan'),[],1)';
-            G14AB_Mean = reshape(mean(mean(G14_AB,'omitnan'),'omitnan'),[],1)';
-            G15AB_Mean = reshape(mean(mean(G15_AB,'omitnan'),'omitnan'),[],1)';
-            G16AB_Mean = reshape(mean(mean(G16_AB,'omitnan'),'omitnan'),[],1)';
-            G17AB_Mean = reshape(mean(mean(G17_AB,'omitnan'),'omitnan'),[],1)';
-            G18AB_Mean = reshape(mean(mean(G18_AB,'omitnan'),'omitnan'),[],1)';
-            G19AB_Mean = reshape(mean(mean(G19_AB,'omitnan'),'omitnan'),[],1)';
-            G20AB_Mean = reshape(mean(mean(G20_AB,'omitnan'),'omitnan'),[],1)';
-            G1_SEM = 2*std(G1,[],1)/sqrt(size(G1,1));
-            G2_SEM = 2*std(G2,[],1)/sqrt(size(G2,1));
-            G3_SEM = 2*std(G3,[],1)/sqrt(size(G3,1));
-            G4_SEM = 2*std(G4,[],1)/sqrt(size(G4,1));
-            G5_SEM = 2*std(G5,[],1)/sqrt(size(G5,1));
-            G6_SEM = 2*std(G6,[],1)/sqrt(size(G6,1));
-            G7_SEM = (reshape(2*std(G7,0,[1 2],'omitnan'),[],1)/sqrt(numel(G7(~isnan(G7)))))';
-            G8_SEM = (reshape(2*std(G8,0,[1 2],'omitnan'),[],1)/sqrt(numel(G8(~isnan(G8)))))';
-            G9_SEM = (reshape(2*std(G9,0,[1 2],'omitnan'),[],1)/sqrt(numel(G9(~isnan(G9)))))';
-            G10_SEM = (reshape(2*std(G10,0,[1 2],'omitnan'),[],1)/sqrt(numel(G10(~isnan(G10)))))';
-            G11_SEM = (reshape(2*std(G11,0,[1 2],'omitnan'),[],1)/sqrt(numel(G11(~isnan(G11)))))';
-            G12_SEM = (reshape(2*std(G12,0,[1 2],'omitnan'),[],1)/sqrt(numel(G12(~isnan(G12)))))';
-            G13_SEM = (reshape(2*std(G13,0,[1 2],'omitnan'),[],1)/sqrt(numel(G13(~isnan(G13)))))';
-            G14_SEM = (reshape(2*std(G14,0,[1 2],'omitnan'),[],1)/sqrt(numel(G14(~isnan(G14)))))';
-            G15_SEM = (reshape(2*std(G15,0,[1 2],'omitnan'),[],1)/sqrt(numel(G15(~isnan(G15)))))';
-            G16_SEM = (reshape(2*std(G16,0,[1 2],'omitnan'),[],1)/sqrt(numel(G16(~isnan(G16)))))';
-            G17_SEM = (reshape(2*std(G17,0,[1 2],'omitnan'),[],1)/sqrt(numel(G17(~isnan(G17)))))';
-            G18_SEM = (reshape(2*std(G18,0,[1 2],'omitnan'),[],1)/sqrt(numel(G18(~isnan(G18)))))';
-            G19_SEM = (reshape(2*std(G19,0,[1 2],'omitnan'),[],1)/sqrt(numel(G19(~isnan(G19)))))';
-            G20_SEM = (reshape(2*std(G20,0,[1 2],'omitnan'),[],1)/sqrt(numel(G20(~isnan(G20)))))';
-            G13FB_SEM = (reshape(2*std(G13_FB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G13_FB(~isnan(G13_FB)))))';
-            G14FB_SEM = (reshape(2*std(G14_FB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G14_FB(~isnan(G14_FB)))))';
-            G15FB_SEM = (reshape(2*std(G15_FB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G15_FB(~isnan(G15_FB)))))';
-            G16FB_SEM = (reshape(2*std(G16_FB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G16_FB(~isnan(G16_FB)))))';
-            G17FB_SEM = (reshape(2*std(G17_FB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G17_FB(~isnan(G17_FB)))))';
-            G18FB_SEM = (reshape(2*std(G18_FB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G18_FB(~isnan(G18_FB)))))';
-            G19FB_SEM = (reshape(2*std(G19_FB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G19_FB(~isnan(G19_FB)))))';
-            G20FB_SEM = (reshape(2*std(G20_FB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G20_FB(~isnan(G20_FB)))))';
-            G13AB_SEM = (reshape(2*std(G13_AB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G13_AB(~isnan(G13_AB)))))';
-            G14AB_SEM = (reshape(2*std(G14_AB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G14_AB(~isnan(G14_AB)))))';
-            G15AB_SEM = (reshape(2*std(G15_AB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G15_AB(~isnan(G15_AB)))))';
-            G16AB_SEM = (reshape(2*std(G16_AB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G16_AB(~isnan(G16_AB)))))';
-            G17AB_SEM = (reshape(2*std(G17_AB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G17_AB(~isnan(G17_AB)))))';
-            G18AB_SEM = (reshape(2*std(G18_AB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G18_AB(~isnan(G18_AB)))))';
-            G19AB_SEM = (reshape(2*std(G19_AB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G19_AB(~isnan(G19_AB)))))';
-            G20AB_SEM = (reshape(2*std(G20_AB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G20_AB(~isnan(G20_AB)))))';
-            plot(ax1,t_Diam(1:size(G1_Mean,2)),G1_Mean,"Color",SColor,"LineWidth",2)
-            plot(ax2,t_Diam(1:size(G2_Mean,2)),G2_Mean,"Color",LColor,"LineWidth",2)
-            plot(ax3,linspace(WP(1),WP(2),size(G3,2)),G3_Mean,"Color",SColor,"LineWidth",2)
-            plot(ax4,linspace(WP(1),WP(2),size(G4,2)),G4_Mean,"Color",LColor,"LineWidth",2)
-            plot(ax5,linspace(WP(1),WP(2),size(G5,2)),G5_Mean,"Color",SColor,"LineWidth",2)
-            plot(ax6,linspace(WP(1),WP(2),size(G6,2)),G6_Mean,"Color",LColor,"LineWidth",2)
-            plot(ax7,linspace(WP(1),WP(2),size(G7,3)),G7_Mean,"Color",SColor,"LineWidth",2)
-            plot(ax8,linspace(WP(1),WP(2),size(G8,3)),G8_Mean,"Color",LColor,"LineWidth",2)
-            plot(ax9,linspace(WP(1),WP(2),size(G9,3)),G9_Mean,"Color",SColor,"LineWidth",2)
-            plot(ax10,linspace(WP(1),WP(2),size(G10,3)),G10_Mean,"Color",LColor,"LineWidth",2)
-            plot(ax11,linspace(WP(1),WP(2),size(G11,3)),G11_Mean,"Color",SColor,"LineWidth",2)
-            plot(ax12,linspace(WP(1),WP(2),size(G12,3)),G12_Mean,"Color",LColor,"LineWidth",2)
-            plot(ax16,linspace(WP(1),WP(2),size(G13,3)),G13_Mean,"Color",QuietColor,"LineWidth",2)
-            plot(ax16,linspace(WP(1),WP(2),size(G15,3)),G15_Mean,"Color",SHLColor,"LineWidth",2)
-            plot(ax16,linspace(WP(1),WP(2),size(G17,3)),G17_Mean,"Color",N60Color,"LineWidth",2)
-            plot(ax16,linspace(WP(1),WP(2),size(G19,3)),G19_Mean,"Color",N70Color,"LineWidth",2)
-            plot(ax17,linspace(WP(1),WP(2),size(G14,3)),G14_Mean,"Color",QuietColor,"LineWidth",2)
-            plot(ax17,linspace(WP(1),WP(2),size(G16,3)),G16_Mean,"Color",SHLColor,"LineWidth",2)
-            plot(ax17,linspace(WP(1),WP(2),size(G18,3)),G18_Mean,"Color",N60Color,"LineWidth",2)
-            plot(ax17,linspace(WP(1),WP(2),size(G20,3)),G20_Mean,"Color",N70Color,"LineWidth",2)
-            plot(ax18,linspace(WP(1),WP(2),size(G13_FB,3)),G13FB_Mean,"Color",QuietColor,"LineWidth",2)
-            plot(ax18,linspace(WP(1),WP(2),size(G15_FB,3)),G15FB_Mean,"Color",SHLColor,"LineWidth",2)
-            plot(ax18,linspace(WP(1),WP(2),size(G17_FB,3)),G17FB_Mean,"Color",N60Color,"LineWidth",2)
-            plot(ax18,linspace(WP(1),WP(2),size(G19_FB,3)),G19FB_Mean,"Color",N70Color,"LineWidth",2)
-            plot(ax19,linspace(WP(1),WP(2),size(G14_FB,3)),G14FB_Mean,"Color",QuietColor,"LineWidth",2)
-            plot(ax19,linspace(WP(1),WP(2),size(G16_FB,3)),G16FB_Mean,"Color",SHLColor,"LineWidth",2)
-            plot(ax19,linspace(WP(1),WP(2),size(G18_FB,3)),G18FB_Mean,"Color",N60Color,"LineWidth",2)
-            plot(ax19,linspace(WP(1),WP(2),size(G20_FB,3)),G20FB_Mean,"Color",N70Color,"LineWidth",2)
-            plot(ax20,linspace(WP(1),WP(2),size(G13_AB,3)),G13AB_Mean,"Color",QuietColor,"LineWidth",2)
-            plot(ax20,linspace(WP(1),WP(2),size(G15_AB,3)),G15AB_Mean,"Color",SHLColor,"LineWidth",2)
-            plot(ax20,linspace(WP(1),WP(2),size(G17_AB,3)),G17AB_Mean,"Color",N60Color,"LineWidth",2)
-            plot(ax20,linspace(WP(1),WP(2),size(G19_AB,3)),G19AB_Mean,"Color",N70Color,"LineWidth",2)
-            plot(ax21,linspace(WP(1),WP(2),size(G14_AB,3)),G14AB_Mean,"Color",QuietColor,"LineWidth",2)
-            plot(ax21,linspace(WP(1),WP(2),size(G16_AB,3)),G16AB_Mean,"Color",SHLColor,"LineWidth",2)
-            plot(ax21,linspace(WP(1),WP(2),size(G18_AB,3)),G18AB_Mean,"Color",N60Color,"LineWidth",2)
-            plot(ax21,linspace(WP(1),WP(2),size(G20_AB,3)),G20AB_Mean,"Color",N70Color,"LineWidth",2)
-            fill(ax1,[t_Diam(1:size(G1_Mean,2)), flipud(t_Diam(1:size(G1_Mean,2))')'],[(G1_Mean+G1_SEM), flipud((G1_Mean-G1_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax2,[t_Diam(1:size(G2_Mean,2)), flipud(t_Diam(1:size(G2_Mean,2))')'],[(G2_Mean+G2_SEM), flipud((G2_Mean-G2_SEM)')'],LColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax3,[linspace(WP(1),WP(2),size(G3,2)), flipud(linspace(WP(1),WP(2),size(G3,2))')'],[(G3_Mean+G3_SEM), flipud((G3_Mean-G3_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax4,[linspace(WP(1),WP(2),size(G4,2)), flipud(linspace(WP(1),WP(2),size(G4,2))')'],[(G4_Mean+G4_SEM), flipud((G4_Mean-G4_SEM)')'],LColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax5,[linspace(WP(1),WP(2),size(G5,2)), flipud(linspace(WP(1),WP(2),size(G5,2))')'],[(G5_Mean+G5_SEM), flipud((G5_Mean-G5_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax6,[linspace(WP(1),WP(2),size(G6,2)), flipud(linspace(WP(1),WP(2),size(G6,2))')'],[(G6_Mean+G6_SEM), flipud((G6_Mean-G6_SEM)')'],LColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax7,[linspace(WP(1),WP(2),size(G7,3)), flipud(linspace(WP(1),WP(2),size(G7,3))')'],[(G7_Mean+G7_SEM), flipud((G7_Mean-G7_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax8,[linspace(WP(1),WP(2),size(G8,3)), flipud(linspace(WP(1),WP(2),size(G8,3))')'],[(G8_Mean+G8_SEM), flipud((G8_Mean-G8_SEM)')'],LColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax9,[linspace(WP(1),WP(2),size(G9,3)), flipud(linspace(WP(1),WP(2),size(G9,3))')'],[(G9_Mean+G9_SEM), flipud((G9_Mean-G9_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax10,[linspace(WP(1),WP(2),size(G10,3)), flipud(linspace(WP(1),WP(2),size(G10,3))')'],[(G10_Mean+G10_SEM), flipud((G10_Mean-G10_SEM)')'],LColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax11,[linspace(WP(1),WP(2),size(G11,3)), flipud(linspace(WP(1),WP(2),size(G11,3))')'],[(G11_Mean+G11_SEM), flipud((G11_Mean-G11_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax12,[linspace(WP(1),WP(2),size(G12,3)), flipud(linspace(WP(1),WP(2),size(G12,3))')'],[(G12_Mean+G12_SEM), flipud((G12_Mean-G12_SEM)')'],LColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax16,[linspace(WP(1),WP(2),size(G13,3)), flipud(linspace(WP(1),WP(2),size(G13,3))')'],[(G13_Mean+G13_SEM), flipud((G13_Mean-G13_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax16,[linspace(WP(1),WP(2),size(G15,3)), flipud(linspace(WP(1),WP(2),size(G15,3))')'],[(G15_Mean+G15_SEM), flipud((G15_Mean-G15_SEM)')'],SHLColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax16,[linspace(WP(1),WP(2),size(G17,3)), flipud(linspace(WP(1),WP(2),size(G17,3))')'],[(G17_Mean+G17_SEM), flipud((G17_Mean-G17_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax16,[linspace(WP(1),WP(2),size(G19,3)), flipud(linspace(WP(1),WP(2),size(G19,3))')'],[(G19_Mean+G19_SEM), flipud((G19_Mean-G19_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax17,[linspace(WP(1),WP(2),size(G14,3)), flipud(linspace(WP(1),WP(2),size(G14,3))')'],[(G14_Mean+G14_SEM), flipud((G14_Mean-G14_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax17,[linspace(WP(1),WP(2),sizes(G16,3)), flipud(linspace(WP(1),WP(2),size(G16,3))')'],[(G16_Mean+G16_SEM), flipud((G16_Mean-G16_SEM)')'],SHLColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax17,[linspace(WP(1),WP(2),size(G18,3)), flipud(linspace(WP(1),WP(2),size(G18,3))')'],[(G18_Mean+G18_SEM), flipud((G18_Mean-G18_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax17,[linspace(WP(1),WP(2),size(G20,3)), flipud(linspace(WP(1),WP(2),size(G20,3))')'],[(G20_Mean+G20_SEM), flipud((G20_Mean-G20_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            lgd17=legend(ax17,'Quiet','SHL','N60','N70','Location','southeastoutside');
-            lgd17.Title.String = 'Conditions:';
-            fill(ax18,[linspace(WP(1),WP(2),size(G13_FB,3)), flipud(linspace(WP(1),WP(2),size(G13_FB,3))')'],[(G13FB_Mean+G13FB_SEM), flipud((G13FB_Mean-G13FB_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax18,[linspace(WP(1),WP(2),size(G15_FB,3)), flipud(linspace(WP(1),WP(2),size(G15_FB,3))')'],[(G15FB_Mean+G15FB_SEM), flipud((G15FB_Mean-G15FB_SEM)')'],SHLColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax18,[linspace(WP(1),WP(2),size(G17_FB,3)), flipud(linspace(WP(1),WP(2),size(G17_FB,3))')'],[(G17FB_Mean+G17FB_SEM), flipud((G17FB_Mean-G17FB_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax18,[linspace(WP(1),WP(2),size(G19_FB,3)), flipud(linspace(WP(1),WP(2),size(G19_FB,3))')'],[(G19FB_Mean+G19FB_SEM), flipud((G19FB_Mean-G19FB_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax19,[linspace(WP(1),WP(2),size(G14_FB,3)), flipud(linspace(WP(1),WP(2),size(G14_FB,3))')'],[(G14FB_Mean+G14FB_SEM), flipud((G14FB_Mean-G14FB_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax19,[linspace(WP(1),WP(2),size(G16_FB,3)), flipud(linspace(WP(1),WP(2),size(G16_FB,3))')'],[(G16FB_Mean+G16FB_SEM), flipud((G16FB_Mean-G16FB_SEM)')'],SHLColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax19,[linspace(WP(1),WP(2),size(G18_FB,3)), flipud(linspace(WP(1),WP(2),size(G18_FB,3))')'],[(G18FB_Mean+G18FB_SEM), flipud((G18FB_Mean-G18FB_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax19,[linspace(WP(1),WP(2),size(G20_FB,3)), flipud(linspace(WP(1),WP(2),size(G20_FB,3))')'],[(G20FB_Mean+G20FB_SEM), flipud((G20FB_Mean-G20FB_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            lgd19=legend(ax19,'Quiet','SHL','N60','N70','Location','southeastoutside');
-            lgd19.Title.String = 'Conditions:';
-            fill(ax20,[linspace(WP(1),WP(2),size(G13_AB,3)), flipud(linspace(WP(1),WP(2),size(G13_AB,3))')'],[(G13AB_Mean+G13AB_SEM), flipud((G13AB_Mean-G13AB_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax20,[linspace(WP(1),WP(2),size(G15_AB,3)), flipud(linspace(WP(1),WP(2),size(G15_AB,3))')'],[(G15AB_Mean+G15AB_SEM), flipud((G15AB_Mean-G15AB_SEM)')'],SHLColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax20,[linspace(WP(1),WP(2),size(G17_AB,3)), flipud(linspace(WP(1),WP(2),size(G17_AB,3))')'],[(G17AB_Mean+G17AB_SEM), flipud((G17AB_Mean-G17AB_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax20,[linspace(WP(1),WP(2),size(G19_AB,3)), flipud(linspace(WP(1),WP(2),size(G19_AB,3))')'],[(G19AB_Mean+G19AB_SEM), flipud((G19AB_Mean-G19AB_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax21,[linspace(WP(1),WP(2),size(G14_AB,3)), flipud(linspace(WP(1),WP(2),size(G14_AB,3))')'],[(G14AB_Mean+G14AB_SEM), flipud((G14AB_Mean-G14AB_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax21,[linspace(WP(1),WP(2),size(G16_AB,3)), flipud(linspace(WP(1),WP(2),size(G16_AB,3))')'],[(G16AB_Mean+G16AB_SEM), flipud((G16AB_Mean-G16AB_SEM)')'],SHLColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax21,[linspace(WP(1),WP(2),size(G18_AB,3)), flipud(linspace(WP(1),WP(2),size(G18_AB,3))')'],[(G18AB_Mean+G18AB_SEM), flipud((G18AB_Mean-G18AB_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            fill(ax21,[linspace(WP(1),WP(2),size(G20_AB,3)), flipud(linspace(WP(1),WP(2),size(G20_AB,3))')'],[(G20AB_Mean+G20AB_SEM), flipud((G20AB_Mean-G20AB_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
-            lgd21=legend(ax21,'Quiet','SHL','N60','N70','Location','southeastoutside');
-            lgd21.Title.String = 'Conditions:';
-            % Plot features
-            data13=[mean(nonzeros(F1_S_Q)),mean(nonzeros(F1_L_Q));mean(nonzeros(F1_S_SHL)),mean(nonzeros(F1_L_SHL));mean(nonzeros(F1_S_N60)),mean(nonzeros(F1_L_N60));mean(nonzeros(F1_S_N70)),mean(nonzeros(F1_L_N70))];
-            b13=bar(ax13,data13,'grouped');
-            [ngroups,nbars] = size(data13);
-            x13 = nan(nbars, ngroups);
-            for e = 1:nbars
-                x13(e,:) = b13(e).XEndPoints;
-            end
-            errorbar(ax13,x13',data13,[2*std(nonzeros(F1_S_Q))/sqrt(numel(nonzeros(F1_S_Q))),2*std(nonzeros(F1_L_Q))/sqrt(numel(nonzeros(F1_L_Q)));2*std(nonzeros(F1_S_SHL))/sqrt(numel(nonzeros(F1_S_SHL))),2*std(nonzeros(F1_L_SHL))/sqrt(numel(nonzeros(F1_L_SHL)));2*std(nonzeros(F1_S_N60))/sqrt(numel(nonzeros(F1_S_N60))),2*std(nonzeros(F1_L_N60))/sqrt(numel(nonzeros(F1_L_N60)));2*std(nonzeros(F1_S_N70))/sqrt(numel(nonzeros(F1_S_N70))),2*std(nonzeros(F1_L_N70))/sqrt(numel(nonzeros(F1_L_N70)))],'k','linestyle','none','handlevisibility' ,'off')
-            data14=[mean(nonzeros(F2_S_Q)),mean(nonzeros(F2_L_Q));mean(nonzeros(F2_S_SHL)),mean(nonzeros(F2_L_SHL));mean(nonzeros(F2_S_N60)),mean(nonzeros(F2_L_N60));mean(nonzeros(F2_S_N70)),mean(nonzeros(F2_L_N70))];
-            b14=bar(ax14,data14,'grouped');
-            [ngroups,nbars] = size(data14);
-            x14 = nan(nbars, ngroups);
-            for e = 1:nbars
-                x14(e,:) = b14(e).XEndPoints;
-            end
-            errorbar(ax14,x14',data14,[2*std(nonzeros(F2_S_Q))/sqrt(numel(nonzeros(F2_S_Q))),2*std(nonzeros(F2_L_Q))/sqrt(numel(nonzeros(F2_L_Q)));2*std(nonzeros(F2_S_SHL))/sqrt(numel(nonzeros(F2_S_SHL))),2*std(nonzeros(F2_L_SHL))/sqrt(numel(nonzeros(F2_L_SHL)));2*std(nonzeros(F2_S_N60))/sqrt(numel(nonzeros(F2_S_N60))),2*std(nonzeros(F2_L_N60))/sqrt(numel(nonzeros(F2_L_N60)));2*std(nonzeros(F2_S_N70))/sqrt(numel(nonzeros(F2_S_N70))),2*std(nonzeros(F2_L_N70))/sqrt(numel(nonzeros(F2_L_N70)))],'k','linestyle','none','handlevisibility' ,'off')
-            data15=[mean(nonzeros(F3_S_Q)),mean(nonzeros(F3_L_Q));mean(nonzeros(F3_S_SHL)),mean(nonzeros(F3_L_SHL));mean(nonzeros(F3_S_N60)),mean(nonzeros(F3_L_N60));mean(nonzeros(F3_S_N70)),mean(nonzeros(F3_L_N70))];
-            b15=bar(ax15,data15,'grouped');
-            [ngroups,nbars] = size(data15);
-            x15 = nan(nbars, ngroups);
-            for e = 1:nbars
-                x15(e,:) = b15(e).XEndPoints;
-            end
-            errorbar(ax15,x15',data15,[2*std(nonzeros(F3_S_Q))/sqrt(numel(nonzeros(F3_S_Q))),2*std(nonzeros(F3_L_Q))/sqrt(numel(nonzeros(F3_L_Q)));2*std(nonzeros(F3_S_SHL))/sqrt(numel(nonzeros(F3_S_SHL))),2*std(nonzeros(F3_L_SHL))/sqrt(numel(nonzeros(F3_L_SHL)));2*std(nonzeros(F3_S_N60))/sqrt(numel(nonzeros(F3_S_N60))),2*std(nonzeros(F3_L_N60))/sqrt(numel(nonzeros(F3_L_N60)));2*std(nonzeros(F3_S_N70))/sqrt(numel(nonzeros(F3_S_N70))),2*std(nonzeros(F3_L_N70))/sqrt(numel(nonzeros(F3_L_N70)))],'k','linestyle','none','handlevisibility' ,'off')
-            lgd15=legend(ax15,'Speaking','Non-Speaking','Location','southeastoutside');
-            lgd15.Title.String = 'Types of Windows:';
-            xticks([ax13 ax14 ax15],1:4)
-            xticklabels([ax13 ax14 ax15],{'Quiet','SHL','N60','N70'})
-% xlim([ax2 ax1],[9.5, 10.5]);xlim([ax3 ax4],[-0.5, 0.5]);ylim([ax1 ax2 ax3 ax4],[3.4, 3.7])
-        end
+        x=x+1;
     end
 end
+%% Plots
+figure;tiledlayout(1,2);
+ax1 = nexttile;
+ax2 = nexttile;
+figure;tiledlayout(2,2);
+ax3 = nexttile;
+ax4 = nexttile;
+ax5 = nexttile;
+ax6 = nexttile;
+figure;tiledlayout(3,2);
+ax7 = nexttile;
+ax8 = nexttile;
+ax9 = nexttile;
+ax10 = nexttile;
+ax11 = nexttile;
+ax12 = nexttile;
+figure;tiledlayout(1,3);
+ax13 = nexttile;
+ax14 = nexttile;
+ax15 = nexttile;
+figure;tiledlayout(1,2);
+ax16 = nexttile;
+ax17 = nexttile;
+figure;tiledlayout(1,2);
+ax18 = nexttile;
+ax19 = nexttile;
+figure;tiledlayout(1,2);
+ax20 = nexttile;
+ax21 = nexttile;
+hold([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10 ax11 ax12 ax13 ax14 ax15 ax16 ax17 ax18 ax19 ax20 ax21],'on')
+title(ax1,'G1: BL Period Initially Speaking')
+title(ax2,'G2: BL Period Initially Listening')
+title(ax3,'G3: Speaking-Evoked')
+title(ax4,'G4: Listening-Evoked')
+title(ax5,'G5: Baselined Speaking-Evoked')
+title(ax6,'G6: Baselined Listening-Evoked')
+title(ax7,'G7: Global Speaking-evoked response')
+title(ax8,'G8: Global Listening-evoked response')
+title(ax9,['G9: Baselined [',num2str(BL(1)),',',num2str(BL(2)),'] global Speaking-evoked response'])
+title(ax10,['G10: Baselined [',num2str(BL(1)),',',num2str(BL(2)),'] global Listening-evoked response'])
+title(ax11,'G11: Baselined (adaptive) global Speaking-evoked response')
+title(ax12,'G12: Baselined (adaptive) global Listening-evoked response')
+title(ax13,'Feature 1: Mean Pupil Size')
+title(ax14,'Feature 2: Mean Slope')
+title(ax15,'Feature 3: Mean Peak Pupil Size')
+title(ax16,'Global Speaking-evoked response')
+title(ax17,'Global Listening-evoked response')
+title(ax18,'Global fixed [15,20] s baselined Speaking-evoked response')
+title(ax19,'Global fixed [15,20] s baselined Listening-evoked response')
+title(ax20,'Global adaptive baselined Speaking-evoked response')
+title(ax21,'Global adaptive baselined Listening-evoked response')
+xlabel([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10 ax11 ax12 ax16 ax17 ax18 ax19 ax20 ax21],'Time [s]')
+xlabel([ax13 ax14 ax15],'Conditions')
+ylabel([ax1 ax2 ax3 ax4 ax7 ax8 ax13 ax15 ax16 ax17],'Pupil diameter [mm]')
+ylabel([ax5 ax6 ax9 ax10 ax11 ax12 ax18 ax19 ax20 ax21],'Pupil baseline difference [mm]')
+ylabel(ax14,'Slope [mm/s]')
+xlim([ax1 ax2],[0, 20])
+xlim([ax3 ax4 ax5 ax6 ax16 ax17 ax18 ax19 ax20 ax21],[WP(1), WP(2)])
+grid([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10 ax11 ax12 ax13 ax14 ax15 ax16 ax17 ax18 ax19 ax20 ax21],'on')
+xline(ax3,0,'--')
+xline(ax4,0,'--')
+xline(ax5,0,'--')
+xline(ax6,0,'--')
+xline(ax7,0,'--')
+xline(ax8,0,'--')
+xline(ax9,0,'--')
+xline(ax10,0,'--')
+xline(ax11,0,'--')
+xline(ax12,0,'--')
+xline(ax16,0,'--','handlevisibility' ,'off')
+xline(ax17,0,'--','handlevisibility' ,'off')
+xline(ax18,0,'--','handlevisibility' ,'off')
+xline(ax19,0,'--','handlevisibility' ,'off')
+xline(ax20,0,'--','handlevisibility' ,'off')
+xline(ax21,0,'--','handlevisibility' ,'off')
+G1(~any(G1,2),:)=[];
+G2(~any(G2,2),:)=[];
+G3(~any(G3,2),:)=[];
+G4(~any(G4,2),:)=[];
+G5(~any(G5,2),:)=[];
+G6(~any(G6,2),:)=[];
+G7(~any(G7,[2 3]),:,:)=[];G7(:,~any(G7,[1 3]),:)=[];
+G8(~any(G8,[2 3]),:,:)=[];G8(:,~any(G8,[1 3]),:)=[];
+G9(~any(G9,[2 3]),:,:)=[];G9(:,~any(G9,[1 3]),:)=[];
+G10(~any(G10,[2 3]),:,:)=[];G10(:,~any(G10,[1 3]),:)=[];
+G11(~any(G11,[2 3]),:,:)=[];G11(:,~any(G11,[1 3]),:)=[];
+G12(~any(G12,[2 3]),:,:)=[];G12(:,~any(G12,[1 3]),:)=[];
+G13(~any(G13,[2 3]),:,:)=[];G13(:,~any(G13,[1 3]),:)=[];
+G14(~any(G14,[2 3]),:,:)=[];G14(:,~any(G14,[1 3]),:)=[];
+G15(~any(G15,[2 3]),:,:)=[];G15(:,~any(G15,[1 3]),:)=[];
+G16(~any(G16,[2 3]),:,:)=[];G16(:,~any(G16,[1 3]),:)=[];
+G17(~any(G17,[2 3]),:,:)=[];G17(:,~any(G17,[1 3]),:)=[];
+G18(~any(G18,[2 3]),:,:)=[];G18(:,~any(G18,[1 3]),:)=[];
+G19(~any(G19,[2 3]),:,:)=[];G19(:,~any(G19,[1 3]),:)=[];
+G20(~any(G20,[2 3]),:,:)=[];G20(:,~any(G20,[1 3]),:)=[];
+G13_FB(~any(G13_FB,[2 3]),:,:)=[];G13_FB(:,~any(G13_FB,[1 3]),:)=[];
+G14_FB(~any(G14_FB,[2 3]),:,:)=[];G14_FB(:,~any(G14_FB,[1 3]),:)=[];
+G15_FB(~any(G15_FB,[2 3]),:,:)=[];G15_FB(:,~any(G15_FB,[1 3]),:)=[];
+G16_FB(~any(G16_FB,[2 3]),:,:)=[];G16_FB(:,~any(G16_FB,[1 3]),:)=[];
+G17_FB(~any(G17_FB,[2 3]),:,:)=[];G17_FB(:,~any(G17_FB,[1 3]),:)=[];
+G18_FB(~any(G18_FB,[2 3]),:,:)=[];G18_FB(:,~any(G18_FB,[1 3]),:)=[];
+G19_FB(~any(G19_FB,[2 3]),:,:)=[];G19_FB(:,~any(G19_FB,[1 3]),:)=[];
+G20_FB(~any(G20_FB,[2 3]),:,:)=[];G20_FB(:,~any(G20_FB,[1 3]),:)=[];
+G13_AB(~any(G13_AB,[2 3]),:,:)=[];G13_AB(:,~any(G13_AB,[1 3]),:)=[];
+G14_AB(~any(G14_AB,[2 3]),:,:)=[];G14_AB(:,~any(G14_AB,[1 3]),:)=[];
+G15_AB(~any(G15_AB,[2 3]),:,:)=[];G15_AB(:,~any(G15_AB,[1 3]),:)=[];
+G16_AB(~any(G16_AB,[2 3]),:,:)=[];G16_AB(:,~any(G16_AB,[1 3]),:)=[];
+G17_AB(~any(G17_AB,[2 3]),:,:)=[];G17_AB(:,~any(G17_AB,[1 3]),:)=[];
+G18_AB(~any(G18_AB,[2 3]),:,:)=[];G18_AB(:,~any(G18_AB,[1 3]),:)=[];
+G19_AB(~any(G19_AB,[2 3]),:,:)=[];G19_AB(:,~any(G19_AB,[1 3]),:)=[];
+G20_AB(~any(G20_AB,[2 3]),:,:)=[];G20_AB(:,~any(G20_AB,[1 3]),:)=[];
+G7(G7==0)=NaN;
+G8(G8==0)=NaN;
+G9(G9==0)=NaN;
+G10(G10==0)=NaN;
+G11(G11==0)=NaN;
+G12(G12==0)=NaN;
+G13(G13==0)=NaN;
+G14(G14==0)=NaN;
+G15(G15==0)=NaN;
+G16(G16==0)=NaN;
+G17(G17==0)=NaN;
+G18(G18==0)=NaN;
+G19(G19==0)=NaN;
+G20(G20==0)=NaN;
+G13_FB(G13_FB==0)=NaN;
+G14_FB(G14_FB==0)=NaN;
+G15_FB(G15_FB==0)=NaN;
+G16_FB(G16_FB==0)=NaN;
+G17_FB(G17_FB==0)=NaN;
+G18_FB(G18_FB==0)=NaN;
+G19_FB(G19_FB==0)=NaN;
+G20_FB(G20_FB==0)=NaN;
+G13_AB(G13_AB==0)=NaN;
+G14_AB(G14_AB==0)=NaN;
+G15_AB(G15_AB==0)=NaN;
+G16_AB(G16_AB==0)=NaN;
+G17_AB(G17_AB==0)=NaN;
+G18_AB(G18_AB==0)=NaN;
+G19_AB(G19_AB==0)=NaN;
+G20_AB(G20_AB==0)=NaN;
+G1_Mean = mean(G1,1);
+G2_Mean = mean(G2,1);
+G3_Mean = mean(G3,1);
+G4_Mean = mean(G4,1);
+G5_Mean = mean(G5,1);
+G6_Mean = mean(G6,1);
+G7_Mean = reshape(mean(mean(G7,'omitnan'),'omitnan'),[],1)';
+G8_Mean = reshape(mean(mean(G8,'omitnan'),'omitnan'),[],1)';
+G9_Mean = reshape(mean(mean(G9,'omitnan'),'omitnan'),[],1)';
+G10_Mean = reshape(mean(mean(G10,'omitnan'),'omitnan'),[],1)';
+G11_Mean = reshape(mean(mean(G11,'omitnan'),'omitnan'),[],1)';
+G12_Mean = reshape(mean(mean(G12,'omitnan'),'omitnan'),[],1)';
+G13_Mean = reshape(mean(mean(G13,'omitnan'),'omitnan'),[],1)';
+G14_Mean = reshape(mean(mean(G14,'omitnan'),'omitnan'),[],1)';
+G15_Mean = reshape(mean(mean(G15,'omitnan'),'omitnan'),[],1)';
+G16_Mean = reshape(mean(mean(G16,'omitnan'),'omitnan'),[],1)';
+G17_Mean = reshape(mean(mean(G17,'omitnan'),'omitnan'),[],1)';
+G18_Mean = reshape(mean(mean(G18,'omitnan'),'omitnan'),[],1)';
+G19_Mean = reshape(mean(mean(G19,'omitnan'),'omitnan'),[],1)';
+G20_Mean = reshape(mean(mean(G20,'omitnan'),'omitnan'),[],1)';
+G13FB_Mean = reshape(mean(mean(G13_FB,'omitnan'),'omitnan'),[],1)';
+G14FB_Mean = reshape(mean(mean(G14_FB,'omitnan'),'omitnan'),[],1)';
+G15FB_Mean = reshape(mean(mean(G15_FB,'omitnan'),'omitnan'),[],1)';
+G16FB_Mean = reshape(mean(mean(G16_FB,'omitnan'),'omitnan'),[],1)';
+G17FB_Mean = reshape(mean(mean(G17_FB,'omitnan'),'omitnan'),[],1)';
+G18FB_Mean = reshape(mean(mean(G18_FB,'omitnan'),'omitnan'),[],1)';
+G19FB_Mean = reshape(mean(mean(G19_FB,'omitnan'),'omitnan'),[],1)';
+G20FB_Mean = reshape(mean(mean(G20_FB,'omitnan'),'omitnan'),[],1)';
+G13AB_Mean = reshape(mean(mean(G13_AB,'omitnan'),'omitnan'),[],1)';
+G14AB_Mean = reshape(mean(mean(G14_AB,'omitnan'),'omitnan'),[],1)';
+G15AB_Mean = reshape(mean(mean(G15_AB,'omitnan'),'omitnan'),[],1)';
+G16AB_Mean = reshape(mean(mean(G16_AB,'omitnan'),'omitnan'),[],1)';
+G17AB_Mean = reshape(mean(mean(G17_AB,'omitnan'),'omitnan'),[],1)';
+G18AB_Mean = reshape(mean(mean(G18_AB,'omitnan'),'omitnan'),[],1)';
+G19AB_Mean = reshape(mean(mean(G19_AB,'omitnan'),'omitnan'),[],1)';
+G20AB_Mean = reshape(mean(mean(G20_AB,'omitnan'),'omitnan'),[],1)';
+G1_SEM = 2*std(G1,[],1)/sqrt(size(G1,1));
+G2_SEM = 2*std(G2,[],1)/sqrt(size(G2,1));
+G3_SEM = 2*std(G3,[],1)/sqrt(size(G3,1));
+G4_SEM = 2*std(G4,[],1)/sqrt(size(G4,1));
+G5_SEM = 2*std(G5,[],1)/sqrt(size(G5,1));
+G6_SEM = 2*std(G6,[],1)/sqrt(size(G6,1));
+G7_SEM = (reshape(2*std(G7,0,[1 2],'omitnan'),[],1)/sqrt(numel(G7(~isnan(G7)))))';
+G8_SEM = (reshape(2*std(G8,0,[1 2],'omitnan'),[],1)/sqrt(numel(G8(~isnan(G8)))))';
+G9_SEM = (reshape(2*std(G9,0,[1 2],'omitnan'),[],1)/sqrt(numel(G9(~isnan(G9)))))';
+G10_SEM = (reshape(2*std(G10,0,[1 2],'omitnan'),[],1)/sqrt(numel(G10(~isnan(G10)))))';
+G11_SEM = (reshape(2*std(G11,0,[1 2],'omitnan'),[],1)/sqrt(numel(G11(~isnan(G11)))))';
+G12_SEM = (reshape(2*std(G12,0,[1 2],'omitnan'),[],1)/sqrt(numel(G12(~isnan(G12)))))';
+G13_SEM = (reshape(2*std(G13,0,[1 2],'omitnan'),[],1)/sqrt(numel(G13(~isnan(G13)))))';
+G14_SEM = (reshape(2*std(G14,0,[1 2],'omitnan'),[],1)/sqrt(numel(G14(~isnan(G14)))))';
+G15_SEM = (reshape(2*std(G15,0,[1 2],'omitnan'),[],1)/sqrt(numel(G15(~isnan(G15)))))';
+G16_SEM = (reshape(2*std(G16,0,[1 2],'omitnan'),[],1)/sqrt(numel(G16(~isnan(G16)))))';
+G17_SEM = (reshape(2*std(G17,0,[1 2],'omitnan'),[],1)/sqrt(numel(G17(~isnan(G17)))))';
+G18_SEM = (reshape(2*std(G18,0,[1 2],'omitnan'),[],1)/sqrt(numel(G18(~isnan(G18)))))';
+G19_SEM = (reshape(2*std(G19,0,[1 2],'omitnan'),[],1)/sqrt(numel(G19(~isnan(G19)))))';
+G20_SEM = (reshape(2*std(G20,0,[1 2],'omitnan'),[],1)/sqrt(numel(G20(~isnan(G20)))))';
+G13FB_SEM = (reshape(2*std(G13_FB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G13_FB(~isnan(G13_FB)))))';
+G14FB_SEM = (reshape(2*std(G14_FB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G14_FB(~isnan(G14_FB)))))';
+G15FB_SEM = (reshape(2*std(G15_FB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G15_FB(~isnan(G15_FB)))))';
+G16FB_SEM = (reshape(2*std(G16_FB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G16_FB(~isnan(G16_FB)))))';
+G17FB_SEM = (reshape(2*std(G17_FB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G17_FB(~isnan(G17_FB)))))';
+G18FB_SEM = (reshape(2*std(G18_FB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G18_FB(~isnan(G18_FB)))))';
+G19FB_SEM = (reshape(2*std(G19_FB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G19_FB(~isnan(G19_FB)))))';
+G20FB_SEM = (reshape(2*std(G20_FB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G20_FB(~isnan(G20_FB)))))';
+G13AB_SEM = (reshape(2*std(G13_AB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G13_AB(~isnan(G13_AB)))))';
+G14AB_SEM = (reshape(2*std(G14_AB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G14_AB(~isnan(G14_AB)))))';
+G15AB_SEM = (reshape(2*std(G15_AB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G15_AB(~isnan(G15_AB)))))';
+G16AB_SEM = (reshape(2*std(G16_AB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G16_AB(~isnan(G16_AB)))))';
+G17AB_SEM = (reshape(2*std(G17_AB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G17_AB(~isnan(G17_AB)))))';
+G18AB_SEM = (reshape(2*std(G18_AB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G18_AB(~isnan(G18_AB)))))';
+G19AB_SEM = (reshape(2*std(G19_AB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G19_AB(~isnan(G19_AB)))))';
+G20AB_SEM = (reshape(2*std(G20_AB,0,[1 2],'omitnan'),[],1)/sqrt(numel(G20_AB(~isnan(G20_AB)))))';
+plot(ax1,t_Diam(1:size(G1_Mean,2)),G1_Mean,"Color",SColor,"LineWidth",2)
+plot(ax2,t_Diam(1:size(G2_Mean,2)),G2_Mean,"Color",LColor,"LineWidth",2)
+plot(ax3,linspace(WP(1),WP(2),size(G3,2)),G3_Mean,"Color",SColor,"LineWidth",2)
+plot(ax4,linspace(WP(1),WP(2),size(G4,2)),G4_Mean,"Color",LColor,"LineWidth",2)
+plot(ax5,linspace(WP(1),WP(2),size(G5,2)),G5_Mean,"Color",SColor,"LineWidth",2)
+plot(ax6,linspace(WP(1),WP(2),size(G6,2)),G6_Mean,"Color",LColor,"LineWidth",2)
+plot(ax7,linspace(WP(1),WP(2),size(G7,3)),G7_Mean,"Color",SColor,"LineWidth",2)
+plot(ax8,linspace(WP(1),WP(2),size(G8,3)),G8_Mean,"Color",LColor,"LineWidth",2)
+plot(ax9,linspace(WP(1),WP(2),size(G9,3)),G9_Mean,"Color",SColor,"LineWidth",2)
+plot(ax10,linspace(WP(1),WP(2),size(G10,3)),G10_Mean,"Color",LColor,"LineWidth",2)
+plot(ax11,linspace(WP(1),WP(2),size(G11,3)),G11_Mean,"Color",SColor,"LineWidth",2)
+plot(ax12,linspace(WP(1),WP(2),size(G12,3)),G12_Mean,"Color",LColor,"LineWidth",2)
+plot(ax16,linspace(WP(1),WP(2),size(G13,3)),G13_Mean,"Color",QuietColor,"LineWidth",2)
+plot(ax16,linspace(WP(1),WP(2),size(G15,3)),G15_Mean,"Color",SHLColor,"LineWidth",2)
+plot(ax16,linspace(WP(1),WP(2),size(G17,3)),G17_Mean,"Color",N60Color,"LineWidth",2)
+plot(ax16,linspace(WP(1),WP(2),size(G19,3)),G19_Mean,"Color",N70Color,"LineWidth",2)
+plot(ax17,linspace(WP(1),WP(2),size(G14,3)),G14_Mean,"Color",QuietColor,"LineWidth",2)
+plot(ax17,linspace(WP(1),WP(2),size(G16,3)),G16_Mean,"Color",SHLColor,"LineWidth",2)
+plot(ax17,linspace(WP(1),WP(2),size(G18,3)),G18_Mean,"Color",N60Color,"LineWidth",2)
+plot(ax17,linspace(WP(1),WP(2),size(G20,3)),G20_Mean,"Color",N70Color,"LineWidth",2)
+plot(ax18,linspace(WP(1),WP(2),size(G13_FB,3)),G13FB_Mean,"Color",QuietColor,"LineWidth",2)
+plot(ax18,linspace(WP(1),WP(2),size(G15_FB,3)),G15FB_Mean,"Color",SHLColor,"LineWidth",2)
+plot(ax18,linspace(WP(1),WP(2),size(G17_FB,3)),G17FB_Mean,"Color",N60Color,"LineWidth",2)
+plot(ax18,linspace(WP(1),WP(2),size(G19_FB,3)),G19FB_Mean,"Color",N70Color,"LineWidth",2)
+plot(ax19,linspace(WP(1),WP(2),size(G14_FB,3)),G14FB_Mean,"Color",QuietColor,"LineWidth",2)
+plot(ax19,linspace(WP(1),WP(2),size(G16_FB,3)),G16FB_Mean,"Color",SHLColor,"LineWidth",2)
+plot(ax19,linspace(WP(1),WP(2),size(G18_FB,3)),G18FB_Mean,"Color",N60Color,"LineWidth",2)
+plot(ax19,linspace(WP(1),WP(2),size(G20_FB,3)),G20FB_Mean,"Color",N70Color,"LineWidth",2)
+plot(ax20,linspace(WP(1),WP(2),size(G13_AB,3)),G13AB_Mean,"Color",QuietColor,"LineWidth",2)
+plot(ax20,linspace(WP(1),WP(2),size(G15_AB,3)),G15AB_Mean,"Color",SHLColor,"LineWidth",2)
+plot(ax20,linspace(WP(1),WP(2),size(G17_AB,3)),G17AB_Mean,"Color",N60Color,"LineWidth",2)
+plot(ax20,linspace(WP(1),WP(2),size(G19_AB,3)),G19AB_Mean,"Color",N70Color,"LineWidth",2)
+plot(ax21,linspace(WP(1),WP(2),size(G14_AB,3)),G14AB_Mean,"Color",QuietColor,"LineWidth",2)
+plot(ax21,linspace(WP(1),WP(2),size(G16_AB,3)),G16AB_Mean,"Color",SHLColor,"LineWidth",2)
+plot(ax21,linspace(WP(1),WP(2),size(G18_AB,3)),G18AB_Mean,"Color",N60Color,"LineWidth",2)
+plot(ax21,linspace(WP(1),WP(2),size(G20_AB,3)),G20AB_Mean,"Color",N70Color,"LineWidth",2)
+fill(ax1,[t_Diam(1:size(G1_Mean,2)), flipud(t_Diam(1:size(G1_Mean,2))')'],[(G1_Mean+G1_SEM), flipud((G1_Mean-G1_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax2,[t_Diam(1:size(G2_Mean,2)), flipud(t_Diam(1:size(G2_Mean,2))')'],[(G2_Mean+G2_SEM), flipud((G2_Mean-G2_SEM)')'],LColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax3,[linspace(WP(1),WP(2),size(G3,2)), flipud(linspace(WP(1),WP(2),size(G3,2))')'],[(G3_Mean+G3_SEM), flipud((G3_Mean-G3_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax4,[linspace(WP(1),WP(2),size(G4,2)), flipud(linspace(WP(1),WP(2),size(G4,2))')'],[(G4_Mean+G4_SEM), flipud((G4_Mean-G4_SEM)')'],LColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax5,[linspace(WP(1),WP(2),size(G5,2)), flipud(linspace(WP(1),WP(2),size(G5,2))')'],[(G5_Mean+G5_SEM), flipud((G5_Mean-G5_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax6,[linspace(WP(1),WP(2),size(G6,2)), flipud(linspace(WP(1),WP(2),size(G6,2))')'],[(G6_Mean+G6_SEM), flipud((G6_Mean-G6_SEM)')'],LColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax7,[linspace(WP(1),WP(2),size(G7,3)), flipud(linspace(WP(1),WP(2),size(G7,3))')'],[(G7_Mean+G7_SEM), flipud((G7_Mean-G7_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax8,[linspace(WP(1),WP(2),size(G8,3)), flipud(linspace(WP(1),WP(2),size(G8,3))')'],[(G8_Mean+G8_SEM), flipud((G8_Mean-G8_SEM)')'],LColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax9,[linspace(WP(1),WP(2),size(G9,3)), flipud(linspace(WP(1),WP(2),size(G9,3))')'],[(G9_Mean+G9_SEM), flipud((G9_Mean-G9_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax10,[linspace(WP(1),WP(2),size(G10,3)), flipud(linspace(WP(1),WP(2),size(G10,3))')'],[(G10_Mean+G10_SEM), flipud((G10_Mean-G10_SEM)')'],LColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax11,[linspace(WP(1),WP(2),size(G11,3)), flipud(linspace(WP(1),WP(2),size(G11,3))')'],[(G11_Mean+G11_SEM), flipud((G11_Mean-G11_SEM)')'],SColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax12,[linspace(WP(1),WP(2),size(G12,3)), flipud(linspace(WP(1),WP(2),size(G12,3))')'],[(G12_Mean+G12_SEM), flipud((G12_Mean-G12_SEM)')'],LColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax16,[linspace(WP(1),WP(2),size(G13,3)), flipud(linspace(WP(1),WP(2),size(G13,3))')'],[(G13_Mean+G13_SEM), flipud((G13_Mean-G13_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax16,[linspace(WP(1),WP(2),size(G15,3)), flipud(linspace(WP(1),WP(2),size(G15,3))')'],[(G15_Mean+G15_SEM), flipud((G15_Mean-G15_SEM)')'],SHLColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax16,[linspace(WP(1),WP(2),size(G17,3)), flipud(linspace(WP(1),WP(2),size(G17,3))')'],[(G17_Mean+G17_SEM), flipud((G17_Mean-G17_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax16,[linspace(WP(1),WP(2),size(G19,3)), flipud(linspace(WP(1),WP(2),size(G19,3))')'],[(G19_Mean+G19_SEM), flipud((G19_Mean-G19_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax17,[linspace(WP(1),WP(2),size(G14,3)), flipud(linspace(WP(1),WP(2),size(G14,3))')'],[(G14_Mean+G14_SEM), flipud((G14_Mean-G14_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax17,[linspace(WP(1),WP(2),size(G16,3)), flipud(linspace(WP(1),WP(2),size(G16,3))')'],[(G16_Mean+G16_SEM), flipud((G16_Mean-G16_SEM)')'],SHLColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax17,[linspace(WP(1),WP(2),size(G18,3)), flipud(linspace(WP(1),WP(2),size(G18,3))')'],[(G18_Mean+G18_SEM), flipud((G18_Mean-G18_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax17,[linspace(WP(1),WP(2),size(G20,3)), flipud(linspace(WP(1),WP(2),size(G20,3))')'],[(G20_Mean+G20_SEM), flipud((G20_Mean-G20_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+lgd17=legend(ax17,'Quiet','SHL','N60','N70','Location','southeastoutside');
+lgd17.Title.String = 'Conditions:';
+fill(ax18,[linspace(WP(1),WP(2),size(G13_FB,3)), flipud(linspace(WP(1),WP(2),size(G13_FB,3))')'],[(G13FB_Mean+G13FB_SEM), flipud((G13FB_Mean-G13FB_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax18,[linspace(WP(1),WP(2),size(G15_FB,3)), flipud(linspace(WP(1),WP(2),size(G15_FB,3))')'],[(G15FB_Mean+G15FB_SEM), flipud((G15FB_Mean-G15FB_SEM)')'],SHLColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax18,[linspace(WP(1),WP(2),size(G17_FB,3)), flipud(linspace(WP(1),WP(2),size(G17_FB,3))')'],[(G17FB_Mean+G17FB_SEM), flipud((G17FB_Mean-G17FB_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax18,[linspace(WP(1),WP(2),size(G19_FB,3)), flipud(linspace(WP(1),WP(2),size(G19_FB,3))')'],[(G19FB_Mean+G19FB_SEM), flipud((G19FB_Mean-G19FB_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax19,[linspace(WP(1),WP(2),size(G14_FB,3)), flipud(linspace(WP(1),WP(2),size(G14_FB,3))')'],[(G14FB_Mean+G14FB_SEM), flipud((G14FB_Mean-G14FB_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax19,[linspace(WP(1),WP(2),size(G16_FB,3)), flipud(linspace(WP(1),WP(2),size(G16_FB,3))')'],[(G16FB_Mean+G16FB_SEM), flipud((G16FB_Mean-G16FB_SEM)')'],SHLColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax19,[linspace(WP(1),WP(2),size(G18_FB,3)), flipud(linspace(WP(1),WP(2),size(G18_FB,3))')'],[(G18FB_Mean+G18FB_SEM), flipud((G18FB_Mean-G18FB_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax19,[linspace(WP(1),WP(2),size(G20_FB,3)), flipud(linspace(WP(1),WP(2),size(G20_FB,3))')'],[(G20FB_Mean+G20FB_SEM), flipud((G20FB_Mean-G20FB_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+lgd19=legend(ax19,'Quiet','SHL','N60','N70','Location','southeastoutside');
+lgd19.Title.String = 'Conditions:';
+fill(ax20,[linspace(WP(1),WP(2),size(G13_AB,3)), flipud(linspace(WP(1),WP(2),size(G13_AB,3))')'],[(G13AB_Mean+G13AB_SEM), flipud((G13AB_Mean-G13AB_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax20,[linspace(WP(1),WP(2),size(G15_AB,3)), flipud(linspace(WP(1),WP(2),size(G15_AB,3))')'],[(G15AB_Mean+G15AB_SEM), flipud((G15AB_Mean-G15AB_SEM)')'],SHLColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax20,[linspace(WP(1),WP(2),size(G17_AB,3)), flipud(linspace(WP(1),WP(2),size(G17_AB,3))')'],[(G17AB_Mean+G17AB_SEM), flipud((G17AB_Mean-G17AB_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax20,[linspace(WP(1),WP(2),size(G19_AB,3)), flipud(linspace(WP(1),WP(2),size(G19_AB,3))')'],[(G19AB_Mean+G19AB_SEM), flipud((G19AB_Mean-G19AB_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax21,[linspace(WP(1),WP(2),size(G14_AB,3)), flipud(linspace(WP(1),WP(2),size(G14_AB,3))')'],[(G14AB_Mean+G14AB_SEM), flipud((G14AB_Mean-G14AB_SEM)')'],QuietColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax21,[linspace(WP(1),WP(2),size(G16_AB,3)), flipud(linspace(WP(1),WP(2),size(G16_AB,3))')'],[(G16AB_Mean+G16AB_SEM), flipud((G16AB_Mean-G16AB_SEM)')'],SHLColor,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax21,[linspace(WP(1),WP(2),size(G18_AB,3)), flipud(linspace(WP(1),WP(2),size(G18_AB,3))')'],[(G18AB_Mean+G18AB_SEM), flipud((G18AB_Mean-G18AB_SEM)')'],N60Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax21,[linspace(WP(1),WP(2),size(G20_AB,3)), flipud(linspace(WP(1),WP(2),size(G20_AB,3))')'],[(G20AB_Mean+G20AB_SEM), flipud((G20AB_Mean-G20AB_SEM)')'],N70Color,'FaceAlpha',.5,'Edgecolor','none','handlevisibility' ,'off')
+lgd21=legend(ax21,'Quiet','SHL','N60','N70','Location','southeastoutside');
+lgd21.Title.String = 'Conditions:';
+% Plot features
+data13=[mean(nonzeros(F1_S_Q)),mean(nonzeros(F1_L_Q));mean(nonzeros(F1_S_SHL)),mean(nonzeros(F1_L_SHL));mean(nonzeros(F1_S_N60)),mean(nonzeros(F1_L_N60));mean(nonzeros(F1_S_N70)),mean(nonzeros(F1_L_N70))];
+b13=bar(ax13,data13,'grouped');
+[ngroups,nbars] = size(data13);
+x13 = nan(nbars, ngroups);
+for e = 1:nbars
+    x13(e,:) = b13(e).XEndPoints;
+end
+errorbar(ax13,x13',data13,[2*std(nonzeros(F1_S_Q))/sqrt(numel(nonzeros(F1_S_Q))),2*std(nonzeros(F1_L_Q))/sqrt(numel(nonzeros(F1_L_Q)));2*std(nonzeros(F1_S_SHL))/sqrt(numel(nonzeros(F1_S_SHL))),2*std(nonzeros(F1_L_SHL))/sqrt(numel(nonzeros(F1_L_SHL)));2*std(nonzeros(F1_S_N60))/sqrt(numel(nonzeros(F1_S_N60))),2*std(nonzeros(F1_L_N60))/sqrt(numel(nonzeros(F1_L_N60)));2*std(nonzeros(F1_S_N70))/sqrt(numel(nonzeros(F1_S_N70))),2*std(nonzeros(F1_L_N70))/sqrt(numel(nonzeros(F1_L_N70)))],'k','linestyle','none','handlevisibility' ,'off')
+data14=[mean(nonzeros(F2_S_Q)),mean(nonzeros(F2_L_Q));mean(nonzeros(F2_S_SHL)),mean(nonzeros(F2_L_SHL));mean(nonzeros(F2_S_N60)),mean(nonzeros(F2_L_N60));mean(nonzeros(F2_S_N70)),mean(nonzeros(F2_L_N70))];
+b14=bar(ax14,data14,'grouped');
+[ngroups,nbars] = size(data14);
+x14 = nan(nbars, ngroups);
+for e = 1:nbars
+    x14(e,:) = b14(e).XEndPoints;
+end
+errorbar(ax14,x14',data14,[2*std(nonzeros(F2_S_Q))/sqrt(numel(nonzeros(F2_S_Q))),2*std(nonzeros(F2_L_Q))/sqrt(numel(nonzeros(F2_L_Q)));2*std(nonzeros(F2_S_SHL))/sqrt(numel(nonzeros(F2_S_SHL))),2*std(nonzeros(F2_L_SHL))/sqrt(numel(nonzeros(F2_L_SHL)));2*std(nonzeros(F2_S_N60))/sqrt(numel(nonzeros(F2_S_N60))),2*std(nonzeros(F2_L_N60))/sqrt(numel(nonzeros(F2_L_N60)));2*std(nonzeros(F2_S_N70))/sqrt(numel(nonzeros(F2_S_N70))),2*std(nonzeros(F2_L_N70))/sqrt(numel(nonzeros(F2_L_N70)))],'k','linestyle','none','handlevisibility' ,'off')
+data15=[mean(nonzeros(F3_S_Q)),mean(nonzeros(F3_L_Q));mean(nonzeros(F3_S_SHL)),mean(nonzeros(F3_L_SHL));mean(nonzeros(F3_S_N60)),mean(nonzeros(F3_L_N60));mean(nonzeros(F3_S_N70)),mean(nonzeros(F3_L_N70))];
+b15=bar(ax15,data15,'grouped');
+[ngroups,nbars] = size(data15);
+x15 = nan(nbars, ngroups);
+for e = 1:nbars
+    x15(e,:) = b15(e).XEndPoints;
+end
+errorbar(ax15,x15',data15,[2*std(nonzeros(F3_S_Q))/sqrt(numel(nonzeros(F3_S_Q))),2*std(nonzeros(F3_L_Q))/sqrt(numel(nonzeros(F3_L_Q)));2*std(nonzeros(F3_S_SHL))/sqrt(numel(nonzeros(F3_S_SHL))),2*std(nonzeros(F3_L_SHL))/sqrt(numel(nonzeros(F3_L_SHL)));2*std(nonzeros(F3_S_N60))/sqrt(numel(nonzeros(F3_S_N60))),2*std(nonzeros(F3_L_N60))/sqrt(numel(nonzeros(F3_L_N60)));2*std(nonzeros(F3_S_N70))/sqrt(numel(nonzeros(F3_S_N70))),2*std(nonzeros(F3_L_N70))/sqrt(numel(nonzeros(F3_L_N70)))],'k','linestyle','none','handlevisibility' ,'off')
+lgd15=legend(ax15,'Speaking','Non-Speaking','Location','southeastoutside');
+lgd15.Title.String = 'Types of Windows:';
+xticks([ax13 ax14 ax15],1:4)
+xticklabels([ax13 ax14 ax15],{'Quiet','SHL','N60','N70'})
+% xlim([ax2 ax1],[9.5, 10.5]);xlim([ax3 ax4],[-0.5, 0.5]);ylim([ax1 ax2 ax3 ax4],[3.4, 3.7])
