@@ -440,3 +440,14 @@ lgd15.Title.String = 'Types of Windows:';
 xticks([ax1 ax2 ax3],1:4)
 xticklabels([ax1 ax2 ax3],{'Quiet','SHL','N60','N70'})
 % xlim([ax2 ax1],[9.5, 10.5]);xlim([ax3 ax4],[-0.5, 0.5]);ylim([ax1 ax2 ax3 ax4],[3.4, 3.7])
+
+% Boxplot
+figure;tiledlayout(1,2);
+ax11 = nexttile;
+ax12 = nexttile;
+[names{1:size(nonzeros(F1_S_Q(:,1)),1)}] = deal('Speaking');[names{end+1:end+size(nonzeros(F1_L_Q(:,1)),1)}] = deal('Listening');
+boxchart(ax11,reshape([nonzeros(F1_S_Q(:,1)),nonzeros(F1_L_Q(:,1))],[],1),'GroupByColor',names);
+boxchart(ax12,reshape([nonzeros(F1_S_Q(:,2)),nonzeros(F1_L_Q(:,2))],[],1),'GroupByColor',names);
+xticklabels(ax11,'Phase 1')
+xticklabels(ax12,'Phase 2')
+legend
