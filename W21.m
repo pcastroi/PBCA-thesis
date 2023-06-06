@@ -20,7 +20,6 @@ TimeInitialMerge = 0.3; % [s], Time threshold for merging windows initially
 TimeMerge = 2; % [s], Time threshold for merging windows after rejecting small windows
 RejectRatio = 0.4; % Rejection threshold based on the ratio of NaNs in data
 RejectDelay = 0.5; % [s], Rejection threshold based on delay between timestamps and n-samples
-Med_S=0; % [mm], Median of Speaking windows
 
 % Colors
 SColor = [53, 155, 67]./255;
@@ -30,8 +29,16 @@ SHLColor = [123, 31, 162]./255;
 N60Color = [0, 196, 215]./255;
 N70Color = [2, 36, 223]./255;
 
+[subDirs] = GetSubDirsFirstLevelOnly('data\AMEND_I');
+FileNames={'P1_Quiet_B1.mat','P1_Quiet_B2.mat','P1_SHL_B1.mat','P1_SHL_B2.mat','P1_Noise60_B1.mat','P1_Noise60_B2.mat','P1_Noise70_B1.mat','P1_Noise70_B2.mat','P2_Quiet_B1.mat','P2_Quiet_B2.mat','P2_SHL_B1.mat','P2_SHL_B2.mat','P2_Noise60_B1.mat','P2_Noise60_B2.mat','P2_Noise70_B1.mat','P2_Noise70_B2.mat'};
+LoadDelays=load('data\AMEND_I\delays1110.mat');
+
+NCols=200; % N of windows
+NRows=2; % N of phases
+NLayers=numel(FileNames)*numel(subDirs); % Number of trials
+
 % Preallocate features - Phase 1, Phase 2
-F1_S_Q=zeros(200,2); % Feature 1 (Quiet): Mean pupil size (Speaking)
+F1_S_Q=nan*ones(NLayers,NRows,NCols); % Feature 1 (Quiet): Mean pupil size (Speaking)
 F1_L_Q=F1_S_Q; % Feature 1 (Quiet): Mean pupil size (Listening)
 F2_S_Q=F1_S_Q; % Feature 2 (Quiet): Mean slope (Speaking)
 F2_L_Q=F1_S_Q; % Feature 2 (Quiet): Mean slope (Listening)
@@ -57,10 +64,6 @@ F3_S_N70=F1_S_Q; % Feature 3 (N70): Mean Peak Pupil Size (Speaking)
 F3_L_N70=F1_S_Q; % Feature 3 (N70): Mean Peak Pupil Size (Listening)
 
 x=1;
-
-[subDirs] = GetSubDirsFirstLevelOnly('data\AMEND_I');
-FileNames={'P1_Quiet_B1.mat','P1_Quiet_B2.mat','P1_SHL_B1.mat','P1_SHL_B2.mat','P1_Noise60_B1.mat','P1_Noise60_B2.mat','P1_Noise70_B1.mat','P1_Noise70_B2.mat','P2_Quiet_B1.mat','P2_Quiet_B2.mat','P2_SHL_B1.mat','P2_SHL_B2.mat','P2_Noise60_B1.mat','P2_Noise60_B2.mat','P2_Noise70_B1.mat','P2_Noise70_B2.mat'};
-LoadDelays=load('data\AMEND_I\delays1110.mat');
 
 for q=1:numel(subDirs)
     PairIn = q;
@@ -204,9 +207,6 @@ for q=1:numel(subDirs)
         Speak = SpeakM(SpeakM(:,1)>2*TimeMinWin,:);
         Listen = ListenM(ListenM(:,1)>2*TimeMinWin,:);
         
-        % Average median, mean of duration of Speaking/Listening
-        Med_S=Med_S+median(Speak(:,1));
-        
         t_Diam = linspace(0,length(Diameter)./Param.Fs,length(Diameter));
         
         if isempty(Speak)  % Could be empty
@@ -246,9 +246,9 @@ for q=1:numel(subDirs)
                 temp2(j,:)=[polyfit(t_Diam(Speak(j,2):Peak),Diameter(Speak(j,2):Peak),1), polyfit(t_Diam(Peak:Speak(j,3)),Diameter(Peak:Speak(j,3)),1)];
                 temp3(j,:)=[max(Diameter(Speak(j,2):Peak)), max(Diameter(Peak:Speak(j,3)))];
             end
-            F1_S_Q(x,:)=[mean(nonzeros(temp(:,1))),mean(nonzeros(temp(:,2)))];
-            F2_S_Q(x,:)=[mean(nonzeros(temp2(:,2))),mean(nonzeros(temp2(:,4)))];
-            F3_S_Q(x,:)=[mean(nonzeros(temp3(:,1))),mean(nonzeros(temp3(:,2)))];
+            F1_S_Q(x,1,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);F1_S_Q(x,2,1:size(temp(temp(:,2)>0,2),1))=temp(temp(:,2)>0,2);
+            F2_S_Q(x,1,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);F2_S_Q(x,2,1:size(temp2(temp2(:,4)~=0,4),1))=temp2(temp2(:,4)~=0,4);
+            F3_S_Q(x,1,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);F3_S_Q(x,2,1:size(temp3(temp3(:,2)>0,2),1))=temp3(temp3(:,2)>0,2);
             for j=1:size(Listen,1)
                 if Listen(j,2)+WD(2)*Param.Fs >= Listen(j,3)
                     PeakLim = Listen(j,3);
@@ -266,9 +266,9 @@ for q=1:numel(subDirs)
                 temp2(j,:)=[polyfit(t_Diam(Listen(j,2):Peak),Diameter(Listen(j,2):Peak),1), polyfit(t_Diam(Peak:Listen(j,3)),Diameter(Peak:Listen(j,3)),1)];
                 temp3(j,:)=[max(Diameter(Listen(j,2):Peak)), max(Diameter(Peak:Listen(j,3)))];
             end
-            F1_L_Q(x,:)=[mean(nonzeros(temp(:,1))),mean(nonzeros(temp(:,2)))];
-            F2_L_Q(x,:)=[mean(nonzeros(temp2(:,2))),mean(nonzeros(temp2(:,4)))];
-            F3_L_Q(x,:)=[mean(nonzeros(temp3(:,1))),mean(nonzeros(temp3(:,2)))];
+            F1_L_Q(x,1,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);F1_L_Q(x,2,1:size(temp(temp(:,2)>0,2),1))=temp(temp(:,2)>0,2);
+            F2_L_Q(x,1,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);F2_L_Q(x,2,1:size(temp2(temp2(:,4)~=0,4),1))=temp2(temp2(:,4)~=0,4);
+            F3_L_Q(x,1,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);F3_L_Q(x,2,1:size(temp3(temp3(:,2)>0,2),1))=temp3(temp3(:,2)>0,2);
         elseif contains(PairFiles(i).name,'SHL')
             for j=1:size(Speak,1)
                 if Speak(j,2)+WD(2)*Param.Fs >= Speak(j,3)
@@ -287,9 +287,9 @@ for q=1:numel(subDirs)
                 temp2(j,:)=[polyfit(t_Diam(Speak(j,2):Peak),Diameter(Speak(j,2):Peak),1), polyfit(t_Diam(Peak:Speak(j,3)),Diameter(Peak:Speak(j,3)),1)];
                 temp3(j,:)=[max(Diameter(Speak(j,2):Peak)), max(Diameter(Peak:Speak(j,3)))];
             end
-            F1_S_SHL(x,:)=mean(nonzeros(temp));
-            F2_S_SHL(x,:)=mean(nonzeros(temp2(:,2)));
-            F3_S_SHL(x,:)=mean(nonzeros(temp3));
+            F1_S_SHL(x,1,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);F1_S_SHL(x,2,1:size(temp(temp(:,2)>0,2),1))=temp(temp(:,2)>0,2);
+            F2_S_SHL(x,1,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);F2_S_SHL(x,2,1:size(temp2(temp2(:,4)~=0,4),1))=temp2(temp2(:,4)~=0,4);
+            F3_S_SHL(x,1,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);F3_S_SHL(x,2,1:size(temp3(temp3(:,2)>0,2),1))=temp3(temp3(:,2)>0,2);
             for j=1:size(Listen,1)
                 if Listen(j,2)+WD(2)*Param.Fs >= Listen(j,3)
                     PeakLim = Listen(j,3);
@@ -307,9 +307,9 @@ for q=1:numel(subDirs)
                 temp2(j,:)=[polyfit(t_Diam(Listen(j,2):Peak),Diameter(Listen(j,2):Peak),1), polyfit(t_Diam(Peak:Listen(j,3)),Diameter(Peak:Listen(j,3)),1)];
                 temp3(j,:)=[max(Diameter(Listen(j,2):Peak)), max(Diameter(Peak:Listen(j,3)))];
             end
-            F1_L_SHL(x,:)=mean(nonzeros(temp));
-            F2_L_SHL(x,:)=mean(nonzeros(temp2(:,2)));
-            F3_L_SHL(x,:)=mean(nonzeros(temp3));
+            F1_L_SHL(x,1,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);F1_L_SHL(x,2,1:size(temp(temp(:,2)>0,2),1))=temp(temp(:,2)>0,2);
+            F2_L_SHL(x,1,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);F2_L_SHL(x,2,1:size(temp2(temp2(:,4)~=0,4),1))=temp2(temp2(:,4)~=0,4);
+            F3_L_SHL(x,1,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);F3_L_SHL(x,2,1:size(temp3(temp3(:,2)>0,2),1))=temp3(temp3(:,2)>0,2);
         elseif contains(PairFiles(i).name,'Noise60')
             for j=1:size(Speak,1)
                 if Speak(j,2)+WD(2)*Param.Fs >= Speak(j,3)
@@ -328,9 +328,9 @@ for q=1:numel(subDirs)
                 temp2(j,:)=[polyfit(t_Diam(Speak(j,2):Peak),Diameter(Speak(j,2):Peak),1), polyfit(t_Diam(Peak:Speak(j,3)),Diameter(Peak:Speak(j,3)),1)];
                 temp3(j,:)=[max(Diameter(Speak(j,2):Peak)), max(Diameter(Peak:Speak(j,3)))];
             end
-            F1_S_N60(x,:)=mean(nonzeros(temp));
-            F2_S_N60(x,:)=mean(nonzeros(temp2(:,2)));
-            F3_S_N60(x,:)=mean(nonzeros(temp3));
+            F1_S_N60(x,1,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);F1_S_N60(x,2,1:size(temp(temp(:,2)>0,2),1))=temp(temp(:,2)>0,2);
+            F2_S_N60(x,1,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);F2_S_N60(x,2,1:size(temp2(temp2(:,4)~=0,4),1))=temp2(temp2(:,4)~=0,4);
+            F3_S_N60(x,1,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);F3_S_N60(x,2,1:size(temp3(temp3(:,2)>0,2),1))=temp3(temp3(:,2)>0,2);
             for j=1:size(Listen,1)
                 if Listen(j,2)+WD(2)*Param.Fs >= Listen(j,3)
                     PeakLim = Listen(j,3);
@@ -348,9 +348,10 @@ for q=1:numel(subDirs)
                 temp2(j,:)=[polyfit(t_Diam(Listen(j,2):Peak),Diameter(Listen(j,2):Peak),1), polyfit(t_Diam(Peak:Listen(j,3)),Diameter(Peak:Listen(j,3)),1)];
                 temp3(j,:)=[max(Diameter(Listen(j,2):Peak)), max(Diameter(Peak:Listen(j,3)))];
             end
-            F1_L_N60(x,:)=mean(nonzeros(temp));
-            F2_L_N60(x,:)=mean(nonzeros(temp2(:,2)));
-            F3_L_N60(x,:)=mean(nonzeros(temp3));
+            F1_L_N60(x,1,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);F1_L_N60(x,2,1:size(temp(temp(:,2)>0,2),1))=temp(temp(:,2)>0,2);
+            F2_L_N60(x,1,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);F2_L_N60(x,2,1:size(temp2(temp2(:,4)~=0,4),1))=temp2(temp2(:,4)~=0,4);
+            F3_L_N60(x,1,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);F3_L_N60(x,2,1:size(temp3(temp3(:,2)>0,2),1))=temp3(temp3(:,2)>0,2);
+            
         elseif contains(PairFiles(i).name,'Noise70')
             for j=1:size(Speak,1)
                 if Speak(j,2)+WD(2)*Param.Fs >= Speak(j,3)
@@ -369,9 +370,9 @@ for q=1:numel(subDirs)
                 temp2(j,:)=[polyfit(t_Diam(Speak(j,2):Peak),Diameter(Speak(j,2):Peak),1), polyfit(t_Diam(Peak:Speak(j,3)),Diameter(Peak:Speak(j,3)),1)];
                 temp3(j,:)=[max(Diameter(Speak(j,2):Peak)), max(Diameter(Peak:Speak(j,3)))];
             end
-            F1_S_N70(x,:)=mean(nonzeros(temp));
-            F2_S_N70(x,:)=mean(nonzeros(temp2(:,2)));
-            F3_S_N70(x,:)=mean(nonzeros(temp3));
+            F1_S_N70(x,1,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);F1_S_N70(x,2,1:size(temp(temp(:,2)>0,2),1))=temp(temp(:,2)>0,2);
+            F2_S_N70(x,1,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);F2_S_N70(x,2,1:size(temp2(temp2(:,4)~=0,4),1))=temp2(temp2(:,4)~=0,4);
+            F3_S_N70(x,1,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);F3_S_N70(x,2,1:size(temp3(temp3(:,2)>0,2),1))=temp3(temp3(:,2)>0,2);
             for j=1:size(Listen,1)
                 if Listen(j,2)+WD(2)*Param.Fs >= Listen(j,3)
                     PeakLim = Listen(j,3);
@@ -389,65 +390,155 @@ for q=1:numel(subDirs)
                 temp2(j,:)=[polyfit(t_Diam(Listen(j,2):Peak),Diameter(Listen(j,2):Peak),1), polyfit(t_Diam(Peak:Listen(j,3)),Diameter(Peak:Listen(j,3)),1)];
                 temp3(j,:)=[max(Diameter(Listen(j,2):Peak)), max(Diameter(Peak:Listen(j,3)))];
             end
-            F1_L_N70(x,:)=mean(nonzeros(temp));
-            F2_L_N70(x,:)=mean(nonzeros(temp2(:,2)));
-            F3_L_N70(x,:)=mean(nonzeros(temp3));
+            F1_L_N70(x,1,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);F1_L_N70(x,2,1:size(temp(temp(:,2)>0,2),1))=temp(temp(:,2)>0,2);
+            F2_L_N70(x,1,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);F2_L_N70(x,2,1:size(temp2(temp2(:,4)~=0,4),1))=temp2(temp2(:,4)~=0,4);
+            F3_L_N70(x,1,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);F3_L_N70(x,2,1:size(temp3(temp3(:,2)>0,2),1))=temp3(temp3(:,2)>0,2);
         end
         x=x+1;
     end
 end
 %% Plots
-figure;tiledlayout(1,3);
-ax1 = nexttile;
-ax2 = nexttile;
-ax3 = nexttile;
-hold([ax1 ax2 ax3],'on')
-title(ax1,'Feature 1: Mean Pupil Size')
-title(ax2,'Feature 2: Mean Slope')
-title(ax3,'Feature 3: Mean Peak Pupil Size')
-xlabel([ax1 ax2 ax3],'Conditions')
-ylabel([ax1 ax3],'Pupil diameter [mm]')
-ylabel(ax2,'Slope [mm/s]')
-grid([ax1 ax2 ax3],'on')
-
-% Plot features
-data13=[mean(nonzeros(F1_S_Q)),mean(nonzeros(F1_L_Q));mean(nonzeros(F1_S_SHL)),mean(nonzeros(F1_L_SHL));mean(nonzeros(F1_S_N60)),mean(nonzeros(F1_L_N60));mean(nonzeros(F1_S_N70)),mean(nonzeros(F1_L_N70))];
-b13=bar(ax1,data13,'grouped');
-[ngroups,nbars] = size(data13);
-x13 = nan(nbars, ngroups);
-for e = 1:nbars
-    x13(e,:) = b13(e).XEndPoints;
-end
-errorbar(ax1,x13',data13,[2*std(nonzeros(F1_S_Q))/sqrt(numel(nonzeros(F1_S_Q))),2*std(nonzeros(F1_L_Q))/sqrt(numel(nonzeros(F1_L_Q)));2*std(nonzeros(F1_S_SHL))/sqrt(numel(nonzeros(F1_S_SHL))),2*std(nonzeros(F1_L_SHL))/sqrt(numel(nonzeros(F1_L_SHL)));2*std(nonzeros(F1_S_N60))/sqrt(numel(nonzeros(F1_S_N60))),2*std(nonzeros(F1_L_N60))/sqrt(numel(nonzeros(F1_L_N60)));2*std(nonzeros(F1_S_N70))/sqrt(numel(nonzeros(F1_S_N70))),2*std(nonzeros(F1_L_N70))/sqrt(numel(nonzeros(F1_L_N70)))],'k','linestyle','none','handlevisibility' ,'off')
-data14=[mean(nonzeros(F2_S_Q)),mean(nonzeros(F2_L_Q));mean(nonzeros(F2_S_SHL)),mean(nonzeros(F2_L_SHL));mean(nonzeros(F2_S_N60)),mean(nonzeros(F2_L_N60));mean(nonzeros(F2_S_N70)),mean(nonzeros(F2_L_N70))];
-b14=bar(ax2,data14,'grouped');
-[ngroups,nbars] = size(data14);
-x14 = nan(nbars, ngroups);
-for e = 1:nbars
-    x14(e,:) = b14(e).XEndPoints;
-end
-errorbar(ax2,x14',data14,[2*std(nonzeros(F2_S_Q))/sqrt(numel(nonzeros(F2_S_Q))),2*std(nonzeros(F2_L_Q))/sqrt(numel(nonzeros(F2_L_Q)));2*std(nonzeros(F2_S_SHL))/sqrt(numel(nonzeros(F2_S_SHL))),2*std(nonzeros(F2_L_SHL))/sqrt(numel(nonzeros(F2_L_SHL)));2*std(nonzeros(F2_S_N60))/sqrt(numel(nonzeros(F2_S_N60))),2*std(nonzeros(F2_L_N60))/sqrt(numel(nonzeros(F2_L_N60)));2*std(nonzeros(F2_S_N70))/sqrt(numel(nonzeros(F2_S_N70))),2*std(nonzeros(F2_L_N70))/sqrt(numel(nonzeros(F2_L_N70)))],'k','linestyle','none','handlevisibility' ,'off')
-data15=[mean(nonzeros(F3_S_Q)),mean(nonzeros(F3_L_Q));mean(nonzeros(F3_S_SHL)),mean(nonzeros(F3_L_SHL));mean(nonzeros(F3_S_N60)),mean(nonzeros(F3_L_N60));mean(nonzeros(F3_S_N70)),mean(nonzeros(F3_L_N70))];
-b15=bar(ax3,data15,'grouped');
-[ngroups,nbars] = size(data15);
-x15 = nan(nbars, ngroups);
-for e = 1:nbars
-    x15(e,:) = b15(e).XEndPoints;
-end
-errorbar(ax3,x15',data15,[2*std(nonzeros(F3_S_Q))/sqrt(numel(nonzeros(F3_S_Q))),2*std(nonzeros(F3_L_Q))/sqrt(numel(nonzeros(F3_L_Q)));2*std(nonzeros(F3_S_SHL))/sqrt(numel(nonzeros(F3_S_SHL))),2*std(nonzeros(F3_L_SHL))/sqrt(numel(nonzeros(F3_L_SHL)));2*std(nonzeros(F3_S_N60))/sqrt(numel(nonzeros(F3_S_N60))),2*std(nonzeros(F3_L_N60))/sqrt(numel(nonzeros(F3_L_N60)));2*std(nonzeros(F3_S_N70))/sqrt(numel(nonzeros(F3_S_N70))),2*std(nonzeros(F3_L_N70))/sqrt(numel(nonzeros(F3_L_N70)))],'k','linestyle','none','handlevisibility' ,'off')
-lgd15=legend(ax3,'Speaking','Non-Speaking','Location','southeastoutside');
-lgd15.Title.String = 'Types of Windows:';
-xticks([ax1 ax2 ax3],1:4)
-xticklabels([ax1 ax2 ax3],{'Quiet','SHL','N60','N70'})
-% xlim([ax2 ax1],[9.5, 10.5]);xlim([ax3 ax4],[-0.5, 0.5]);ylim([ax1 ax2 ax3 ax4],[3.4, 3.7])
-
-% Boxplot
 figure;tiledlayout(1,2);
 ax11 = nexttile;
 ax12 = nexttile;
-[names{1:size(nonzeros(F1_S_Q(:,1)),1)}] = deal('Speaking');[names{end+1:end+size(nonzeros(F1_L_Q(:,1)),1)}] = deal('Listening');
-boxchart(ax11,reshape([nonzeros(F1_S_Q(:,1)),nonzeros(F1_L_Q(:,1))],[],1),'GroupByColor',names);
-boxchart(ax12,reshape([nonzeros(F1_S_Q(:,2)),nonzeros(F1_L_Q(:,2))],[],1),'GroupByColor',names);
-xticklabels(ax11,'Phase 1')
-xticklabels(ax12,'Phase 2')
-legend
+figure;tiledlayout(1,2);
+ax21 = nexttile;
+ax22 = nexttile;
+figure;tiledlayout(1,2);
+ax31 = nexttile;
+ax32 = nexttile;
+hold([ax11 ax12 ax21 ax22 ax31 ax32],'on')
+
+% Boxplot
+% F1 Data
+F1_P1_S_Q = F1_S_Q(logical([~isnan(F1_S_Q(:,1,:)),zeros(NLayers,NRows/2,NCols)]));
+F1_P2_S_Q = F1_S_Q(logical([zeros(NLayers,NRows/2,NCols),~isnan(F1_S_Q(:,2,:))]));
+F1_P1_L_Q = F1_L_Q(logical([~isnan(F1_L_Q(:,1,:)),zeros(NLayers,NRows/2,NCols)]));
+F1_P2_L_Q = F1_L_Q(logical([zeros(NLayers,NRows/2,NCols),~isnan(F1_L_Q(:,2,:))]));
+
+F1_P1_S_SHL = F1_S_SHL(logical([~isnan(F1_S_SHL(:,1,:)),zeros(NLayers,NRows/2,NCols)]));
+F1_P2_S_SHL = F1_S_SHL(logical([zeros(NLayers,NRows/2,NCols),~isnan(F1_S_SHL(:,2,:))]));
+F1_P1_L_SHL = F1_L_SHL(logical([~isnan(F1_L_SHL(:,1,:)),zeros(NLayers,NRows/2,NCols)]));
+F1_P2_L_SHL = F1_L_SHL(logical([zeros(NLayers,NRows/2,NCols),~isnan(F1_L_SHL(:,2,:))]));
+
+F1_P1_S_N60 = F1_S_N60(logical([~isnan(F1_S_N60(:,1,:)),zeros(NLayers,NRows/2,NCols)]));
+F1_P2_S_N60 = F1_S_N60(logical([zeros(NLayers,NRows/2,NCols),~isnan(F1_S_N60(:,2,:))]));
+F1_P1_L_N60 = F1_L_N60(logical([~isnan(F1_L_N60(:,1,:)),zeros(NLayers,NRows/2,NCols)]));
+F1_P2_L_N60 = F1_L_N60(logical([zeros(NLayers,NRows/2,NCols),~isnan(F1_L_N60(:,2,:))]));
+
+F1_P1_S_N70 = F1_S_N70(logical([~isnan(F1_S_N70(:,1,:)),zeros(NLayers,NRows/2,NCols)]));
+F1_P2_S_N70 = F1_S_N70(logical([zeros(NLayers,NRows/2,NCols),~isnan(F1_S_N70(:,2,:))]));
+F1_P1_L_N70 = F1_L_N70(logical([~isnan(F1_L_N70(:,1,:)),zeros(NLayers,NRows/2,NCols)]));
+F1_P2_L_N70 = F1_L_N70(logical([zeros(NLayers,NRows/2,NCols),~isnan(F1_L_N70(:,2,:))]));
+
+% F2 Data
+F2_P1_S_Q = F2_S_Q(logical([~isnan(F2_S_Q(:,1,:)),zeros(NLayers,NRows/2,NCols)]));
+F2_P2_S_Q = F2_S_Q(logical([zeros(NLayers,NRows/2,NCols),~isnan(F2_S_Q(:,2,:))]));
+F2_P1_L_Q = F2_L_Q(logical([~isnan(F2_L_Q(:,1,:)),zeros(NLayers,NRows/2,NCols)]));
+F2_P2_L_Q = F2_L_Q(logical([zeros(NLayers,NRows/2,NCols),~isnan(F2_L_Q(:,2,:))]));
+
+F2_P1_S_SHL = F2_S_SHL(logical([~isnan(F2_S_SHL(:,1,:)),zeros(NLayers,NRows/2,NCols)]));
+F2_P2_S_SHL = F2_S_SHL(logical([zeros(NLayers,NRows/2,NCols),~isnan(F2_S_SHL(:,2,:))]));
+F2_P1_L_SHL = F2_L_SHL(logical([~isnan(F2_L_SHL(:,1,:)),zeros(NLayers,NRows/2,NCols)]));
+F2_P2_L_SHL = F2_L_SHL(logical([zeros(NLayers,NRows/2,NCols),~isnan(F2_L_SHL(:,2,:))]));
+
+F2_P1_S_N60 = F2_S_N60(logical([~isnan(F2_S_N60(:,1,:)),zeros(NLayers,NRows/2,NCols)]));
+F2_P2_S_N60 = F2_S_N60(logical([zeros(NLayers,NRows/2,NCols),~isnan(F2_S_N60(:,2,:))]));
+F2_P1_L_N60 = F2_L_N60(logical([~isnan(F2_L_N60(:,1,:)),zeros(NLayers,NRows/2,NCols)]));
+F2_P2_L_N60 = F2_L_N60(logical([zeros(NLayers,NRows/2,NCols),~isnan(F2_L_N60(:,2,:))]));
+
+F2_P1_S_N70 = F2_S_N70(logical([~isnan(F2_S_N70(:,1,:)),zeros(NLayers,NRows/2,NCols)]));
+F2_P2_S_N70 = F2_S_N70(logical([zeros(NLayers,NRows/2,NCols),~isnan(F2_S_N70(:,2,:))]));
+F2_P1_L_N70 = F2_L_N70(logical([~isnan(F2_L_N70(:,1,:)),zeros(NLayers,NRows/2,NCols)]));
+F2_P2_L_N70 = F2_L_N70(logical([zeros(NLayers,NRows/2,NCols),~isnan(F2_L_N70(:,2,:))]));
+
+% F3 Data
+F3_P1_S_Q = F3_S_Q(logical([~isnan(F3_S_Q(:,1,:)),zeros(NLayers,NRows/2,NCols)]));
+F3_P2_S_Q = F3_S_Q(logical([zeros(NLayers,NRows/2,NCols),~isnan(F3_S_Q(:,2,:))]));
+F3_P1_L_Q = F3_L_Q(logical([~isnan(F3_L_Q(:,1,:)),zeros(NLayers,NRows/2,NCols)]));
+F3_P2_L_Q = F3_L_Q(logical([zeros(NLayers,NRows/2,NCols),~isnan(F3_L_Q(:,2,:))]));
+
+F3_P1_S_SHL = F3_S_SHL(logical([~isnan(F3_S_SHL(:,1,:)),zeros(NLayers,NRows/2,NCols)]));
+F3_P2_S_SHL = F3_S_SHL(logical([zeros(NLayers,NRows/2,NCols),~isnan(F3_S_SHL(:,2,:))]));
+F3_P1_L_SHL = F3_L_SHL(logical([~isnan(F3_L_SHL(:,1,:)),zeros(NLayers,NRows/2,NCols)]));
+F3_P2_L_SHL = F3_L_SHL(logical([zeros(NLayers,NRows/2,NCols),~isnan(F3_L_SHL(:,2,:))]));
+
+F3_P1_S_N60 = F3_S_N60(logical([~isnan(F3_S_N60(:,1,:)),zeros(NLayers,NRows/2,NCols)]));
+F3_P2_S_N60 = F3_S_N60(logical([zeros(NLayers,NRows/2,NCols),~isnan(F3_S_N60(:,2,:))]));
+F3_P1_L_N60 = F3_L_N60(logical([~isnan(F3_L_N60(:,1,:)),zeros(NLayers,NRows/2,NCols)]));
+F3_P2_L_N60 = F3_L_N60(logical([zeros(NLayers,NRows/2,NCols),~isnan(F3_L_N60(:,2,:))]));
+
+F3_P1_S_N70 = F3_S_N70(logical([~isnan(F3_S_N70(:,1,:)),zeros(NLayers,NRows/2,NCols)]));
+F3_P2_S_N70 = F3_S_N70(logical([zeros(NLayers,NRows/2,NCols),~isnan(F3_S_N70(:,2,:))]));
+F3_P1_L_N70 = F3_L_N70(logical([~isnan(F3_L_N70(:,1,:)),zeros(NLayers,NRows/2,NCols)]));
+F3_P2_L_N70 = F3_L_N70(logical([zeros(NLayers,NRows/2,NCols),~isnan(F3_L_N70(:,2,:))]));
+
+h11=boxplotGroup(ax11,{[F1_P1_S_Q,F1_P2_S_Q],[F1_P1_S_SHL,F1_P2_S_SHL],[F1_P1_S_N60,F1_P2_S_N60],[F1_P1_S_N70,F1_P2_S_N70]},...
+'PrimaryLabels', {'Quiet','SHL','N60','N70'}, ...
+'SecondaryLabels', {'Phase 1', 'Phase 2'}, ...
+'interGroupSpace',2,'groupLabelType','Vertical', ...
+'PlotStyle','Compact','BoxStyle','filled',...
+'Colors',[QuietColor;SHLColor;N60Color;N70Color],'GroupType','betweenGroups');
+h12=boxplotGroup(ax12,{[F1_P1_L_Q,F1_P2_L_Q],[F1_P1_L_SHL,F1_P2_L_SHL],[F1_P1_L_N60,F1_P2_L_N60],[F1_P1_L_N70,F1_P2_L_N70]},...
+'PrimaryLabels', {'Quiet','SHL','N60','N70'}, ...
+'SecondaryLabels', {'Phase 1', 'Phase 2'}, ...
+'interGroupSpace',2,'groupLabelType','Vertical', ...
+'PlotStyle','Compact','BoxStyle','filled',...
+'Colors',[QuietColor;SHLColor;N60Color;N70Color],'GroupType','betweenGroups');
+
+h21=boxplotGroup(ax21,{[F2_P1_S_Q,F2_P2_S_Q],[F2_P1_S_SHL,F2_P2_S_SHL],[F2_P1_S_N60,F2_P2_S_N60],[F2_P1_S_N70,F2_P2_S_N70]},...
+'PrimaryLabels', {'Quiet','SHL','N60','N70'}, ...
+'SecondaryLabels', {'Phase 1', 'Phase 2'}, ...
+'interGroupSpace',2,'groupLabelType','Vertical', ...
+'PlotStyle','Compact','BoxStyle','filled',...
+'Colors',[QuietColor;SHLColor;N60Color;N70Color],'GroupType','betweenGroups');
+h22=boxplotGroup(ax22,{[F2_P1_L_Q,F2_P2_L_Q],[F2_P1_L_SHL,F2_P2_L_SHL],[F2_P1_L_N60,F2_P2_L_N60],[F2_P1_L_N70,F2_P2_L_N70]},...
+'PrimaryLabels', {'Quiet','SHL','N60','N70'}, ...
+'SecondaryLabels', {'Phase 1', 'Phase 2'}, ...
+'interGroupSpace',2,'groupLabelType','Vertical', ...
+'PlotStyle','Compact','BoxStyle','filled',...
+'Colors',[QuietColor;SHLColor;N60Color;N70Color],'GroupType','betweenGroups');
+
+h31=boxplotGroup(ax31,{[F3_P1_S_Q,F3_P2_S_Q],[F3_P1_S_SHL,F3_P2_S_SHL],[F3_P1_S_N60,F3_P2_S_N60],[F3_P1_S_N70,F3_P2_S_N70]},...
+'PrimaryLabels', {'Quiet','SHL','N60','N70'}, ...
+'SecondaryLabels', {'Phase 1', 'Phase 2'}, ...
+'interGroupSpace',2,'groupLabelType','Vertical', ...
+'PlotStyle','Compact','BoxStyle','filled',...
+'Colors',[QuietColor;SHLColor;N60Color;N70Color],'GroupType','betweenGroups');
+h32=boxplotGroup(ax32,{[F3_P1_L_Q,F3_P2_L_Q],[F3_P1_L_SHL,F3_P2_L_SHL],[F3_P1_L_N60,F3_P2_L_N60],[F3_P1_L_N70,F3_P2_L_N70]},...
+'PrimaryLabels', {'Quiet','SHL','N60','N70'}, ...
+'SecondaryLabels', {'Phase 1', 'Phase 2'}, ...
+'interGroupSpace',2,'groupLabelType','Vertical', ...
+'PlotStyle','Compact','BoxStyle','filled',...
+'Colors',[QuietColor;SHLColor;N60Color;N70Color],'GroupType','betweenGroups');
+
+ax11.YGrid = 'on';
+ax11.XTickLabelRotation = 90;
+set(ax11,'Color',[SColor,0.1])
+ax12.YGrid = 'on';
+ax12.XTickLabelRotation = 90;
+set(ax12,'Color',[LColor,0.1])
+
+ax21.YGrid = 'on';
+ax21.XTickLabelRotation = 90;
+set(ax21,'Color',[SColor,0.1])
+ax22.YGrid = 'on';
+ax22.XTickLabelRotation = 90;
+set(ax22,'Color',[LColor,0.1])
+
+ax31.YGrid = 'on';
+ax31.XTickLabelRotation = 90;
+set(ax31,'Color',[SColor,0.1])
+ax32.YGrid = 'on';
+ax32.XTickLabelRotation = 90;
+set(ax32,'Color',[LColor,0.1])
+
+title(ax11,'MPD Speaking')
+title(ax12,'MPD Listening')
+title(ax21,'Slope Speaking')
+title(ax22,'Slope Listening')
+title(ax31,'Peak Speaking')
+title(ax32,'Peak Listening')
+
+ylabel([ax11 ax12 ax31 ax32],'Pupil diameter [mm]')
+ylabel([ax21 ax22],'Slope [mm/s]')
