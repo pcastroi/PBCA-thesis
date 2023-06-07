@@ -125,7 +125,7 @@ for q=1:numel(subDirs)
     PairUtt=LoadUtt.Utterances(PairIn,:);
     PairDelay=LoadDelays.TobAudDelay(PairIn,:);
     
-    for i=1:numel(FileNames)        
+    for i=1:numel(FileNames)
         try
             alldata = load([PairFiles(1).folder, '\', cell2mat(FileNames(i))]);
         catch ME

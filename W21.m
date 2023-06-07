@@ -32,7 +32,12 @@ N70Color = [2, 36, 223]./255;
 [subDirs] = GetSubDirsFirstLevelOnly('data\AMEND_I');
 FileNames={'P1_Quiet_B1.mat','P1_Quiet_B2.mat','P1_SHL_B1.mat','P1_SHL_B2.mat','P1_Noise60_B1.mat','P1_Noise60_B2.mat','P1_Noise70_B1.mat','P1_Noise70_B2.mat','P2_Quiet_B1.mat','P2_Quiet_B2.mat','P2_SHL_B1.mat','P2_SHL_B2.mat','P2_Noise60_B1.mat','P2_Noise60_B2.mat','P2_Noise70_B1.mat','P2_Noise70_B2.mat'};
 LoadDelays=load('data\AMEND_I\delays1110.mat');
+LoadTPsOrder=load('data\AMEND_I\TPsOrder_I.mat');
+LoadUtt=load('data\AMEND_I\utterances1110.mat');
 
+NPs = 2; % N of TPs per Pair
+NCond = numel(FileNames)/NPs; % N of conditions
+NTPs = numel(subDirs)*numel(FileNames)/NCond; % Total N of TPs
 NCols=200; % N of windows
 NRows=2; % N of phases
 NLayers=numel(FileNames)*numel(subDirs); % Number of trials
@@ -68,27 +73,28 @@ x=1;
 for q=1:numel(subDirs)
     PairIn = q;
     PairFiles=dir(['data\AMEND_I\Main',sprintf('%d',PairIn),'\*.mat']);
-    PairUtt=load('data\AMEND_I\utterances1110.mat');
-    PairUtt=PairUtt.Utterances(PairIn,:);
+    PairUtt=LoadUtt.Utterances(PairIn,:);
     PairDelay=LoadDelays.TobAudDelay(PairIn,:);
     
-    for i=1:numel(PairFiles)
-        alldata = load([PairFiles(i).folder, '\', PairFiles(i).name]);
+    for i=1:numel(FileNames)
+        if contains(cell2mat(FileNames(i)),'P2')
+            if LoadTPsOrder.TPsOrder(2*q,i-NCond) ~= x
+                disp(['Warning: File ',PairFiles(1).folder, '\', cell2mat(FileNames(i)),' was rejected in AMEND I (P2) analysis.']);
+                continue
+            end
+        elseif contains(cell2mat(FileNames(i)),'P1')
+            if LoadTPsOrder.TPsOrder(2*q-1,i) ~= x
+                disp(['Warning: File ',PairFiles(1).folder, '\', cell2mat(FileNames(i)),' was rejected in AMEND I (P1) analysis.']);
+                continue
+            end
+        end
+        
+        alldata = load([PairFiles(1).folder, '\', cell2mat(FileNames(i))]);
         alldata_mat = cell2mat(alldata.data);
         
         % Replace blanks '[]' for 'NaN' in fields diameterLeft and diameterRight
         [alldata_mat(cellfun(@isempty,{alldata_mat.diameterLeft})).diameterLeft] = deal(NaN);
         [alldata_mat(cellfun(@isempty,{alldata_mat.diameterRight})).diameterRight] = deal(NaN);
-        
-        % Extract delay [s] (Duration_timeStamps - Duration_nsamples)
-        EyeAudDelay=alldata_mat(end).timeStamp-alldata_mat(1).timeStamp-length(alldata_mat)/Param.Fs;
-        
-        % Skip file if the difference in duration from the number of
-        % samples and the duration given by timestamps is bigger than 0.5 s
-        if EyeAudDelay > RejectDelay
-            disp(['Warning: File ',PairFiles(i).folder, '\', PairFiles(i).name, ' was rejected, too much delay (',sprintf('%0.2f',EyeAudDelay),'s).']);
-            continue
-        end
         
         LDiamRaw = [alldata_mat.diameterLeft];
         RDiamRaw = [alldata_mat.diameterRight];
@@ -132,61 +138,41 @@ for q=1:numel(subDirs)
             DiamNaN = sum(RMetadata.Isnan);
         end
         
-        if DiamNaN/length(Diameter) >= RejectRatio
-            disp(['Warning: File ',PairFiles(i).folder, '\', PairFiles(i).name, ' was rejected because it contains too many NaNs (',sprintf('%0.2f',100*DiamNaN/length(Diameter)),'%).'])
-            continue
-        end
-        
         % Retrieve Utterances
-        if contains(PairFiles(i).name,'P2')
+        if contains(cell2mat(FileNames(i)),'P2')
             SpeakKey = 'utteranceCH1';
             ListenKey = 'utteranceCH2';
             SDelayKey = 'delayCH1';
             LDelayKey = 'delayCH2';
-        elseif contains(PairFiles(i).name,'P1')
+        elseif contains(cell2mat(FileNames(i)),'P1')
             SpeakKey = 'utteranceCH2';
             ListenKey = 'utteranceCH1';
             SDelayKey = 'delayCH2';
             LDelayKey = 'delayCH1';
         end
 
-        if contains(PairFiles(i).name,'B1')
+        if contains(cell2mat(FileNames(i)),'B1')
             SpeB = 0;
-        elseif contains(PairFiles(i).name,'B2')
+        elseif contains(cell2mat(FileNames(i)),'B2')
             SpeB = 1;
         end
 
-        if contains(PairFiles(i).name,'Quiet')
+        if contains(cell2mat(FileNames(i)),'Quiet')
             SpeCond = SpeB + 1;
-        elseif contains(PairFiles(i).name,'SHL')
+        elseif contains(cell2mat(FileNames(i)),'SHL')
             SpeCond = SpeB + 3;
-        elseif contains(PairFiles(i).name,'Noise60')
+        elseif contains(cell2mat(FileNames(i)),'Noise60')
             SpeCond = SpeB + 5;
-        elseif contains(PairFiles(i).name,'Noise70')
+        elseif contains(cell2mat(FileNames(i)),'Noise70')
             SpeCond = SpeB + 7;
         end
 
         SpeakRaw = PairUtt{1,SpeCond}.(SpeakKey);
         ListenRaw = PairUtt{1,SpeCond}.(ListenKey);
         binResUtt = PairUtt{1,SpeCond}.binRes;
-        try
-            SDelayRaw = PairDelay{1,SpeCond}.(SDelayKey);
-            LDelayRaw = PairDelay{1,SpeCond}.(LDelayKey);
-        catch ME
-            disp(['Warning: File ',PairFiles(i).folder, '\', PairFiles(i).name,' was rejected for not having an associated delay.']);
-            continue
-        end
-        
-        if (SDelayRaw <= 0 | SDelayRaw >= 1 | LDelayRaw <= 0 | LDelayRaw >= 1)
-            disp(['Warning: File ', PairFiles(i).folder, '\', PairFiles(i).name,' was rejected because the delay between Tobii and Utterances is out of proportions (Speaking: ',sprintf('%0.3f',SDelayRaw(2)),' [s], Listening: ',sprintf('%0.3f',LDelayRaw(2)),' [s]).']);
-            continue
-        end
-        
-        if isempty(SpeakRaw) && isempty(ListenRaw)
-            disp(['Warning: File ',PairFiles(i).folder, '\', PairFiles(i).name,' was rejected for not having associated Utterance windows.']);
-            continue
-        end
-        
+        SDelayRaw = PairDelay{1,SpeCond}.(SDelayKey);
+        LDelayRaw = PairDelay{1,SpeCond}.(LDelayKey);
+
         SpeakRaw(:,2:3)=round((SpeakRaw(:,2:3)*binResUtt+BLPeriod(2))*Param.Fs+SDelayRaw(1)/2);
         ListenRaw(:,2:3)=round((ListenRaw(:,2:3)*binResUtt+BLPeriod(2))*Param.Fs+LDelayRaw(1)/2);
         
@@ -228,7 +214,7 @@ for q=1:numel(subDirs)
         temp=zeros(100,2);
         temp2=zeros(100,4);
         temp3=temp;
-        if contains(PairFiles(i).name,'Quiet')
+        if contains(cell2mat(FileNames(i)),'Quiet')
             for j=1:size(Speak,1)
                 if Speak(j,2)+WD(2)*Param.Fs >= Speak(j,3)
                     PeakLim = Speak(j,3);
@@ -269,7 +255,7 @@ for q=1:numel(subDirs)
             F1_L_Q(x,1,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);F1_L_Q(x,2,1:size(temp(temp(:,2)>0,2),1))=temp(temp(:,2)>0,2);
             F2_L_Q(x,1,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);F2_L_Q(x,2,1:size(temp2(temp2(:,4)~=0,4),1))=temp2(temp2(:,4)~=0,4);
             F3_L_Q(x,1,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);F3_L_Q(x,2,1:size(temp3(temp3(:,2)>0,2),1))=temp3(temp3(:,2)>0,2);
-        elseif contains(PairFiles(i).name,'SHL')
+        elseif contains(cell2mat(FileNames(i)),'SHL')
             for j=1:size(Speak,1)
                 if Speak(j,2)+WD(2)*Param.Fs >= Speak(j,3)
                     PeakLim = Speak(j,3);
@@ -310,7 +296,7 @@ for q=1:numel(subDirs)
             F1_L_SHL(x,1,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);F1_L_SHL(x,2,1:size(temp(temp(:,2)>0,2),1))=temp(temp(:,2)>0,2);
             F2_L_SHL(x,1,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);F2_L_SHL(x,2,1:size(temp2(temp2(:,4)~=0,4),1))=temp2(temp2(:,4)~=0,4);
             F3_L_SHL(x,1,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);F3_L_SHL(x,2,1:size(temp3(temp3(:,2)>0,2),1))=temp3(temp3(:,2)>0,2);
-        elseif contains(PairFiles(i).name,'Noise60')
+        elseif contains(cell2mat(FileNames(i)),'Noise60')
             for j=1:size(Speak,1)
                 if Speak(j,2)+WD(2)*Param.Fs >= Speak(j,3)
                     PeakLim = Speak(j,3);
@@ -352,7 +338,7 @@ for q=1:numel(subDirs)
             F2_L_N60(x,1,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);F2_L_N60(x,2,1:size(temp2(temp2(:,4)~=0,4),1))=temp2(temp2(:,4)~=0,4);
             F3_L_N60(x,1,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);F3_L_N60(x,2,1:size(temp3(temp3(:,2)>0,2),1))=temp3(temp3(:,2)>0,2);
             
-        elseif contains(PairFiles(i).name,'Noise70')
+        elseif contains(cell2mat(FileNames(i)),'Noise70')
             for j=1:size(Speak,1)
                 if Speak(j,2)+WD(2)*Param.Fs >= Speak(j,3)
                     PeakLim = Speak(j,3);
