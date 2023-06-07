@@ -4,6 +4,12 @@ function Merge = merge_windows(Raw, Fs, TimeMerge)
 num_windows = size(Raw, 1);
 merged_windows = [];
 
+% Check for empty inputs
+if isnan(Raw)
+   Merge = Raw;
+   return;
+end
+
 % Loop through the windows and merge adjacent windows if necessary
 i = 1;
 while i <= num_windows
