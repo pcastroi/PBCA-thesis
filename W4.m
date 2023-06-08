@@ -7,8 +7,8 @@ addpath([BPath{1} 'Pupil-preprocessing-tools\tools']) % For preprocessing
 
 % Files and Utterances: different conditions
 Param.Fs = 50; % Sampling frequency of pupil data
-Param.RemoveBeforeAndAfter = [35 100]*1e-3; % Samples within the time range before and after NaNs will set NaNs as well.
-Param.MinLengthNaNRepair = 5; % Drop values (i.e., change to NaN) before and after NaNs only for contiguous NaNs of at least __ samples. 
+Param.RemoveBeforeAndAfter = [0 0]*1e-3; % Samples within the time range before and after NaNs will set NaNs as well.
+Param.MinLengthNaNRepair = 0; % Drop values (i.e., change to NaN) before and after NaNs only for contiguous NaNs of at least __ samples. 
 LPWinSize = 0.5; % [s]: Window size of hamming-window for low-pass filtering
 LPWindow = hamming(round(LPWinSize*Param.Fs));
 LPWindow = LPWindow/sum(LPWindow); % Hamming-window

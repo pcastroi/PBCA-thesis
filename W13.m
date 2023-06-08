@@ -12,8 +12,8 @@ LoadDelays=load('data\AMEND_I\delays1110.mat');
 
 % Parameters for processing
 Param.Fs = 50; % Sampling frequency of pupil data
-Param.RemoveBeforeAndAfter = [35 100]*1e-3; % Samples within the time range before and after NaNs will set NaNs as well.
-Param.MinLengthNaNRepair = 5; % Drop values (i.e., change to NaN) before and after NaNs only for contiguous NaNs of at least __ samples.
+Param.RemoveBeforeAndAfter = [0 0]*1e-3; % Samples within the time range before and after NaNs will set NaNs as well.
+Param.MinLengthNaNRepair = 0; % Drop values (i.e., change to NaN) before and after NaNs only for contiguous NaNs of at least __ samples.
 Param.Preblink = 0.1; % [s], set to NaN, time before blink
 Param.Postblink = 0.2; % [s], set to NaN, time after blink
 Param.BlinkThresh = 3; % [samples], threshold of samples in between artifacts or blinks
@@ -289,7 +289,7 @@ for q=1:numel(subDirs)
                 
         % Time-locked indexes (based on Start or End of events)
         WSpeakIdx=[Speak(:,2)-TimeStartW*Param.Fs,Speak(:,2),Speak(:,3)+TimeEndW*Param.Fs];
-        WListenIdx=[Listen(:,2)-TimeStartW*Param.Fs,Listen(:,2),Listen(:,2)+TimeEndW*Param.Fs];
+        WListenIdx=[Listen(:,2)-TimeStartW*Param.Fs,Listen(:,2),Listen(:,3)+TimeEndW*Param.Fs];
 %         EWSpeakIdx=[Speak(:,3)-TimeStartW*Param.Fs,Speak(:,3),Speak(:,3)+TimeEndW*Param.Fs];
 %         EWListenIdx=[Listen(:,3)-TimeStartW*Param.Fs,Listen(:,3),Listen(:,3)+TimeEndW*Param.Fs];
         

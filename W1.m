@@ -21,7 +21,7 @@ LoadDelays=load('data\AMEND_I\delays1110.mat');
 % Parameters for processing
 Param.Fs = 50; % Sampling frequency of pupil data
 Param.RemoveBeforeAndAfter = [35 100]*1e-3; % Samples within the time range before and after NaNs will set NaNs as well.
-Param.MinLengthNaNRepair = 5; % Drop values (i.e., change to NaN) before and after NaNs only for contiguous NaNs of at least __ samples. 
+Param.MinLengthNaNRepair = 0; % Drop values (i.e., change to NaN) before and after NaNs only for contiguous NaNs of at least __ samples. 
 LPWinSize = 1; % [s]: Window size of hamming-window for low-pass filtering
 LPWindow = hamming(round(LPWinSize*Param.Fs));
 LPWindow = LPWindow/sum(LPWindow); % Hamming-window
@@ -243,6 +243,9 @@ for q=1:numel(subDirs)
         % Discard windows if duration is < 2*TimeMinWin (1 s)
         Speak = SpeakM(SpeakM(:,1)>2*TimeMinWin,:);
         Listen = ListenM(ListenM(:,1)>2*TimeMinWin,:);
+        
+        % Added from W6.m -> Cut/Split overlaps
+        [Speak,Listen] = overlap_windows(SpeakD,ListenD,Param.Fs);
         
         % figure;t_Diam = linspace(1,length(Diameter)./Param.Fs,length(Diameter));startStopS = t_Diam(SpeakRaw(:,2:3));yl=ylim();widthS = startStopS(:,2)-startStopS(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStopS(i,1),yl(1),widthS(i),1],'EdgeColor', 'none', 'FaceColor', [1 0 0 .2]), 1:size(startStopS,1));startStopS2 = t_Diam(SpeakMI(:,2:3));widthS = startStopS2(:,2)-startStopS2(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStopS2(i,1),1,widthS(i),1],'EdgeColor', 'none', 'FaceColor', [0 0 1 .2]), 1:size(startStopS2,1));startStopS3 = t_Diam(SpeakD(:,2:3));widthS = startStopS3(:,2)-startStopS3(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStopS3(i,1),2,widthS(i),1],'EdgeColor', 'none', 'FaceColor', [0 1 1 .2]), 1:size(startStopS3,1));startStopS4 = t_Diam(SpeakM(:,2:3));widthS = startStopS4(:,2)-startStopS4(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStopS5(i,1),3,widthS(i),1],'EdgeColor', 'none', 'FaceColor', [1 0 1 .2]), 1:size(startStopS4,1));startStopS5 = t_Diam(Speak(:,2:3));widthS = startStopS5(:,2)-startStopS5(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStopS5(i,1),4,widthS(i),1],'EdgeColor', 'none', 'FaceColor', [1 1 0 .2]), 1:size(startStopS5,1));grid on        
         
