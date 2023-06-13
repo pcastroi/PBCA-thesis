@@ -785,13 +785,13 @@ LW_R_N70_SEM = (squeeze(std(LW_R_N70,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isna
 LW_RB_N70_SEM = (squeeze(std(LW_RB_N70,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(LW_RB_N70),[1 2]))))';
 LW_Z_N70_SEM = (squeeze(std(LW_Z_N70,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(LW_Z_N70),[1 2]))))';
 %% Global Plots
-figure;tiledlayout(1,2);ax1 = nexttile;ax2 = nexttile;
-figure;tiledlayout(1,2);ax3 = nexttile;ax4 = nexttile;
-figure;tiledlayout(1,2);ax5 = nexttile;ax6 = nexttile;
-figure;tiledlayout(1,2);ax7 = nexttile;ax8 = nexttile;
-figure;tiledlayout(1,2);ax9 = nexttile;ax10 = nexttile;
-figure;tiledlayout(1,2);ax11 = nexttile;ax12 = nexttile;
-figure;tiledlayout(1,2);ax13 = nexttile;ax14 = nexttile;
+figure;t1=tiledlayout(1,2);ax1 = nexttile;ax2 = nexttile;
+figure;t2=tiledlayout(1,2);ax3 = nexttile;ax4 = nexttile;
+figure;t3=tiledlayout(1,2);ax5 = nexttile;ax6 = nexttile;
+figure;t4=tiledlayout(1,2);ax7 = nexttile;ax8 = nexttile;
+figure;t5=tiledlayout(1,2);ax9 = nexttile;ax10 = nexttile;
+figure;t6=tiledlayout(1,2);ax11 = nexttile;ax12 = nexttile;
+figure;t7=tiledlayout(1,2);ax13 = nexttile;ax14 = nexttile;
 
 hold([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10 ax11 ax12 ax13 ax14],'on')
 grid([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10 ax11 ax12 ax13 ax14],'on')
@@ -1062,26 +1062,28 @@ fill(ax14,[linspace(-TimeStartW,size(TP_LW_B_N60,2)/Param.Fs,size(TP_LW_B_N60,2)
 fill(ax14,[linspace(-TimeStartW,size(TP_LW_B_N70,2)/Param.Fs,size(TP_LW_B_N70,2)), flipud(linspace(-TimeStartW,size(TP_LW_B_N70,2)/Param.Fs,size(TP_LW_B_N70,2))')'],[(TP_LW_B_N70_Mean+TP_LW_B_N70_SEM), flipud((TP_LW_B_N70_Mean-TP_LW_B_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
 
 xlabel([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10 ax11 ax12 ax13 ax14],'Time [s]')
-ylabel([ax1 ax2 ax11 ax12],'Pupil diameter [mm]')
-ylabel([ax3 ax4 ax13 ax14],'Pupil baseline difference [mm]')
+ylabel([ax1 ax2 ax11],'Pupil diameter [mm]')
+ylabel([ax3 ax4 ax13],'Pupil baseline difference [mm]')
 ylabel([ax5 ax6],'Range-normalized pupil diameter [%]')
 ylabel([ax7 ax8],'Normalized pupil baseline difference [mm]')
 ylabel([ax9 ax10],'Pupil z-score difference [mm]')
 xlim([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10 ax11 ax12 ax13 ax14],[-TimeStartW 3])
-lgd2=legend(ax2,'Quiet','SHL','N60','N70','Location','southeastoutside');
-lgd2.Title.String = 'Types of windows:';
-lgd4=legend(ax4,'Quiet','SHL','N60','N70','Location','southeastoutside');
-lgd4.Title.String = 'Types of windows:';
-lgd6=legend(ax6,'Speaking','Listening','Quiet','SHL','N60','N70','Location','southeastoutside');
-lgd6.Title.String = 'Types of windows:';
-lgd8=legend(ax8,'Speaking','Listening','Quiet','SHL','N60','N70','Location','southeastoutside');
-lgd8.Title.String = 'Types of windows:';
-lgd10=legend(ax10,'Speaking','Listening','Quiet','SHL','N60','N70','Location','southeastoutside');
-lgd10.Title.String = 'Types of windows:';
-lgd12=legend(ax12,'Quiet','SHL','N60','N70','Location','southeastoutside');
-lgd12.Title.String = 'Types of windows:';
-lgd14=legend(ax14,'Quiet','SHL','N60','N70','Location','southeastoutside');
-lgd14.Title.String = 'Types of windows:';
+ylim([ax11 ax12],[min([ylim(ax11),ylim(ax12)]), max([ylim(ax11),ylim(ax12)])])
+ylim([ax13 ax14],[min([ylim(ax13),ylim(ax14)]), max([ylim(ax13),ylim(ax14)])])
+% lgd2=legend(ax2,'Quiet','SHL','N60','N70','Location','southeastoutside');
+% lgd2.Title.String = 'Types of windows:';
+% lgd4=legend(ax4,'Quiet','SHL','N60','N70','Location','southeastoutside');
+% lgd4.Title.String = 'Types of windows:';
+% lgd6=legend(ax6,'Speaking','Listening','Quiet','SHL','N60','N70','Location','southeastoutside');
+% lgd6.Title.String = 'Types of windows:';
+% lgd8=legend(ax8,'Speaking','Listening','Quiet','SHL','N60','N70','Location','southeastoutside');
+% lgd8.Title.String = 'Types of windows:';
+% lgd10=legend(ax10,'Speaking','Listening','Quiet','SHL','N60','N70','Location','southeastoutside');
+% lgd10.Title.String = 'Types of windows:';
+% lgd12=legend(ax12,'Quiet','SHL','N60','N70','Location','southeastoutside');
+% lgd12.Title.String = 'Types of windows:';
+% lgd14=legend(ax14,'Quiet','SHL','N60','N70','Location','southeastoutside');
+% lgd14.Title.String = 'Types of windows:';
 title(ax1,'Global Speaking')
 title(ax2,'Global Listening')
 title(ax3,'Global adaptive baselined Speaking')
@@ -1092,10 +1094,36 @@ title(ax7,'Global range normalized baselined Speaking')
 title(ax8,'Global range normalized baselined Listening')
 title(ax9,'Global z-score normalized Speaking')
 title(ax10,'Global z-score normalized Listening')
-title(ax11,'Avg accross TPs Speaking')
-title(ax12,'Avg accross TPs Listening')
-title(ax13,'Avg accross TPs adaptive baselined Speaking')
-title(ax14,'Avg accross TPs adaptive baselined Listening')
+% title(ax11,'Avg accross TPs Speaking')
+% title(ax12,'Avg accross TPs Listening')
+% title(ax13,'Avg accross TPs adaptive baselined Speaking')
+% title(ax14,'Avg accross TPs adaptive baselined Listening')
+
+set([ax11 ax13],'Color',[SColor,0.04])
+set([ax12 ax14],'Color',[LColor,0.04])
+
+% flgd=figure;axlgd=gca();hold(axlgd,'on')
+% plot(axlgd,nan,color=QuietColor,linewidth=2) % plot nans to show color in legend
+% plot(axlgd,nan,color=SHLColor,linewidth=2) % plot nans to show color in legend
+% plot(axlgd,nan,color=N60Color,linewidth=2) % plot nans to show color in legend
+% plot(axlgd,nan,color=N70Color,linewidth=2) % plot nans to show color in legend
+% lgd=legend(axlgd,'N0','SHL','N60','N70','Location','southeastoutside');
+% lgd.Title.String = 'Noise conditions:';
+% 
+% flgd2=figure;axlgd2=gca();hold(axlgd2,'on')
+% plot(axlgd2,nan,color=[SColor 0.3],linewidth=3) % plot nans to show color in legend
+% plot(axlgd2,nan,color=[LColor 0.3],linewidth=3) % plot nans to show color in legend
+% lgd2=legend(axlgd2,'Speaking','Listening','Location','southeastoutside');
+% lgd2.Title.String = 'Types of windows:';
+
+% saveLegendToImage(flgd, lgd, 'lgd', 'eps');
+% saveLegendToImage(flgd2, lgd2, 'lgd2', 'eps');
+
+% Export figs as pdfs
+% tiles = {t6,t7,axlgd,axlgd2};
+% for i=1:size(tiles,2)
+% exportgraphics(tiles{i}, ['output_' num2str(i) '.pdf']);
+% end
 
 % figure;
 % plot(linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)),squeeze(mean(GSW,[1 2],'omitnan')));

@@ -1,4 +1,4 @@
-%% PBCA-Thesis - Week 21 - Pupil Features in 2 phases for AMEND I - Copy of W4.m
+%% PBCA-Thesis - Week 21 - Pupil Features for AMEND I - Copy of W4.m
 % Pathing
 clear all; clc; close all;
 BPath = strsplit(pwd,'PBCA-thesis');

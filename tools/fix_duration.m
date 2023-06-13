@@ -88,7 +88,7 @@ for i = 1:size(Gaze, 1)
         end
     end
 end
-% % 3D Plot
+% 3D Plot
 % tic
 % figure
 % plot3(Gaze(:,1),Gaze(:,2),Gaze(:,3),'b*')
@@ -103,14 +103,34 @@ end
 %     surf(x+Gaze(j,1),y+Gaze(j,2),z+Gaze(j,3),'FaceColor','none','EdgeColor','r')
 % end
 % toc
-% 
-% % 2D Plot
+
+% 2D Plot
 % figure
-% plot(Gaze(:,1),Gaze(:,2),'b*')
+% plot(Gaze(:,1),Gaze(:,2),'k*')
 % hold on
 % plot(0,0,'r*')
 % grid on
 % viscircles(Gaze(:, 1:2),radius);
+
+% figure
+% hold on
+% for j = 1:size(Gaze, 1)
+%     distfromcenter(j) = norm(Gaze(6667,1:2)-Gaze(j,1:2));
+% end
+% distfromcenter = 1-normalize(distfromcenter,'range');
+% distfromcenter(6667) = 15;
+% scatter(Gaze(:,1),Gaze(:,2),[],[0 0 0],'filled','AlphaData',distfromcenter,'MarkerFaceAlpha','flat')
+% scatter(Gaze(6667-23:6667,1),Gaze(6667-23:6667,2),[],[0 1 0],'filled')
+% scatter(Gaze(6667:6667+185,1),Gaze(6667:6667+185,2),[],[0 0 1],'filled')
+% scatter(Gaze(6667,1),Gaze(6667,2),[],[1 0 0],'filled')
+% grid on
+% viscircles(Gaze(6667, 1:2),radius(6667));
+% xlim([Gaze(6667,1)-radius(6667)-radius(6667)/3,Gaze(6667,1)+radius(6667)+radius(6667)/3])
+% ylim([Gaze(6667,2)-radius(6667)-radius(6667)/3,Gaze(6667,2)+radius(6667)+radius(6667)/3])
+% xlabel('Gaze X')
+% ylabel('Gaze Y')
+% set(gca,'xtick',[])
+% set(gca,'ytick',[])
 
 end
 
