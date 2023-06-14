@@ -362,8 +362,6 @@ for q=1:numel(subDirs_II)
         %         t_Diam = linspace(0,length(Diameter)./Param.Fs,length(Diameter));
 
             % FIXATION+DIAMETER GROUPS
-            
-            
             % Storing Speaking/Listening by conditions
             if contains(cell2mat(FileNames_II(i)),'N0')
                 for j=1:size(Speak,1)
