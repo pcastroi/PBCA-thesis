@@ -214,7 +214,7 @@ for q=1:numel(subDirs_I)
         end
         
         % Overlap Speaking/Listening
-        [D{1},D{2}] = overlap_windows(D{1},D{2},Param.Fs);
+        [OM{1},OM{2}] = overlap_windows(D{1},D{2},Param.Fs);
 
         GapDurRaw_I(x_I,1:size(GapRaw,1))=GapRaw(:,1)';
         OLWDurRaw_I(x_I,1:size(OLWRaw,1))=OLWRaw(:,1)';
@@ -229,8 +229,8 @@ for q=1:numel(subDirs_I)
         OLBDur_I(x_I,1:size(D{5},1))=D{5}(:,1)';
         TurnDur_I(x_I,1:size(D{6},1))=D{6}(:,1)';
         PauseDur_I(x_I,1:size(D{7},1))=D{7}(:,1)';
-        SpeakDur_I(x_I,1:size(D{1},1))=D{1}(:,1)';
-        ListenDur_I(x_I,1:size(D{2},1))=D{2}(:,1)';
+        SpeakDur_I(x_I,1:size(OM{1},1))=OM{1}(:,1)';
+        ListenDur_I(x_I,1:size(OM{2},1))=OM{2}(:,1)';
         
         % Find time diff between turns (same talker)
         for j=1:size(Turn,1)-1
@@ -244,24 +244,23 @@ for q=1:numel(subDirs_I)
 
         %Plots
 %         figure;
-%         startStop = SpeakRaw(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),0,width(i),1],'EdgeColor', 'none', 'FaceColor', SpeakColor), 1:size(startStop,1));
-%         startStop = ListenRaw(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),0,width(i),1],'EdgeColor', 'none', 'FaceColor', ListenColor), 1:size(startStop,1));
-%         startStop = SpeakMI(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),1,width(i),1],'EdgeColor', 'none', 'FaceColor', SpeakColor), 1:size(startStop,1));
-%         startStop = ListenMI(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),1,width(i),1],'EdgeColor', 'none', 'FaceColor', ListenColor), 1:size(startStop,1));
-%         startStop = SpeakDI(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),2,width(i),1],'EdgeColor', 'none', 'FaceColor', SpeakColor), 1:size(startStop,1));
-%         startStop = ListenDI(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),2,width(i),1],'EdgeColor', 'none', 'FaceColor', ListenColor), 1:size(startStop,1));
-%         startStop = SpeakM(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),3,width(i),1],'EdgeColor', 'none', 'FaceColor', SpeakColor), 1:size(startStop,1));
-%         startStop = ListenM(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),3,width(i),1],'EdgeColor', 'none', 'FaceColor', ListenColor), 1:size(startStop,1));
-%         startStop = SpeakD(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),4,width(i),1],'EdgeColor', 'none', 'FaceColor', SpeakColor), 1:size(startStop,1));
-%         startStop = ListenD(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),4,width(i),1],'EdgeColor', 'none', 'FaceColor', ListenColor), 1:size(startStop,1));
-%         startStop = SpeakOM(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),5,width(i),1],'EdgeColor', 'none', 'FaceColor', SpeakColor), 1:size(startStop,1));
-%         startStop = ListenOM(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),5,width(i),1],'EdgeColor', 'none', 'FaceColor', ListenColor), 1:size(startStop,1));
-%         startStop = GapRaw(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),6,width(i),1],'EdgeColor', 'none', 'FaceColor', GapColor), 1:size(startStop,1))
-%         startStop = OLWRaw(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),6,width(i),1],'EdgeColor', 'none', 'FaceColor', OLWColor), 1:size(startStop,1))
-%         startStop = OLBRaw(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),6,width(i),1],'EdgeColor', 'none', 'FaceColor', OLBColor), 1:size(startStop,1))
-%         startStop = TurnRaw(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),6,width(i),1],'EdgeColor', 'none', 'FaceColor', TurnColor), 1:size(startStop,1))
-%         startStop = PauseRaw(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),6,width(i),1],'EdgeColor', 'none', 'FaceColor', PauseColor), 1:size(startStop,1))
-%         grid on
+%         startStop = SpeakRaw(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),0,width(i),1],'EdgeColor', 'none', 'FaceColor', [SpeakColor 0.3]), 1:size(startStop,1));
+%         startStop = ListenRaw(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),0,width(i),1],'EdgeColor', 'none', 'FaceColor', [ListenColor 0.3]), 1:size(startStop,1));
+%         startStop = MI{1}(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),1,width(i),1],'EdgeColor', 'none', 'FaceColor', [SpeakColor 0.3]), 1:size(startStop,1));
+%         startStop = MI{2}(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),1,width(i),1],'EdgeColor', 'none', 'FaceColor', [ListenColor 0.3]), 1:size(startStop,1));
+%         startStop = DI{1}(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),2,width(i),1],'EdgeColor', 'none', 'FaceColor', [SpeakColor 0.3]), 1:size(startStop,1));
+%         startStop = DI{2}(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),2,width(i),1],'EdgeColor', 'none', 'FaceColor', [ListenColor 0.3]), 1:size(startStop,1));
+%         startStop = M{1}(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),3,width(i),1],'EdgeColor', 'none', 'FaceColor', [SpeakColor 0.3]), 1:size(startStop,1));
+%         startStop = M{2}(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),3,width(i),1],'EdgeColor', 'none', 'FaceColor', [ListenColor 0.3]), 1:size(startStop,1));
+%         startStop = D{1}(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),4,width(i),1],'EdgeColor', 'none', 'FaceColor', [SpeakColor 0.3]), 1:size(startStop,1));
+%         startStop = D{2}(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),4,width(i),1],'EdgeColor', 'none', 'FaceColor', [ListenColor 0.3]), 1:size(startStop,1));
+%         startStop = OM{1}(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),5,width(i),1],'EdgeColor', 'none', 'FaceColor', [SpeakColor 0.3]), 1:size(startStop,1));
+%         startStop = OM{2}(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),5,width(i),1],'EdgeColor', 'none', 'FaceColor', [ListenColor 0.3]), 1:size(startStop,1));
+%         startStop = GapRaw(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),6,width(i),1],'EdgeColor', 'none', 'FaceColor', [GapColor 0.3]), 1:size(startStop,1))
+%         startStop = OLWRaw(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),6,width(i),1],'EdgeColor', 'none', 'FaceColor', [OLWColor 0.3]), 1:size(startStop,1))
+%         startStop = OLBRaw(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),6,width(i),1],'EdgeColor', 'none', 'FaceColor', [OLBColor 0.3]), 1:size(startStop,1))
+%         startStop = TurnRaw(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),6,width(i),1],'EdgeColor', 'none', 'FaceColor', [TurnColor 0.3]), 1:size(startStop,1))
+%         startStop = PauseRaw(:,2:3)*binResUtt;width = startStop(:,2)-startStop(:,1);hold on;arrayfun(@(i)rectangle('Position', [startStop(i,1),6,width(i),1],'EdgeColor', 'none', 'FaceColor', [PauseColor 0.3]), 1:size(startStop,1))
 %         yline(1,"--",'HandleVisibility','off')
 %         yline(2,"--",'HandleVisibility','off')
 %         yline(3,"--",'HandleVisibility','off')
@@ -270,15 +269,9 @@ for q=1:numel(subDirs_I)
 %         yline(6,"--",'HandleVisibility','off')
 %         yline(7,"--",'HandleVisibility','off')
 %         xlabel('Time [s]')
-%         line(NaN,NaN,'linewidth',5,'Color',SpeakColor);
-%         line(NaN,NaN,'linewidth',5,'Color',ListenColor);
-%         line(NaN,NaN,'linewidth',5,'Color',GapColor);
-%         line(NaN,NaN,'linewidth',5,'Color',OLWColor);
-%         line(NaN,NaN,'linewidth',5,'Color',OLBColor);
-%         line(NaN,NaN,'linewidth',5,'Color',TurnColor);
-%         line(NaN,NaN,'linewidth',5,'Color',PauseColor);
-%         title(strrep(strrep([PairFiles(1).folder(25:end),'\',cell2mat(FileNames_I(i))],'_','-'),'\','\\'))
-%         legend('Speak','Listen','Gap','Overlap-Within','Overlap-Between','Turn','Pause')
+%         yticks(0.5:6.5)
+%         yticklabels({'Raw','Merge < 0.3','Discard < 0.5','Merge < 2','Discard < 1','Split overlaps','Other windows'})
+%         title(strrep(strrep([PairFiles_I(1).folder(25:end),'\',cell2mat(FileNames_I(i))],'_','-'),'\','\\'))
     end
 end
 

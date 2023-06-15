@@ -11,9 +11,9 @@ SColor = [53, 155, 67]./255;
 LColor = [204, 36, 0]./255;
 NHColor = [204, 62, 0]./255;
 HIColor = [164, 0, 204]./255;
-UNColor = [185, 193, 254]./255;
-AAColor = [116, 132, 252]./255;
-ABColor = [4, 30, 222]./255;
+UNColor = [1, 35, 33]./255;
+AAColor = [4, 105, 100]./255;
+ABColor = [7, 192, 182]./255;
 QuietColor = [204, 152, 0]./255;
 SHLColor = [123, 31, 162]./255;
 N60Color = [0, 196, 215]./255;
@@ -2542,9 +2542,17 @@ set([ax2 ax6 ax12 ax22 ax26 ax32 ax4 ax8 ax14 ax24 ax28 ax34],'Color',[LColor,0.
 % plot(axlgd2,nan,color=[LColor 0.3],linewidth=3) % plot nans to show color in legend
 % lgd2=legend(axlgd2,'Speaking','Listening','Location','southeastoutside');
 % lgd2.Title.String = 'Types of windows:';
+% 
+% flgd3=figure;axlgd3=gca();hold(axlgd3,'on')
+% plot(axlgd3,nan,color=UNColor,linewidth=2) % plot nans to show color in legend
+% plot(axlgd3,nan,color=AAColor,linewidth=2) % plot nans to show color in legend
+% plot(axlgd3,nan,color=ABColor,linewidth=2) % plot nans to show color in legend
+% lgd3=legend(axlgd3,'UN','AA','AB','Location','southeastoutside');
+% lgd3.Title.String = 'Hearing aid settings:';
 
 % saveLegendToImage(flgd, lgd, 'lgd', 'eps');
 % saveLegendToImage(flgd2, lgd2, 'lgd2', 'eps');
+% saveLegendToImage(flgd3, lgd3, 'lgd3', 'eps');
 
 % Export figs as pdfs
 % tiles = {t9,t10,t11,t12,t13,t14};

@@ -30,6 +30,9 @@ QuietColor = [204, 152, 0]./255;
 SHLColor = [123, 31, 162]./255;
 N60Color = [0, 196, 215]./255;
 N70Color = [2, 36, 223]./255;
+UNColor = [1, 35, 33]./255;
+AAColor = [4, 105, 100]./255;
+ABColor = [7, 192, 182]./255;
 
 [subDirs_I] = GetSubDirsFirstLevelOnly('data\AMEND_I');
 FileNames_I={'P1_Quiet_B1.mat','P1_Quiet_B2.mat','P1_SHL_B1.mat','P1_SHL_B2.mat','P1_Noise60_B1.mat','P1_Noise60_B2.mat','P1_Noise70_B1.mat','P1_Noise70_B2.mat','P2_Quiet_B1.mat','P2_Quiet_B2.mat','P2_SHL_B1.mat','P2_SHL_B2.mat','P2_Noise60_B1.mat','P2_Noise60_B2.mat','P2_Noise70_B1.mat','P2_Noise70_B2.mat'};
@@ -81,12 +84,6 @@ F2_S_Q_II=F1_S_Q_II; % Feature 2 (Quiet): Mean slope (Speaking)
 F2_L_Q_II=F1_S_Q_II; % Feature 2 (Quiet): Mean slope (Listening)
 F3_S_Q_II=F1_S_Q_II; % Feature 3 (Quiet): Mean Peak Pupil Size (Speaking)
 F3_L_Q_II=F1_S_Q_II; % Feature 3 (Quiet): Mean Peak Pupil Size (Listening)
-F1_S_SHL_II=F1_S_Q_II; % Feature 1 (SHL): Mean pupil size (Speaking)
-F1_L_SHL_II=F1_S_Q_II; % Feature 1 (SHL): Mean pupil size (Listening)
-F2_S_SHL_II=F1_S_Q_II; % Feature 2 (SHL): Mean slope (Speaking)
-F2_L_SHL_II=F1_S_Q_II; % Feature 2 (SHL): Mean slope (Listening)
-F3_S_SHL_II=F1_S_Q_II; % Feature 3 (SHL): Mean Peak Pupil Size (Speaking)
-F3_L_SHL_II=F1_S_Q_II; % Feature 3 (SHL): Mean Peak Pupil Size (Listening)
 F1_S_N60_II=F1_S_Q_II; % Feature 1 (N60): Mean pupil size (Speaking)
 F1_L_N60_II=F1_S_Q_II; % Feature 1 (N60): Mean pupil size (Listening)
 F2_S_N60_II=F1_S_Q_II; % Feature 2 (N60): Mean slope (Speaking)
@@ -99,6 +96,25 @@ F2_S_N70_II=F1_S_Q_II; % Feature 2 (N70): Mean slope (Speaking)
 F2_L_N70_II=F1_S_Q_II; % Feature 2 (N70): Mean slope (Listening)
 F3_S_N70_II=F1_S_Q_II; % Feature 3 (N70): Mean Peak Pupil Size (Speaking)
 F3_L_N70_II=F1_S_Q_II; % Feature 3 (N70): Mean Peak Pupil Size (Listening)
+
+F1_S_UN_II=nan*ones(NRows,NCols); 
+F1_L_UN_II=F1_S_UN_II; 
+F2_S_UN_II=F1_S_UN_II; 
+F2_L_UN_II=F1_S_UN_II; 
+F3_S_UN_II=F1_S_UN_II; 
+F3_L_UN_II=F1_S_UN_II;
+F1_S_AA_II=F1_S_UN_II;
+F1_L_AA_II=F1_S_UN_II;
+F2_S_AA_II=F1_S_UN_II;
+F2_L_AA_II=F1_S_UN_II;
+F3_S_AA_II=F1_S_UN_II;
+F3_L_AA_II=F1_S_UN_II;
+F1_S_AB_II=F1_S_UN_II;
+F1_L_AB_II=F1_S_UN_II;
+F2_S_AB_II=F1_S_UN_II;
+F2_L_AB_II=F1_S_UN_II;
+F3_S_AB_II=F1_S_UN_II;
+F3_L_AB_II=F1_S_UN_II;
 
 x_I=1;
 x_II=1;
@@ -468,6 +484,7 @@ for q=1:numel(subDirs_II)
             temp=zeros(NCols,1);
             temp2=zeros(NCols,2);
             temp3=temp;
+            % NOISE
             if contains(cell2mat(FileNames_II(i)),'N0')
                 for j=1:size(Speak,1)
                     temp(j,:)=mean(Diameter(Speak(j,2):SIdxEnd_II(j)));
@@ -520,133 +537,157 @@ for q=1:numel(subDirs_II)
                 F2_L_N70_II(x_II,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
                 F3_L_N70_II(x_II,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
             end
+            temp=zeros(NCols,1);
+            temp2=zeros(NCols,2);
+            temp3=temp;
+            % HA SETTINGS - ONLY HI
+            if contains(ChosenFolder,'HI')
+                if contains(cell2mat(FileNames_II(i)),'UN')
+                    for j=1:size(Speak,1)
+                        temp(j,:)=mean(Diameter(Speak(j,2):SIdxEnd_II(j)));
+                        temp2(j,:)=polyfit(t_Diam(Speak(j,2):SIdxEnd_II(j)),Diameter(Speak(j,2):SIdxEnd_II(j)),1);
+                        temp3(j,:)=max(Diameter(Speak(j,2):SIdxEnd_II(j)));
+                    end
+                    F1_S_UN_II(x_II,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
+                    F2_S_UN_II(x_II,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
+                    F3_S_UN_II(x_II,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
+                    for j=1:size(Listen,1)
+                        temp(j,:)=mean(Diameter(Listen(j,2):LIdxEnd_II(j)));
+                        temp2(j,:)=polyfit(t_Diam(Listen(j,2):LIdxEnd_II(j)),Diameter(Listen(j,2):LIdxEnd_II(j)),1);
+                        temp3(j,:)=max(Diameter(Listen(j,2):LIdxEnd_II(j)));
+                    end
+                    F1_L_UN_II(x_II,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
+                    F2_L_UN_II(x_II,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
+                    F3_L_UN_II(x_II,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
+                elseif contains(cell2mat(FileNames_II(i)),'AA')
+                    for j=1:size(Speak,1)
+                        temp(j,:)=mean(Diameter(Speak(j,2):SIdxEnd_II(j)));
+                        temp2(j,:)=polyfit(t_Diam(Speak(j,2):SIdxEnd_II(j)),Diameter(Speak(j,2):SIdxEnd_II(j)),1);
+                        temp3(j,:)=max(Diameter(Speak(j,2):SIdxEnd_II(j)));
+                    end
+                    F1_S_AA_II(x_II,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
+                    F2_S_AA_II(x_II,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
+                    F3_S_AA_II(x_II,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
+                    for j=1:size(Listen,1)
+                        temp(j,:)=mean(Diameter(Listen(j,2):LIdxEnd_II(j)));
+                        temp2(j,:)=polyfit(t_Diam(Listen(j,2):LIdxEnd_II(j)),Diameter(Listen(j,2):LIdxEnd_II(j)),1);
+                        temp3(j,:)=max(Diameter(Listen(j,2):LIdxEnd_II(j)));
+                    end
+                    F1_L_AA_II(x_II,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
+                    F2_L_AA_II(x_II,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
+                    F3_L_AA_II(x_II,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
+                elseif contains(cell2mat(FileNames_II(i)),'AB')
+                    for j=1:size(Speak,1)
+                        temp(j,:)=mean(Diameter(Speak(j,2):SIdxEnd_II(j)));
+                        temp2(j,:)=polyfit(t_Diam(Speak(j,2):SIdxEnd_II(j)),Diameter(Speak(j,2):SIdxEnd_II(j)),1);
+                        temp3(j,:)=max(Diameter(Speak(j,2):SIdxEnd_II(j)));
+                    end
+                    F1_S_AB_II(x_II,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
+                    F2_S_AB_II(x_II,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
+                    F3_S_AB_II(x_II,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
+                    for j=1:size(Listen,1)
+                        temp(j,:)=mean(Diameter(Listen(j,2):LIdxEnd_II(j)));
+                        temp2(j,:)=polyfit(t_Diam(Listen(j,2):LIdxEnd_II(j)),Diameter(Listen(j,2):LIdxEnd_II(j)),1);
+                        temp3(j,:)=max(Diameter(Listen(j,2):LIdxEnd_II(j)));
+                    end
+                    F1_L_AB_II(x_II,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
+                    F2_L_AB_II(x_II,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
+                    F3_L_AB_II(x_II,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
+                end
+            end
             x_II=x_II+1;
         end
     end
 end
+%% Linear Mixed Model approach - show statistical differences between conditions/settings
+tbl_S_F1_I = table(F1_S_Q_I(~isnan(F1_S_Q_I)),F1_S_SHL_I(~isnan(F1_S_SHL_I)),F1_S_N60_I(~isnan(F1_S_N60_I)),F1_S_N70_I(~isnan(F1_S_N70_I)),'VariableNames',{'Quiet','SHL','N60','N70'});
+tbl_S_F2_I = table(F2_S_Q_I(~isnan(F2_S_Q_I)),F2_S_SHL_I(~isnan(F2_S_SHL_I)),F2_S_N60_I(~isnan(F2_S_N60_I)),F2_S_N70_I(~isnan(F2_S_N70_I)),'VariableNames',{'Quiet','SHL','N60','N70'});
+tbl_S_F3_I = table(F3_S_Q_I(~isnan(F3_S_Q_I)),F3_S_SHL_I(~isnan(F3_S_SHL_I)),F3_S_N60_I(~isnan(F3_S_N60_I)),F3_S_N70_I(~isnan(F3_S_N70_I)),'VariableNames',{'Quiet','SHL','N60','N70'});
+tbl_L_F1_I = table(F1_L_Q_I(~isnan(F1_L_Q_I)),F1_L_SHL_I(~isnan(F1_L_SHL_I)),F1_L_N60_I(~isnan(F1_L_N60_I)),F1_L_N70_I(~isnan(F1_L_N70_I)),'VariableNames',{'Quiet','SHL','N60','N70'});
+tbl_L_F2_I = table(F2_L_Q_I(~isnan(F2_L_Q_I)),F2_L_SHL_I(~isnan(F2_L_SHL_I)),F2_L_N60_I(~isnan(F2_L_N60_I)),F2_L_N70_I(~isnan(F2_L_N70_I)),'VariableNames',{'Quiet','SHL','N60','N70'});
+tbl_L_F3_I = table(F3_L_Q_I(~isnan(F3_L_Q_I)),F3_L_SHL_I(~isnan(F3_L_SHL_I)),F3_L_N60_I(~isnan(F3_L_N60_I)),F3_L_N70_I(~isnan(F3_L_N70_I)),'VariableNames',{'Quiet','SHL','N60','N70'});
+
+tbl_S_F1_II = table(F1_S_Q_II(~isnan(F1_S_Q_II)),F1_S_N60_II(~isnan(F1_S_N60_II)),F1_S_N70_II(~isnan(F1_S_N70_II)),'VariableNames',{'Quiet','N60','N70'});
+tbl_S_F2_II = table(F2_S_Q_II(~isnan(F2_S_Q_II)),F2_S_N60_II(~isnan(F2_S_N60_II)),F2_S_N70_II(~isnan(F2_S_N70_II)),'VariableNames',{'Quiet','N60','N70'});
+tbl_S_F3_II = table(F3_S_Q_II(~isnan(F3_S_Q_II)),F3_S_N60_II(~isnan(F3_S_N60_II)),F3_S_N70_II(~isnan(F3_S_N70_II)),'VariableNames',{'Quiet','N60','N70'});
+tbl_L_F1_II = table(F1_L_Q_II(~isnan(F1_L_Q_II)),F1_L_N60_II(~isnan(F1_L_N60_II)),F1_L_N70_II(~isnan(F1_L_N70_II)),'VariableNames',{'Quiet','N60','N70'});
+tbl_L_F2_II = table(F2_L_Q_II(~isnan(F2_L_Q_II)),F2_L_N60_II(~isnan(F2_L_N60_II)),F2_L_N70_II(~isnan(F2_L_N70_II)),'VariableNames',{'Quiet','N60','N70'});
+tbl_L_F3_II = table(F3_L_Q_II(~isnan(F3_L_Q_II)),F3_L_N60_II(~isnan(F3_L_N60_II)),F3_L_N70_II(~isnan(F3_L_N70_II)),'VariableNames',{'Quiet','N60','N70'});
+
+lme_S_F1_I = fitlme(tbl_S_F1_I,'Quiet~SHL~N60~N70');
+
 %% Plots
-f11=figure;tl11=tiledlayout(1,2);
-ax11 = nexttile;
-ax12 = nexttile;
-f12=figure;tl12=tiledlayout(1,2);
-ax21 = nexttile;
-ax22 = nexttile;
-f13=figure;tl13=tiledlayout(1,2);
-ax31 = nexttile;
-ax32 = nexttile;
-f1=figure;tl1=tiledlayout(1,2);
+f1=figure;t1=tiledlayout(1,2);
 ax1 = nexttile;
 ax2 = nexttile;
-f2=figure;tl2=tiledlayout(1,2);
+f2=figure;t2=tiledlayout(1,2);
 ax3 = nexttile;
 ax4 = nexttile;
-f3=figure;tl3=tiledlayout(1,2);
+f3=figure;t3=tiledlayout(1,2);
 ax5 = nexttile;
 ax6 = nexttile;
-hold([ax1 ax2 ax3 ax4 ax5 ax6 ax11 ax12 ax21 ax22 ax31 ax32],'on')
+f4=figure;t4=tiledlayout(1,2);
+ax7 = nexttile;
+ax8 = nexttile;
+f5=figure;t5=tiledlayout(1,2);
+ax9 = nexttile;
+ax10 = nexttile;
+f6=figure;t6=tiledlayout(1,2);
+ax11 = nexttile;
+ax12 = nexttile;
+f7=figure;t7=tiledlayout(1,2);
+ax13 = nexttile;
+ax14 = nexttile;
+f8=figure;t8=tiledlayout(1,2);
+ax15 = nexttile;
+ax16 = nexttile;
+f9=figure;t9=tiledlayout(1,2);
+ax17 = nexttile;
+ax18 = nexttile;
+
+
+hold([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10 ax11 ax12 ax13 ax14 ax15 ax16 ax17 ax18],'on')
 
 % Boxplot
-h11=boxplotGroup(ax11,{F1_S_Q_I(~isnan(F1_S_Q_I)),F1_S_SHL_I(~isnan(F1_S_SHL_I)),F1_S_N60_I(~isnan(F1_S_N60_I)),F1_S_N70_I(~isnan(F1_S_N70_I))},...
+% Noise Conditions A_I
+boxplotGroup(ax1,{F1_S_Q_I(~isnan(F1_S_Q_I)),F1_S_SHL_I(~isnan(F1_S_SHL_I)),F1_S_N60_I(~isnan(F1_S_N60_I)),F1_S_N70_I(~isnan(F1_S_N70_I))},...
 'PrimaryLabels', {'Quiet','SHL','N60','N70'}, ...
 'SecondaryLabels', {'Speaking'}, ...
 'interGroupSpace',2,'groupLabelType','Vertical', ...
 'PlotStyle','Compact','BoxStyle','filled',...
 'Colors',[QuietColor;SHLColor;N60Color;N70Color],'GroupType','betweenGroups');
-h12=boxplotGroup(ax12,{F1_L_Q_I(~isnan(F1_L_Q_I)),F1_L_SHL_I(~isnan(F1_L_SHL_I)),F1_L_N60_I(~isnan(F1_L_N60_I)),F1_L_N70_I(~isnan(F1_L_N70_I))},...
-'PrimaryLabels', {'Quiet','SHL','N60','N70'}, ...
-'SecondaryLabels', {'Listening'}, ...
-'interGroupSpace',2,'groupLabelType','Vertical', ...
-'PlotStyle','Compact','BoxStyle','filled',...
-'Colors',[QuietColor;SHLColor;N60Color;N70Color],'GroupType','betweenGroups');
-
-h21=boxplotGroup(ax21,{F2_S_Q_I(~isnan(F2_S_Q_I)),F2_S_SHL_I(~isnan(F2_S_SHL_I)),F2_S_N60_I(~isnan(F2_S_N60_I)),F2_S_N70_I(~isnan(F2_S_N70_I))},...
-'PrimaryLabels', {'Quiet','SHL','N60','N70'}, ...
-'SecondaryLabels', {'Speaking'}, ...
-'interGroupSpace',2,'groupLabelType','Vertical', ...
-'PlotStyle','Compact','BoxStyle','filled',...
-'Colors',[QuietColor;SHLColor;N60Color;N70Color],'GroupType','betweenGroups');
-h22=boxplotGroup(ax22,{F2_L_Q_I(~isnan(F2_L_Q_I)),F2_L_SHL_I(~isnan(F2_L_SHL_I)),F2_L_N60_I(~isnan(F2_L_N60_I)),F2_L_N70_I(~isnan(F2_L_N70_I))},...
+boxplotGroup(ax2,{F1_L_Q_I(~isnan(F1_L_Q_I)),F1_L_SHL_I(~isnan(F1_L_SHL_I)),F1_L_N60_I(~isnan(F1_L_N60_I)),F1_L_N70_I(~isnan(F1_L_N70_I))},...
 'PrimaryLabels', {'Quiet','SHL','N60','N70'}, ...
 'SecondaryLabels', {'Listening'}, ...
 'interGroupSpace',2,'groupLabelType','Vertical', ...
 'PlotStyle','Compact','BoxStyle','filled',...
 'Colors',[QuietColor;SHLColor;N60Color;N70Color],'GroupType','betweenGroups');
 
-h31=boxplotGroup(ax31,{F3_S_Q_I(~isnan(F3_S_Q_I)),F3_S_SHL_I(~isnan(F3_S_SHL_I)),F3_S_N60_I(~isnan(F3_S_N60_I)),F3_S_N70_I(~isnan(F3_S_N70_I))},...
+boxplotGroup(ax3,{F2_S_Q_I(~isnan(F2_S_Q_I)),F2_S_SHL_I(~isnan(F2_S_SHL_I)),F2_S_N60_I(~isnan(F2_S_N60_I)),F2_S_N70_I(~isnan(F2_S_N70_I))},...
 'PrimaryLabels', {'Quiet','SHL','N60','N70'}, ...
 'SecondaryLabels', {'Speaking'}, ...
 'interGroupSpace',2,'groupLabelType','Vertical', ...
 'PlotStyle','Compact','BoxStyle','filled',...
 'Colors',[QuietColor;SHLColor;N60Color;N70Color],'GroupType','betweenGroups');
-h32=boxplotGroup(ax32,{F3_L_Q_I(~isnan(F3_L_Q_I)),F3_L_SHL_I(~isnan(F3_L_SHL_I)),F3_L_N60_I(~isnan(F3_L_N60_I)),F3_L_N70_I(~isnan(F3_L_N70_I))},...
+boxplotGroup(ax4,{F2_L_Q_I(~isnan(F2_L_Q_I)),F2_L_SHL_I(~isnan(F2_L_SHL_I)),F2_L_N60_I(~isnan(F2_L_N60_I)),F2_L_N70_I(~isnan(F2_L_N70_I))},...
 'PrimaryLabels', {'Quiet','SHL','N60','N70'}, ...
 'SecondaryLabels', {'Listening'}, ...
 'interGroupSpace',2,'groupLabelType','Vertical', ...
 'PlotStyle','Compact','BoxStyle','filled',...
 'Colors',[QuietColor;SHLColor;N60Color;N70Color],'GroupType','betweenGroups');
 
-ax11.YGrid = 'on';
-ax11.XTickLabelRotation = 90;
-set(ax11,'Color',[SColor,0.04])
-ax12.YGrid = 'on';
-ax12.XTickLabelRotation = 90;
-set(ax12,'Color',[LColor,0.04])
-ylim([ax11 ax12],[min([ylim(ax11) ylim(ax12)]) max([ylim(ax11) ylim(ax12)])])
-
-ax21.YGrid = 'on';
-ax21.XTickLabelRotation = 90;
-set(ax21,'Color',[SColor,0.04])
-ax22.YGrid = 'on';
-ax22.XTickLabelRotation = 90;
-set(ax22,'Color',[LColor,0.04])
-ylim([ax21 ax22],[min([ylim(ax21) ylim(ax22)]) max([ylim(ax21) ylim(ax22)])])
-
-ax31.YGrid = 'on';
-ax31.XTickLabelRotation = 90;
-set(ax31,'Color',[SColor,0.04])
-ax32.YGrid = 'on';
-ax32.XTickLabelRotation = 90;
-set(ax32,'Color',[LColor,0.04])
-ylim([ax31 ax32],[min([ylim(ax31) ylim(ax32)]) max([ylim(ax31) ylim(ax32)])])
-
-h1=boxplotGroup(ax1,{F1_S_Q_II(~isnan(F1_S_Q_II)),F1_S_N60_II(~isnan(F1_S_N60_II)),F1_S_N70_II(~isnan(F1_S_N70_II))},...
-'PrimaryLabels', {'Quiet','N60','N70'}, ...
+boxplotGroup(ax5,{F3_S_Q_I(~isnan(F3_S_Q_I)),F3_S_SHL_I(~isnan(F3_S_SHL_I)),F3_S_N60_I(~isnan(F3_S_N60_I)),F3_S_N70_I(~isnan(F3_S_N70_I))},...
+'PrimaryLabels', {'Quiet','SHL','N60','N70'}, ...
 'SecondaryLabels', {'Speaking'}, ...
 'interGroupSpace',2,'groupLabelType','Vertical', ...
 'PlotStyle','Compact','BoxStyle','filled',...
-'Colors',[QuietColor;N60Color;N70Color],'GroupType','betweenGroups');
-h2=boxplotGroup(ax2,{F1_L_Q_II(~isnan(F1_L_Q_II)),F1_L_N60_II(~isnan(F1_L_N60_II)),F1_L_N70_II(~isnan(F1_L_N70_II))},...
-'PrimaryLabels', {'Quiet','N60','N70'}, ...
+'Colors',[QuietColor;SHLColor;N60Color;N70Color],'GroupType','betweenGroups');
+boxplotGroup(ax6,{F3_L_Q_I(~isnan(F3_L_Q_I)),F3_L_SHL_I(~isnan(F3_L_SHL_I)),F3_L_N60_I(~isnan(F3_L_N60_I)),F3_L_N70_I(~isnan(F3_L_N70_I))},...
+'PrimaryLabels', {'Quiet','SHL','N60','N70'}, ...
 'SecondaryLabels', {'Listening'}, ...
 'interGroupSpace',2,'groupLabelType','Vertical', ...
 'PlotStyle','Compact','BoxStyle','filled',...
-'Colors',[QuietColor;N60Color;N70Color],'GroupType','betweenGroups');
-
-h3=boxplotGroup(ax3,{F2_S_Q_II(~isnan(F2_S_Q_II)),F2_S_N60_II(~isnan(F2_S_N60_II)),F2_S_N70_II(~isnan(F2_S_N70_II))},...
-'PrimaryLabels', {'Quiet','N60','N70'}, ...
-'SecondaryLabels', {'Speaking'}, ...
-'interGroupSpace',2,'groupLabelType','Vertical', ...
-'PlotStyle','Compact','BoxStyle','filled',...
-'Colors',[QuietColor;N60Color;N70Color],'GroupType','betweenGroups');
-h4=boxplotGroup(ax4,{F2_L_Q_II(~isnan(F2_L_Q_II)),F2_L_N60_II(~isnan(F2_L_N60_II)),F2_L_N70_II(~isnan(F2_L_N70_II))},...
-'PrimaryLabels', {'Quiet','N60','N70'}, ...
-'SecondaryLabels', {'Listening'}, ...
-'interGroupSpace',2,'groupLabelType','Vertical', ...
-'PlotStyle','Compact','BoxStyle','filled',...
-'Colors',[QuietColor;N60Color;N70Color],'GroupType','betweenGroups');
-
-h5=boxplotGroup(ax5,{F3_S_Q_II(~isnan(F3_S_Q_II)),F3_S_N60_II(~isnan(F3_S_N60_II)),F3_S_N70_II(~isnan(F3_S_N70_II))},...
-'PrimaryLabels', {'Quiet','N60','N70'}, ...
-'SecondaryLabels', {'Speaking'}, ...
-'interGroupSpace',2,'groupLabelType','Vertical', ...
-'PlotStyle','Compact','BoxStyle','filled',...
-'Colors',[QuietColor;N60Color;N70Color],'GroupType','betweenGroups');
-h6=boxplotGroup(ax6,{F3_L_Q_II(~isnan(F3_L_Q_II)),F3_L_N60_II(~isnan(F3_L_N60_II)),F3_L_N70_II(~isnan(F3_L_N70_II))},...
-'PrimaryLabels', {'Quiet','N60','N70'}, ...
-'SecondaryLabels', {'Listening'}, ...
-'interGroupSpace',2,'groupLabelType','Vertical', ...
-'PlotStyle','Compact','BoxStyle','filled',...
-'Colors',[QuietColor;N60Color;N70Color],'GroupType','betweenGroups');
+'Colors',[QuietColor;SHLColor;N60Color;N70Color],'GroupType','betweenGroups');
 
 ax1.YGrid = 'on';
 ax1.XTickLabelRotation = 90;
@@ -672,9 +713,137 @@ ax6.XTickLabelRotation = 90;
 set(ax6,'Color',[LColor,0.04])
 ylim([ax5 ax6],[min([ylim(ax5) ylim(ax6)]) max([ylim(ax5) ylim(ax6)])])
 
+% Noise Conditions A_II
+boxplotGroup(ax7,{F1_S_Q_II(~isnan(F1_S_Q_II)),F1_S_N60_II(~isnan(F1_S_N60_II)),F1_S_N70_II(~isnan(F1_S_N70_II))},...
+'PrimaryLabels', {'Quiet','N60','N70'}, ...
+'SecondaryLabels', {'Speaking'}, ...
+'interGroupSpace',2,'groupLabelType','Vertical', ...
+'PlotStyle','Compact','BoxStyle','filled',...
+'Colors',[QuietColor;N60Color;N70Color],'GroupType','betweenGroups');
+boxplotGroup(ax8,{F1_L_Q_II(~isnan(F1_L_Q_II)),F1_L_N60_II(~isnan(F1_L_N60_II)),F1_L_N70_II(~isnan(F1_L_N70_II))},...
+'PrimaryLabels', {'Quiet','N60','N70'}, ...
+'SecondaryLabels', {'Listening'}, ...
+'interGroupSpace',2,'groupLabelType','Vertical', ...
+'PlotStyle','Compact','BoxStyle','filled',...
+'Colors',[QuietColor;N60Color;N70Color],'GroupType','betweenGroups');
+
+boxplotGroup(ax9,{F2_S_Q_II(~isnan(F2_S_Q_II)),F2_S_N60_II(~isnan(F2_S_N60_II)),F2_S_N70_II(~isnan(F2_S_N70_II))},...
+'PrimaryLabels', {'Quiet','N60','N70'}, ...
+'SecondaryLabels', {'Speaking'}, ...
+'interGroupSpace',2,'groupLabelType','Vertical', ...
+'PlotStyle','Compact','BoxStyle','filled',...
+'Colors',[QuietColor;N60Color;N70Color],'GroupType','betweenGroups');
+boxplotGroup(ax10,{F2_L_Q_II(~isnan(F2_L_Q_II)),F2_L_N60_II(~isnan(F2_L_N60_II)),F2_L_N70_II(~isnan(F2_L_N70_II))},...
+'PrimaryLabels', {'Quiet','N60','N70'}, ...
+'SecondaryLabels', {'Listening'}, ...
+'interGroupSpace',2,'groupLabelType','Vertical', ...
+'PlotStyle','Compact','BoxStyle','filled',...
+'Colors',[QuietColor;N60Color;N70Color],'GroupType','betweenGroups');
+
+boxplotGroup(ax11,{F3_S_Q_II(~isnan(F3_S_Q_II)),F3_S_N60_II(~isnan(F3_S_N60_II)),F3_S_N70_II(~isnan(F3_S_N70_II))},...
+'PrimaryLabels', {'Quiet','N60','N70'}, ...
+'SecondaryLabels', {'Speaking'}, ...
+'interGroupSpace',2,'groupLabelType','Vertical', ...
+'PlotStyle','Compact','BoxStyle','filled',...
+'Colors',[QuietColor;N60Color;N70Color],'GroupType','betweenGroups');
+boxplotGroup(ax12,{F3_L_Q_II(~isnan(F3_L_Q_II)),F3_L_N60_II(~isnan(F3_L_N60_II)),F3_L_N70_II(~isnan(F3_L_N70_II))},...
+'PrimaryLabels', {'Quiet','N60','N70'}, ...
+'SecondaryLabels', {'Listening'}, ...
+'interGroupSpace',2,'groupLabelType','Vertical', ...
+'PlotStyle','Compact','BoxStyle','filled',...
+'Colors',[QuietColor;N60Color;N70Color],'GroupType','betweenGroups');
+
+ax7.YGrid = 'on';
+ax7.XTickLabelRotation = 90;
+set(ax7,'Color',[SColor,0.04])
+ax8.YGrid = 'on';
+ax8.XTickLabelRotation = 90;
+set(ax8,'Color',[LColor,0.04])
+ylim([ax7 ax8],[min([ylim(ax7) ylim(ax8)]) max([ylim(ax7) ylim(ax8)])])
+
+ax9.YGrid = 'on';
+ax9.XTickLabelRotation = 90;
+set(ax9,'Color',[SColor,0.04])
+ax10.YGrid = 'on';
+ax10.XTickLabelRotation = 90;
+set(ax10,'Color',[LColor,0.04])
+ylim([ax9 ax10],[min([ylim(ax9) ylim(ax10)]) max([ylim(ax9) ylim(ax10)])])
+
+ax11.YGrid = 'on';
+ax11.XTickLabelRotation = 90;
+set(ax11,'Color',[SColor,0.04])
+ax12.YGrid = 'on';
+ax12.XTickLabelRotation = 90;
+set(ax12,'Color',[LColor,0.04])
+ylim([ax11 ax12],[min([ylim(ax11) ylim(ax12)]) max([ylim(ax11) ylim(ax12)])])
+
+% Settings A_II
+boxplotGroup(ax13,{F1_S_UN_II(~isnan(F1_S_UN_II)),F1_S_AA_II(~isnan(F1_S_AA_II)),F1_S_AB_II(~isnan(F1_S_AB_II))},...
+'PrimaryLabels', {'UN','AA','AB'}, ...
+'SecondaryLabels', {'Speaking'}, ...
+'interGroupSpace',2,'groupLabelType','Vertical', ...
+'PlotStyle','Compact','BoxStyle','filled',...
+'Colors',[UNColor;AAColor;ABColor],'GroupType','betweenGroups');
+boxplotGroup(ax14,{F1_L_UN_II(~isnan(F1_L_UN_II)),F1_L_AA_II(~isnan(F1_L_AA_II)),F1_L_AB_II(~isnan(F1_L_AB_II))},...
+'PrimaryLabels', {'UN','AA','AB'}, ...
+'SecondaryLabels', {'Listening'}, ...
+'interGroupSpace',2,'groupLabelType','Vertical', ...
+'PlotStyle','Compact','BoxStyle','filled',...
+'Colors',[UNColor;AAColor;ABColor],'GroupType','betweenGroups');
+
+boxplotGroup(ax15,{F2_S_UN_II(~isnan(F2_S_UN_II)),F2_S_AA_II(~isnan(F2_S_AA_II)),F2_S_AB_II(~isnan(F2_S_AB_II))},...
+'PrimaryLabels', {'UN','AA','AB'}, ...
+'SecondaryLabels', {'Speaking'}, ...
+'interGroupSpace',2,'groupLabelType','Vertical', ...
+'PlotStyle','Compact','BoxStyle','filled',...
+'Colors',[UNColor;AAColor;ABColor],'GroupType','betweenGroups');
+boxplotGroup(ax16,{F2_L_UN_II(~isnan(F2_L_UN_II)),F2_L_AA_II(~isnan(F2_L_AA_II)),F2_L_AB_II(~isnan(F2_L_AB_II))},...
+'PrimaryLabels', {'UN','AA','AB'}, ...
+'SecondaryLabels', {'Listening'}, ...
+'interGroupSpace',2,'groupLabelType','Vertical', ...
+'PlotStyle','Compact','BoxStyle','filled',...
+'Colors',[UNColor;AAColor;ABColor],'GroupType','betweenGroups');
+
+boxplotGroup(ax17,{F3_S_UN_II(~isnan(F3_S_UN_II)),F3_S_AA_II(~isnan(F3_S_AA_II)),F3_S_AB_II(~isnan(F3_S_AB_II))},...
+'PrimaryLabels', {'UN','AA','AB'}, ...
+'SecondaryLabels', {'Speaking'}, ...
+'interGroupSpace',2,'groupLabelType','Vertical', ...
+'PlotStyle','Compact','BoxStyle','filled',...
+'Colors',[UNColor;AAColor;ABColor],'GroupType','betweenGroups');
+boxplotGroup(ax18,{F3_L_UN_II(~isnan(F3_L_UN_II)),F3_L_AA_II(~isnan(F3_L_AA_II)),F3_L_AB_II(~isnan(F3_L_AB_II))},...
+'PrimaryLabels', {'UN','AA','AB'}, ...
+'SecondaryLabels', {'Listening'}, ...
+'interGroupSpace',2,'groupLabelType','Vertical', ...
+'PlotStyle','Compact','BoxStyle','filled',...
+'Colors',[UNColor;AAColor;ABColor],'GroupType','betweenGroups');
+
+ax13.YGrid = 'on';
+ax13.XTickLabelRotation = 90;
+set(ax13,'Color',[SColor,0.04])
+ax14.YGrid = 'on';
+ax14.XTickLabelRotation = 90;
+set(ax14,'Color',[LColor,0.04])
+ylim([ax13 ax14],[min([ylim(ax13) ylim(ax14)]) max([ylim(ax13) ylim(ax14)])])
+
+ax15.YGrid = 'on';
+ax15.XTickLabelRotation = 90;
+set(ax15,'Color',[SColor,0.04])
+ax16.YGrid = 'on';
+ax16.XTickLabelRotation = 90;
+set(ax16,'Color',[LColor,0.04])
+ylim([ax15 ax16],[min([ylim(ax15) ylim(ax16)]) max([ylim(ax15) ylim(ax16)])])
+
+ax17.YGrid = 'on';
+ax17.XTickLabelRotation = 90;
+set(ax17,'Color',[SColor,0.04])
+ax18.YGrid = 'on';
+ax18.XTickLabelRotation = 90;
+set(ax18,'Color',[LColor,0.04])
+ylim([ax17 ax18],[min([ylim(ax17) ylim(ax18)]) max([ylim(ax17) ylim(ax18)])])
+
 % title(tl11,'Mean Pupil Diameter','FontWeight','bold')
 % title(tl12,'Pupil Diameter Slope','FontWeight','bold')
 % title(tl13,'Peak Pupil Diameter','FontWeight','bold')
 
-ylabel([ax11 ax31 ax1 ax5],'Pupil diameter [mm]')
-ylabel([ax21 ax3],'Slope [mm/s]')
+ylabel([ax1 ax5 ax7 ax11 ax13 ax17],'Pupil diameter [mm]')
+ylabel([ax3 ax9 ax15],'Slope [mm/s]')
