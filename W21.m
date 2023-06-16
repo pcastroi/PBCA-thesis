@@ -246,8 +246,9 @@ for q=1:numel(subDirs_I)
         % Added from W6.m -> Cut/Split overlaps
         [Speak,Listen] = overlap_windows(SpeakD,ListenD,Param.Fs);
         
-        Speak = Speak(Speak(:,1)>TimeMinWin,:);
-        Listen = Listen(Listen(:,1)>TimeMinWin,:);
+        % Unwanted start/end means from LP filtering
+        Speak = Speak(Speak(:,3)<length(Diameter)-round(length(LPWindow)/2-1)-TimeEndW*Param.Fs,:);
+        Listen = Listen(Listen(:,3)<length(Diameter)-round(length(LPWindow)/2-1)-TimeEndW*Param.Fs,:);
         
         % Time-locked indexes (cannot be bigger than diameter itself)
 %         SIdxEnd=Speak(:,3);
@@ -470,6 +471,10 @@ for q=1:numel(subDirs_II)
             % Added from W6.m -> Cut/Split overlaps
             [Speak,Listen] = overlap_windows(SpeakD,ListenD,Param.Fs);
             
+            % Unwanted start/end means from LP filtering
+            Speak = Speak(Speak(:,3)<length(Diameter)-round(length(LPWindow)/2-1)-TimeEndW*Param.Fs,:);
+            Listen = Listen(Listen(:,3)<length(Diameter)-round(length(LPWindow)/2-1)-TimeEndW*Param.Fs,:);
+            
             % Time-locked indexes (cannot be bigger than diameter itself)
         %         SIdxEnd=Speak(:,3);
         %         LIdxEnd=Listen(:,3);
@@ -613,6 +618,12 @@ tbl_S_F3_II = table(F3_S_Q_II(~isnan(F3_S_Q_II)),F3_S_N60_II(~isnan(F3_S_N60_II)
 tbl_L_F1_II = table(F1_L_Q_II(~isnan(F1_L_Q_II)),F1_L_N60_II(~isnan(F1_L_N60_II)),F1_L_N70_II(~isnan(F1_L_N70_II)),'VariableNames',{'Quiet','N60','N70'});
 tbl_L_F2_II = table(F2_L_Q_II(~isnan(F2_L_Q_II)),F2_L_N60_II(~isnan(F2_L_N60_II)),F2_L_N70_II(~isnan(F2_L_N70_II)),'VariableNames',{'Quiet','N60','N70'});
 tbl_L_F3_II = table(F3_L_Q_II(~isnan(F3_L_Q_II)),F3_L_N60_II(~isnan(F3_L_N60_II)),F3_L_N70_II(~isnan(F3_L_N70_II)),'VariableNames',{'Quiet','N60','N70'});
+
+% p = 0.05 significacnt difference -> discussion: i dont'a avg across
+% comparisons (not divinding by the total number of comparisons - Bonferroni correction)
+% 1 given subject = (1|subject)
+
+% categorical - table
 
 lme_S_F1_I = fitlme(tbl_S_F1_I,'Quiet~SHL~N60~N70');
 
