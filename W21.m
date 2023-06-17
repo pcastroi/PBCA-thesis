@@ -52,6 +52,11 @@ NTPs = numel(subDirs_I)*numel(FileNames_I)/NCond; % Total N of TPs
 NCols=200; % N of windows
 NRows=numel(FileNames_I)*numel(subDirs_I); % Number of trials
 
+% Preallocate tables
+Tab_I = table(0,0,0,0,0,0,'VariableNames',{'Subject','Activity','Noise','MPD','Slope','PPD'});
+Tab_II = table(0,0,0,0,0,0,'VariableNames',{'Subject','Activity','Noise','MPD','Slope','PPD'});
+Tab_S_II = table(0,0,0,0,0,0,'VariableNames',{'Subject','Activity','Setting','MPD','Slope','PPD'});
+
 % Preallocate features - Phase 1, Phase 2
 F1_S_Q_I=nan*ones(NRows,NCols); % Feature 1 (Quiet): Mean pupil size (Speaking)
 F1_L_Q_I=F1_S_Q_I; % Feature 1 (Quiet): Mean pupil size (Listening)
@@ -128,11 +133,13 @@ for q=1:numel(subDirs_I)
     
     for i=1:numel(FileNames_I)
         if contains(cell2mat(FileNames_I(i)),'P2')
+            TP_I = 2*q;
             if LoadTPsOrder_I.TPsOrder(2*q,i-NCond) ~= x_I
                 disp(['Warning: File ',PairFiles_I(1).folder, '\', cell2mat(FileNames_I(i)),' was rejected in AMEND I (P2) analysis.']);
                 continue
             end
         elseif contains(cell2mat(FileNames_I(i)),'P1')
+            TP_I = 2*q-1;
             if LoadTPsOrder_I.TPsOrder(2*q-1,i) ~= x_I
                 disp(['Warning: File ',PairFiles_I(1).folder, '\', cell2mat(FileNames_I(i)),' was rejected in AMEND I (P1) analysis.']);
                 continue
@@ -261,83 +268,152 @@ for q=1:numel(subDirs_I)
         t_Diam = linspace(0,length(Diameter)./Param.Fs,length(Diameter));
         
         % Extract features for different conditions
-        temp=zeros(NCols,1);
-        temp2=zeros(NCols,2);
-        temp3=temp;
+        S_temp=zeros(NCols,1);
+        S_temp2=zeros(NCols,2);
+        S_temp3=S_temp;
+        L_temp=S_temp;
+        L_temp2=S_temp2;
+        L_temp3=S_temp3;
         if contains(cell2mat(FileNames_I(i)),'Quiet')
             for j=1:size(Speak,1)
-                temp(j,:)=mean(Diameter(Speak(j,2):SIdxEnd_I(j)));
-                temp2(j,:)=polyfit(t_Diam(Speak(j,2):SIdxEnd_I(j)),Diameter(Speak(j,2):SIdxEnd_I(j)),1);
-                temp3(j,:)=max(Diameter(Speak(j,2):SIdxEnd_I(j)));
+                S_temp(j,:)=mean(Diameter(Speak(j,2):SIdxEnd_I(j)),'omitnan');
+                S_temp2(j,:)=polyfit(t_Diam(Speak(j,2):SIdxEnd_I(j)),Diameter(Speak(j,2):SIdxEnd_I(j)),1);
+                S_temp3(j,:)=max(Diameter(Speak(j,2):SIdxEnd_I(j)));
             end
-            F1_S_Q_I(x_I,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
-            F2_S_Q_I(x_I,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
-            F3_S_Q_I(x_I,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
+            F1_S_Q_I(x_I,1:size(S_temp(S_temp(:,1)>0,1),1))=S_temp(S_temp(:,1)>0,1);
+            F2_S_Q_I(x_I,1:size(S_temp2(S_temp2(:,2)~=0,2),1))=S_temp2(S_temp2(:,2)~=0,2);
+            F3_S_Q_I(x_I,1:size(S_temp3(S_temp3(:,1)>0,1),1))=S_temp3(S_temp3(:,1)>0,1);          
+            % Store in table for LMM
+            Tab_I = [Tab_I;table(TP_I*ones(size(Speak,1),1),...
+                    repmat({'Speak'}, 1, size(Speak,1))',...
+                    repmat({'Quiet'}, 1, size(Speak,1))',...
+                    S_temp(S_temp(:,1)>0,1),...
+                    S_temp2(S_temp2(:,2)~=0,2),...
+                    S_temp3(S_temp3(:,1)>0,1),...
+                    'VariableNames',{'Subject','Activity','Noise','MPD','Slope','PPD'})];
             for j=1:size(Listen,1)
-                temp(j,:)=mean(Diameter(Listen(j,2):LIdxEnd_I(j)));
-                temp2(j,:)=polyfit(t_Diam(Listen(j,2):LIdxEnd_I(j)),Diameter(Listen(j,2):LIdxEnd_I(j)),1);
-                temp3(j,:)=max(Diameter(Listen(j,2):LIdxEnd_I(j)));
+                L_temp(j,:)=mean(Diameter(Listen(j,2):LIdxEnd_I(j)));
+                L_temp2(j,:)=polyfit(t_Diam(Listen(j,2):LIdxEnd_I(j)),Diameter(Listen(j,2):LIdxEnd_I(j)),1);
+                L_temp3(j,:)=max(Diameter(Listen(j,2):LIdxEnd_I(j)));
             end
-            F1_L_Q_I(x_I,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
-            F2_L_Q_I(x_I,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
-            F3_L_Q_I(x_I,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
+            F1_L_Q_I(x_I,1:size(L_temp(L_temp(:,1)>0,1),1))=L_temp(L_temp(:,1)>0,1);
+            F2_L_Q_I(x_I,1:size(L_temp2(L_temp2(:,2)~=0,2),1))=L_temp2(L_temp2(:,2)~=0,2);
+            F3_L_Q_I(x_I,1:size(L_temp3(L_temp3(:,1)>0,1),1))=L_temp3(L_temp3(:,1)>0,1);
+            % Store in table for LMM
+            Tab_I = [Tab_I;table(TP_I*ones(size(Listen,1),1),...
+                    repmat({'Listen'}, 1, size(Listen,1))',...
+                    repmat({'Quiet'}, 1, size(Listen,1))',...
+                    L_temp(L_temp(:,1)>0,1),...
+                    L_temp2(L_temp2(:,2)~=0,2),...
+                    L_temp3(L_temp3(:,1)>0,1),...
+                    'VariableNames',{'Subject','Activity','Noise','MPD','Slope','PPD'})];
         elseif contains(cell2mat(FileNames_I(i)),'SHL')
             for j=1:size(Speak,1)
-                temp(j,:)=mean(Diameter(Speak(j,2):SIdxEnd_I(j)));
-                temp2(j,:)=polyfit(t_Diam(Speak(j,2):SIdxEnd_I(j)),Diameter(Speak(j,2):SIdxEnd_I(j)),1);
-                temp3(j,:)=max(Diameter(Speak(j,2):SIdxEnd_I(j)));
+                S_temp(j,:)=mean(Diameter(Speak(j,2):SIdxEnd_I(j)),'omitnan');
+                S_temp2(j,:)=polyfit(t_Diam(Speak(j,2):SIdxEnd_I(j)),Diameter(Speak(j,2):SIdxEnd_I(j)),1);
+                S_temp3(j,:)=max(Diameter(Speak(j,2):SIdxEnd_I(j)));
             end
-            F1_S_SHL_I(x_I,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
-            F2_S_SHL_I(x_I,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
-            F3_S_SHL_I(x_I,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
+            F1_S_SHL_I(x_I,1:size(S_temp(S_temp(:,1)>0,1),1))=S_temp(S_temp(:,1)>0,1);
+            F2_S_SHL_I(x_I,1:size(S_temp2(S_temp2(:,2)~=0,2),1))=S_temp2(S_temp2(:,2)~=0,2);
+            F3_S_SHL_I(x_I,1:size(S_temp3(S_temp3(:,1)>0,1),1))=S_temp3(S_temp3(:,1)>0,1);
+            % Store in table for LMM
+            Tab_I = [Tab_I;table(TP_I*ones(size(Speak,1),1),...
+                    repmat({'Speak'}, 1, size(Speak,1))',...
+                    repmat({'SHL'}, 1, size(Speak,1))',...
+                    S_temp(S_temp(:,1)>0,1),...
+                    S_temp2(S_temp2(:,2)~=0,2),...
+                    S_temp3(S_temp3(:,1)>0,1),...
+                    'VariableNames',{'Subject','Activity','Noise','MPD','Slope','PPD'})];
             for j=1:size(Listen,1)
-                temp(j,:)=mean(Diameter(Listen(j,2):LIdxEnd_I(j)));
-                temp2(j,:)=polyfit(t_Diam(Listen(j,2):LIdxEnd_I(j)),Diameter(Listen(j,2):LIdxEnd_I(j)),1);
-                temp3(j,:)=max(Diameter(Listen(j,2):LIdxEnd_I(j)));
+                L_temp(j,:)=mean(Diameter(Listen(j,2):LIdxEnd_I(j)));
+                L_temp2(j,:)=polyfit(t_Diam(Listen(j,2):LIdxEnd_I(j)),Diameter(Listen(j,2):LIdxEnd_I(j)),1);
+                L_temp3(j,:)=max(Diameter(Listen(j,2):LIdxEnd_I(j)));
             end
-            F1_L_SHL_I(x_I,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
-            F2_L_SHL_I(x_I,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
-            F3_L_SHL_I(x_I,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
+            F1_L_SHL_I(x_I,1:size(L_temp(L_temp(:,1)>0,1),1))=L_temp(L_temp(:,1)>0,1);
+            F2_L_SHL_I(x_I,1:size(L_temp2(L_temp2(:,2)~=0,2),1))=L_temp2(L_temp2(:,2)~=0,2);
+            F3_L_SHL_I(x_I,1:size(L_temp3(L_temp3(:,1)>0,1),1))=L_temp3(L_temp3(:,1)>0,1);
+            % Store in table for LMM
+            Tab_I = [Tab_I;table(TP_I*ones(size(Listen,1),1),...
+                    repmat({'Listen'}, 1, size(Listen,1))',...
+                    repmat({'SHL'}, 1, size(Listen,1))',...
+                    L_temp(L_temp(:,1)>0,1),...
+                    L_temp2(L_temp2(:,2)~=0,2),...
+                    L_temp3(L_temp3(:,1)>0,1),...
+                    'VariableNames',{'Subject','Activity','Noise','MPD','Slope','PPD'})];
         elseif contains(cell2mat(FileNames_I(i)),'Noise60')
             for j=1:size(Speak,1)
-                temp(j,:)=mean(Diameter(Speak(j,2):SIdxEnd_I(j)));
-                temp2(j,:)=polyfit(t_Diam(Speak(j,2):SIdxEnd_I(j)),Diameter(Speak(j,2):SIdxEnd_I(j)),1);
-                temp3(j,:)=max(Diameter(Speak(j,2):SIdxEnd_I(j)));
+                S_temp(j,:)=mean(Diameter(Speak(j,2):SIdxEnd_I(j)),'omitnan');
+                S_temp2(j,:)=polyfit(t_Diam(Speak(j,2):SIdxEnd_I(j)),Diameter(Speak(j,2):SIdxEnd_I(j)),1);
+                S_temp3(j,:)=max(Diameter(Speak(j,2):SIdxEnd_I(j)));
             end
-            F1_S_N60_I(x_I,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
-            F2_S_N60_I(x_I,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
-            F3_S_N60_I(x_I,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
+            F1_S_N60_I(x_I,1:size(S_temp(S_temp(:,1)>0,1),1))=S_temp(S_temp(:,1)>0,1);
+            F2_S_N60_I(x_I,1:size(S_temp2(S_temp2(:,2)~=0,2),1))=S_temp2(S_temp2(:,2)~=0,2);
+            F3_S_N60_I(x_I,1:size(S_temp3(S_temp3(:,1)>0,1),1))=S_temp3(S_temp3(:,1)>0,1);
+            % Store in table for LMM
+            Tab_I = [Tab_I;table(TP_I*ones(size(Speak,1),1),...
+                    repmat({'Speak'}, 1, size(Speak,1))',...
+                    repmat({'N60'}, 1, size(Speak,1))',...
+                    S_temp(S_temp(:,1)>0,1),...
+                    S_temp2(S_temp2(:,2)~=0,2),...
+                    S_temp3(S_temp3(:,1)>0,1),...
+                    'VariableNames',{'Subject','Activity','Noise','MPD','Slope','PPD'})];
             for j=1:size(Listen,1)
-                temp(j,:)=mean(Diameter(Listen(j,2):LIdxEnd_I(j)));
-                temp2(j,:)=polyfit(t_Diam(Listen(j,2):LIdxEnd_I(j)),Diameter(Listen(j,2):LIdxEnd_I(j)),1);
-                temp3(j,:)=max(Diameter(Listen(j,2):LIdxEnd_I(j)));
+                L_temp(j,:)=mean(Diameter(Listen(j,2):LIdxEnd_I(j)));
+                L_temp2(j,:)=polyfit(t_Diam(Listen(j,2):LIdxEnd_I(j)),Diameter(Listen(j,2):LIdxEnd_I(j)),1);
+                L_temp3(j,:)=max(Diameter(Listen(j,2):LIdxEnd_I(j)));
             end
-            F1_L_N60_I(x_I,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
-            F2_L_N60_I(x_I,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
-            F3_L_N60_I(x_I,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
-            
+            F1_L_N60_I(x_I,1:size(L_temp(L_temp(:,1)>0,1),1))=L_temp(L_temp(:,1)>0,1);
+            F2_L_N60_I(x_I,1:size(L_temp2(L_temp2(:,2)~=0,2),1))=L_temp2(L_temp2(:,2)~=0,2);
+            F3_L_N60_I(x_I,1:size(L_temp3(L_temp3(:,1)>0,1),1))=L_temp3(L_temp3(:,1)>0,1);
+            % Store in table for LMM
+            Tab_I = [Tab_I;table(TP_I*ones(size(Listen,1),1),...
+                    repmat({'Listen'}, 1, size(Listen,1))',...
+                    repmat({'N60'}, 1, size(Listen,1))',...
+                    L_temp(L_temp(:,1)>0,1),...
+                    L_temp2(L_temp2(:,2)~=0,2),...
+                    L_temp3(L_temp3(:,1)>0,1),...
+                    'VariableNames',{'Subject','Activity','Noise','MPD','Slope','PPD'})];
         elseif contains(cell2mat(FileNames_I(i)),'Noise70')
             for j=1:size(Speak,1)
-                temp(j,:)=mean(Diameter(Speak(j,2):SIdxEnd_I(j)));
-                temp2(j,:)=polyfit(t_Diam(Speak(j,2):SIdxEnd_I(j)),Diameter(Speak(j,2):SIdxEnd_I(j)),1);
-                temp3(j,:)=max(Diameter(Speak(j,2):SIdxEnd_I(j)));
+                S_temp(j,:)=mean(Diameter(Speak(j,2):SIdxEnd_I(j)),'omitnan');
+                S_temp2(j,:)=polyfit(t_Diam(Speak(j,2):SIdxEnd_I(j)),Diameter(Speak(j,2):SIdxEnd_I(j)),1);
+                S_temp3(j,:)=max(Diameter(Speak(j,2):SIdxEnd_I(j)));
             end
-            F1_S_N70_I(x_I,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
-            F2_S_N70_I(x_I,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
-            F3_S_N70_I(x_I,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
+            F1_S_N70_I(x_I,1:size(S_temp(S_temp(:,1)>0,1),1))=S_temp(S_temp(:,1)>0,1);
+            F2_S_N70_I(x_I,1:size(S_temp2(S_temp2(:,2)~=0,2),1))=S_temp2(S_temp2(:,2)~=0,2);
+            F3_S_N70_I(x_I,1:size(S_temp3(S_temp3(:,1)>0,1),1))=S_temp3(S_temp3(:,1)>0,1);
+            % Store in table for LMM
+            Tab_I = [Tab_I;table(TP_I*ones(size(Speak,1),1),...
+                    repmat({'Speak'}, 1, size(Speak,1))',...
+                    repmat({'N70'}, 1, size(Speak,1))',...
+                    S_temp(S_temp(:,1)>0,1),...
+                    S_temp2(S_temp2(:,2)~=0,2),...
+                    S_temp3(S_temp3(:,1)>0,1),...
+                    'VariableNames',{'Subject','Activity','Noise','MPD','Slope','PPD'})];
             for j=1:size(Listen,1)
-                temp(j,:)=mean(Diameter(Listen(j,2):LIdxEnd_I(j)));
-                temp2(j,:)=polyfit(t_Diam(Listen(j,2):LIdxEnd_I(j)),Diameter(Listen(j,2):LIdxEnd_I(j)),1);
-                temp3(j,:)=max(Diameter(Listen(j,2):LIdxEnd_I(j)));
+                L_temp(j,:)=mean(Diameter(Listen(j,2):LIdxEnd_I(j)),'omitnan');
+                L_temp2(j,:)=polyfit(t_Diam(Listen(j,2):LIdxEnd_I(j)),Diameter(Listen(j,2):LIdxEnd_I(j)),1);
+                L_temp3(j,:)=max(Diameter(Listen(j,2):LIdxEnd_I(j)));
             end
-            F1_L_N70_I(x_I,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
-            F2_L_N70_I(x_I,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
-            F3_L_N70_I(x_I,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
-        end
+            F1_L_N70_I(x_I,1:size(L_temp(L_temp(:,1)>0,1),1))=L_temp(L_temp(:,1)>0,1);
+            F2_L_N70_I(x_I,1:size(L_temp2(L_temp2(:,2)~=0,2),1))=L_temp2(L_temp2(:,2)~=0,2);
+            F3_L_N70_I(x_I,1:size(L_temp3(L_temp3(:,1)>0,1),1))=L_temp3(L_temp3(:,1)>0,1);
+            % Store in table for LMM
+            Tab_I = [Tab_I;table(TP_I*ones(size(Listen,1),1),...
+                    repmat({'Listen'}, 1, size(Listen,1))',...
+                    repmat({'N70'}, 1, size(Listen,1))',...
+                    L_temp(L_temp(:,1)>0,1),...
+                    L_temp2(L_temp2(:,2)~=0,2),...
+                    L_temp3(L_temp3(:,1)>0,1),...
+                    'VariableNames',{'Subject','Activity','Noise','MPD','Slope','PPD'})];
+        end        
         x_I=x_I+1;
     end
 end
+% Delete first row of Table
+Tab_I(1,:)=[];
 
+% [F1_S_Q_I(~isnan(F1_S_Q_I)),F2_S_Q_I(~isnan(F2_S_Q_I)),F3_S_Q_I(~isnan(F3_S_Q_I));F1_S_SHL_I(~isnan(F1_S_SHL_I)),F2_S_SHL_I(~isnan(F2_S_SHL_I)),F3_S_SHL_I(~isnan(F3_S_SHL_I));F1_S_N60_I(~isnan(F1_S_N60_I)),F2_S_N60_I(~isnan(F2_S_N60_I)),F3_S_N60_I(~isnan(F3_S_N60_I));F1_S_N70_I(~isnan(F1_S_N70_I)),F2_S_N70_I(~isnan(F2_S_N70_I)),F3_S_N70_I(~isnan(F3_S_N70_I))]
 % AMEND II
 for q=1:numel(subDirs_II)
     PairIn_II = q;
@@ -348,11 +424,13 @@ for q=1:numel(subDirs_II)
         
         for i=1:numel(FileNames_II)
             if contains(ChosenFolder,'HI')
+                TP_II = 2*q;
                 if LoadTPsOrder_II.TPsOrder_II(2*q,i) ~= x_II
                     disp(['Warning: File ',PairFiles_II(1).folder, '\', cell2mat(FileNames_II(i)),' was rejected in AMEND II (P2) analysis.']);
                     continue
                 end
             elseif contains(ChosenFolder,'NH')
+                TP_II = 2*q-1;
                 if LoadTPsOrder_II.TPsOrder_II(2*q-1,i) ~= x_II
                     disp(['Warning: File ',PairFiles_II(1).folder, '\', cell2mat(FileNames_II(i)),' was rejected in AMEND II (P1) analysis.']);
                     continue
@@ -486,146 +564,231 @@ for q=1:numel(subDirs_II)
             t_Diam = linspace(0,length(Diameter)./Param.Fs,length(Diameter));
 
             % Extract features for different conditions
-            temp=zeros(NCols,1);
-            temp2=zeros(NCols,2);
-            temp3=temp;
+            S_temp=zeros(NCols,1);
+            S_temp2=zeros(NCols,2);
+            S_temp3=S_temp;
+            L_temp=S_temp;
+            L_temp2=S_temp2;
+            L_temp3=S_temp3;
             % NOISE
             if contains(cell2mat(FileNames_II(i)),'N0')
                 for j=1:size(Speak,1)
-                    temp(j,:)=mean(Diameter(Speak(j,2):SIdxEnd_II(j)));
-                    temp2(j,:)=polyfit(t_Diam(Speak(j,2):SIdxEnd_II(j)),Diameter(Speak(j,2):SIdxEnd_II(j)),1);
-                    temp3(j,:)=max(Diameter(Speak(j,2):SIdxEnd_II(j)));
+                    S_temp(j,:)=mean(Diameter(Speak(j,2):SIdxEnd_II(j)));
+                    S_temp2(j,:)=polyfit(t_Diam(Speak(j,2):SIdxEnd_II(j)),Diameter(Speak(j,2):SIdxEnd_II(j)),1);
+                    S_temp3(j,:)=max(Diameter(Speak(j,2):SIdxEnd_II(j)));
                 end
-                F1_S_Q_II(x_II,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
-                F2_S_Q_II(x_II,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
-                F3_S_Q_II(x_II,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
+                F1_S_Q_II(x_II,1:size(S_temp(S_temp(:,1)>0,1),1))=S_temp(S_temp(:,1)>0,1);
+                F2_S_Q_II(x_II,1:size(S_temp2(S_temp2(:,2)~=0,2),1))=S_temp2(S_temp2(:,2)~=0,2);
+                F3_S_Q_II(x_II,1:size(S_temp3(S_temp3(:,1)>0,1),1))=S_temp3(S_temp3(:,1)>0,1);
+                % Store in table for LMM
+                Tab_II = [Tab_II;table(TP_II*ones(size(Speak,1),1),...
+                        repmat({'Speak'}, 1, size(Speak,1))',...
+                        repmat({'N0'}, 1, size(Speak,1))',...
+                        S_temp(S_temp(:,1)>0,1),...
+                        S_temp2(S_temp2(:,2)~=0,2),...
+                        S_temp3(S_temp3(:,1)>0,1),...
+                        'VariableNames',{'Subject','Activity','Noise','MPD','Slope','PPD'})];
                 for j=1:size(Listen,1)
-                    temp(j,:)=mean(Diameter(Listen(j,2):LIdxEnd_II(j)));
-                    temp2(j,:)=polyfit(t_Diam(Listen(j,2):LIdxEnd_II(j)),Diameter(Listen(j,2):LIdxEnd_II(j)),1);
-                    temp3(j,:)=max(Diameter(Listen(j,2):LIdxEnd_II(j)));
+                    L_temp(j,:)=mean(Diameter(Listen(j,2):LIdxEnd_II(j)));
+                    L_temp2(j,:)=polyfit(t_Diam(Listen(j,2):LIdxEnd_II(j)),Diameter(Listen(j,2):LIdxEnd_II(j)),1);
+                    L_temp3(j,:)=max(Diameter(Listen(j,2):LIdxEnd_II(j)));
                 end
-                F1_L_Q_II(x_II,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
-                F2_L_Q_II(x_II,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
-                F3_L_Q_II(x_II,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
+                F1_L_Q_II(x_II,1:size(L_temp(L_temp(:,1)>0,1),1))=L_temp(L_temp(:,1)>0,1);
+                F2_L_Q_II(x_II,1:size(L_temp2(L_temp2(:,2)~=0,2),1))=L_temp2(L_temp2(:,2)~=0,2);
+                F3_L_Q_II(x_II,1:size(L_temp3(L_temp3(:,1)>0,1),1))=L_temp3(L_temp3(:,1)>0,1);
+                % Store in table for LMM
+                Tab_II = [Tab_II;table(TP_II*ones(size(Listen,1),1),...
+                        repmat({'Listen'}, 1, size(Listen,1))',...
+                        repmat({'N0'}, 1, size(Listen,1))',...
+                        L_temp(L_temp(:,1)>0,1),...
+                        L_temp2(L_temp2(:,2)~=0,2),...
+                        L_temp3(L_temp3(:,1)>0,1),...
+                        'VariableNames',{'Subject','Activity','Noise','MPD','Slope','PPD'})];
             elseif contains(cell2mat(FileNames_II(i)),'N60')
                 for j=1:size(Speak,1)
-                    temp(j,:)=mean(Diameter(Speak(j,2):SIdxEnd_II(j)));
-                    temp2(j,:)=polyfit(t_Diam(Speak(j,2):SIdxEnd_II(j)),Diameter(Speak(j,2):SIdxEnd_II(j)),1);
-                    temp3(j,:)=max(Diameter(Speak(j,2):SIdxEnd_II(j)));
+                    S_temp(j,:)=mean(Diameter(Speak(j,2):SIdxEnd_II(j)));
+                    S_temp2(j,:)=polyfit(t_Diam(Speak(j,2):SIdxEnd_II(j)),Diameter(Speak(j,2):SIdxEnd_II(j)),1);
+                    S_temp3(j,:)=max(Diameter(Speak(j,2):SIdxEnd_II(j)));
                 end
-                F1_S_N60_II(x_II,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
-                F2_S_N60_II(x_II,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
-                F3_S_N60_II(x_II,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
+                F1_S_N60_II(x_II,1:size(S_temp(S_temp(:,1)>0,1),1))=S_temp(S_temp(:,1)>0,1);
+                F2_S_N60_II(x_II,1:size(S_temp2(S_temp2(:,2)~=0,2),1))=S_temp2(S_temp2(:,2)~=0,2);
+                F3_S_N60_II(x_II,1:size(S_temp3(S_temp3(:,1)>0,1),1))=S_temp3(S_temp3(:,1)>0,1);
+                % Store in table for LMM
+                Tab_II = [Tab_II;table(TP_II*ones(size(Speak,1),1),...
+                        repmat({'Speak'}, 1, size(Speak,1))',...
+                        repmat({'N60'}, 1, size(Speak,1))',...
+                        S_temp(S_temp(:,1)>0,1),...
+                        S_temp2(S_temp2(:,2)~=0,2),...
+                        S_temp3(S_temp3(:,1)>0,1),...
+                        'VariableNames',{'Subject','Activity','Noise','MPD','Slope','PPD'})];
                 for j=1:size(Listen,1)
-                    temp(j,:)=mean(Diameter(Listen(j,2):LIdxEnd_II(j)));
-                    temp2(j,:)=polyfit(t_Diam(Listen(j,2):LIdxEnd_II(j)),Diameter(Listen(j,2):LIdxEnd_II(j)),1);
-                    temp3(j,:)=max(Diameter(Listen(j,2):LIdxEnd_II(j)));
+                    L_temp(j,:)=mean(Diameter(Listen(j,2):LIdxEnd_II(j)));
+                    L_temp2(j,:)=polyfit(t_Diam(Listen(j,2):LIdxEnd_II(j)),Diameter(Listen(j,2):LIdxEnd_II(j)),1);
+                    L_temp3(j,:)=max(Diameter(Listen(j,2):LIdxEnd_II(j)));
                 end
-                F1_L_N60_II(x_II,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
-                F2_L_N60_II(x_II,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
-                F3_L_N60_II(x_II,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
+                F1_L_N60_II(x_II,1:size(L_temp(L_temp(:,1)>0,1),1))=L_temp(L_temp(:,1)>0,1);
+                F2_L_N60_II(x_II,1:size(L_temp2(L_temp2(:,2)~=0,2),1))=L_temp2(L_temp2(:,2)~=0,2);
+                F3_L_N60_II(x_II,1:size(L_temp3(L_temp3(:,1)>0,1),1))=L_temp3(L_temp3(:,1)>0,1);
+                % Store in table for LMM
+                Tab_II = [Tab_II;table(TP_II*ones(size(Listen,1),1),...
+                        repmat({'Listen'}, 1, size(Listen,1))',...
+                        repmat({'N60'}, 1, size(Listen,1))',...
+                        L_temp(L_temp(:,1)>0,1),...
+                        L_temp2(L_temp2(:,2)~=0,2),...
+                        L_temp3(L_temp3(:,1)>0,1),...
+                        'VariableNames',{'Subject','Activity','Noise','MPD','Slope','PPD'})];
             elseif contains(cell2mat(FileNames_II(i)),'N70')
                 for j=1:size(Speak,1)
-                    temp(j,:)=mean(Diameter(Speak(j,2):SIdxEnd_II(j)));
-                    temp2(j,:)=polyfit(t_Diam(Speak(j,2):SIdxEnd_II(j)),Diameter(Speak(j,2):SIdxEnd_II(j)),1);
-                    temp3(j,:)=max(Diameter(Speak(j,2):SIdxEnd_II(j)));
+                    S_temp(j,:)=mean(Diameter(Speak(j,2):SIdxEnd_II(j)),'omitnan');
+                    S_temp2(j,:)=polyfit(t_Diam(Speak(j,2):SIdxEnd_II(j)),Diameter(Speak(j,2):SIdxEnd_II(j)),1);
+                    S_temp3(j,:)=max(Diameter(Speak(j,2):SIdxEnd_II(j)));
                 end
-                F1_S_N70_II(x_II,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
-                F2_S_N70_II(x_II,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
-                F3_S_N70_II(x_II,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
+                F1_S_N70_II(x_II,1:size(S_temp(S_temp(:,1)>0,1),1))=S_temp(S_temp(:,1)>0,1);
+                F2_S_N70_II(x_II,1:size(S_temp2(S_temp2(:,2)~=0,2),1))=S_temp2(S_temp2(:,2)~=0,2);
+                F3_S_N70_II(x_II,1:size(S_temp3(S_temp3(:,1)>0,1),1))=S_temp3(S_temp3(:,1)>0,1);
+                % Store in table for LMM
+                Tab_II = [Tab_II;table(TP_II*ones(size(Speak,1),1),...
+                        repmat({'Speak'}, 1, size(Speak,1))',...
+                        repmat({'N70'}, 1, size(Speak,1))',...
+                        S_temp(S_temp(:,1)>0,1),...
+                        S_temp2(S_temp2(:,2)~=0,2),...
+                        S_temp3(S_temp3(:,1)>0,1),...
+                        'VariableNames',{'Subject','Activity','Noise','MPD','Slope','PPD'})];
                 for j=1:size(Listen,1)
-                    temp(j,:)=mean(Diameter(Listen(j,2):LIdxEnd_II(j)));
-                    temp2(j,:)=polyfit(t_Diam(Listen(j,2):LIdxEnd_II(j)),Diameter(Listen(j,2):LIdxEnd_II(j)),1);
-                    temp3(j,:)=max(Diameter(Listen(j,2):LIdxEnd_II(j)));
+                    L_temp(j,:)=mean(Diameter(Listen(j,2):LIdxEnd_II(j)));
+                    L_temp2(j,:)=polyfit(t_Diam(Listen(j,2):LIdxEnd_II(j)),Diameter(Listen(j,2):LIdxEnd_II(j)),1);
+                    L_temp3(j,:)=max(Diameter(Listen(j,2):LIdxEnd_II(j)));
                 end
-                F1_L_N70_II(x_II,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
-                F2_L_N70_II(x_II,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
-                F3_L_N70_II(x_II,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
+                F1_L_N70_II(x_II,1:size(L_temp(L_temp(:,1)>0,1),1))=L_temp(L_temp(:,1)>0,1);
+                F2_L_N70_II(x_II,1:size(L_temp2(L_temp2(:,2)~=0,2),1))=L_temp2(L_temp2(:,2)~=0,2);
+                F3_L_N70_II(x_II,1:size(L_temp3(L_temp3(:,1)>0,1),1))=L_temp3(L_temp3(:,1)>0,1);
+                % Store in table for LMM
+                Tab_II = [Tab_II;table(TP_II*ones(size(Listen,1),1),...
+                        repmat({'Listen'}, 1, size(Listen,1))',...
+                        repmat({'N70'}, 1, size(Listen,1))',...
+                        L_temp(L_temp(:,1)>0,1),...
+                        L_temp2(L_temp2(:,2)~=0,2),...
+                        L_temp3(L_temp3(:,1)>0,1),...
+                        'VariableNames',{'Subject','Activity','Noise','MPD','Slope','PPD'})];
             end
-            temp=zeros(NCols,1);
-            temp2=zeros(NCols,2);
-            temp3=temp;
+            
+            S_temp=zeros(NCols,1);
+            S_temp2=zeros(NCols,2);
+            S_temp3=S_temp;
+            L_temp=S_temp;
+            L_temp2=S_temp2;
+            L_temp3=S_temp3;
             % HA SETTINGS - ONLY HI
             if contains(ChosenFolder,'HI')
                 if contains(cell2mat(FileNames_II(i)),'UN')
                     for j=1:size(Speak,1)
-                        temp(j,:)=mean(Diameter(Speak(j,2):SIdxEnd_II(j)));
-                        temp2(j,:)=polyfit(t_Diam(Speak(j,2):SIdxEnd_II(j)),Diameter(Speak(j,2):SIdxEnd_II(j)),1);
-                        temp3(j,:)=max(Diameter(Speak(j,2):SIdxEnd_II(j)));
+                        S_temp(j,:)=mean(Diameter(Speak(j,2):SIdxEnd_II(j)),'omitnan');
+                        S_temp2(j,:)=polyfit(t_Diam(Speak(j,2):SIdxEnd_II(j)),Diameter(Speak(j,2):SIdxEnd_II(j)),1);
+                        S_temp3(j,:)=max(Diameter(Speak(j,2):SIdxEnd_II(j)));
                     end
-                    F1_S_UN_II(x_II,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
-                    F2_S_UN_II(x_II,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
-                    F3_S_UN_II(x_II,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
+                    F1_S_UN_II(x_II,1:size(S_temp(S_temp(:,1)>0,1),1))=S_temp(S_temp(:,1)>0,1);
+                    F2_S_UN_II(x_II,1:size(S_temp2(S_temp2(:,2)~=0,2),1))=S_temp2(S_temp2(:,2)~=0,2);
+                    F3_S_UN_II(x_II,1:size(S_temp3(S_temp3(:,1)>0,1),1))=S_temp3(S_temp3(:,1)>0,1);
+                    Tab_S_II = [Tab_S_II;table(TP_II*ones(size(Speak,1),1),...
+                        repmat({'Speak'}, 1, size(Speak,1))',...
+                        repmat({'UN'}, 1, size(Speak,1))',...
+                        S_temp(S_temp(:,1)>0,1),...
+                        S_temp2(S_temp2(:,2)~=0,2),...
+                        S_temp3(S_temp3(:,1)>0,1),...
+                        'VariableNames',{'Subject','Activity','Setting','MPD','Slope','PPD'})];
                     for j=1:size(Listen,1)
-                        temp(j,:)=mean(Diameter(Listen(j,2):LIdxEnd_II(j)));
-                        temp2(j,:)=polyfit(t_Diam(Listen(j,2):LIdxEnd_II(j)),Diameter(Listen(j,2):LIdxEnd_II(j)),1);
-                        temp3(j,:)=max(Diameter(Listen(j,2):LIdxEnd_II(j)));
+                        L_temp(j,:)=mean(Diameter(Listen(j,2):LIdxEnd_II(j)));
+                        L_temp2(j,:)=polyfit(t_Diam(Listen(j,2):LIdxEnd_II(j)),Diameter(Listen(j,2):LIdxEnd_II(j)),1);
+                        L_temp3(j,:)=max(Diameter(Listen(j,2):LIdxEnd_II(j)));
                     end
-                    F1_L_UN_II(x_II,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
-                    F2_L_UN_II(x_II,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
-                    F3_L_UN_II(x_II,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
+                    F1_L_UN_II(x_II,1:size(L_temp(L_temp(:,1)>0,1),1))=L_temp(L_temp(:,1)>0,1);
+                    F2_L_UN_II(x_II,1:size(L_temp2(L_temp2(:,2)~=0,2),1))=L_temp2(L_temp2(:,2)~=0,2);
+                    F3_L_UN_II(x_II,1:size(L_temp3(L_temp3(:,1)>0,1),1))=L_temp3(L_temp3(:,1)>0,1);
+                    Tab_S_II = [Tab_S_II;table(TP_II*ones(size(Listen,1),1),...
+                        repmat({'Listen'}, 1, size(Listen,1))',...
+                        repmat({'UN'}, 1, size(Listen,1))',...
+                        L_temp(L_temp(:,1)>0,1),...
+                        L_temp2(L_temp2(:,2)~=0,2),...
+                        L_temp3(L_temp3(:,1)>0,1),...
+                        'VariableNames',{'Subject','Activity','Setting','MPD','Slope','PPD'})];
                 elseif contains(cell2mat(FileNames_II(i)),'AA')
                     for j=1:size(Speak,1)
-                        temp(j,:)=mean(Diameter(Speak(j,2):SIdxEnd_II(j)));
-                        temp2(j,:)=polyfit(t_Diam(Speak(j,2):SIdxEnd_II(j)),Diameter(Speak(j,2):SIdxEnd_II(j)),1);
-                        temp3(j,:)=max(Diameter(Speak(j,2):SIdxEnd_II(j)));
+                        S_temp(j,:)=mean(Diameter(Speak(j,2):SIdxEnd_II(j)),'omitnan');
+                        S_temp2(j,:)=polyfit(t_Diam(Speak(j,2):SIdxEnd_II(j)),Diameter(Speak(j,2):SIdxEnd_II(j)),1);
+                        S_temp3(j,:)=max(Diameter(Speak(j,2):SIdxEnd_II(j)));
                     end
-                    F1_S_AA_II(x_II,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
-                    F2_S_AA_II(x_II,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
-                    F3_S_AA_II(x_II,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
+                    F1_S_AA_II(x_II,1:size(S_temp(S_temp(:,1)>0,1),1))=S_temp(S_temp(:,1)>0,1);
+                    F2_S_AA_II(x_II,1:size(S_temp2(S_temp2(:,2)~=0,2),1))=S_temp2(S_temp2(:,2)~=0,2);
+                    F3_S_AA_II(x_II,1:size(S_temp3(S_temp3(:,1)>0,1),1))=S_temp3(S_temp3(:,1)>0,1);
+                    Tab_S_II = [Tab_S_II;table(TP_II*ones(size(Speak,1),1),...
+                        repmat({'Speak'}, 1, size(Speak,1))',...
+                        repmat({'AA'}, 1, size(Speak,1))',...
+                        S_temp(S_temp(:,1)>0,1),...
+                        S_temp2(S_temp2(:,2)~=0,2),...
+                        S_temp3(S_temp3(:,1)>0,1),...
+                        'VariableNames',{'Subject','Activity','Setting','MPD','Slope','PPD'})];
                     for j=1:size(Listen,1)
-                        temp(j,:)=mean(Diameter(Listen(j,2):LIdxEnd_II(j)));
-                        temp2(j,:)=polyfit(t_Diam(Listen(j,2):LIdxEnd_II(j)),Diameter(Listen(j,2):LIdxEnd_II(j)),1);
-                        temp3(j,:)=max(Diameter(Listen(j,2):LIdxEnd_II(j)));
+                        L_temp(j,:)=mean(Diameter(Listen(j,2):LIdxEnd_II(j)));
+                        L_temp2(j,:)=polyfit(t_Diam(Listen(j,2):LIdxEnd_II(j)),Diameter(Listen(j,2):LIdxEnd_II(j)),1);
+                        L_temp3(j,:)=max(Diameter(Listen(j,2):LIdxEnd_II(j)));
                     end
-                    F1_L_AA_II(x_II,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
-                    F2_L_AA_II(x_II,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
-                    F3_L_AA_II(x_II,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
+                    F1_L_AA_II(x_II,1:size(L_temp(L_temp(:,1)>0,1),1))=L_temp(L_temp(:,1)>0,1);
+                    F2_L_AA_II(x_II,1:size(L_temp2(L_temp2(:,2)~=0,2),1))=L_temp2(L_temp2(:,2)~=0,2);
+                    F3_L_AA_II(x_II,1:size(L_temp3(L_temp3(:,1)>0,1),1))=L_temp3(L_temp3(:,1)>0,1);
+                    Tab_S_II = [Tab_S_II;table(TP_II*ones(size(Listen,1),1),...
+                        repmat({'Listen'}, 1, size(Listen,1))',...
+                        repmat({'AA'}, 1, size(Listen,1))',...
+                        L_temp(L_temp(:,1)>0,1),...
+                        L_temp2(L_temp2(:,2)~=0,2),...
+                        L_temp3(L_temp3(:,1)>0,1),...
+                        'VariableNames',{'Subject','Activity','Setting','MPD','Slope','PPD'})];
                 elseif contains(cell2mat(FileNames_II(i)),'AB')
                     for j=1:size(Speak,1)
-                        temp(j,:)=mean(Diameter(Speak(j,2):SIdxEnd_II(j)));
-                        temp2(j,:)=polyfit(t_Diam(Speak(j,2):SIdxEnd_II(j)),Diameter(Speak(j,2):SIdxEnd_II(j)),1);
-                        temp3(j,:)=max(Diameter(Speak(j,2):SIdxEnd_II(j)));
+                        S_temp(j,:)=mean(Diameter(Speak(j,2):SIdxEnd_II(j)),'omitnan');
+                        S_temp2(j,:)=polyfit(t_Diam(Speak(j,2):SIdxEnd_II(j)),Diameter(Speak(j,2):SIdxEnd_II(j)),1);
+                        S_temp3(j,:)=max(Diameter(Speak(j,2):SIdxEnd_II(j)));
                     end
-                    F1_S_AB_II(x_II,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
-                    F2_S_AB_II(x_II,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
-                    F3_S_AB_II(x_II,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
+                    F1_S_AB_II(x_II,1:size(S_temp(S_temp(:,1)>0,1),1))=S_temp(S_temp(:,1)>0,1);
+                    F2_S_AB_II(x_II,1:size(S_temp2(S_temp2(:,2)~=0,2),1))=S_temp2(S_temp2(:,2)~=0,2);
+                    F3_S_AB_II(x_II,1:size(S_temp3(S_temp3(:,1)>0,1),1))=S_temp3(S_temp3(:,1)>0,1);
+                    Tab_S_II = [Tab_S_II;table(TP_II*ones(size(Speak,1),1),...
+                        repmat({'Speak'}, 1, size(Speak,1))',...
+                        repmat({'AB'}, 1, size(Speak,1))',...
+                        S_temp(S_temp(:,1)>0,1),...
+                        S_temp2(S_temp2(:,2)~=0,2),...
+                        S_temp3(S_temp3(:,1)>0,1),...
+                        'VariableNames',{'Subject','Activity','Setting','MPD','Slope','PPD'})];
                     for j=1:size(Listen,1)
-                        temp(j,:)=mean(Diameter(Listen(j,2):LIdxEnd_II(j)));
-                        temp2(j,:)=polyfit(t_Diam(Listen(j,2):LIdxEnd_II(j)),Diameter(Listen(j,2):LIdxEnd_II(j)),1);
-                        temp3(j,:)=max(Diameter(Listen(j,2):LIdxEnd_II(j)));
+                        L_temp(j,:)=mean(Diameter(Listen(j,2):LIdxEnd_II(j)),'omitnan');
+                        L_temp2(j,:)=polyfit(t_Diam(Listen(j,2):LIdxEnd_II(j)),Diameter(Listen(j,2):LIdxEnd_II(j)),1);
+                        L_temp3(j,:)=max(Diameter(Listen(j,2):LIdxEnd_II(j)));
                     end
-                    F1_L_AB_II(x_II,1:size(temp(temp(:,1)>0,1),1))=temp(temp(:,1)>0,1);
-                    F2_L_AB_II(x_II,1:size(temp2(temp2(:,2)~=0,2),1))=temp2(temp2(:,2)~=0,2);
-                    F3_L_AB_II(x_II,1:size(temp3(temp3(:,1)>0,1),1))=temp3(temp3(:,1)>0,1);
+                    F1_L_AB_II(x_II,1:size(L_temp(L_temp(:,1)>0,1),1))=L_temp(L_temp(:,1)>0,1);
+                    F2_L_AB_II(x_II,1:size(L_temp2(L_temp2(:,2)~=0,2),1))=L_temp2(L_temp2(:,2)~=0,2);
+                    F3_L_AB_II(x_II,1:size(L_temp3(L_temp3(:,1)>0,1),1))=L_temp3(L_temp3(:,1)>0,1);
+                    Tab_S_II = [Tab_S_II;table(TP_II*ones(size(Listen,1),1),...
+                        repmat({'Listen'}, 1, size(Listen,1))',...
+                        repmat({'AB'}, 1, size(Listen,1))',...
+                        L_temp(L_temp(:,1)>0,1),...
+                        L_temp2(L_temp2(:,2)~=0,2),...
+                        L_temp3(L_temp3(:,1)>0,1),...
+                        'VariableNames',{'Subject','Activity','Setting','MPD','Slope','PPD'})];
                 end
             end
             x_II=x_II+1;
         end
     end
 end
+% Delete first row of Table
+Tab_II(1,:)=[];
+Tab_S_II(1,:)=[];
 %% Linear Mixed Model approach - show statistical differences between conditions/settings
-tbl_S_F1_I = table(F1_S_Q_I(~isnan(F1_S_Q_I)),F1_S_SHL_I(~isnan(F1_S_SHL_I)),F1_S_N60_I(~isnan(F1_S_N60_I)),F1_S_N70_I(~isnan(F1_S_N70_I)),'VariableNames',{'Quiet','SHL','N60','N70'});
-tbl_S_F2_I = table(F2_S_Q_I(~isnan(F2_S_Q_I)),F2_S_SHL_I(~isnan(F2_S_SHL_I)),F2_S_N60_I(~isnan(F2_S_N60_I)),F2_S_N70_I(~isnan(F2_S_N70_I)),'VariableNames',{'Quiet','SHL','N60','N70'});
-tbl_S_F3_I = table(F3_S_Q_I(~isnan(F3_S_Q_I)),F3_S_SHL_I(~isnan(F3_S_SHL_I)),F3_S_N60_I(~isnan(F3_S_N60_I)),F3_S_N70_I(~isnan(F3_S_N70_I)),'VariableNames',{'Quiet','SHL','N60','N70'});
-tbl_L_F1_I = table(F1_L_Q_I(~isnan(F1_L_Q_I)),F1_L_SHL_I(~isnan(F1_L_SHL_I)),F1_L_N60_I(~isnan(F1_L_N60_I)),F1_L_N70_I(~isnan(F1_L_N70_I)),'VariableNames',{'Quiet','SHL','N60','N70'});
-tbl_L_F2_I = table(F2_L_Q_I(~isnan(F2_L_Q_I)),F2_L_SHL_I(~isnan(F2_L_SHL_I)),F2_L_N60_I(~isnan(F2_L_N60_I)),F2_L_N70_I(~isnan(F2_L_N70_I)),'VariableNames',{'Quiet','SHL','N60','N70'});
-tbl_L_F3_I = table(F3_L_Q_I(~isnan(F3_L_Q_I)),F3_L_SHL_I(~isnan(F3_L_SHL_I)),F3_L_N60_I(~isnan(F3_L_N60_I)),F3_L_N70_I(~isnan(F3_L_N70_I)),'VariableNames',{'Quiet','SHL','N60','N70'});
-
-tbl_S_F1_II = table(F1_S_Q_II(~isnan(F1_S_Q_II)),F1_S_N60_II(~isnan(F1_S_N60_II)),F1_S_N70_II(~isnan(F1_S_N70_II)),'VariableNames',{'Quiet','N60','N70'});
-tbl_S_F2_II = table(F2_S_Q_II(~isnan(F2_S_Q_II)),F2_S_N60_II(~isnan(F2_S_N60_II)),F2_S_N70_II(~isnan(F2_S_N70_II)),'VariableNames',{'Quiet','N60','N70'});
-tbl_S_F3_II = table(F3_S_Q_II(~isnan(F3_S_Q_II)),F3_S_N60_II(~isnan(F3_S_N60_II)),F3_S_N70_II(~isnan(F3_S_N70_II)),'VariableNames',{'Quiet','N60','N70'});
-tbl_L_F1_II = table(F1_L_Q_II(~isnan(F1_L_Q_II)),F1_L_N60_II(~isnan(F1_L_N60_II)),F1_L_N70_II(~isnan(F1_L_N70_II)),'VariableNames',{'Quiet','N60','N70'});
-tbl_L_F2_II = table(F2_L_Q_II(~isnan(F2_L_Q_II)),F2_L_N60_II(~isnan(F2_L_N60_II)),F2_L_N70_II(~isnan(F2_L_N70_II)),'VariableNames',{'Quiet','N60','N70'});
-tbl_L_F3_II = table(F3_L_Q_II(~isnan(F3_L_Q_II)),F3_L_N60_II(~isnan(F3_L_N60_II)),F3_L_N70_II(~isnan(F3_L_N70_II)),'VariableNames',{'Quiet','N60','N70'});
-
 % p = 0.05 significacnt difference -> discussion: i dont'a avg across
 % comparisons (not divinding by the total number of comparisons - Bonferroni correction)
 % 1 given subject = (1|subject)
-
 % categorical - table
 
-lme_S_F1_I = fitlme(tbl_S_F1_I,'Quiet~SHL~N60~N70');
+% lme_S_F1_I = fitlme(tbl_S_F1_I,'Quiet~SHL~N60~N70');
 
 %% Plots
 f1=figure;t1=tiledlayout(1,2);
@@ -656,11 +819,12 @@ f9=figure;t9=tiledlayout(1,2);
 ax17 = nexttile;
 ax18 = nexttile;
 
-
 hold([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10 ax11 ax12 ax13 ax14 ax15 ax16 ax17 ax18],'on')
 
 % Boxplot
 % Noise Conditions A_I
+% Table_I(and(contains(Table_I.Activity,'Listen')
+
 boxplotGroup(ax1,{F1_S_Q_I(~isnan(F1_S_Q_I)),F1_S_SHL_I(~isnan(F1_S_SHL_I)),F1_S_N60_I(~isnan(F1_S_N60_I)),F1_S_N70_I(~isnan(F1_S_N70_I))},...
 'PrimaryLabels', {'Quiet','SHL','N60','N70'}, ...
 'SecondaryLabels', {'Speaking'}, ...
