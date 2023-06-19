@@ -351,9 +351,6 @@ for q=1:numel(subDirs_II)
 
             % Added from W6.m -> Cut/Split overlaps
             [Speak,Listen] = overlap_windows(SpeakD,ListenD,Param.Fs);
-            
-            Speak = SpeakRaw;
-            Listen = ListenRaw;
 
             % Time-locked indexes (based on Start or End of events)
             WSpeakIdx=[Speak(:,2)-TimeStartW*Param.Fs,Speak(:,2),Speak(:,3)+TimeEndW*Param.Fs];
