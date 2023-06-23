@@ -4,6 +4,8 @@ clear all; clc; close all;
 BPath = strsplit(pwd,'PBCA-thesis');
 addpath('tools')
 addpath([BPath{1} '\Pupil-preprocessing-tools\tools']) % For preprocessing
+addpath([BPath{1} 'PUPILS-preprocessing-pipeline']) % For preprocessing
+
 
 [subDirs] = GetSubDirsFirstLevelOnly('data\AMEND_I');
 FileNames={'P1_Quiet_B1.mat','P1_Quiet_B2.mat','P1_SHL_B1.mat','P1_SHL_B2.mat','P1_Noise60_B1.mat','P1_Noise60_B2.mat','P1_Noise70_B1.mat','P1_Noise70_B2.mat','P2_Quiet_B1.mat','P2_Quiet_B2.mat','P2_SHL_B1.mat','P2_SHL_B2.mat','P2_Noise60_B1.mat','P2_Noise60_B2.mat','P2_Noise70_B1.mat','P2_Noise70_B2.mat'};

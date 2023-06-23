@@ -27,6 +27,6 @@ figHandle.InnerPosition = [1, 1, legLocPixels(3) + 12 * boxLineWidth, ...
     legLocPixels(4) + 12 * boxLineWidth];
 
 %save legend
-saveas(figHandle, [fileName, '.', fileType], fileType);
+% saveas(figHandle, [fileName, '.', fileType], fileType);
 
 end

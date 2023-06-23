@@ -257,9 +257,12 @@ for q=1:numel(subDirs_I)
         Speak = Speak(Speak(:,3)<length(Diameter)-round(length(LPWindow)/2-1)-TimeEndW*Param.Fs,:);
         Listen = Listen(Listen(:,3)<length(Diameter)-round(length(LPWindow)/2-1)-TimeEndW*Param.Fs,:);
         
+        Speak = Speak(Speak(:,1)>0,:);
+        Listen = Listen(Listen(:,1)>0,:);
+        
         % Time-locked indexes (cannot be bigger than diameter itself)
-%         SIdxEnd=Speak(:,3);
-%         LIdxEnd=Listen(:,3);
+%         SIdxEnd_I=Speak(:,3);
+%         LIdxEnd_I=Listen(:,3);
         SIdxEnd_I=Speak(:,2)+TimeEndW*Param.Fs;
         SIdxEnd_I(SIdxEnd_I>length(Diameter)) = length(Diameter);
         LIdxEnd_I=Listen(:,2)+TimeEndW*Param.Fs;
@@ -553,9 +556,12 @@ for q=1:numel(subDirs_II)
             Speak = Speak(Speak(:,3)<length(Diameter)-round(length(LPWindow)/2-1)-TimeEndW*Param.Fs,:);
             Listen = Listen(Listen(:,3)<length(Diameter)-round(length(LPWindow)/2-1)-TimeEndW*Param.Fs,:);
             
+            Speak = Speak(Speak(:,1)>0,:);
+            Listen = Listen(Listen(:,1)>0,:);
+            
             % Time-locked indexes (cannot be bigger than diameter itself)
-        %         SIdxEnd=Speak(:,3);
-        %         LIdxEnd=Listen(:,3);
+%             SIdxEnd_II=Speak(:,3);
+%             LIdxEnd_II=Listen(:,3);
             SIdxEnd_II=Speak(:,2)+TimeEndW*Param.Fs;
             SIdxEnd_II(SIdxEnd_II>length(Diameter)) = length(Diameter);
             LIdxEnd_II=Listen(:,2)+TimeEndW*Param.Fs;
@@ -583,7 +589,7 @@ for q=1:numel(subDirs_II)
                 % Store in table for LMM
                 Tab_II = [Tab_II;table(TP_II*ones(size(Speak,1),1),...
                         repmat({'Speak'}, 1, size(Speak,1))',...
-                        repmat({'N0'}, 1, size(Speak,1))',...
+                        repmat({'Quiet'}, 1, size(Speak,1))',...
                         S_temp(S_temp(:,1)>0,1),...
                         S_temp2(S_temp2(:,2)~=0,2),...
                         S_temp3(S_temp3(:,1)>0,1),...
@@ -599,7 +605,7 @@ for q=1:numel(subDirs_II)
                 % Store in table for LMM
                 Tab_II = [Tab_II;table(TP_II*ones(size(Listen,1),1),...
                         repmat({'Listen'}, 1, size(Listen,1))',...
-                        repmat({'N0'}, 1, size(Listen,1))',...
+                        repmat({'Quiet'}, 1, size(Listen,1))',...
                         L_temp(L_temp(:,1)>0,1),...
                         L_temp2(L_temp2(:,2)~=0,2),...
                         L_temp3(L_temp3(:,1)>0,1),...
@@ -791,6 +797,9 @@ Tab_S_II(1,:)=[];
 lme_MPD_I = fitlme(Tab_I,'MPD~Activity*Noise+(1|Subject)');
 lme_Slo_I = fitlme(Tab_I,'Slope~Activity*Noise+(1|Subject)');
 lme_PPD_I = fitlme(Tab_I,'PPD~Activity*Noise+(1|Subject)');
+
+% Tab_I(contains(Tab_I.Activity,'Listen'),:)
+% fitlme(Tab_I(contains(Tab_I.Activity,'Listen'),:),'MPD~Activity*Noise+(1|Subject)')
 
 lme_MPD_II = fitlme(Tab_II,'MPD~Activity*Noise+(1|Subject)');
 lme_Slo_II = fitlme(Tab_II,'Slope~Activity*Noise+(1|Subject)');

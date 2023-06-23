@@ -610,67 +610,67 @@ SW_Z_N70 = zeros(size(SW_N70)); % N70 Speaking Windows Z-score normalized
 LW_Z_N70 = zeros(size(LW_N70)); % N70 Listening Windows Z-score normalized
 
 % Calculate X_R, X_RB and X_Z
-for j = 1:size(GSW,1)
-    TPRow = ismember(TPsOrder,j);
-    GSW_R(j,:,:) = (GSW(j,:,:)-GSW_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(GSW_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-GSW_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
-    GSW_RB(j,:,:) = (GSW_B(j,:,:)-GSW_B_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(GSW_B_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-GSW_B_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
-    GSW_Z(j,:,:) = (GSW(j,:,:)-GSW_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./GSW_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
-    GLW_R(j,:,:) = (GLW(j,:,:)-GLW_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(GLW_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-GLW_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
-    GLW_RB(j,:,:) = (GLW_B(j,:,:)-GLW_B_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(GLW_B_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-GLW_B_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
-    GLW_Z(j,:,:) = (GLW(j,:,:)-GLW_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./GLW_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
-end
-
-TPsQuiet = nonzeros(TPsOrder(:,1:2));
-for j = 1:size(SW_Quiet,1)
-    TPRow = ismember(TPsOrder,TPsQuiet(j));
-    if ~isempty(nonzeros(TPRow))
-        SW_R_Quiet(j,:,:) = (SW_Quiet(j,:,:)-SW_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(SW_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-SW_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
-        SW_RB_Quiet(j,:,:) = (SW_B_Quiet(j,:,:)-SW_B_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(SW_B_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-SW_B_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
-        SW_Z_Quiet(j,:,:) = (SW_Quiet(j,:,:)-SW_Quiet_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./SW_Quiet_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
-        LW_R_Quiet(j,:,:) = (LW_Quiet(j,:,:)-LW_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(LW_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-LW_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
-        LW_RB_Quiet(j,:,:) = (LW_B_Quiet(j,:,:)-LW_B_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(LW_B_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-LW_B_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
-        LW_Z_Quiet(j,:,:) = (LW_Quiet(j,:,:)-LW_Quiet_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./LW_Quiet_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
-    end
-end
-
-TPsSHL = nonzeros(TPsOrder(:,3:4));
-for j = 1:size(SW_SHL,1)
-    TPRow = ismember(TPsOrder,TPsSHL(j));
-    if ~isempty(nonzeros(TPRow))
-        SW_R_SHL(j,:,:) = (SW_SHL(j,:,:)-SW_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(SW_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-SW_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
-        SW_RB_SHL(j,:,:) = (SW_B_SHL(j,:,:)-SW_B_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(SW_B_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-SW_B_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
-        SW_Z_SHL(j,:,:) = (SW_SHL(j,:,:)-SW_SHL_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./SW_SHL_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
-        LW_R_SHL(j,:,:) = (LW_SHL(j,:,:)-LW_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(LW_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-LW_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
-        LW_RB_SHL(j,:,:) = (LW_B_SHL(j,:,:)-LW_B_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(LW_B_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-LW_B_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
-        LW_Z_SHL(j,:,:) = (LW_SHL(j,:,:)-LW_SHL_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./LW_SHL_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
-    end
-end
-
-TPsN60 = nonzeros(TPsOrder(:,5:6));
-for j = 1:size(SW_N60,1)
-    TPRow = ismember(TPsOrder,TPsN60(j));
-    if ~isempty(nonzeros(TPRow))
-        SW_R_N60(j,:,:) = (SW_N60(j,:,:)-SW_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(SW_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-SW_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
-        SW_RB_N60(j,:,:) = (SW_B_N60(j,:,:)-SW_B_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(SW_B_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-SW_B_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
-        SW_Z_N60(j,:,:) = (SW_N60(j,:,:)-SW_N60_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./SW_N60_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
-        LW_R_N60(j,:,:) = (LW_N60(j,:,:)-LW_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(LW_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-LW_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
-        LW_RB_N60(j,:,:) = (LW_B_N60(j,:,:)-LW_B_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(LW_B_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-LW_B_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
-        LW_Z_N60(j,:,:) = (LW_N60(j,:,:)-LW_N60_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./LW_N60_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
-    end
-end
-
-TPsN70 = nonzeros(TPsOrder(:,7:8));
-for j = 1:size(SW_N70,1)
-    TPRow = ismember(TPsOrder,TPsN70(j));
-    if ~isempty(nonzeros(TPRow))
-        SW_R_N70(j,:,:) = (SW_N70(j,:,:)-SW_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(SW_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-SW_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
-        SW_RB_N70(j,:,:) = (SW_B_N70(j,:,:)-SW_B_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(SW_B_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-SW_B_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
-        SW_Z_N70(j,:,:) = (SW_N70(j,:,:)-SW_N70_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./SW_N70_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
-        LW_R_N70(j,:,:) = (LW_N70(j,:,:)-LW_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(LW_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-LW_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
-        LW_RB_N70(j,:,:) = (LW_B_N70(j,:,:)-LW_B_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(LW_B_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-LW_B_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
-        LW_Z_N70(j,:,:) = (LW_N70(j,:,:)-LW_N70_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./LW_N70_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
-    end
-end
+% for j = 1:size(GSW,1)
+%     TPRow = ismember(TPsOrder,j);
+%     GSW_R(j,:,:) = (GSW(j,:,:)-GSW_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(GSW_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-GSW_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+%     GSW_RB(j,:,:) = (GSW_B(j,:,:)-GSW_B_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(GSW_B_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-GSW_B_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+%     GSW_Z(j,:,:) = (GSW(j,:,:)-GSW_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./GSW_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
+%     GLW_R(j,:,:) = (GLW(j,:,:)-GLW_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(GLW_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-GLW_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+%     GLW_RB(j,:,:) = (GLW_B(j,:,:)-GLW_B_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(GLW_B_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-GLW_B_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+%     GLW_Z(j,:,:) = (GLW(j,:,:)-GLW_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./GLW_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
+% end
+% 
+% TPsQuiet = nonzeros(TPsOrder(:,1:2));
+% for j = 1:size(SW_Quiet,1)
+%     TPRow = ismember(TPsOrder,TPsQuiet(j));
+%     if ~isempty(nonzeros(TPRow))
+%         SW_R_Quiet(j,:,:) = (SW_Quiet(j,:,:)-SW_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(SW_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-SW_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+%         SW_RB_Quiet(j,:,:) = (SW_B_Quiet(j,:,:)-SW_B_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(SW_B_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-SW_B_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+%         SW_Z_Quiet(j,:,:) = (SW_Quiet(j,:,:)-SW_Quiet_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./SW_Quiet_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
+%         LW_R_Quiet(j,:,:) = (LW_Quiet(j,:,:)-LW_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(LW_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-LW_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+%         LW_RB_Quiet(j,:,:) = (LW_B_Quiet(j,:,:)-LW_B_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(LW_B_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-LW_B_Quiet_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+%         LW_Z_Quiet(j,:,:) = (LW_Quiet(j,:,:)-LW_Quiet_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./LW_Quiet_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
+%     end
+% end
+% 
+% TPsSHL = nonzeros(TPsOrder(:,3:4));
+% for j = 1:size(SW_SHL,1)
+%     TPRow = ismember(TPsOrder,TPsSHL(j));
+%     if ~isempty(nonzeros(TPRow))
+%         SW_R_SHL(j,:,:) = (SW_SHL(j,:,:)-SW_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(SW_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-SW_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+%         SW_RB_SHL(j,:,:) = (SW_B_SHL(j,:,:)-SW_B_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(SW_B_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-SW_B_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+%         SW_Z_SHL(j,:,:) = (SW_SHL(j,:,:)-SW_SHL_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./SW_SHL_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
+%         LW_R_SHL(j,:,:) = (LW_SHL(j,:,:)-LW_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(LW_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-LW_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+%         LW_RB_SHL(j,:,:) = (LW_B_SHL(j,:,:)-LW_B_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(LW_B_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-LW_B_SHL_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+%         LW_Z_SHL(j,:,:) = (LW_SHL(j,:,:)-LW_SHL_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./LW_SHL_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
+%     end
+% end
+% 
+% TPsN60 = nonzeros(TPsOrder(:,5:6));
+% for j = 1:size(SW_N60,1)
+%     TPRow = ismember(TPsOrder,TPsN60(j));
+%     if ~isempty(nonzeros(TPRow))
+%         SW_R_N60(j,:,:) = (SW_N60(j,:,:)-SW_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(SW_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-SW_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+%         SW_RB_N60(j,:,:) = (SW_B_N60(j,:,:)-SW_B_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(SW_B_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-SW_B_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+%         SW_Z_N60(j,:,:) = (SW_N60(j,:,:)-SW_N60_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./SW_N60_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
+%         LW_R_N60(j,:,:) = (LW_N60(j,:,:)-LW_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(LW_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-LW_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+%         LW_RB_N60(j,:,:) = (LW_B_N60(j,:,:)-LW_B_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(LW_B_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-LW_B_N60_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+%         LW_Z_N60(j,:,:) = (LW_N60(j,:,:)-LW_N60_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./LW_N60_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
+%     end
+% end
+% 
+% TPsN70 = nonzeros(TPsOrder(:,7:8));
+% for j = 1:size(SW_N70,1)
+%     TPRow = ismember(TPsOrder,TPsN70(j));
+%     if ~isempty(nonzeros(TPRow))
+%         SW_R_N70(j,:,:) = (SW_N70(j,:,:)-SW_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(SW_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-SW_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+%         SW_RB_N70(j,:,:) = (SW_B_N70(j,:,:)-SW_B_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(SW_B_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-SW_B_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+%         SW_Z_N70(j,:,:) = (SW_N70(j,:,:)-SW_N70_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./SW_N70_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
+%         LW_R_N70(j,:,:) = (LW_N70(j,:,:)-LW_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(LW_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-LW_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+%         LW_RB_N70(j,:,:) = (LW_B_N70(j,:,:)-LW_B_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),1))./(LW_B_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),2)-LW_B_N70_MinMax(mod(find(TPRow,1),size(TPRow,1)),1));
+%         LW_Z_N70(j,:,:) = (LW_N70(j,:,:)-LW_N70_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),1))./LW_N70_MPDSTD(mod(find(TPRow,1),size(TPRow,1)),2);
+%     end
+% end
 
 % Calculate means omitting NaNs, LP filtering with mean-padding at start
 % end of each group of Speaking/Listening windows
@@ -1120,7 +1120,7 @@ set([ax12 ax14],'Color',[LColor,0.04])
 % saveLegendToImage(flgd2, lgd2, 'lgd2', 'eps');
 
 % Export figs as pdfs
-% tiles = {t6,t7,axlgd,axlgd2};
+% tiles = {t6,t7};
 % for i=1:size(tiles,2)
 % exportgraphics(tiles{i}, ['output_' num2str(i) '.pdf']);
 % end

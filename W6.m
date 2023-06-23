@@ -451,6 +451,20 @@ histplot(GroupRaw_II,GroupColor,nbins);
 histplot(GroupPro_II,GroupColor,nbins);
 % sgtitle('Processed')
 
+flgd=figure;axlgd=gca();hold(axlgd,'on')
+plot(axlgd,nan,color=[SpeakColor 0.3],linewidth=10) % plot nans to show color in legend
+plot(axlgd,nan,color=[ListenColor 0.3],linewidth=10) % plot nans to show color in legend
+% plot(axlgd,nan,color=[GapColor 0.3],linewidth=10) % plot nans to show color in legend
+% plot(axlgd,nan,color=[PauseColor 0.3],linewidth=10) % plot nans to show color in legend
+% plot(axlgd,nan,color=[OLWColor 0.3],linewidth=10) % plot nans to show color in legend
+% plot(axlgd,nan,color=[OLBColor 0.3],linewidth=10) % plot nans to show color in legend
+% plot(axlgd,nan,color=[TurnColor 0.3],linewidth=10) % plot nans to show color in legend
+lgd=legend(axlgd,'Speak','Listen','Gap','Pause','O.Within','O.Between','Turn','Location','southeastoutside');
+lgd.Title.String = 'Types of windows:';
+
+saveLegendToImage(flgd, lgd, 'lgd', 'eps');
+exportgraphics(flgd, ['output_' num2str(1) '.jpg']);
+
 % figure;histogram(nonzeros(TurnDiff_I),nbins,'FaceColor',TurnColor(1:3));title(['Time between turns - Avg: ',sprintf('%0.5f',mean(nonzeros(TurnDiff_I))),' s']);
 % xlabel('Time [s]'),ylabel('Bin Count');grid on;
 % 
