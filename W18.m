@@ -71,9 +71,21 @@ DSW_NH_N70 = DGSW; DLW_NH_N70 = DGSW; % NH N70 Diameter Speaking/Listening Windo
 DSW_HI_N0 = DGSW; DLW_HI_N0 = DGSW; % HI N0 Diameter Speaking/Listening Windows
 DSW_HI_N60 = DGSW; DLW_HI_N60 = DGSW; % HI N60 Diameter Speaking/Listening Windows
 DSW_HI_N70 = DGSW; DLW_HI_N70 = DGSW; % HI N70 Diameter Speaking/Listening Windows
+DSW_NH_UN = DGSW; DLW_NH_UN = DGSW; % NH UN Diameter Speaking/Listening Windows
+DSW_NH_AA = DGSW; DLW_NH_AA = DGSW; % NH AA Diameter Speaking/Listening Windows
+DSW_NH_AB = DGSW; DLW_NH_AB = DGSW; % NH AB Diameter Speaking/Listening Windows
 DSW_HI_UN = DGSW; DLW_HI_UN = DGSW; % HI UN Diameter Speaking/Listening Windows
 DSW_HI_AA = DGSW; DLW_HI_AA = DGSW; % HI AA Diameter Speaking/Listening Windows
 DSW_HI_AB = DGSW; DLW_HI_AB = DGSW; % HI AB Diameter Speaking/Listening Windows
+DSW_NH_UN_N0 = DGSW; DLW_NH_UN_N0 = DGSW; % NH UN N0 Diameter Speaking/Listening Windows
+DSW_NH_UN_N60 = DGSW; DLW_NH_UN_N60 = DGSW; % NH UN N60 Diameter Speaking/Listening Windows
+DSW_NH_UN_N70 = DGSW; DLW_NH_UN_N70 = DGSW; % NH UN N70 Diameter Speaking/Listening Windows
+DSW_NH_AA_N0 = DGSW; DLW_NH_AA_N0 = DGSW; % NH AA N0 Diameter Speaking/Listening Windows
+DSW_NH_AA_N60 = DGSW; DLW_NH_AA_N60 = DGSW; % NH AA N60 Diameter Speaking/Listening Windows
+DSW_NH_AA_N70 = DGSW; DLW_NH_AA_N70 = DGSW; % NH AA N70 Diameter Speaking/Listening Windows
+DSW_NH_AB_N0 = DGSW; DLW_NH_AB_N0 = DGSW; % NH AB N0 Diameter Speaking/Listening Windows
+DSW_NH_AB_N60 = DGSW; DLW_NH_AB_N60 = DGSW; % NH AB N60 Diameter Speaking/Listening Windows
+DSW_NH_AB_N70 = DGSW; DLW_NH_AB_N70 = DGSW; % NH AB N70 Diameter Speaking/Listening Windows
 DSW_HI_UN_N0 = DGSW; DLW_HI_UN_N0 = DGSW; % HI UN N0 Diameter Speaking/Listening Windows
 DSW_HI_UN_N60 = DGSW; DLW_HI_UN_N60 = DGSW; % HI UN N60 Diameter Speaking/Listening Windows
 DSW_HI_UN_N70 = DGSW; DLW_HI_UN_N70 = DGSW; % HI UN N70 Diameter Speaking/Listening Windows
@@ -96,9 +108,21 @@ DSW_NH_N70_B = DGSW; DLW_NH_N70_B = DGSW; % NH N70 Diameter Speaking/Listening W
 DSW_HI_N0_B = DGSW; DLW_HI_N0_B = DGSW; % HI N0 Diameter Speaking/Listening Windows Adaptive-Baseline corrected
 DSW_HI_N60_B = DGSW; DLW_HI_N60_B = DGSW; % HI N60 Diameter Speaking/Listening Windows Adaptive-Baseline corrected
 DSW_HI_N70_B = DGSW; DLW_HI_N70_B = DGSW; % HI N70 Diameter Speaking/Listening Windows Adaptive-Baseline corrected
+DSW_NH_UN_B = DGSW; DLW_NH_UN_B = DGSW; % NH UN Diameter Speaking/Listening Windows Adaptive-Baseline corrected
+DSW_NH_AA_B = DGSW; DLW_NH_AA_B = DGSW; % NH AA Diameter Speaking/Listening Windows Adaptive-Baseline corrected
+DSW_NH_AB_B = DGSW; DLW_NH_AB_B = DGSW; % NH AB Diameter Speaking/Listening Windows Adaptive-Baseline corrected
 DSW_HI_UN_B = DGSW; DLW_HI_UN_B = DGSW; % HI UN Diameter Speaking/Listening Windows Adaptive-Baseline corrected
 DSW_HI_AA_B = DGSW; DLW_HI_AA_B = DGSW; % HI AA Diameter Speaking/Listening Windows Adaptive-Baseline corrected
 DSW_HI_AB_B = DGSW; DLW_HI_AB_B = DGSW; % HI AB Diameter Speaking/Listening Windows Adaptive-Baseline corrected
+DSW_NH_UN_N0_B = DGSW; DLW_NH_UN_N0_B = DGSW; % NH UN N0 Diameter Speaking/Listening Windows Adaptive-Baseline corrected
+DSW_NH_UN_N60_B = DGSW; DLW_NH_UN_N60_B = DGSW; % NH UN N60 Diameter Speaking/Listening Windows Adaptive-Baseline corrected
+DSW_NH_UN_N70_B = DGSW; DLW_NH_UN_N70_B = DGSW; % NH UN N70 Diameter Speaking/Listening Windows Adaptive-Baseline corrected
+DSW_NH_AA_N0_B = DGSW; DLW_NH_AA_N0_B = DGSW; % NH AA N0 Diameter Speaking/Listening Windows Adaptive-Baseline corrected
+DSW_NH_AA_N60_B = DGSW; DLW_NH_AA_N60_B = DGSW; % NH AA N60 Diameter Speaking/Listening Windows Adaptive-Baseline corrected
+DSW_NH_AA_N70_B = DGSW; DLW_NH_AA_N70_B = DGSW; % NH AA N70 Diameter Speaking/Listening Windows Adaptive-Baseline corrected
+DSW_NH_AB_N0_B = DGSW; DLW_NH_AB_N0_B = DGSW; % NH AB N0 Diameter Speaking/Listening Windows Adaptive-Baseline corrected
+DSW_NH_AB_N60_B = DGSW; DLW_NH_AB_N60_B = DGSW; % NH AB N60 Diameter Speaking/Listening Windows Adaptive-Baseline corrected
+DSW_NH_AB_N70_B = DGSW; DLW_NH_AB_N70_B = DGSW; % NH AB N70 Diameter Speaking/Listening Windows Adaptive-Baseline corrected
 DSW_HI_UN_N0_B = DGSW; DLW_HI_UN_N0_B = DGSW; % HI UN N0 Diameter Speaking/Listening Windows Adaptive-Baseline corrected
 DSW_HI_UN_N60_B = DGSW; DLW_HI_UN_N60_B = DGSW; % HI UN N60 Diameter Speaking/Listening Windows Adaptive-Baseline corrected
 DSW_HI_UN_N70_B = DGSW; DLW_HI_UN_N70_B = DGSW; % HI UN N70 Diameter Speaking/Listening Windows Adaptive-Baseline corrected
@@ -121,9 +145,21 @@ FSW_NH_N70 = DGSW; FLW_NH_N70 = DGSW; % NH N70 Fixation Speaking/Listening Windo
 FSW_HI_N0 = DGSW; FLW_HI_N0 = DGSW; % HI N0 Fixation Speaking/Listening Windows
 FSW_HI_N60 = DGSW; FLW_HI_N60 = DGSW; % HI N60 Fixation Speaking/Listening Windows
 FSW_HI_N70 = DGSW; FLW_HI_N70 = DGSW; % HI N70 Fixation Speaking/Listening Windows
+FSW_NH_UN = DGSW; FLW_NH_UN = DGSW; % NH UN Fixation Speaking/Listening Windows
+FSW_NH_AA = DGSW; FLW_NH_AA = DGSW; % NH AA Fixation Speaking/Listening Windows
+FSW_NH_AB = DGSW; FLW_NH_AB = DGSW; % NH AB Fixation Speaking/Listening Windows
 FSW_HI_UN = DGSW; FLW_HI_UN = DGSW; % HI UN Fixation Speaking/Listening Windows
 FSW_HI_AA = DGSW; FLW_HI_AA = DGSW; % HI AA Fixation Speaking/Listening Windows
 FSW_HI_AB = DGSW; FLW_HI_AB = DGSW; % HI AB Fixation Speaking/Listening Windows
+FSW_NH_UN_N0 = DGSW; FLW_NH_UN_N0 = DGSW; % NH UN N0 Fixation Speaking/Listening Windows
+FSW_NH_UN_N60 = DGSW; FLW_NH_UN_N60 = DGSW; % NH UN N60 Fixation Speaking/Listening Windows
+FSW_NH_UN_N70 = DGSW; FLW_NH_UN_N70 = DGSW; % NH UN N70 Fixation Speaking/Listening Windows
+FSW_NH_AA_N0 = DGSW; FLW_NH_AA_N0 = DGSW; % NH AA N0 Fixation Speaking/Listening Windows
+FSW_NH_AA_N60 = DGSW; FLW_NH_AA_N60 = DGSW; % NH AA N60 Fixation Speaking/Listening Windows
+FSW_NH_AA_N70 = DGSW; FLW_NH_AA_N70 = DGSW; % NH AA N70 Fixation Speaking/Listening Windows
+FSW_NH_AB_N0 = DGSW; FLW_NH_AB_N0 = DGSW; % NH AB N0 Fixation Speaking/Listening Windows
+FSW_NH_AB_N60 = DGSW; FLW_NH_AB_N60 = DGSW; % NH AB N60 Fixation Speaking/Listening Windows
+FSW_NH_AB_N70 = DGSW; FLW_NH_AB_N70 = DGSW; % NH AB N70 Fixation Speaking/Listening Windows
 FSW_HI_UN_N0 = DGSW; FLW_HI_UN_N0 = DGSW; % HI UN N0 Fixation Speaking/Listening Windows
 FSW_HI_UN_N60 = DGSW; FLW_HI_UN_N60 = DGSW; % HI UN N60 Fixation Speaking/Listening Windows
 FSW_HI_UN_N70 = DGSW; FLW_HI_UN_N70 = DGSW; % HI UN N70 Fixation Speaking/Listening Windows
@@ -413,7 +449,7 @@ for q=1:numel(subDirs_II)
                 for j=1:size(Listen,1)
                     DLW_NH(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(DLW_NH)-length(WListenIdx(j,1):Listen(j,3)))'];
                     DLW_NH_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(DLW_NH_B)-length(WListenIdx(j,1):Listen(j,3)))'];
-                    FLW_NH(x,j,:)=[Fixation(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(FLW_NH)-length(WListenIdx(j,1):Listen(j,3)))'];
+                	FLW_NH(x,j,:)=[Fixation(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(FLW_NH)-length(WListenIdx(j,1):Listen(j,3)))'];
                 end
                 if contains(cell2mat(FileNames_II(i)),'N0')
                     for j=1:size(Speak,1)
@@ -447,6 +483,142 @@ for q=1:numel(subDirs_II)
                         DLW_NH_N70(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(DLW_NH_N70)-length(WListenIdx(j,1):Listen(j,3)))'];
                         DLW_NH_N70_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(DLW_NH_N70_B)-length(WListenIdx(j,1):Listen(j,3)))'];
                     	FLW_NH_N70(x,j,:)=[Fixation(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(FLW_NH_N70)-length(WListenIdx(j,1):Listen(j,3)))'];
+                    end
+                end
+                if contains(cell2mat(FileNames_II(i)),'UN')
+                    for j=1:size(Speak,1)
+                        DSW_NH_UN(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(DSW_NH_UN)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        DSW_NH_UN_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(DSW_NH_UN_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                    	FSW_NH_UN(x,j,:)=[Fixation(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(FSW_NH_UN)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                    end
+                    for j=1:size(Listen,1)
+                        DLW_NH_UN(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(DLW_NH_UN)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        DLW_NH_UN_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(DLW_NH_UN_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                    	FLW_NH_UN(x,j,:)=[Fixation(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(FLW_NH_UN)-length(WListenIdx(j,1):Listen(j,3)))'];
+                    end
+                    if contains(cell2mat(FileNames_II(i)),'N0')
+                        for j=1:size(Speak,1)
+                            DSW_NH_UN_N0(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(DSW_NH_UN_N0)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                            DSW_NH_UN_N0_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(DSW_NH_UN_N0_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        	FSW_NH_UN_N0(x,j,:)=[Fixation(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(FSW_NH_UN_N0)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        end
+                        for j=1:size(Listen,1)
+                            DLW_NH_UN_N0(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(DLW_NH_UN_N0)-length(WListenIdx(j,1):Listen(j,3)))'];
+                            DLW_NH_UN_N0_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(DLW_NH_UN_N0_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                            FLW_NH_UN_N0(x,j,:)=[Fixation(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(FLW_NH_UN_N0)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        end
+                    elseif contains(cell2mat(FileNames_II(i)),'N60')
+                        for j=1:size(Speak,1)
+                            DSW_NH_UN_N60(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(DSW_NH_UN_N60)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                            DSW_NH_UN_N60_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(DSW_NH_UN_N60_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        	FSW_NH_UN_N60(x,j,:)=[Fixation(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(FSW_NH_UN_N60)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        end
+                        for j=1:size(Listen,1)
+                            DLW_NH_UN_N60(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(DLW_NH_UN_N60)-length(WListenIdx(j,1):Listen(j,3)))'];
+                            DLW_NH_UN_N60_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(DLW_NH_UN_N60_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        	FLW_NH_UN_N60(x,j,:)=[Fixation(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(FLW_NH_UN_N60)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        end
+                    elseif contains(cell2mat(FileNames_II(i)),'N70')
+                        for j=1:size(Speak,1)
+                            DSW_NH_UN_N70(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(DSW_NH_UN_N70)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                            DSW_NH_UN_N70_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(DSW_NH_UN_N70_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        	FSW_NH_UN_N70(x,j,:)=[Fixation(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(FSW_NH_UN_N70)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        end
+                        for j=1:size(Listen,1)
+                            DLW_NH_UN_N70(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(DLW_NH_UN_N70)-length(WListenIdx(j,1):Listen(j,3)))'];
+                            DLW_NH_UN_N70_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(DLW_NH_UN_N70_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        	FLW_NH_UN_N70(x,j,:)=[Fixation(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(FLW_NH_UN_N70)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        end
+                    end
+                elseif contains(cell2mat(FileNames_II(i)),'AA')
+                    for j=1:size(Speak,1)
+                        DSW_NH_AA(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(DSW_NH_AA)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        DSW_NH_AA_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(DSW_NH_AA_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                    	FSW_NH_AA(x,j,:)=[Fixation(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(FSW_NH_AA)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                    end
+                    for j=1:size(Listen,1)
+                        DLW_NH_AA(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(DLW_NH_AA)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        DLW_NH_AA_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(DLW_NH_AA_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                    	FLW_NH_AA(x,j,:)=[Fixation(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(FLW_NH_AA)-length(WListenIdx(j,1):Listen(j,3)))'];
+                    end
+                    if contains(cell2mat(FileNames_II(i)),'N0')
+                        for j=1:size(Speak,1)
+                            DSW_NH_AA_N0(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(DSW_NH_AA_N0)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                            DSW_NH_AA_N0_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(DSW_NH_AA_N0_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        	FSW_NH_AA_N0(x,j,:)=[Fixation(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(FSW_NH_AA_N0)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        end
+                        for j=1:size(Listen,1)
+                            DLW_NH_AA_N0(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(DLW_NH_AA_N0)-length(WListenIdx(j,1):Listen(j,3)))'];
+                            DLW_NH_AA_N0_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(DLW_NH_AA_N0_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        	FLW_NH_AA_N0(x,j,:)=[Fixation(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(FLW_NH_AA_N0)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        end
+                    elseif contains(cell2mat(FileNames_II(i)),'N60')
+                        for j=1:size(Speak,1)
+                            DSW_NH_AA_N60(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(DSW_NH_AA_N60)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                            DSW_NH_AA_N60_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(DSW_NH_AA_N60_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        	FSW_NH_AA_N60(x,j,:)=[Fixation(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(FSW_NH_AA_N60)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        end
+                        for j=1:size(Listen,1)
+                            DLW_NH_AA_N60(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(DLW_NH_AA_N60)-length(WListenIdx(j,1):Listen(j,3)))'];
+                            DLW_NH_AA_N60_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(DLW_NH_AA_N60_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        	FLW_NH_AA_N60(x,j,:)=[Fixation(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(FLW_NH_AA_N60)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        end
+                    elseif contains(cell2mat(FileNames_II(i)),'N70')
+                        for j=1:size(Speak,1)
+                            DSW_NH_AA_N70(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(DSW_NH_AA_N70)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                            DSW_NH_AA_N70_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(DSW_NH_AA_N70_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        	FSW_NH_AA_N70(x,j,:)=[Fixation(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(FSW_NH_AA_N70)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        end
+                        for j=1:size(Listen,1)
+                            DLW_NH_AA_N70(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(DLW_NH_AA_N70)-length(WListenIdx(j,1):Listen(j,3)))'];
+                            DLW_NH_AA_N70_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(DLW_NH_AA_N70_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        	FLW_NH_AA_N70(x,j,:)=[Fixation(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(FLW_NH_AA_N70)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        end
+                    end
+                elseif contains(cell2mat(FileNames_II(i)),'AB')
+                    for j=1:size(Speak,1)
+                        DSW_NH_AB(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(DSW_NH_AB)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        DSW_NH_AB_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(DSW_NH_AB_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                    	FSW_NH_AB(x,j,:)=[Fixation(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(FSW_NH_AB)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                    end
+                    for j=1:size(Listen,1)
+                        DLW_NH_AB(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(DLW_NH_AB)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        DLW_NH_AB_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(DLW_NH_AB_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                    	FLW_NH_AB(x,j,:)=[Fixation(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(FLW_NH_AB)-length(WListenIdx(j,1):Listen(j,3)))'];
+                    end
+                    if contains(cell2mat(FileNames_II(i)),'N0')
+                        for j=1:size(Speak,1)
+                            DSW_NH_AB_N0(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(DSW_NH_AB_N0)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                            DSW_NH_AB_N0_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(DSW_NH_AB_N0_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        	FSW_NH_AB_N0(x,j,:)=[Fixation(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(FSW_NH_AB_N0)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        end
+                        for j=1:size(Listen,1)
+                            DLW_NH_AB_N0(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(DLW_NH_AB_N0)-length(WListenIdx(j,1):Listen(j,3)))'];
+                            DLW_NH_AB_N0_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(DLW_NH_AB_N0_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        	FLW_NH_AB_N0(x,j,:)=[Fixation(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(FLW_NH_AB_N0)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        end
+                    elseif contains(cell2mat(FileNames_II(i)),'N60')
+                        for j=1:size(Speak,1)
+                            DSW_NH_AB_N60(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(DSW_NH_AB_N60)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                            DSW_NH_AB_N60_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(DSW_NH_AB_N60_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        	FSW_NH_AB_N60(x,j,:)=[Fixation(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(FSW_NH_AB_N60)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        end
+                        for j=1:size(Listen,1)
+                            DLW_NH_AB_N60(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(DLW_NH_AB_N60)-length(WListenIdx(j,1):Listen(j,3)))'];
+                            DLW_NH_AB_N60_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(DLW_NH_AB_N60_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        	FLW_NH_AB_N60(x,j,:)=[Fixation(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(FLW_NH_AB_N60)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        end
+                    elseif contains(cell2mat(FileNames_II(i)),'N70')
+                        for j=1:size(Speak,1)
+                            DSW_NH_AB_N70(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(DSW_NH_AB_N70)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                            DSW_NH_AB_N70_B(x,j,:)=[Diameter(WSpeakIdx(j,1):Speak(j,3))-mean(Diameter(Speak(j,2)-AdapBL*Param.Fs:Speak(j,2)));NaN*ones(1,length(DSW_NH_AB_N70_B)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        	FSW_NH_AB_N70(x,j,:)=[Fixation(WSpeakIdx(j,1):Speak(j,3));NaN*ones(1,length(FSW_NH_AB_N70)-length(WSpeakIdx(j,1):Speak(j,3)))'];
+                        end
+                        for j=1:size(Listen,1)
+                            DLW_NH_AB_N70(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(DLW_NH_AB_N70)-length(WListenIdx(j,1):Listen(j,3)))'];
+                            DLW_NH_AB_N70_B(x,j,:)=[Diameter(WListenIdx(j,1):Listen(j,3))-mean(Diameter(Listen(j,2)-AdapBL*Param.Fs:Listen(j,2)));NaN*ones(1,length(DLW_NH_AB_N70_B)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        	FLW_NH_AB_N70(x,j,:)=[Fixation(WListenIdx(j,1):Listen(j,3));NaN*ones(1,length(FLW_NH_AB_N70)-length(WListenIdx(j,1):Listen(j,3)))'];
+                        end
                     end
                 end
             elseif contains(ChosenFolder,'HI')
@@ -717,6 +889,19 @@ DSW_HI_N70_B(~any(DSW_HI_N70_B,[2 3]),:,:)=[];DSW_HI_N70_B(:,~any(DSW_HI_N70_B,[
 DLW_HI_N70(~any(DLW_HI_N70,[2 3]),:,:)=[];DLW_HI_N70(:,~any(DLW_HI_N70,[1 3]),:)=[];DLW_HI_N70(DLW_HI_N70==0)=NaN;
 DLW_HI_N70_B(~any(DLW_HI_N70_B,[2 3]),:,:)=[];DLW_HI_N70_B(:,~any(DLW_HI_N70_B,[1 3]),:)=[];DLW_HI_N70_B(DLW_HI_N70_B==0)=NaN;
 
+DSW_NH_UN(~any(DSW_NH_UN,[2 3]),:,:)=[];DSW_NH_UN(:,~any(DSW_NH_UN,[1 3]),:)=[];DSW_NH_UN(DSW_NH_UN==0)=NaN;
+DSW_NH_UN_B(~any(DSW_NH_UN_B,[2 3]),:,:)=[];DSW_NH_UN_B(:,~any(DSW_NH_UN_B,[1 3]),:)=[];DSW_NH_UN_B(DSW_NH_UN_B==0)=NaN;
+DLW_NH_UN(~any(DLW_NH_UN,[2 3]),:,:)=[];DLW_NH_UN(:,~any(DLW_NH_UN,[1 3]),:)=[];DLW_NH_UN(DLW_NH_UN==0)=NaN;
+DLW_NH_UN_B(~any(DLW_NH_UN_B,[2 3]),:,:)=[];DLW_NH_UN_B(:,~any(DLW_NH_UN_B,[1 3]),:)=[];DLW_NH_UN_B(DLW_NH_UN_B==0)=NaN;
+DSW_NH_AA(~any(DSW_NH_AA,[2 3]),:,:)=[];DSW_NH_AA(:,~any(DSW_NH_AA,[1 3]),:)=[];DSW_NH_AA(DSW_NH_AA==0)=NaN;
+DSW_NH_AA_B(~any(DSW_NH_AA_B,[2 3]),:,:)=[];DSW_NH_AA_B(:,~any(DSW_NH_AA_B,[1 3]),:)=[];DSW_NH_AA_B(DSW_NH_AA_B==0)=NaN;
+DLW_NH_AA(~any(DLW_NH_AA,[2 3]),:,:)=[];DLW_NH_AA(:,~any(DLW_NH_AA,[1 3]),:)=[];DLW_NH_AA(DLW_NH_AA==0)=NaN;
+DLW_NH_AA_B(~any(DLW_NH_AA_B,[2 3]),:,:)=[];DLW_NH_AA_B(:,~any(DLW_NH_AA_B,[1 3]),:)=[];DLW_NH_AA_B(DLW_NH_AA_B==0)=NaN;
+DSW_NH_AB(~any(DSW_NH_AB,[2 3]),:,:)=[];DSW_NH_AB(:,~any(DSW_NH_AB,[1 3]),:)=[];DSW_NH_AB(DSW_NH_AB==0)=NaN;
+DSW_NH_AB_B(~any(DSW_NH_AB_B,[2 3]),:,:)=[];DSW_NH_AB_B(:,~any(DSW_NH_AB_B,[1 3]),:)=[];DSW_NH_AB_B(DSW_NH_AB_B==0)=NaN;
+DLW_NH_AB(~any(DLW_NH_AB,[2 3]),:,:)=[];DLW_NH_AB(:,~any(DLW_NH_AB,[1 3]),:)=[];DLW_NH_AB(DLW_NH_AB==0)=NaN;
+DLW_NH_AB_B(~any(DLW_NH_AB_B,[2 3]),:,:)=[];DLW_NH_AB_B(:,~any(DLW_NH_AB_B,[1 3]),:)=[];DLW_NH_AB_B(DLW_NH_AB_B==0)=NaN;
+
 DSW_HI_UN(~any(DSW_HI_UN,[2 3]),:,:)=[];DSW_HI_UN(:,~any(DSW_HI_UN,[1 3]),:)=[];DSW_HI_UN(DSW_HI_UN==0)=NaN;
 DSW_HI_UN_B(~any(DSW_HI_UN_B,[2 3]),:,:)=[];DSW_HI_UN_B(:,~any(DSW_HI_UN_B,[1 3]),:)=[];DSW_HI_UN_B(DSW_HI_UN_B==0)=NaN;
 DLW_HI_UN(~any(DLW_HI_UN,[2 3]),:,:)=[];DLW_HI_UN(:,~any(DLW_HI_UN,[1 3]),:)=[];DLW_HI_UN(DLW_HI_UN==0)=NaN;
@@ -729,6 +914,43 @@ DSW_HI_AB(~any(DSW_HI_AB,[2 3]),:,:)=[];DSW_HI_AB(:,~any(DSW_HI_AB,[1 3]),:)=[];
 DSW_HI_AB_B(~any(DSW_HI_AB_B,[2 3]),:,:)=[];DSW_HI_AB_B(:,~any(DSW_HI_AB_B,[1 3]),:)=[];DSW_HI_AB_B(DSW_HI_AB_B==0)=NaN;
 DLW_HI_AB(~any(DLW_HI_AB,[2 3]),:,:)=[];DLW_HI_AB(:,~any(DLW_HI_AB,[1 3]),:)=[];DLW_HI_AB(DLW_HI_AB==0)=NaN;
 DLW_HI_AB_B(~any(DLW_HI_AB_B,[2 3]),:,:)=[];DLW_HI_AB_B(:,~any(DLW_HI_AB_B,[1 3]),:)=[];DLW_HI_AB_B(DLW_HI_AB_B==0)=NaN;
+
+DSW_NH_UN_N0(~any(DSW_NH_UN_N0,[2 3]),:,:)=[];DSW_NH_UN_N0(:,~any(DSW_NH_UN_N0,[1 3]),:)=[];DSW_NH_UN_N0(DSW_NH_UN_N0==0)=NaN;
+DSW_NH_UN_N0_B(~any(DSW_NH_UN_N0_B,[2 3]),:,:)=[];DSW_NH_UN_N0_B(:,~any(DSW_NH_UN_N0_B,[1 3]),:)=[];DSW_NH_UN_N0_B(DSW_NH_UN_N0_B==0)=NaN;
+DLW_NH_UN_N0(~any(DLW_NH_UN_N0,[2 3]),:,:)=[];DLW_NH_UN_N0(:,~any(DLW_NH_UN_N0,[1 3]),:)=[];DLW_NH_UN_N0(DLW_NH_UN_N0==0)=NaN;
+DLW_NH_UN_N0_B(~any(DLW_NH_UN_N0_B,[2 3]),:,:)=[];DLW_NH_UN_N0_B(:,~any(DLW_NH_UN_N0_B,[1 3]),:)=[];DLW_NH_UN_N0_B(DLW_NH_UN_N0_B==0)=NaN;
+DSW_NH_UN_N60(~any(DSW_NH_UN_N60,[2 3]),:,:)=[];DSW_NH_UN_N60(:,~any(DSW_NH_UN_N60,[1 3]),:)=[];DSW_NH_UN_N60(DSW_NH_UN_N60==0)=NaN;
+DSW_NH_UN_N60_B(~any(DSW_NH_UN_N60_B,[2 3]),:,:)=[];DSW_NH_UN_N60_B(:,~any(DSW_NH_UN_N60_B,[1 3]),:)=[];DSW_NH_UN_N60_B(DSW_NH_UN_N60_B==0)=NaN;
+DLW_NH_UN_N60(~any(DLW_NH_UN_N60,[2 3]),:,:)=[];DLW_NH_UN_N60(:,~any(DLW_NH_UN_N60,[1 3]),:)=[];DLW_NH_UN_N60(DLW_NH_UN_N60==0)=NaN;
+DLW_NH_UN_N60_B(~any(DLW_NH_UN_N60_B,[2 3]),:,:)=[];DLW_NH_UN_N60_B(:,~any(DLW_NH_UN_N60_B,[1 3]),:)=[];DLW_NH_UN_N60_B(DLW_NH_UN_N60_B==0)=NaN;
+DSW_NH_UN_N70(~any(DSW_NH_UN_N70,[2 3]),:,:)=[];DSW_NH_UN_N70(:,~any(DSW_NH_UN_N70,[1 3]),:)=[];DSW_NH_UN_N70(DSW_NH_UN_N70==0)=NaN;
+DSW_NH_UN_N70_B(~any(DSW_NH_UN_N70_B,[2 3]),:,:)=[];DSW_NH_UN_N70_B(:,~any(DSW_NH_UN_N70_B,[1 3]),:)=[];DSW_NH_UN_N70_B(DSW_NH_UN_N70_B==0)=NaN;
+DLW_NH_UN_N70(~any(DLW_NH_UN_N70,[2 3]),:,:)=[];DLW_NH_UN_N70(:,~any(DLW_NH_UN_N70,[1 3]),:)=[];DLW_NH_UN_N70(DLW_NH_UN_N70==0)=NaN;
+DLW_NH_UN_N70_B(~any(DLW_NH_UN_N70_B,[2 3]),:,:)=[];DLW_NH_UN_N70_B(:,~any(DLW_NH_UN_N70_B,[1 3]),:)=[];DLW_NH_UN_N70_B(DLW_NH_UN_N70_B==0)=NaN;
+DSW_NH_AA_N0(~any(DSW_NH_AA_N0,[2 3]),:,:)=[];DSW_NH_AA_N0(:,~any(DSW_NH_AA_N0,[1 3]),:)=[];DSW_NH_AA_N0(DSW_NH_AA_N0==0)=NaN;
+DSW_NH_AA_N0_B(~any(DSW_NH_AA_N0_B,[2 3]),:,:)=[];DSW_NH_AA_N0_B(:,~any(DSW_NH_AA_N0_B,[1 3]),:)=[];DSW_NH_AA_N0_B(DSW_NH_AA_N0_B==0)=NaN;
+DLW_NH_AA_N0(~any(DLW_NH_AA_N0,[2 3]),:,:)=[];DLW_NH_AA_N0(:,~any(DLW_NH_AA_N0,[1 3]),:)=[];DLW_NH_AA_N0(DLW_NH_AA_N0==0)=NaN;
+DLW_NH_AA_N0_B(~any(DLW_NH_AA_N0_B,[2 3]),:,:)=[];DLW_NH_AA_N0_B(:,~any(DLW_NH_AA_N0_B,[1 3]),:)=[];DLW_NH_AA_N0_B(DLW_NH_AA_N0_B==0)=NaN;
+DSW_NH_AA_N60(~any(DSW_NH_AA_N60,[2 3]),:,:)=[];DSW_NH_AA_N60(:,~any(DSW_NH_AA_N60,[1 3]),:)=[];DSW_NH_AA_N60(DSW_NH_AA_N60==0)=NaN;
+DSW_NH_AA_N60_B(~any(DSW_NH_AA_N60_B,[2 3]),:,:)=[];DSW_NH_AA_N60_B(:,~any(DSW_NH_AA_N60_B,[1 3]),:)=[];DSW_NH_AA_N60_B(DSW_NH_AA_N60_B==0)=NaN;
+DLW_NH_AA_N60(~any(DLW_NH_AA_N60,[2 3]),:,:)=[];DLW_NH_AA_N60(:,~any(DLW_NH_AA_N60,[1 3]),:)=[];DLW_NH_AA_N60(DLW_NH_AA_N60==0)=NaN;
+DLW_NH_AA_N60_B(~any(DLW_NH_AA_N60_B,[2 3]),:,:)=[];DLW_NH_AA_N60_B(:,~any(DLW_NH_AA_N60_B,[1 3]),:)=[];DLW_NH_AA_N60_B(DLW_NH_AA_N60_B==0)=NaN;
+DSW_NH_AA_N70(~any(DSW_NH_AA_N70,[2 3]),:,:)=[];DSW_NH_AA_N70(:,~any(DSW_NH_AA_N70,[1 3]),:)=[];DSW_NH_AA_N70(DSW_NH_AA_N70==0)=NaN;
+DSW_NH_AA_N70_B(~any(DSW_NH_AA_N70_B,[2 3]),:,:)=[];DSW_NH_AA_N70_B(:,~any(DSW_NH_AA_N70_B,[1 3]),:)=[];DSW_NH_AA_N70_B(DSW_NH_AA_N70_B==0)=NaN;
+DLW_NH_AA_N70(~any(DLW_NH_AA_N70,[2 3]),:,:)=[];DLW_NH_AA_N70(:,~any(DLW_NH_AA_N70,[1 3]),:)=[];DLW_NH_AA_N70(DLW_NH_AA_N70==0)=NaN;
+DLW_NH_AA_N70_B(~any(DLW_NH_AA_N70_B,[2 3]),:,:)=[];DLW_NH_AA_N70_B(:,~any(DLW_NH_AA_N70_B,[1 3]),:)=[];DLW_NH_AA_N70_B(DLW_NH_AA_N70_B==0)=NaN;
+DSW_NH_AB_N0(~any(DSW_NH_AB_N0,[2 3]),:,:)=[];DSW_NH_AB_N0(:,~any(DSW_NH_AB_N0,[1 3]),:)=[];DSW_NH_AB_N0(DSW_NH_AB_N0==0)=NaN;
+DSW_NH_AB_N0_B(~any(DSW_NH_AB_N0_B,[2 3]),:,:)=[];DSW_NH_AB_N0_B(:,~any(DSW_NH_AB_N0_B,[1 3]),:)=[];DSW_NH_AB_N0_B(DSW_NH_AB_N0_B==0)=NaN;
+DLW_NH_AB_N0(~any(DLW_NH_AB_N0,[2 3]),:,:)=[];DLW_NH_AB_N0(:,~any(DLW_NH_AB_N0,[1 3]),:)=[];DLW_NH_AB_N0(DLW_NH_AB_N0==0)=NaN;
+DLW_NH_AB_N0_B(~any(DLW_NH_AB_N0_B,[2 3]),:,:)=[];DLW_NH_AB_N0_B(:,~any(DLW_NH_AB_N0_B,[1 3]),:)=[];DLW_NH_AB_N0_B(DLW_NH_AB_N0_B==0)=NaN;
+DSW_NH_AB_N60(~any(DSW_NH_AB_N60,[2 3]),:,:)=[];DSW_NH_AB_N60(:,~any(DSW_NH_AB_N60,[1 3]),:)=[];DSW_NH_AB_N60(DSW_NH_AB_N60==0)=NaN;
+DSW_NH_AB_N60_B(~any(DSW_NH_AB_N60_B,[2 3]),:,:)=[];DSW_NH_AB_N60_B(:,~any(DSW_NH_AB_N60_B,[1 3]),:)=[];DSW_NH_AB_N60_B(DSW_NH_AB_N60_B==0)=NaN;
+DLW_NH_AB_N60(~any(DLW_NH_AB_N60,[2 3]),:,:)=[];DLW_NH_AB_N60(:,~any(DLW_NH_AB_N60,[1 3]),:)=[];DLW_NH_AB_N60(DLW_NH_AB_N60==0)=NaN;
+DLW_NH_AB_N60_B(~any(DLW_NH_AB_N60_B,[2 3]),:,:)=[];DLW_NH_AB_N60_B(:,~any(DLW_NH_AB_N60_B,[1 3]),:)=[];DLW_NH_AB_N60_B(DLW_NH_AB_N60_B==0)=NaN;
+DSW_NH_AB_N70(~any(DSW_NH_AB_N70,[2 3]),:,:)=[];DSW_NH_AB_N70(:,~any(DSW_NH_AB_N70,[1 3]),:)=[];DSW_NH_AB_N70(DSW_NH_AB_N70==0)=NaN;
+DSW_NH_AB_N70_B(~any(DSW_NH_AB_N70_B,[2 3]),:,:)=[];DSW_NH_AB_N70_B(:,~any(DSW_NH_AB_N70_B,[1 3]),:)=[];DSW_NH_AB_N70_B(DSW_NH_AB_N70_B==0)=NaN;
+DLW_NH_AB_N70(~any(DLW_NH_AB_N70,[2 3]),:,:)=[];DLW_NH_AB_N70(:,~any(DLW_NH_AB_N70,[1 3]),:)=[];DLW_NH_AB_N70(DLW_NH_AB_N70==0)=NaN;
+DLW_NH_AB_N70_B(~any(DLW_NH_AB_N70_B,[2 3]),:,:)=[];DLW_NH_AB_N70_B(:,~any(DLW_NH_AB_N70_B,[1 3]),:)=[];DLW_NH_AB_N70_B(DLW_NH_AB_N70_B==0)=NaN;
 
 DSW_HI_UN_N0(~any(DSW_HI_UN_N0,[2 3]),:,:)=[];DSW_HI_UN_N0(:,~any(DSW_HI_UN_N0,[1 3]),:)=[];DSW_HI_UN_N0(DSW_HI_UN_N0==0)=NaN;
 DSW_HI_UN_N0_B(~any(DSW_HI_UN_N0_B,[2 3]),:,:)=[];DSW_HI_UN_N0_B(:,~any(DSW_HI_UN_N0_B,[1 3]),:)=[];DSW_HI_UN_N0_B(DSW_HI_UN_N0_B==0)=NaN;
@@ -796,12 +1018,38 @@ FLW_HI_N60(~any(FLW_HI_N60,[2 3]),:,:)=[];FLW_HI_N60(:,~any(FLW_HI_N60,[1 3]),:)
 FSW_HI_N70(~any(FSW_HI_N70,[2 3]),:,:)=[];FSW_HI_N70(:,~any(FSW_HI_N70,[1 3]),:)=[];FSW_HI_N70(FSW_HI_N70==0)=NaN;
 FLW_HI_N70(~any(FLW_HI_N70,[2 3]),:,:)=[];FLW_HI_N70(:,~any(FLW_HI_N70,[1 3]),:)=[];FLW_HI_N70(FLW_HI_N70==0)=NaN;
 
+FSW_NH_UN(~any(FSW_NH_UN,[2 3]),:,:)=[];FSW_NH_UN(:,~any(FSW_NH_UN,[1 3]),:)=[];FSW_NH_UN(FSW_NH_UN==0)=NaN;
+FLW_NH_UN(~any(FLW_NH_UN,[2 3]),:,:)=[];FLW_NH_UN(:,~any(FLW_NH_UN,[1 3]),:)=[];FLW_NH_UN(FLW_NH_UN==0)=NaN;
+FSW_NH_AA(~any(FSW_NH_AA,[2 3]),:,:)=[];FSW_NH_AA(:,~any(FSW_NH_AA,[1 3]),:)=[];FSW_NH_AA(FSW_NH_AA==0)=NaN;
+FLW_NH_AA(~any(FLW_NH_AA,[2 3]),:,:)=[];FLW_NH_AA(:,~any(FLW_NH_AA,[1 3]),:)=[];FLW_NH_AA(FLW_NH_AA==0)=NaN;
+FSW_NH_AB(~any(FSW_NH_AB,[2 3]),:,:)=[];FSW_NH_AB(:,~any(FSW_NH_AB,[1 3]),:)=[];FSW_NH_AB(FSW_NH_AB==0)=NaN;
+FLW_NH_AB(~any(FLW_NH_AB,[2 3]),:,:)=[];FLW_NH_AB(:,~any(FLW_NH_AB,[1 3]),:)=[];FLW_NH_AB(FLW_NH_AB==0)=NaN;
+
 FSW_HI_UN(~any(FSW_HI_UN,[2 3]),:,:)=[];FSW_HI_UN(:,~any(FSW_HI_UN,[1 3]),:)=[];FSW_HI_UN(FSW_HI_UN==0)=NaN;
 FLW_HI_UN(~any(FLW_HI_UN,[2 3]),:,:)=[];FLW_HI_UN(:,~any(FLW_HI_UN,[1 3]),:)=[];FLW_HI_UN(FLW_HI_UN==0)=NaN;
 FSW_HI_AA(~any(FSW_HI_AA,[2 3]),:,:)=[];FSW_HI_AA(:,~any(FSW_HI_AA,[1 3]),:)=[];FSW_HI_AA(FSW_HI_AA==0)=NaN;
 FLW_HI_AA(~any(FLW_HI_AA,[2 3]),:,:)=[];FLW_HI_AA(:,~any(FLW_HI_AA,[1 3]),:)=[];FLW_HI_AA(FLW_HI_AA==0)=NaN;
 FSW_HI_AB(~any(FSW_HI_AB,[2 3]),:,:)=[];FSW_HI_AB(:,~any(FSW_HI_AB,[1 3]),:)=[];FSW_HI_AB(FSW_HI_AB==0)=NaN;
 FLW_HI_AB(~any(FLW_HI_AB,[2 3]),:,:)=[];FLW_HI_AB(:,~any(FLW_HI_AB,[1 3]),:)=[];FLW_HI_AB(FLW_HI_AB==0)=NaN;
+
+FSW_NH_UN_N0(~any(FSW_NH_UN_N0,[2 3]),:,:)=[];FSW_NH_UN_N0(:,~any(FSW_NH_UN_N0,[1 3]),:)=[];FSW_NH_UN_N0(FSW_NH_UN_N0==0)=NaN;
+FLW_NH_UN_N0(~any(FLW_NH_UN_N0,[2 3]),:,:)=[];FLW_NH_UN_N0(:,~any(FLW_NH_UN_N0,[1 3]),:)=[];FLW_NH_UN_N0(FLW_NH_UN_N0==0)=NaN;
+FSW_NH_UN_N60(~any(FSW_NH_UN_N60,[2 3]),:,:)=[];FSW_NH_UN_N60(:,~any(FSW_NH_UN_N60,[1 3]),:)=[];FSW_NH_UN_N60(FSW_NH_UN_N60==0)=NaN;
+FLW_NH_UN_N60(~any(FLW_NH_UN_N60,[2 3]),:,:)=[];FLW_NH_UN_N60(:,~any(FLW_NH_UN_N60,[1 3]),:)=[];FLW_NH_UN_N60(FLW_NH_UN_N60==0)=NaN;
+FSW_NH_UN_N70(~any(FSW_NH_UN_N70,[2 3]),:,:)=[];FSW_NH_UN_N70(:,~any(FSW_NH_UN_N70,[1 3]),:)=[];FSW_NH_UN_N70(FSW_NH_UN_N70==0)=NaN;
+FLW_NH_UN_N70(~any(FLW_NH_UN_N70,[2 3]),:,:)=[];FLW_NH_UN_N70(:,~any(FLW_NH_UN_N70,[1 3]),:)=[];FLW_NH_UN_N70(FLW_NH_UN_N70==0)=NaN;
+FSW_NH_AA_N0(~any(FSW_NH_AA_N0,[2 3]),:,:)=[];FSW_NH_AA_N0(:,~any(FSW_NH_AA_N0,[1 3]),:)=[];FSW_NH_AA_N0(FSW_NH_AA_N0==0)=NaN;
+FLW_NH_AA_N0(~any(FLW_NH_AA_N0,[2 3]),:,:)=[];FLW_NH_AA_N0(:,~any(FLW_NH_AA_N0,[1 3]),:)=[];FLW_NH_AA_N0(FLW_NH_AA_N0==0)=NaN;
+FSW_NH_AA_N60(~any(FSW_NH_AA_N60,[2 3]),:,:)=[];FSW_NH_AA_N60(:,~any(FSW_NH_AA_N60,[1 3]),:)=[];FSW_NH_AA_N60(FSW_NH_AA_N60==0)=NaN;
+FLW_NH_AA_N60(~any(FLW_NH_AA_N60,[2 3]),:,:)=[];FLW_NH_AA_N60(:,~any(FLW_NH_AA_N60,[1 3]),:)=[];FLW_NH_AA_N60(FLW_NH_AA_N60==0)=NaN;
+FSW_NH_AA_N70(~any(FSW_NH_AA_N70,[2 3]),:,:)=[];FSW_NH_AA_N70(:,~any(FSW_NH_AA_N70,[1 3]),:)=[];FSW_NH_AA_N70(FSW_NH_AA_N70==0)=NaN;
+FLW_NH_AA_N70(~any(FLW_NH_AA_N70,[2 3]),:,:)=[];FLW_NH_AA_N70(:,~any(FLW_NH_AA_N70,[1 3]),:)=[];FLW_NH_AA_N70(FLW_NH_AA_N70==0)=NaN;
+FSW_NH_AB_N0(~any(FSW_NH_AB_N0,[2 3]),:,:)=[];FSW_NH_AB_N0(:,~any(FSW_NH_AB_N0,[1 3]),:)=[];FSW_NH_AB_N0(FSW_NH_AB_N0==0)=NaN;
+FLW_NH_AB_N0(~any(FLW_NH_AB_N0,[2 3]),:,:)=[];FLW_NH_AB_N0(:,~any(FLW_NH_AB_N0,[1 3]),:)=[];FLW_NH_AB_N0(FLW_NH_AB_N0==0)=NaN;
+FSW_NH_AB_N60(~any(FSW_NH_AB_N60,[2 3]),:,:)=[];FSW_NH_AB_N60(:,~any(FSW_NH_AB_N60,[1 3]),:)=[];FSW_NH_AB_N60(FSW_NH_AB_N60==0)=NaN;
+FLW_NH_AB_N60(~any(FLW_NH_AB_N60,[2 3]),:,:)=[];FLW_NH_AB_N60(:,~any(FLW_NH_AB_N60,[1 3]),:)=[];FLW_NH_AB_N60(FLW_NH_AB_N60==0)=NaN;
+FSW_NH_AB_N70(~any(FSW_NH_AB_N70,[2 3]),:,:)=[];FSW_NH_AB_N70(:,~any(FSW_NH_AB_N70,[1 3]),:)=[];FSW_NH_AB_N70(FSW_NH_AB_N70==0)=NaN;
+FLW_NH_AB_N70(~any(FLW_NH_AB_N70,[2 3]),:,:)=[];FLW_NH_AB_N70(:,~any(FLW_NH_AB_N70,[1 3]),:)=[];FLW_NH_AB_N70(FLW_NH_AB_N70==0)=NaN;
 
 FSW_HI_UN_N0(~any(FSW_HI_UN_N0,[2 3]),:,:)=[];FSW_HI_UN_N0(:,~any(FSW_HI_UN_N0,[1 3]),:)=[];FSW_HI_UN_N0(FSW_HI_UN_N0==0)=NaN;
 FLW_HI_UN_N0(~any(FLW_HI_UN_N0,[2 3]),:,:)=[];FLW_HI_UN_N0(:,~any(FLW_HI_UN_N0,[1 3]),:)=[];FLW_HI_UN_N0(FLW_HI_UN_N0==0)=NaN;
@@ -890,6 +1138,56 @@ DSW_HI_AB_B_Mean = ndnanfilter(reshape(mean(DSW_HI_AB_B,[1 2],'omitnan'),[],1)',
 DLW_HI_AB_Mean = ndnanfilter(reshape(mean(DLW_HI_AB,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
 DLW_HI_AB_B_Mean = ndnanfilter(reshape(mean(DLW_HI_AB_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
 
+DSW_HI_UN_Mean = ndnanfilter(reshape(mean(DSW_HI_UN,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DSW_HI_UN_B_Mean = ndnanfilter(reshape(mean(DSW_HI_UN_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DLW_HI_UN_Mean = ndnanfilter(reshape(mean(DLW_HI_UN,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DLW_HI_UN_B_Mean = ndnanfilter(reshape(mean(DLW_HI_UN_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DSW_HI_AA_Mean = ndnanfilter(reshape(mean(DSW_HI_AA,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DSW_HI_AA_B_Mean = ndnanfilter(reshape(mean(DSW_HI_AA_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DLW_HI_AA_Mean = ndnanfilter(reshape(mean(DLW_HI_AA,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DLW_HI_AA_B_Mean = ndnanfilter(reshape(mean(DLW_HI_AA_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DSW_HI_AB_Mean = ndnanfilter(reshape(mean(DSW_HI_AB,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DSW_HI_AB_B_Mean = ndnanfilter(reshape(mean(DSW_HI_AB_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DLW_HI_AB_Mean = ndnanfilter(reshape(mean(DLW_HI_AB,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DLW_HI_AB_B_Mean = ndnanfilter(reshape(mean(DLW_HI_AB_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+
+DSW_NH_UN_N0_Mean = ndnanfilter(reshape(mean(DSW_NH_UN_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DSW_NH_UN_N0_B_Mean = ndnanfilter(reshape(mean(DSW_NH_UN_N0_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DLW_NH_UN_N0_Mean = ndnanfilter(reshape(mean(DLW_NH_UN_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DLW_NH_UN_N0_B_Mean = ndnanfilter(reshape(mean(DLW_NH_UN_N0_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DSW_NH_UN_N60_Mean = ndnanfilter(reshape(mean(DSW_NH_UN_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DSW_NH_UN_N60_B_Mean = ndnanfilter(reshape(mean(DSW_NH_UN_N60_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DLW_NH_UN_N60_Mean = ndnanfilter(reshape(mean(DLW_NH_UN_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DLW_NH_UN_N60_B_Mean = ndnanfilter(reshape(mean(DLW_NH_UN_N60_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DSW_NH_UN_N70_Mean = ndnanfilter(reshape(mean(DSW_NH_UN_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DSW_NH_UN_N70_B_Mean = ndnanfilter(reshape(mean(DSW_NH_UN_N70_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DLW_NH_UN_N70_Mean = ndnanfilter(reshape(mean(DLW_NH_UN_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DLW_NH_UN_N70_B_Mean = ndnanfilter(reshape(mean(DLW_NH_UN_N70_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DSW_NH_AA_N0_Mean = ndnanfilter(reshape(mean(DSW_NH_AA_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DSW_NH_AA_N0_B_Mean = ndnanfilter(reshape(mean(DSW_NH_AA_N0_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DLW_NH_AA_N0_Mean = ndnanfilter(reshape(mean(DLW_NH_AA_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DLW_NH_AA_N0_B_Mean = ndnanfilter(reshape(mean(DLW_NH_AA_N0_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DSW_NH_AA_N60_Mean = ndnanfilter(reshape(mean(DSW_NH_AA_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DSW_NH_AA_N60_B_Mean = ndnanfilter(reshape(mean(DSW_NH_AA_N60_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DLW_NH_AA_N60_Mean = ndnanfilter(reshape(mean(DLW_NH_AA_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DLW_NH_AA_N60_B_Mean = ndnanfilter(reshape(mean(DLW_NH_AA_N60_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DSW_NH_AA_N70_Mean = ndnanfilter(reshape(mean(DSW_NH_AA_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DSW_NH_AA_N70_B_Mean = ndnanfilter(reshape(mean(DSW_NH_AA_N70_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DLW_NH_AA_N70_Mean = ndnanfilter(reshape(mean(DLW_NH_AA_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DLW_NH_AA_N70_B_Mean = ndnanfilter(reshape(mean(DLW_NH_AA_N70_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DSW_NH_AB_N0_Mean = ndnanfilter(reshape(mean(DSW_NH_AB_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DSW_NH_AB_N0_B_Mean = ndnanfilter(reshape(mean(DSW_NH_AB_N0_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DLW_NH_AB_N0_Mean = ndnanfilter(reshape(mean(DLW_NH_AB_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DLW_NH_AB_N0_B_Mean = ndnanfilter(reshape(mean(DLW_NH_AB_N0_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DSW_NH_AB_N60_Mean = ndnanfilter(reshape(mean(DSW_NH_AB_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DSW_NH_AB_N60_B_Mean = ndnanfilter(reshape(mean(DSW_NH_AB_N60_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DLW_NH_AB_N60_Mean = ndnanfilter(reshape(mean(DLW_NH_AB_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DLW_NH_AB_N60_B_Mean = ndnanfilter(reshape(mean(DLW_NH_AB_N60_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DSW_NH_AB_N70_Mean = ndnanfilter(reshape(mean(DSW_NH_AB_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DSW_NH_AB_N70_B_Mean = ndnanfilter(reshape(mean(DSW_NH_AB_N70_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DLW_NH_AB_N70_Mean = ndnanfilter(reshape(mean(DLW_NH_AB_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+DLW_NH_AB_N70_B_Mean = ndnanfilter(reshape(mean(DLW_NH_AB_N70_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+
 DSW_HI_UN_N0_Mean = ndnanfilter(reshape(mean(DSW_HI_UN_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
 DSW_HI_UN_N0_B_Mean = ndnanfilter(reshape(mean(DSW_HI_UN_N0_B,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
 DLW_HI_UN_N0_Mean = ndnanfilter(reshape(mean(DLW_HI_UN_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
@@ -956,12 +1254,38 @@ FLW_HI_N60_Mean = ndnanfilter(reshape(mean(FLW_HI_N60,[1 2],'omitnan'),[],1)','h
 FSW_HI_N70_Mean = ndnanfilter(reshape(mean(FSW_HI_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
 FLW_HI_N70_Mean = ndnanfilter(reshape(mean(FLW_HI_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
 
+FSW_NH_UN_Mean = ndnanfilter(reshape(mean(FSW_NH_UN,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+FLW_NH_UN_Mean = ndnanfilter(reshape(mean(FLW_NH_UN,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+FSW_NH_AA_Mean = ndnanfilter(reshape(mean(FSW_NH_AA,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+FLW_NH_AA_Mean = ndnanfilter(reshape(mean(FLW_NH_AA,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+FSW_NH_AB_Mean = ndnanfilter(reshape(mean(FSW_NH_AB,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+FLW_NH_AB_Mean = ndnanfilter(reshape(mean(FLW_NH_AB,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+
 FSW_HI_UN_Mean = ndnanfilter(reshape(mean(FSW_HI_UN,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
 FLW_HI_UN_Mean = ndnanfilter(reshape(mean(FLW_HI_UN,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
 FSW_HI_AA_Mean = ndnanfilter(reshape(mean(FSW_HI_AA,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
 FLW_HI_AA_Mean = ndnanfilter(reshape(mean(FLW_HI_AA,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
 FSW_HI_AB_Mean = ndnanfilter(reshape(mean(FSW_HI_AB,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
 FLW_HI_AB_Mean = ndnanfilter(reshape(mean(FLW_HI_AB,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+
+FSW_NH_UN_N0_Mean = ndnanfilter(reshape(mean(FSW_NH_UN_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+FLW_NH_UN_N0_Mean = ndnanfilter(reshape(mean(FLW_NH_UN_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+FSW_NH_UN_N60_Mean = ndnanfilter(reshape(mean(FSW_NH_UN_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+FLW_NH_UN_N60_Mean = ndnanfilter(reshape(mean(FLW_NH_UN_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+FSW_NH_UN_N70_Mean = ndnanfilter(reshape(mean(FSW_NH_UN_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+FLW_NH_UN_N70_Mean = ndnanfilter(reshape(mean(FLW_NH_UN_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+FSW_NH_AA_N0_Mean = ndnanfilter(reshape(mean(FSW_NH_AA_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+FLW_NH_AA_N0_Mean = ndnanfilter(reshape(mean(FLW_NH_AA_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+FSW_NH_AA_N60_Mean = ndnanfilter(reshape(mean(FSW_NH_AA_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+FLW_NH_AA_N60_Mean = ndnanfilter(reshape(mean(FLW_NH_AA_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+FSW_NH_AA_N70_Mean = ndnanfilter(reshape(mean(FSW_NH_AA_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+FLW_NH_AA_N70_Mean = ndnanfilter(reshape(mean(FLW_NH_AA_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+FSW_NH_AB_N0_Mean = ndnanfilter(reshape(mean(FSW_NH_AB_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+FLW_NH_AB_N0_Mean = ndnanfilter(reshape(mean(FLW_NH_AB_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+FSW_NH_AB_N60_Mean = ndnanfilter(reshape(mean(FSW_NH_AB_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+FLW_NH_AB_N60_Mean = ndnanfilter(reshape(mean(FLW_NH_AB_N60,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+FSW_NH_AB_N70_Mean = ndnanfilter(reshape(mean(FSW_NH_AB_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
+FLW_NH_AB_N70_Mean = ndnanfilter(reshape(mean(FLW_NH_AB_N70,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
 
 FSW_HI_UN_N0_Mean = ndnanfilter(reshape(mean(FSW_HI_UN_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
 FLW_HI_UN_N0_Mean = ndnanfilter(reshape(mean(FLW_HI_UN_N0,[1 2],'omitnan'),[],1)','hamming',FilterWidth);
@@ -1036,6 +1360,19 @@ DSW_HI_N70_B_SEM = (squeeze(std(DSW_HI_N70_B,0,[1 2],'omitnan'))./sqrt(squeeze(s
 DLW_HI_N70_SEM = (squeeze(std(DLW_HI_N70,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_HI_N70),[1 2]))))';
 DLW_HI_N70_B_SEM = (squeeze(std(DLW_HI_N70_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_HI_N70_B),[1 2]))))';
 
+DSW_NH_UN_SEM = (squeeze(std(DSW_NH_UN,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_NH_UN),[1 2]))))';
+DSW_NH_UN_B_SEM = (squeeze(std(DSW_NH_UN_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_NH_UN_B),[1 2]))))';
+DLW_NH_UN_SEM = (squeeze(std(DLW_NH_UN,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_NH_UN),[1 2]))))';
+DLW_NH_UN_B_SEM = (squeeze(std(DLW_NH_UN_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_NH_UN_B),[1 2]))))';
+DSW_NH_AA_SEM = (squeeze(std(DSW_NH_AA,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_NH_AA),[1 2]))))';
+DSW_NH_AA_B_SEM = (squeeze(std(DSW_NH_AA_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_NH_AA_B),[1 2]))))';
+DLW_NH_AA_SEM = (squeeze(std(DLW_NH_AA,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_NH_AA),[1 2]))))';
+DLW_NH_AA_B_SEM = (squeeze(std(DLW_NH_AA_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_NH_AA_B),[1 2]))))';
+DSW_NH_AB_SEM = (squeeze(std(DSW_NH_AB,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_NH_AB),[1 2]))))';
+DSW_NH_AB_B_SEM = (squeeze(std(DSW_NH_AB_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_NH_AB_B),[1 2]))))';
+DLW_NH_AB_SEM = (squeeze(std(DLW_NH_AB,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_NH_AB),[1 2]))))';
+DLW_NH_AB_B_SEM = (squeeze(std(DLW_NH_AB_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_NH_AB_B),[1 2]))))';
+
 DSW_HI_UN_SEM = (squeeze(std(DSW_HI_UN,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_HI_UN),[1 2]))))';
 DSW_HI_UN_B_SEM = (squeeze(std(DSW_HI_UN_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_HI_UN_B),[1 2]))))';
 DLW_HI_UN_SEM = (squeeze(std(DLW_HI_UN,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_HI_UN),[1 2]))))';
@@ -1048,6 +1385,43 @@ DSW_HI_AB_SEM = (squeeze(std(DSW_HI_AB,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~is
 DSW_HI_AB_B_SEM = (squeeze(std(DSW_HI_AB_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_HI_AB_B),[1 2]))))';
 DLW_HI_AB_SEM = (squeeze(std(DLW_HI_AB,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_HI_AB),[1 2]))))';
 DLW_HI_AB_B_SEM = (squeeze(std(DLW_HI_AB_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_HI_AB_B),[1 2]))))';
+
+DSW_NH_UN_N0_SEM = (squeeze(std(DSW_NH_UN_N0,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_NH_UN_N0),[1 2]))))';
+DSW_NH_UN_N0_B_SEM = (squeeze(std(DSW_NH_UN_N0_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_NH_UN_N0_B),[1 2]))))';
+DLW_NH_UN_N0_SEM = (squeeze(std(DLW_NH_UN_N0,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_NH_UN_N0),[1 2]))))';
+DLW_NH_UN_N0_B_SEM = (squeeze(std(DLW_NH_UN_N0_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_NH_UN_N0_B),[1 2]))))';
+DSW_NH_UN_N60_SEM = (squeeze(std(DSW_NH_UN_N60,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_NH_UN_N60),[1 2]))))';
+DSW_NH_UN_N60_B_SEM = (squeeze(std(DSW_NH_UN_N60_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_NH_UN_N60_B),[1 2]))))';
+DLW_NH_UN_N60_SEM = (squeeze(std(DLW_NH_UN_N60,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_NH_UN_N60),[1 2]))))';
+DLW_NH_UN_N60_B_SEM = (squeeze(std(DLW_NH_UN_N60_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_NH_UN_N60_B),[1 2]))))';
+DSW_NH_UN_N70_SEM = (squeeze(std(DSW_NH_UN_N70,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_NH_UN_N70),[1 2]))))';
+DSW_NH_UN_N70_B_SEM = (squeeze(std(DSW_NH_UN_N70_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_NH_UN_N70_B),[1 2]))))';
+DLW_NH_UN_N70_SEM = (squeeze(std(DLW_NH_UN_N70,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_NH_UN_N70),[1 2]))))';
+DLW_NH_UN_N70_B_SEM = (squeeze(std(DLW_NH_UN_N70_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_NH_UN_N70_B),[1 2]))))';
+DSW_NH_AA_N0_SEM = (squeeze(std(DSW_NH_AA_N0,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_NH_AA_N0),[1 2]))))';
+DSW_NH_AA_N0_B_SEM = (squeeze(std(DSW_NH_AA_N0_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_NH_AA_N0_B),[1 2]))))';
+DLW_NH_AA_N0_SEM = (squeeze(std(DLW_NH_AA_N0,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_NH_AA_N0),[1 2]))))';
+DLW_NH_AA_N0_B_SEM = (squeeze(std(DLW_NH_AA_N0_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_NH_AA_N0_B),[1 2]))))';
+DSW_NH_AA_N60_SEM = (squeeze(std(DSW_NH_AA_N60,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_NH_AA_N60),[1 2]))))';
+DSW_NH_AA_N60_B_SEM = (squeeze(std(DSW_NH_AA_N60_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_NH_AA_N60_B),[1 2]))))';
+DLW_NH_AA_N60_SEM = (squeeze(std(DLW_NH_AA_N60,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_NH_AA_N60),[1 2]))))';
+DLW_NH_AA_N60_B_SEM = (squeeze(std(DLW_NH_AA_N60_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_NH_AA_N60_B),[1 2]))))';
+DSW_NH_AA_N70_SEM = (squeeze(std(DSW_NH_AA_N70,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_NH_AA_N70),[1 2]))))';
+DSW_NH_AA_N70_B_SEM = (squeeze(std(DSW_NH_AA_N70_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_NH_AA_N70_B),[1 2]))))';
+DLW_NH_AA_N70_SEM = (squeeze(std(DLW_NH_AA_N70,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_NH_AA_N70),[1 2]))))';
+DLW_NH_AA_N70_B_SEM = (squeeze(std(DLW_NH_AA_N70_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_NH_AA_N70_B),[1 2]))))';
+DSW_NH_AB_N0_SEM = (squeeze(std(DSW_NH_AB_N0,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_NH_AB_N0),[1 2]))))';
+DSW_NH_AB_N0_B_SEM = (squeeze(std(DSW_NH_AB_N0_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_NH_AB_N0_B),[1 2]))))';
+DLW_NH_AB_N0_SEM = (squeeze(std(DLW_NH_AB_N0,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_NH_AB_N0),[1 2]))))';
+DLW_NH_AB_N0_B_SEM = (squeeze(std(DLW_NH_AB_N0_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_NH_AB_N0_B),[1 2]))))';
+DSW_NH_AB_N60_SEM = (squeeze(std(DSW_NH_AB_N60,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_NH_AB_N60),[1 2]))))';
+DSW_NH_AB_N60_B_SEM = (squeeze(std(DSW_NH_AB_N60_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_NH_AB_N60_B),[1 2]))))';
+DLW_NH_AB_N60_SEM = (squeeze(std(DLW_NH_AB_N60,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_NH_AB_N60),[1 2]))))';
+DLW_NH_AB_N60_B_SEM = (squeeze(std(DLW_NH_AB_N60_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_NH_AB_N60_B),[1 2]))))';
+DSW_NH_AB_N70_SEM = (squeeze(std(DSW_NH_AB_N70,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_NH_AB_N70),[1 2]))))';
+DSW_NH_AB_N70_B_SEM = (squeeze(std(DSW_NH_AB_N70_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_NH_AB_N70_B),[1 2]))))';
+DLW_NH_AB_N70_SEM = (squeeze(std(DLW_NH_AB_N70,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_NH_AB_N70),[1 2]))))';
+DLW_NH_AB_N70_B_SEM = (squeeze(std(DLW_NH_AB_N70_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DLW_NH_AB_N70_B),[1 2]))))';
 
 DSW_HI_UN_N0_SEM = (squeeze(std(DSW_HI_UN_N0,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_HI_UN_N0),[1 2]))))';
 DSW_HI_UN_N0_B_SEM = (squeeze(std(DSW_HI_UN_N0_B,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(DSW_HI_UN_N0_B),[1 2]))))';
@@ -1101,7 +1475,6 @@ FLW_N60_SEM = (squeeze(std(FLW_N60,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(
 FSW_N70_SEM = (squeeze(std(FSW_N70,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FSW_N70),[1 2]))))';
 FLW_N70_SEM = (squeeze(std(FLW_N70,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FLW_N70),[1 2]))))';
 
-
 FSW_NH_N0_SEM = (squeeze(std(FSW_NH_N0,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FSW_NH_N0),[1 2]))))';
 FLW_NH_N0_SEM = (squeeze(std(FLW_NH_N0,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FLW_NH_N0),[1 2]))))';
 FSW_NH_N60_SEM = (squeeze(std(FSW_NH_N60,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FSW_NH_N60),[1 2]))))';
@@ -1116,12 +1489,38 @@ FLW_HI_N60_SEM = (squeeze(std(FLW_HI_N60,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~
 FSW_HI_N70_SEM = (squeeze(std(FSW_HI_N70,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FSW_HI_N70),[1 2]))))';
 FLW_HI_N70_SEM = (squeeze(std(FLW_HI_N70,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FLW_HI_N70),[1 2]))))';
 
+FSW_NH_UN_SEM = (squeeze(std(FSW_NH_UN,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FSW_NH_UN),[1 2]))))';
+FLW_NH_UN_SEM = (squeeze(std(FLW_NH_UN,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FLW_NH_UN),[1 2]))))';
+FSW_NH_AA_SEM = (squeeze(std(FSW_NH_AA,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FSW_NH_AA),[1 2]))))';
+FLW_NH_AA_SEM = (squeeze(std(FLW_NH_AA,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FLW_NH_AA),[1 2]))))';
+FSW_NH_AB_SEM = (squeeze(std(FSW_NH_AB,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FSW_NH_AB),[1 2]))))';
+FLW_NH_AB_SEM = (squeeze(std(FLW_NH_AB,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FLW_NH_AB),[1 2]))))';
+
 FSW_HI_UN_SEM = (squeeze(std(FSW_HI_UN,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FSW_HI_UN),[1 2]))))';
 FLW_HI_UN_SEM = (squeeze(std(FLW_HI_UN,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FLW_HI_UN),[1 2]))))';
 FSW_HI_AA_SEM = (squeeze(std(FSW_HI_AA,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FSW_HI_AA),[1 2]))))';
 FLW_HI_AA_SEM = (squeeze(std(FLW_HI_AA,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FLW_HI_AA),[1 2]))))';
 FSW_HI_AB_SEM = (squeeze(std(FSW_HI_AB,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FSW_HI_AB),[1 2]))))';
 FLW_HI_AB_SEM = (squeeze(std(FLW_HI_AB,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FLW_HI_AB),[1 2]))))';
+
+FSW_NH_UN_N0_SEM = (squeeze(std(FSW_NH_UN_N0,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FSW_NH_UN_N0),[1 2]))))';
+FLW_NH_UN_N0_SEM = (squeeze(std(FLW_NH_UN_N0,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FLW_NH_UN_N0),[1 2]))))';
+FSW_NH_UN_N60_SEM = (squeeze(std(FSW_NH_UN_N60,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FSW_NH_UN_N60),[1 2]))))';
+FLW_NH_UN_N60_SEM = (squeeze(std(FLW_NH_UN_N60,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FLW_NH_UN_N60),[1 2]))))';
+FSW_NH_UN_N70_SEM = (squeeze(std(FSW_NH_UN_N70,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FSW_NH_UN_N70),[1 2]))))';
+FLW_NH_UN_N70_SEM = (squeeze(std(FLW_NH_UN_N70,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FLW_NH_UN_N70),[1 2]))))';
+FSW_NH_AA_N0_SEM = (squeeze(std(FSW_NH_AA_N0,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FSW_NH_AA_N0),[1 2]))))';
+FLW_NH_AA_N0_SEM = (squeeze(std(FLW_NH_AA_N0,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FLW_NH_AA_N0),[1 2]))))';
+FSW_NH_AA_N60_SEM = (squeeze(std(FSW_NH_AA_N60,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FSW_NH_AA_N60),[1 2]))))';
+FLW_NH_AA_N60_SEM = (squeeze(std(FLW_NH_AA_N60,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FLW_NH_AA_N60),[1 2]))))';
+FSW_NH_AA_N70_SEM = (squeeze(std(FSW_NH_AA_N70,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FSW_NH_AA_N70),[1 2]))))';
+FLW_NH_AA_N70_SEM = (squeeze(std(FLW_NH_AA_N70,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FLW_NH_AA_N70),[1 2]))))';
+FSW_NH_AB_N0_SEM = (squeeze(std(FSW_NH_AB_N0,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FSW_NH_AB_N0),[1 2]))))';
+FLW_NH_AB_N0_SEM = (squeeze(std(FLW_NH_AB_N0,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FLW_NH_AB_N0),[1 2]))))';
+FSW_NH_AB_N60_SEM = (squeeze(std(FSW_NH_AB_N60,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FSW_NH_AB_N60),[1 2]))))';
+FLW_NH_AB_N60_SEM = (squeeze(std(FLW_NH_AB_N60,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FLW_NH_AB_N60),[1 2]))))';
+FSW_NH_AB_N70_SEM = (squeeze(std(FSW_NH_AB_N70,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FSW_NH_AB_N70),[1 2]))))';
+FLW_NH_AB_N70_SEM = (squeeze(std(FLW_NH_AB_N70,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FLW_NH_AB_N70),[1 2]))))';
 
 FSW_HI_UN_N0_SEM = (squeeze(std(FSW_HI_UN_N0,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FSW_HI_UN_N0),[1 2]))))';
 FLW_HI_UN_N0_SEM = (squeeze(std(FLW_HI_UN_N0,0,[1 2],'omitnan'))./sqrt(squeeze(sum(~isnan(FLW_HI_UN_N0),[1 2]))))';
@@ -1145,9 +1544,9 @@ FLW_HI_AB_N70_SEM = (squeeze(std(FLW_HI_AB_N70,0,[1 2],'omitnan'))./sqrt(squeeze
 TPsG = nonzeros(TPsOrder_II);
 TPsNH = nonzeros(TPsOrder_II(1:2:NTPs_II,:));
 TPsHI = nonzeros(TPsOrder_II(2:2:NTPs_II,:));
-TPsUN = nonzeros(TPsOrder_II(2:2:NTPs_II,1:3));
-TPsAA = nonzeros(TPsOrder_II(2:2:NTPs_II,4:6));
-TPsAB = nonzeros(TPsOrder_II(2:2:NTPs_II,7:9));
+TPsUN = nonzeros(TPsOrder_II(:,1:3));
+TPsAA = nonzeros(TPsOrder_II(:,4:6));
+TPsAB = nonzeros(TPsOrder_II(:,7:9));
 TPsN0 = nonzeros(TPsOrder_II(:,1:3:NCond_II));
 TPsN60 = nonzeros(TPsOrder_II(:,2:3:NCond_II));
 TPsN70 = nonzeros(TPsOrder_II(:,3:3:NCond_II));
@@ -1164,6 +1563,18 @@ TP_DSW_NH_N70 = TP_DGSW; TP_DLW_NH_N70 = TP_DGSW; % NH N70 TP_Diameter Speaking/
 TP_DSW_HI_N0 = TP_DGSW; TP_DLW_HI_N0 = TP_DGSW; % HI N0 TP_Diameter Speaking/Listening Windows
 TP_DSW_HI_N60 = TP_DGSW; TP_DLW_HI_N60 = TP_DGSW; % HI N60 TP_Diameter Speaking/Listening Windows
 TP_DSW_HI_N70 = TP_DGSW; TP_DLW_HI_N70 = TP_DGSW; % HI N70 TP_Diameter Speaking/Listening Windows
+TP_DSW_NH_UN = TP_DGSW; TP_DLW_NH_UN = TP_DGSW; % NH UN TP_Diameter Speaking/Listening Windows
+TP_DSW_NH_AA = TP_DGSW; TP_DLW_NH_AA = TP_DGSW; % NH AA TP_Diameter Speaking/Listening Windows
+TP_DSW_NH_AB = TP_DGSW; TP_DLW_NH_AB = TP_DGSW; % NH AB TP_Diameter Speaking/Listening Windows
+TP_DSW_NH_UN_N0 = TP_DGSW; TP_DLW_NH_UN_N0 = TP_DGSW; % NH UN N0 TP_Diameter Speaking/Listening Windows
+TP_DSW_NH_UN_N60 = TP_DGSW; TP_DLW_NH_UN_N60 = TP_DGSW; % NH UN N60 TP_Diameter Speaking/Listening Windows
+TP_DSW_NH_UN_N70 = TP_DGSW; TP_DLW_NH_UN_N70 = TP_DGSW; % NH UN N70 TP_Diameter Speaking/Listening Windows
+TP_DSW_NH_AA_N0 = TP_DGSW; TP_DLW_NH_AA_N0 = TP_DGSW; % NH AA N0 TP_Diameter Speaking/Listening Windows
+TP_DSW_NH_AA_N60 = TP_DGSW; TP_DLW_NH_AA_N60 = TP_DGSW; % NH AA N60 TP_Diameter Speaking/Listening Windows
+TP_DSW_NH_AA_N70 = TP_DGSW; TP_DLW_NH_AA_N70 = TP_DGSW; % NH AA N70 TP_Diameter Speaking/Listening Windows
+TP_DSW_NH_AB_N0 = TP_DGSW; TP_DLW_NH_AB_N0 = TP_DGSW; % NH AB N0 TP_Diameter Speaking/Listening Windows
+TP_DSW_NH_AB_N60 = TP_DGSW; TP_DLW_NH_AB_N60 = TP_DGSW; % NH AB N60 TP_Diameter Speaking/Listening Windows
+TP_DSW_NH_AB_N70 = TP_DGSW; TP_DLW_NH_AB_N70 = TP_DGSW; % NH AB N70 TP_Diameter Speaking/Listening Windows
 TP_DSW_HI_UN = TP_DGSW; TP_DLW_HI_UN = TP_DGSW; % HI UN TP_Diameter Speaking/Listening Windows
 TP_DSW_HI_AA = TP_DGSW; TP_DLW_HI_AA = TP_DGSW; % HI AA TP_Diameter Speaking/Listening Windows
 TP_DSW_HI_AB = TP_DGSW; TP_DLW_HI_AB = TP_DGSW; % HI AB TP_Diameter Speaking/Listening Windows
@@ -1189,6 +1600,18 @@ TP_DSW_NH_N70_B = TP_DGSW; TP_DLW_NH_N70_B = TP_DGSW; % NH N70 TP_Diameter Speak
 TP_DSW_HI_N0_B = TP_DGSW; TP_DLW_HI_N0_B = TP_DGSW; % HI N0 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
 TP_DSW_HI_N60_B = TP_DGSW; TP_DLW_HI_N60_B = TP_DGSW; % HI N60 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
 TP_DSW_HI_N70_B = TP_DGSW; TP_DLW_HI_N70_B = TP_DGSW; % HI N70 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_NH_UN_B = TP_DGSW; TP_DLW_NH_UN_B = TP_DGSW; % NH UN TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_NH_AA_B = TP_DGSW; TP_DLW_NH_AA_B = TP_DGSW; % NH AA TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_NH_AB_B = TP_DGSW; TP_DLW_NH_AB_B = TP_DGSW; % NH AB TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_NH_UN_N0_B = TP_DGSW; TP_DLW_NH_UN_N0_B = TP_DGSW; % NH UN N0 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_NH_UN_N60_B = TP_DGSW; TP_DLW_NH_UN_N60_B = TP_DGSW; % NH UN N60 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_NH_UN_N70_B = TP_DGSW; TP_DLW_NH_UN_N70_B = TP_DGSW; % NH UN N70 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_NH_AA_N0_B = TP_DGSW; TP_DLW_NH_AA_N0_B = TP_DGSW; % NH AA N0 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_NH_AA_N60_B = TP_DGSW; TP_DLW_NH_AA_N60_B = TP_DGSW; % NH AA N60 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_NH_AA_N70_B = TP_DGSW; TP_DLW_NH_AA_N70_B = TP_DGSW; % NH AA N70 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_NH_AB_N0_B = TP_DGSW; TP_DLW_NH_AB_N0_B = TP_DGSW; % NH AB N0 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_NH_AB_N60_B = TP_DGSW; TP_DLW_NH_AB_N60_B = TP_DGSW; % NH AB N60 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
+TP_DSW_NH_AB_N70_B = TP_DGSW; TP_DLW_NH_AB_N70_B = TP_DGSW; % NH AB N70 TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
 TP_DSW_HI_UN_B = TP_DGSW; TP_DLW_HI_UN_B = TP_DGSW; % HI UN TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
 TP_DSW_HI_AA_B = TP_DGSW; TP_DLW_HI_AA_B = TP_DGSW; % HI AA TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
 TP_DSW_HI_AB_B = TP_DGSW; TP_DLW_HI_AB_B = TP_DGSW; % HI AB TP_Diameter Speaking/Listening Windows Adaptive_Baseline corrected
@@ -1214,6 +1637,18 @@ TP_FSW_NH_N70 = TP_DGSW; TP_FLW_NH_N70 = TP_DGSW; % NH N70 TP_Fixation Speaking/
 TP_FSW_HI_N0 = TP_DGSW; TP_FLW_HI_N0 = TP_DGSW; % HI N0 TP_Fixation Speaking/Listening Windows
 TP_FSW_HI_N60 = TP_DGSW; TP_FLW_HI_N60 = TP_DGSW; % HI N60 TP_Fixation Speaking/Listening Windows
 TP_FSW_HI_N70 = TP_DGSW; TP_FLW_HI_N70 = TP_DGSW; % HI N70 TP_Fixation Speaking/Listening Windows
+TP_FSW_NH_UN = TP_DGSW; TP_FLW_NH_UN = TP_DGSW; % NH UN TP_Fixation Speaking/Listening Windows
+TP_FSW_NH_AA = TP_DGSW; TP_FLW_NH_AA = TP_DGSW; % NH AA TP_Fixation Speaking/Listening Windows
+TP_FSW_NH_AB = TP_DGSW; TP_FLW_NH_AB = TP_DGSW; % NH AB TP_Fixation Speaking/Listening Windows
+TP_FSW_NH_UN_N0 = TP_DGSW; TP_FLW_NH_UN_N0 = TP_DGSW; % NH UN N0 TP_Fixation Speaking/Listening Windows
+TP_FSW_NH_UN_N60 = TP_DGSW; TP_FLW_NH_UN_N60 = TP_DGSW; % NH UN N60 TP_Fixation Speaking/Listening Windows
+TP_FSW_NH_UN_N70 = TP_DGSW; TP_FLW_NH_UN_N70 = TP_DGSW; % NH UN N70 TP_Fixation Speaking/Listening Windows
+TP_FSW_NH_AA_N0 = TP_DGSW; TP_FLW_NH_AA_N0 = TP_DGSW; % NH AA N0 TP_Fixation Speaking/Listening Windows
+TP_FSW_NH_AA_N60 = TP_DGSW; TP_FLW_NH_AA_N60 = TP_DGSW; % NH AA N60 TP_Fixation Speaking/Listening Windows
+TP_FSW_NH_AA_N70 = TP_DGSW; TP_FLW_NH_AA_N70 = TP_DGSW; % NH AA N70 TP_Fixation Speaking/Listening Windows
+TP_FSW_NH_AB_N0 = TP_DGSW; TP_FLW_NH_AB_N0 = TP_DGSW; % NH AB N0 TP_Fixation Speaking/Listening Windows
+TP_FSW_NH_AB_N60 = TP_DGSW; TP_FLW_NH_AB_N60 = TP_DGSW; % NH AB N60 TP_Fixation Speaking/Listening Windows
+TP_FSW_NH_AB_N70 = TP_DGSW; TP_FLW_NH_AB_N70 = TP_DGSW; % NH AB N70 TP_Fixation Speaking/Listening Windows
 TP_FSW_HI_UN = TP_DGSW; TP_FLW_HI_UN = TP_DGSW; % HI UN TP_Fixation Speaking/Listening Windows
 TP_FSW_HI_AA = TP_DGSW; TP_FLW_HI_AA = TP_DGSW; % HI AA TP_Fixation Speaking/Listening Windows
 TP_FSW_HI_AB = TP_DGSW; TP_FLW_HI_AB = TP_DGSW; % HI AB TP_Fixation Speaking/Listening Windows
@@ -1277,6 +1712,54 @@ for i=1:NTPs_II
     TP_DSW_HI_N70_B(i,:) = (reshape(mean(DGSW_B(intersect(TPsF,intersect(TPsHI,TPsN70)),:,:),[1 2],'omitnan'),[],1))';
     TP_DLW_HI_N70(i,:) = (reshape(mean(DGLW(intersect(TPsF,intersect(TPsHI,TPsN70)),:,:),[1 2],'omitnan'),[],1))';
     TP_DLW_HI_N70_B(i,:) = (reshape(mean(DGLW_B(intersect(TPsF,intersect(TPsHI,TPsN70)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DSW_NH_UN(i,:) = (reshape(mean(DGSW(intersect(TPsF,intersect(TPsNH,TPsUN)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DSW_NH_UN_B(i,:) = (reshape(mean(DGSW_B(intersect(TPsF,intersect(TPsNH,TPsUN)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DLW_NH_UN(i,:) = (reshape(mean(DGLW(intersect(TPsF,intersect(TPsNH,TPsUN)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DLW_NH_UN_B(i,:) = (reshape(mean(DGLW_B(intersect(TPsF,intersect(TPsNH,TPsUN)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DSW_NH_AA(i,:) = (reshape(mean(DGSW(intersect(TPsF,intersect(TPsNH,TPsAA)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DSW_NH_AA_B(i,:) = (reshape(mean(DGSW_B(intersect(TPsF,intersect(TPsNH,TPsAA)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DLW_NH_AA(i,:) = (reshape(mean(DGLW(intersect(TPsF,intersect(TPsNH,TPsAA)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DLW_NH_AA_B(i,:) = (reshape(mean(DGLW_B(intersect(TPsF,intersect(TPsNH,TPsAA)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DSW_NH_AB(i,:) = (reshape(mean(DGSW(intersect(TPsF,intersect(TPsNH,TPsAB)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DSW_NH_AB_B(i,:) = (reshape(mean(DGSW_B(intersect(TPsF,intersect(TPsNH,TPsAB)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DLW_NH_AB(i,:) = (reshape(mean(DGLW(intersect(TPsF,intersect(TPsNH,TPsAB)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DLW_NH_AB_B(i,:) = (reshape(mean(DGLW_B(intersect(TPsF,intersect(TPsNH,TPsAB)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DSW_NH_UN_N0(i,:) = (reshape(mean(DGSW(intersect(TPsF,intersect(intersect(TPsNH,TPsUN),TPsN0)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DSW_NH_UN_N0_B(i,:) = (reshape(mean(DGSW_B(intersect(TPsF,intersect(intersect(TPsNH,TPsUN),TPsN0)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DLW_NH_UN_N0(i,:) = (reshape(mean(DGLW(intersect(TPsF,intersect(intersect(TPsNH,TPsUN),TPsN0)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DLW_NH_UN_N0_B(i,:) = (reshape(mean(DGLW_B(intersect(TPsF,intersect(intersect(TPsNH,TPsUN),TPsN0)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DSW_NH_UN_N60(i,:) = (reshape(mean(DGSW(intersect(TPsF,intersect(intersect(TPsNH,TPsUN),TPsN60)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DSW_NH_UN_N60_B(i,:) = (reshape(mean(DGSW_B(intersect(TPsF,intersect(intersect(TPsNH,TPsUN),TPsN60)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DLW_NH_UN_N60(i,:) = (reshape(mean(DGLW(intersect(TPsF,intersect(intersect(TPsNH,TPsUN),TPsN60)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DLW_NH_UN_N60_B(i,:) = (reshape(mean(DGLW_B(intersect(TPsF,intersect(intersect(TPsNH,TPsUN),TPsN60)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DSW_NH_UN_N70(i,:) = (reshape(mean(DGSW(intersect(TPsF,intersect(intersect(TPsNH,TPsUN),TPsN70)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DSW_NH_UN_N70_B(i,:) = (reshape(mean(DGSW_B(intersect(TPsF,intersect(intersect(TPsNH,TPsUN),TPsN70)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DLW_NH_UN_N70(i,:) = (reshape(mean(DGLW(intersect(TPsF,intersect(intersect(TPsNH,TPsUN),TPsN70)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DLW_NH_UN_N70_B(i,:) = (reshape(mean(DGLW_B(intersect(TPsF,intersect(intersect(TPsNH,TPsUN),TPsN70)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DSW_NH_AA_N0(i,:) = (reshape(mean(DGSW(intersect(TPsF,intersect(intersect(TPsNH,TPsAA),TPsN0)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DSW_NH_AA_N0_B(i,:) = (reshape(mean(DGSW_B(intersect(TPsF,intersect(intersect(TPsNH,TPsAA),TPsN0)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DLW_NH_AA_N0(i,:) = (reshape(mean(DGLW(intersect(TPsF,intersect(intersect(TPsNH,TPsAA),TPsN0)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DLW_NH_AA_N0_B(i,:) = (reshape(mean(DGLW_B(intersect(TPsF,intersect(intersect(TPsNH,TPsAA),TPsN0)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DSW_NH_AA_N60(i,:) = (reshape(mean(DGSW(intersect(TPsF,intersect(intersect(TPsNH,TPsAA),TPsN60)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DSW_NH_AA_N60_B(i,:) = (reshape(mean(DGSW_B(intersect(TPsF,intersect(intersect(TPsNH,TPsAA),TPsN60)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DLW_NH_AA_N60(i,:) = (reshape(mean(DGLW(intersect(TPsF,intersect(intersect(TPsNH,TPsAA),TPsN60)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DLW_NH_AA_N60_B(i,:) = (reshape(mean(DGLW_B(intersect(TPsF,intersect(intersect(TPsNH,TPsAA),TPsN60)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DSW_NH_AA_N70(i,:) = (reshape(mean(DGSW(intersect(TPsF,intersect(intersect(TPsNH,TPsAA),TPsN70)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DSW_NH_AA_N70_B(i,:) = (reshape(mean(DGSW_B(intersect(TPsF,intersect(intersect(TPsNH,TPsAA),TPsN70)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DLW_NH_AA_N70(i,:) = (reshape(mean(DGLW(intersect(TPsF,intersect(intersect(TPsNH,TPsAA),TPsN70)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DLW_NH_AA_N70_B(i,:) = (reshape(mean(DGLW_B(intersect(TPsF,intersect(intersect(TPsNH,TPsAA),TPsN70)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DSW_NH_AB_N0(i,:) = (reshape(mean(DGSW(intersect(TPsF,intersect(intersect(TPsNH,TPsAB),TPsN0)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DSW_NH_AB_N0_B(i,:) = (reshape(mean(DGSW_B(intersect(TPsF,intersect(intersect(TPsNH,TPsAB),TPsN0)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DLW_NH_AB_N0(i,:) = (reshape(mean(DGLW(intersect(TPsF,intersect(intersect(TPsNH,TPsAB),TPsN0)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DLW_NH_AB_N0_B(i,:) = (reshape(mean(DGLW_B(intersect(TPsF,intersect(intersect(TPsNH,TPsAB),TPsN0)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DSW_NH_AB_N60(i,:) = (reshape(mean(DGSW(intersect(TPsF,intersect(intersect(TPsNH,TPsAB),TPsN60)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DSW_NH_AB_N60_B(i,:) = (reshape(mean(DGSW_B(intersect(TPsF,intersect(intersect(TPsNH,TPsAB),TPsN60)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DLW_NH_AB_N60(i,:) = (reshape(mean(DGLW(intersect(TPsF,intersect(intersect(TPsNH,TPsAB),TPsN60)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DLW_NH_AB_N60_B(i,:) = (reshape(mean(DGLW_B(intersect(TPsF,intersect(intersect(TPsNH,TPsAB),TPsN60)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DSW_NH_AB_N70(i,:) = (reshape(mean(DGSW(intersect(TPsF,intersect(intersect(TPsNH,TPsAB),TPsN70)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DSW_NH_AB_N70_B(i,:) = (reshape(mean(DGSW_B(intersect(TPsF,intersect(intersect(TPsNH,TPsAB),TPsN70)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DLW_NH_AB_N70(i,:) = (reshape(mean(DGLW(intersect(TPsF,intersect(intersect(TPsNH,TPsAB),TPsN70)),:,:),[1 2],'omitnan'),[],1))';
+    TP_DLW_NH_AB_N70_B(i,:) = (reshape(mean(DGLW_B(intersect(TPsF,intersect(intersect(TPsNH,TPsAB),TPsN70)),:,:),[1 2],'omitnan'),[],1))';
     TP_DSW_HI_UN(i,:) = (reshape(mean(DGSW(intersect(TPsF,intersect(TPsHI,TPsUN)),:,:),[1 2],'omitnan'),[],1))';
     TP_DSW_HI_UN_B(i,:) = (reshape(mean(DGSW_B(intersect(TPsF,intersect(TPsHI,TPsUN)),:,:),[1 2],'omitnan'),[],1))';
     TP_DLW_HI_UN(i,:) = (reshape(mean(DGLW(intersect(TPsF,intersect(TPsHI,TPsUN)),:,:),[1 2],'omitnan'),[],1))';
@@ -1350,6 +1833,30 @@ for i=1:NTPs_II
     TP_FLW_HI_N60(i,:) = (reshape(mean(FGLW(intersect(TPsF,intersect(TPsHI,TPsN60)),:,:),[1 2],'omitnan'),[],1))';
     TP_FSW_HI_N70(i,:) = (reshape(mean(FGSW(intersect(TPsF,intersect(TPsHI,TPsN70)),:,:),[1 2],'omitnan'),[],1))';
     TP_FLW_HI_N70(i,:) = (reshape(mean(FGLW(intersect(TPsF,intersect(TPsHI,TPsN70)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FSW_NH_UN(i,:) = (reshape(mean(FGSW(intersect(TPsF,intersect(TPsNH,TPsUN)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FLW_NH_UN(i,:) = (reshape(mean(FGLW(intersect(TPsF,intersect(TPsNH,TPsUN)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FSW_NH_AA(i,:) = (reshape(mean(FGSW(intersect(TPsF,intersect(TPsNH,TPsAA)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FLW_NH_AA(i,:) = (reshape(mean(FGLW(intersect(TPsF,intersect(TPsNH,TPsAA)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FSW_NH_AB(i,:) = (reshape(mean(FGSW(intersect(TPsF,intersect(TPsNH,TPsAB)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FLW_NH_AB(i,:) = (reshape(mean(FGLW(intersect(TPsF,intersect(TPsNH,TPsAB)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FSW_NH_UN_N0(i,:) = (reshape(mean(FGSW(intersect(TPsF,intersect(intersect(TPsNH,TPsUN),TPsN0)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FLW_NH_UN_N0(i,:) = (reshape(mean(FGLW(intersect(TPsF,intersect(intersect(TPsNH,TPsUN),TPsN0)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FSW_NH_UN_N60(i,:) = (reshape(mean(FGSW(intersect(TPsF,intersect(intersect(TPsNH,TPsUN),TPsN60)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FLW_NH_UN_N60(i,:) = (reshape(mean(FGLW(intersect(TPsF,intersect(intersect(TPsNH,TPsUN),TPsN60)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FSW_NH_UN_N70(i,:) = (reshape(mean(FGSW(intersect(TPsF,intersect(intersect(TPsNH,TPsUN),TPsN70)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FLW_NH_UN_N70(i,:) = (reshape(mean(FGLW(intersect(TPsF,intersect(intersect(TPsNH,TPsUN),TPsN70)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FSW_NH_AA_N0(i,:) = (reshape(mean(FGSW(intersect(TPsF,intersect(intersect(TPsNH,TPsAA),TPsN0)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FLW_NH_AA_N0(i,:) = (reshape(mean(FGLW(intersect(TPsF,intersect(intersect(TPsNH,TPsAA),TPsN0)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FSW_NH_AA_N60(i,:) = (reshape(mean(FGSW(intersect(TPsF,intersect(intersect(TPsNH,TPsAA),TPsN60)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FLW_NH_AA_N60(i,:) = (reshape(mean(FGLW(intersect(TPsF,intersect(intersect(TPsNH,TPsAA),TPsN60)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FSW_NH_AA_N70(i,:) = (reshape(mean(FGSW(intersect(TPsF,intersect(intersect(TPsNH,TPsAA),TPsN70)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FLW_NH_AA_N70(i,:) = (reshape(mean(FGLW(intersect(TPsF,intersect(intersect(TPsNH,TPsAA),TPsN70)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FSW_NH_AB_N0(i,:) = (reshape(mean(FGSW(intersect(TPsF,intersect(intersect(TPsNH,TPsAB),TPsN0)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FLW_NH_AB_N0(i,:) = (reshape(mean(FGLW(intersect(TPsF,intersect(intersect(TPsNH,TPsAB),TPsN0)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FSW_NH_AB_N60(i,:) = (reshape(mean(FGSW(intersect(TPsF,intersect(intersect(TPsNH,TPsAB),TPsN60)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FLW_NH_AB_N60(i,:) = (reshape(mean(FGLW(intersect(TPsF,intersect(intersect(TPsNH,TPsAB),TPsN60)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FSW_NH_AB_N70(i,:) = (reshape(mean(FGSW(intersect(TPsF,intersect(intersect(TPsNH,TPsAB),TPsN70)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FLW_NH_AB_N70(i,:) = (reshape(mean(FGLW(intersect(TPsF,intersect(intersect(TPsNH,TPsAB),TPsN70)),:,:),[1 2],'omitnan'),[],1))';
     TP_FSW_HI_UN(i,:) = (reshape(mean(FGSW(intersect(TPsF,intersect(TPsHI,TPsUN)),:,:),[1 2],'omitnan'),[],1))';
     TP_FLW_HI_UN(i,:) = (reshape(mean(FGLW(intersect(TPsF,intersect(TPsHI,TPsUN)),:,:),[1 2],'omitnan'),[],1))';
     TP_FSW_HI_AA(i,:) = (reshape(mean(FGSW(intersect(TPsF,intersect(TPsHI,TPsAA)),:,:),[1 2],'omitnan'),[],1))';
@@ -1362,6 +1869,11 @@ for i=1:NTPs_II
     TP_FLW_HI_UN_N60(i,:) = (reshape(mean(FGLW(intersect(TPsF,intersect(intersect(TPsHI,TPsUN),TPsN60)),:,:),[1 2],'omitnan'),[],1))';
     TP_FSW_HI_UN_N70(i,:) = (reshape(mean(FGSW(intersect(TPsF,intersect(intersect(TPsHI,TPsUN),TPsN70)),:,:),[1 2],'omitnan'),[],1))';
     TP_FLW_HI_UN_N70(i,:) = (reshape(mean(FGLW(intersect(TPsF,intersect(intersect(TPsHI,TPsUN),TPsN70)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FSW_HI_AA_N0(i,:) = (reshape(mean(FGSW(intersect(TPsF,intersect(intersect(TPsHI,TPsAA),TPsN0)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FLW_HI_AA_N0(i,:) = (reshape(mean(FGLW(intersect(TPsF,intersect(intersect(TPsHI,TPsAA),TPsN0)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FSW_HI_AA_N60(i,:) = (reshape(mean(FGSW(intersect(TPsF,intersect(intersect(TPsHI,TPsAA),TPsN60)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FLW_HI_AA_N60(i,:) = (reshape(mean(FGLW(intersect(TPsF,intersect(intersect(TPsHI,TPsAA),TPsN60)),:,:),[1 2],'omitnan'),[],1))';
+    TP_FSW_HI_AA_N70(i,:) = (reshape(mean(FGSW(intersect(TPsF,intersect(intersect(TPsHI,TPsAA),TPsN70)),:,:),[1 2],'omitnan'),[],1))';
     TP_FLW_HI_AA_N70(i,:) = (reshape(mean(FGLW(intersect(TPsF,intersect(intersect(TPsHI,TPsAA),TPsN70)),:,:),[1 2],'omitnan'),[],1))';
     TP_FSW_HI_AB_N0(i,:) = (reshape(mean(FGSW(intersect(TPsF,intersect(intersect(TPsHI,TPsAB),TPsN0)),:,:),[1 2],'omitnan'),[],1))';
     TP_FLW_HI_AB_N0(i,:) = (reshape(mean(FGLW(intersect(TPsF,intersect(intersect(TPsHI,TPsAB),TPsN0)),:,:),[1 2],'omitnan'),[],1))';
@@ -1425,6 +1937,19 @@ TP_DSW_HI_N70_B(TP_DSW_HI_N70_B==0)=NaN;
 TP_DLW_HI_N70(TP_DLW_HI_N70==0)=NaN;
 TP_DLW_HI_N70_B(TP_DLW_HI_N70_B==0)=NaN;
 
+TP_DSW_NH_UN(TP_DSW_NH_UN==0)=NaN;
+TP_DSW_NH_UN_B(TP_DSW_NH_UN_B==0)=NaN;
+TP_DLW_NH_UN(TP_DLW_NH_UN==0)=NaN;
+TP_DLW_NH_UN_B(TP_DLW_NH_UN_B==0)=NaN;
+TP_DSW_NH_AA(TP_DSW_NH_AA==0)=NaN;
+TP_DSW_NH_AA_B(TP_DSW_NH_AA_B==0)=NaN;
+TP_DLW_NH_AA(TP_DLW_NH_AA==0)=NaN;
+TP_DLW_NH_AA_B(TP_DLW_NH_AA_B==0)=NaN;
+TP_DSW_NH_AB(TP_DSW_NH_AB==0)=NaN;
+TP_DSW_NH_AB_B(TP_DSW_NH_AB_B==0)=NaN;
+TP_DLW_NH_AB(TP_DLW_NH_AB==0)=NaN;
+TP_DLW_NH_AB_B(TP_DLW_NH_AB_B==0)=NaN;
+
 TP_DSW_HI_UN(TP_DSW_HI_UN==0)=NaN;
 TP_DSW_HI_UN_B(TP_DSW_HI_UN_B==0)=NaN;
 TP_DLW_HI_UN(TP_DLW_HI_UN==0)=NaN;
@@ -1437,6 +1962,43 @@ TP_DSW_HI_AB(TP_DSW_HI_AB==0)=NaN;
 TP_DSW_HI_AB_B(TP_DSW_HI_AB_B==0)=NaN;
 TP_DLW_HI_AB(TP_DLW_HI_AB==0)=NaN;
 TP_DLW_HI_AB_B(TP_DLW_HI_AB_B==0)=NaN;
+
+TP_DSW_NH_UN_N0(TP_DSW_NH_UN_N0==0)=NaN;
+TP_DSW_NH_UN_N0_B(TP_DSW_NH_UN_N0_B==0)=NaN;
+TP_DLW_NH_UN_N0(TP_DLW_NH_UN_N0==0)=NaN;
+TP_DLW_NH_UN_N0_B(TP_DLW_NH_UN_N0_B==0)=NaN;
+TP_DSW_NH_UN_N60(TP_DSW_NH_UN_N60==0)=NaN;
+TP_DSW_NH_UN_N60_B(TP_DSW_NH_UN_N60_B==0)=NaN;
+TP_DLW_NH_UN_N60(TP_DLW_NH_UN_N60==0)=NaN;
+TP_DLW_NH_UN_N60_B(TP_DLW_NH_UN_N60_B==0)=NaN;
+TP_DSW_NH_UN_N70(TP_DSW_NH_UN_N70==0)=NaN;
+TP_DSW_NH_UN_N70_B(TP_DSW_NH_UN_N70_B==0)=NaN;
+TP_DLW_NH_UN_N70(TP_DLW_NH_UN_N70==0)=NaN;
+TP_DLW_NH_UN_N70_B(TP_DLW_NH_UN_N70_B==0)=NaN;
+TP_DSW_NH_AA_N0(TP_DSW_NH_AA_N0==0)=NaN;
+TP_DSW_NH_AA_N0_B(TP_DSW_NH_AA_N0_B==0)=NaN;
+TP_DLW_NH_AA_N0(TP_DLW_NH_AA_N0==0)=NaN;
+TP_DLW_NH_AA_N0_B(TP_DLW_NH_AA_N0_B==0)=NaN;
+TP_DSW_NH_AA_N60(TP_DSW_NH_AA_N60==0)=NaN;
+TP_DSW_NH_AA_N60_B(TP_DSW_NH_AA_N60_B==0)=NaN;
+TP_DLW_NH_AA_N60(TP_DLW_NH_AA_N60==0)=NaN;
+TP_DLW_NH_AA_N60_B(TP_DLW_NH_AA_N60_B==0)=NaN;
+TP_DSW_NH_AA_N70(TP_DSW_NH_AA_N70==0)=NaN;
+TP_DSW_NH_AA_N70_B(TP_DSW_NH_AA_N70_B==0)=NaN;
+TP_DLW_NH_AA_N70(TP_DLW_NH_AA_N70==0)=NaN;
+TP_DLW_NH_AA_N70_B(TP_DLW_NH_AA_N70_B==0)=NaN;
+TP_DSW_NH_AB_N0(TP_DSW_NH_AB_N0==0)=NaN;
+TP_DSW_NH_AB_N0_B(TP_DSW_NH_AB_N0_B==0)=NaN;
+TP_DLW_NH_AB_N0(TP_DLW_NH_AB_N0==0)=NaN;
+TP_DLW_NH_AB_N0_B(TP_DLW_NH_AB_N0_B==0)=NaN;
+TP_DSW_NH_AB_N60(TP_DSW_NH_AB_N60==0)=NaN;
+TP_DSW_NH_AB_N60_B(TP_DSW_NH_AB_N60_B==0)=NaN;
+TP_DLW_NH_AB_N60(TP_DLW_NH_AB_N60==0)=NaN;
+TP_DLW_NH_AB_N60_B(TP_DLW_NH_AB_N60_B==0)=NaN;
+TP_DSW_NH_AB_N70(TP_DSW_NH_AB_N70==0)=NaN;
+TP_DSW_NH_AB_N70_B(TP_DSW_NH_AB_N70_B==0)=NaN;
+TP_DLW_NH_AB_N70(TP_DLW_NH_AB_N70==0)=NaN;
+TP_DLW_NH_AB_N70_B(TP_DLW_NH_AB_N70_B==0)=NaN;
 
 TP_DSW_HI_UN_N0(TP_DSW_HI_UN_N0==0)=NaN;
 TP_DSW_HI_UN_N0_B(TP_DSW_HI_UN_N0_B==0)=NaN;
@@ -1504,12 +2066,38 @@ TP_FLW_HI_N60(TP_FLW_HI_N60==0)=NaN;
 TP_FSW_HI_N70(TP_FSW_HI_N70==0)=NaN;
 TP_FLW_HI_N70(TP_FLW_HI_N70==0)=NaN;
 
+TP_FSW_NH_UN(TP_FSW_NH_UN==0)=NaN;
+TP_FLW_NH_UN(TP_FLW_NH_UN==0)=NaN;
+TP_FSW_NH_AA(TP_FSW_NH_AA==0)=NaN;
+TP_FLW_NH_AA(TP_FLW_NH_AA==0)=NaN;
+TP_FSW_NH_AB(TP_FSW_NH_AB==0)=NaN;
+TP_FLW_NH_AB(TP_FLW_NH_AB==0)=NaN;
+
 TP_FSW_HI_UN(TP_FSW_HI_UN==0)=NaN;
 TP_FLW_HI_UN(TP_FLW_HI_UN==0)=NaN;
 TP_FSW_HI_AA(TP_FSW_HI_AA==0)=NaN;
 TP_FLW_HI_AA(TP_FLW_HI_AA==0)=NaN;
 TP_FSW_HI_AB(TP_FSW_HI_AB==0)=NaN;
 TP_FLW_HI_AB(TP_FLW_HI_AB==0)=NaN;
+
+TP_FSW_NH_UN_N0(TP_FSW_NH_UN_N0==0)=NaN;
+TP_FLW_NH_UN_N0(TP_FLW_NH_UN_N0==0)=NaN;
+TP_FSW_NH_UN_N60(TP_FSW_NH_UN_N60==0)=NaN;
+TP_FLW_NH_UN_N60(TP_FLW_NH_UN_N60==0)=NaN;
+TP_FSW_NH_UN_N70(TP_FSW_NH_UN_N70==0)=NaN;
+TP_FLW_NH_UN_N70(TP_FLW_NH_UN_N70==0)=NaN;
+TP_FSW_NH_AA_N0(TP_FSW_NH_AA_N0==0)=NaN;
+TP_FLW_NH_AA_N0(TP_FLW_NH_AA_N0==0)=NaN;
+TP_FSW_NH_AA_N60(TP_FSW_NH_AA_N60==0)=NaN;
+TP_FLW_NH_AA_N60(TP_FLW_NH_AA_N60==0)=NaN;
+TP_FSW_NH_AA_N70(TP_FSW_NH_AA_N70==0)=NaN;
+TP_FLW_NH_AA_N70(TP_FLW_NH_AA_N70==0)=NaN;
+TP_FSW_NH_AB_N0(TP_FSW_NH_AB_N0==0)=NaN;
+TP_FLW_NH_AB_N0(TP_FLW_NH_AB_N0==0)=NaN;
+TP_FSW_NH_AB_N60(TP_FSW_NH_AB_N60==0)=NaN;
+TP_FLW_NH_AB_N60(TP_FLW_NH_AB_N60==0)=NaN;
+TP_FSW_NH_AB_N70(TP_FSW_NH_AB_N70==0)=NaN;
+TP_FLW_NH_AB_N70(TP_FLW_NH_AB_N70==0)=NaN;
 
 TP_FSW_HI_UN_N0(TP_FSW_HI_UN_N0==0)=NaN;
 TP_FLW_HI_UN_N0(TP_FLW_HI_UN_N0==0)=NaN;
@@ -1584,6 +2172,19 @@ TP_DSW_HI_N70_B_Mean = ndnanfilter(mean(TP_DSW_HI_N70_B,'omitnan'),'hamming',Fil
 TP_DLW_HI_N70_Mean = ndnanfilter(mean(TP_DLW_HI_N70,'omitnan'),'hamming',FilterWidth);
 TP_DLW_HI_N70_B_Mean = ndnanfilter(mean(TP_DLW_HI_N70_B,'omitnan'),'hamming',FilterWidth);
 
+TP_DSW_NH_UN_Mean = ndnanfilter(mean(TP_DSW_NH_UN,'omitnan'),'hamming',FilterWidth);
+TP_DSW_NH_UN_B_Mean = ndnanfilter(mean(TP_DSW_NH_UN_B,'omitnan'),'hamming',FilterWidth);
+TP_DLW_NH_UN_Mean = ndnanfilter(mean(TP_DLW_NH_UN,'omitnan'),'hamming',FilterWidth);
+TP_DLW_NH_UN_B_Mean = ndnanfilter(mean(TP_DLW_NH_UN_B,'omitnan'),'hamming',FilterWidth);
+TP_DSW_NH_AA_Mean = ndnanfilter(mean(TP_DSW_NH_AA,'omitnan'),'hamming',FilterWidth);
+TP_DSW_NH_AA_B_Mean = ndnanfilter(mean(TP_DSW_NH_AA_B,'omitnan'),'hamming',FilterWidth);
+TP_DLW_NH_AA_Mean = ndnanfilter(mean(TP_DLW_NH_AA,'omitnan'),'hamming',FilterWidth);
+TP_DLW_NH_AA_B_Mean = ndnanfilter(mean(TP_DLW_NH_AA_B,'omitnan'),'hamming',FilterWidth);
+TP_DSW_NH_AB_Mean = ndnanfilter(mean(TP_DSW_NH_AB,'omitnan'),'hamming',FilterWidth);
+TP_DSW_NH_AB_B_Mean = ndnanfilter(mean(TP_DSW_NH_AB_B,'omitnan'),'hamming',FilterWidth);
+TP_DLW_NH_AB_Mean = ndnanfilter(mean(TP_DLW_NH_AB,'omitnan'),'hamming',FilterWidth);
+TP_DLW_NH_AB_B_Mean = ndnanfilter(mean(TP_DLW_NH_AB_B,'omitnan'),'hamming',FilterWidth);
+
 TP_DSW_HI_UN_Mean = ndnanfilter(mean(TP_DSW_HI_UN,'omitnan'),'hamming',FilterWidth);
 TP_DSW_HI_UN_B_Mean = ndnanfilter(mean(TP_DSW_HI_UN_B,'omitnan'),'hamming',FilterWidth);
 TP_DLW_HI_UN_Mean = ndnanfilter(mean(TP_DLW_HI_UN,'omitnan'),'hamming',FilterWidth);
@@ -1596,6 +2197,43 @@ TP_DSW_HI_AB_Mean = ndnanfilter(mean(TP_DSW_HI_AB,'omitnan'),'hamming',FilterWid
 TP_DSW_HI_AB_B_Mean = ndnanfilter(mean(TP_DSW_HI_AB_B,'omitnan'),'hamming',FilterWidth);
 TP_DLW_HI_AB_Mean = ndnanfilter(mean(TP_DLW_HI_AB,'omitnan'),'hamming',FilterWidth);
 TP_DLW_HI_AB_B_Mean = ndnanfilter(mean(TP_DLW_HI_AB_B,'omitnan'),'hamming',FilterWidth);
+
+TP_DSW_NH_UN_N0_Mean = ndnanfilter(mean(TP_DSW_NH_UN_N0,'omitnan'),'hamming',FilterWidth);
+TP_DSW_NH_UN_N0_B_Mean = ndnanfilter(mean(TP_DSW_NH_UN_N0_B,'omitnan'),'hamming',FilterWidth);
+TP_DLW_NH_UN_N0_Mean = ndnanfilter(mean(TP_DLW_NH_UN_N0,'omitnan'),'hamming',FilterWidth);
+TP_DLW_NH_UN_N0_B_Mean = ndnanfilter(mean(TP_DLW_NH_UN_N0_B,'omitnan'),'hamming',FilterWidth);
+TP_DSW_NH_UN_N60_Mean = ndnanfilter(mean(TP_DSW_NH_UN_N60,'omitnan'),'hamming',FilterWidth);
+TP_DSW_NH_UN_N60_B_Mean = ndnanfilter(mean(TP_DSW_NH_UN_N60_B,'omitnan'),'hamming',FilterWidth);
+TP_DLW_NH_UN_N60_Mean = ndnanfilter(mean(TP_DLW_NH_UN_N60,'omitnan'),'hamming',FilterWidth);
+TP_DLW_NH_UN_N60_B_Mean = ndnanfilter(mean(TP_DLW_NH_UN_N60_B,'omitnan'),'hamming',FilterWidth);
+TP_DSW_NH_UN_N70_Mean = ndnanfilter(mean(TP_DSW_NH_UN_N70,'omitnan'),'hamming',FilterWidth);
+TP_DSW_NH_UN_N70_B_Mean = ndnanfilter(mean(TP_DSW_NH_UN_N70_B,'omitnan'),'hamming',FilterWidth);
+TP_DLW_NH_UN_N70_Mean = ndnanfilter(mean(TP_DLW_NH_UN_N70,'omitnan'),'hamming',FilterWidth);
+TP_DLW_NH_UN_N70_B_Mean = ndnanfilter(mean(TP_DLW_NH_UN_N70_B,'omitnan'),'hamming',FilterWidth);
+TP_DSW_NH_AA_N0_Mean = ndnanfilter(mean(TP_DSW_NH_AA_N0,'omitnan'),'hamming',FilterWidth);
+TP_DSW_NH_AA_N0_B_Mean = ndnanfilter(mean(TP_DSW_NH_AA_N0_B,'omitnan'),'hamming',FilterWidth);
+TP_DLW_NH_AA_N0_Mean = ndnanfilter(mean(TP_DLW_NH_AA_N0,'omitnan'),'hamming',FilterWidth);
+TP_DLW_NH_AA_N0_B_Mean = ndnanfilter(mean(TP_DLW_NH_AA_N0_B,'omitnan'),'hamming',FilterWidth);
+TP_DSW_NH_AA_N60_Mean = ndnanfilter(mean(TP_DSW_NH_AA_N60,'omitnan'),'hamming',FilterWidth);
+TP_DSW_NH_AA_N60_B_Mean = ndnanfilter(mean(TP_DSW_NH_AA_N60_B,'omitnan'),'hamming',FilterWidth);
+TP_DLW_NH_AA_N60_Mean = ndnanfilter(mean(TP_DLW_NH_AA_N60,'omitnan'),'hamming',FilterWidth);
+TP_DLW_NH_AA_N60_B_Mean = ndnanfilter(mean(TP_DLW_NH_AA_N60_B,'omitnan'),'hamming',FilterWidth);
+TP_DSW_NH_AA_N70_Mean = ndnanfilter(mean(TP_DSW_NH_AA_N70,'omitnan'),'hamming',FilterWidth);
+TP_DSW_NH_AA_N70_B_Mean = ndnanfilter(mean(TP_DSW_NH_AA_N70_B,'omitnan'),'hamming',FilterWidth);
+TP_DLW_NH_AA_N70_Mean = ndnanfilter(mean(TP_DLW_NH_AA_N70,'omitnan'),'hamming',FilterWidth);
+TP_DLW_NH_AA_N70_B_Mean = ndnanfilter(mean(TP_DLW_NH_AA_N70_B,'omitnan'),'hamming',FilterWidth);
+TP_DSW_NH_AB_N0_Mean = ndnanfilter(mean(TP_DSW_NH_AB_N0,'omitnan'),'hamming',FilterWidth);
+TP_DSW_NH_AB_N0_B_Mean = ndnanfilter(mean(TP_DSW_NH_AB_N0_B,'omitnan'),'hamming',FilterWidth);
+TP_DLW_NH_AB_N0_Mean = ndnanfilter(mean(TP_DLW_NH_AB_N0,'omitnan'),'hamming',FilterWidth);
+TP_DLW_NH_AB_N0_B_Mean = ndnanfilter(mean(TP_DLW_NH_AB_N0_B,'omitnan'),'hamming',FilterWidth);
+TP_DSW_NH_AB_N60_Mean = ndnanfilter(mean(TP_DSW_NH_AB_N60,'omitnan'),'hamming',FilterWidth);
+TP_DSW_NH_AB_N60_B_Mean = ndnanfilter(mean(TP_DSW_NH_AB_N60_B,'omitnan'),'hamming',FilterWidth);
+TP_DLW_NH_AB_N60_Mean = ndnanfilter(mean(TP_DLW_NH_AB_N60,'omitnan'),'hamming',FilterWidth);
+TP_DLW_NH_AB_N60_B_Mean = ndnanfilter(mean(TP_DLW_NH_AB_N60_B,'omitnan'),'hamming',FilterWidth);
+TP_DSW_NH_AB_N70_Mean = ndnanfilter(mean(TP_DSW_NH_AB_N70,'omitnan'),'hamming',FilterWidth);
+TP_DSW_NH_AB_N70_B_Mean = ndnanfilter(mean(TP_DSW_NH_AB_N70_B,'omitnan'),'hamming',FilterWidth);
+TP_DLW_NH_AB_N70_Mean = ndnanfilter(mean(TP_DLW_NH_AB_N70,'omitnan'),'hamming',FilterWidth);
+TP_DLW_NH_AB_N70_B_Mean = ndnanfilter(mean(TP_DLW_NH_AB_N70_B,'omitnan'),'hamming',FilterWidth);
 
 TP_DSW_HI_UN_N0_Mean = ndnanfilter(mean(TP_DSW_HI_UN_N0,'omitnan'),'hamming',FilterWidth);
 TP_DSW_HI_UN_N0_B_Mean = ndnanfilter(mean(TP_DSW_HI_UN_N0_B,'omitnan'),'hamming',FilterWidth);
@@ -1663,12 +2301,38 @@ TP_FLW_HI_N60_Mean = ndnanfilter(mean(TP_FLW_HI_N60,'omitnan'),'hamming',FilterW
 TP_FSW_HI_N70_Mean = ndnanfilter(mean(TP_FSW_HI_N70,'omitnan'),'hamming',FilterWidth);
 TP_FLW_HI_N70_Mean = ndnanfilter(mean(TP_FLW_HI_N70,'omitnan'),'hamming',FilterWidth);
 
+TP_FSW_NH_UN_Mean = ndnanfilter(mean(TP_FSW_NH_UN,'omitnan'),'hamming',FilterWidth);
+TP_FLW_NH_UN_Mean = ndnanfilter(mean(TP_FLW_NH_UN,'omitnan'),'hamming',FilterWidth);
+TP_FSW_NH_AA_Mean = ndnanfilter(mean(TP_FSW_NH_AA,'omitnan'),'hamming',FilterWidth);
+TP_FLW_NH_AA_Mean = ndnanfilter(mean(TP_FLW_NH_AA,'omitnan'),'hamming',FilterWidth);
+TP_FSW_NH_AB_Mean = ndnanfilter(mean(TP_FSW_NH_AB,'omitnan'),'hamming',FilterWidth);
+TP_FLW_NH_AB_Mean = ndnanfilter(mean(TP_FLW_NH_AB,'omitnan'),'hamming',FilterWidth);
+
 TP_FSW_HI_UN_Mean = ndnanfilter(mean(TP_FSW_HI_UN,'omitnan'),'hamming',FilterWidth);
 TP_FLW_HI_UN_Mean = ndnanfilter(mean(TP_FLW_HI_UN,'omitnan'),'hamming',FilterWidth);
 TP_FSW_HI_AA_Mean = ndnanfilter(mean(TP_FSW_HI_AA,'omitnan'),'hamming',FilterWidth);
 TP_FLW_HI_AA_Mean = ndnanfilter(mean(TP_FLW_HI_AA,'omitnan'),'hamming',FilterWidth);
 TP_FSW_HI_AB_Mean = ndnanfilter(mean(TP_FSW_HI_AB,'omitnan'),'hamming',FilterWidth);
 TP_FLW_HI_AB_Mean = ndnanfilter(mean(TP_FLW_HI_AB,'omitnan'),'hamming',FilterWidth);
+
+TP_FSW_NH_UN_N0_Mean = ndnanfilter(mean(TP_FSW_NH_UN_N0,'omitnan'),'hamming',FilterWidth);
+TP_FLW_NH_UN_N0_Mean = ndnanfilter(mean(TP_FLW_NH_UN_N0,'omitnan'),'hamming',FilterWidth);
+TP_FSW_NH_UN_N60_Mean = ndnanfilter(mean(TP_FSW_NH_UN_N60,'omitnan'),'hamming',FilterWidth);
+TP_FLW_NH_UN_N60_Mean = ndnanfilter(mean(TP_FLW_NH_UN_N60,'omitnan'),'hamming',FilterWidth);
+TP_FSW_NH_UN_N70_Mean = ndnanfilter(mean(TP_FSW_NH_UN_N70,'omitnan'),'hamming',FilterWidth);
+TP_FLW_NH_UN_N70_Mean = ndnanfilter(mean(TP_FLW_NH_UN_N70,'omitnan'),'hamming',FilterWidth);
+TP_FSW_NH_AA_N0_Mean = ndnanfilter(mean(TP_FSW_NH_AA_N0,'omitnan'),'hamming',FilterWidth);
+TP_FLW_NH_AA_N0_Mean = ndnanfilter(mean(TP_FLW_NH_AA_N0,'omitnan'),'hamming',FilterWidth);
+TP_FSW_NH_AA_N60_Mean = ndnanfilter(mean(TP_FSW_NH_AA_N60,'omitnan'),'hamming',FilterWidth);
+TP_FLW_NH_AA_N60_Mean = ndnanfilter(mean(TP_FLW_NH_AA_N60,'omitnan'),'hamming',FilterWidth);
+TP_FSW_NH_AA_N70_Mean = ndnanfilter(mean(TP_FSW_NH_AA_N70,'omitnan'),'hamming',FilterWidth);
+TP_FLW_NH_AA_N70_Mean = ndnanfilter(mean(TP_FLW_NH_AA_N70,'omitnan'),'hamming',FilterWidth);
+TP_FSW_NH_AB_N0_Mean = ndnanfilter(mean(TP_FSW_NH_AB_N0,'omitnan'),'hamming',FilterWidth);
+TP_FLW_NH_AB_N0_Mean = ndnanfilter(mean(TP_FLW_NH_AB_N0,'omitnan'),'hamming',FilterWidth);
+TP_FSW_NH_AB_N60_Mean = ndnanfilter(mean(TP_FSW_NH_AB_N60,'omitnan'),'hamming',FilterWidth);
+TP_FLW_NH_AB_N60_Mean = ndnanfilter(mean(TP_FLW_NH_AB_N60,'omitnan'),'hamming',FilterWidth);
+TP_FSW_NH_AB_N70_Mean = ndnanfilter(mean(TP_FSW_NH_AB_N70,'omitnan'),'hamming',FilterWidth);
+TP_FLW_NH_AB_N70_Mean = ndnanfilter(mean(TP_FLW_NH_AB_N70,'omitnan'),'hamming',FilterWidth);
 
 TP_FSW_HI_UN_N0_Mean = ndnanfilter(mean(TP_FSW_HI_UN_N0,'omitnan'),'hamming',FilterWidth);
 TP_FLW_HI_UN_N0_Mean = ndnanfilter(mean(TP_FLW_HI_UN_N0,'omitnan'),'hamming',FilterWidth);
@@ -1743,6 +2407,19 @@ TP_DSW_HI_N70_B_SEM = (std(TP_DSW_HI_N70_B,0,1,'omitnan')./sqrt(squeeze(sum(~isn
 TP_DLW_HI_N70_SEM = (std(TP_DLW_HI_N70,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_HI_N70),[1 2])))');
 TP_DLW_HI_N70_B_SEM = (std(TP_DLW_HI_N70_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_HI_N70_B),[1 2])))');
 
+TP_DSW_NH_UN_SEM = (std(TP_DSW_NH_UN,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_NH_UN),[1 2])))');
+TP_DSW_NH_UN_B_SEM = (std(TP_DSW_NH_UN_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_NH_UN_B),[1 2])))');
+TP_DLW_NH_UN_SEM = (std(TP_DLW_NH_UN,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_NH_UN),[1 2])))');
+TP_DLW_NH_UN_B_SEM = (std(TP_DLW_NH_UN_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_NH_UN_B),[1 2])))');
+TP_DSW_NH_AA_SEM = (std(TP_DSW_NH_AA,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_NH_AA),[1 2])))');
+TP_DSW_NH_AA_B_SEM = (std(TP_DSW_NH_AA_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_NH_AA_B),[1 2])))');
+TP_DLW_NH_AA_SEM = (std(TP_DLW_NH_AA,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_NH_AA),[1 2])))');
+TP_DLW_NH_AA_B_SEM = (std(TP_DLW_NH_AA_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_NH_AA_B),[1 2])))');
+TP_DSW_NH_AB_SEM = (std(TP_DSW_NH_AB,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_NH_AB),[1 2])))');
+TP_DSW_NH_AB_B_SEM = (std(TP_DSW_NH_AB_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_NH_AB_B),[1 2])))');
+TP_DLW_NH_AB_SEM = (std(TP_DLW_NH_AB,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_NH_AB),[1 2])))');
+TP_DLW_NH_AB_B_SEM = (std(TP_DLW_NH_AB_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_NH_AB_B),[1 2])))');
+
 TP_DSW_HI_UN_SEM = (std(TP_DSW_HI_UN,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_HI_UN),[1 2])))');
 TP_DSW_HI_UN_B_SEM = (std(TP_DSW_HI_UN_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_HI_UN_B),[1 2])))');
 TP_DLW_HI_UN_SEM = (std(TP_DLW_HI_UN,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_HI_UN),[1 2])))');
@@ -1755,6 +2432,43 @@ TP_DSW_HI_AB_SEM = (std(TP_DSW_HI_AB,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW
 TP_DSW_HI_AB_B_SEM = (std(TP_DSW_HI_AB_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_HI_AB_B),[1 2])))');
 TP_DLW_HI_AB_SEM = (std(TP_DLW_HI_AB,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_HI_AB),[1 2])))');
 TP_DLW_HI_AB_B_SEM = (std(TP_DLW_HI_AB_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_HI_AB_B),[1 2])))');
+
+TP_DSW_NH_UN_N0_SEM = (std(TP_DSW_NH_UN_N0,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_NH_UN_N0),[1 2])))');
+TP_DSW_NH_UN_N0_B_SEM = (std(TP_DSW_NH_UN_N0_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_NH_UN_N0_B),[1 2])))');
+TP_DLW_NH_UN_N0_SEM = (std(TP_DLW_NH_UN_N0,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_NH_UN_N0),[1 2])))');
+TP_DLW_NH_UN_N0_B_SEM = (std(TP_DLW_NH_UN_N0_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_NH_UN_N0_B),[1 2])))');
+TP_DSW_NH_UN_N60_SEM = (std(TP_DSW_NH_UN_N60,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_NH_UN_N60),[1 2])))');
+TP_DSW_NH_UN_N60_B_SEM = (std(TP_DSW_NH_UN_N60_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_NH_UN_N60_B),[1 2])))');
+TP_DLW_NH_UN_N60_SEM = (std(TP_DLW_NH_UN_N60,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_NH_UN_N60),[1 2])))');
+TP_DLW_NH_UN_N60_B_SEM = (std(TP_DLW_NH_UN_N60_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_NH_UN_N60_B),[1 2])))');
+TP_DSW_NH_UN_N70_SEM = (std(TP_DSW_NH_UN_N70,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_NH_UN_N70),[1 2])))');
+TP_DSW_NH_UN_N70_B_SEM = (std(TP_DSW_NH_UN_N70_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_NH_UN_N70_B),[1 2])))');
+TP_DLW_NH_UN_N70_SEM = (std(TP_DLW_NH_UN_N70,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_NH_UN_N70),[1 2])))');
+TP_DLW_NH_UN_N70_B_SEM = (std(TP_DLW_NH_UN_N70_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_NH_UN_N70_B),[1 2])))');
+TP_DSW_NH_AA_N0_SEM = (std(TP_DSW_NH_AA_N0,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_NH_AA_N0),[1 2])))');
+TP_DSW_NH_AA_N0_B_SEM = (std(TP_DSW_NH_AA_N0_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_NH_AA_N0_B),[1 2])))');
+TP_DLW_NH_AA_N0_SEM = (std(TP_DLW_NH_AA_N0,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_NH_AA_N0),[1 2])))');
+TP_DLW_NH_AA_N0_B_SEM = (std(TP_DLW_NH_AA_N0_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_NH_AA_N0_B),[1 2])))');
+TP_DSW_NH_AA_N60_SEM = (std(TP_DSW_NH_AA_N60,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_NH_AA_N60),[1 2])))');
+TP_DSW_NH_AA_N60_B_SEM = (std(TP_DSW_NH_AA_N60_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_NH_AA_N60_B),[1 2])))');
+TP_DLW_NH_AA_N60_SEM = (std(TP_DLW_NH_AA_N60,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_NH_AA_N60),[1 2])))');
+TP_DLW_NH_AA_N60_B_SEM = (std(TP_DLW_NH_AA_N60_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_NH_AA_N60_B),[1 2])))');
+TP_DSW_NH_AA_N70_SEM = (std(TP_DSW_NH_AA_N70,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_NH_AA_N70),[1 2])))');
+TP_DSW_NH_AA_N70_B_SEM = (std(TP_DSW_NH_AA_N70_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_NH_AA_N70_B),[1 2])))');
+TP_DLW_NH_AA_N70_SEM = (std(TP_DLW_NH_AA_N70,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_NH_AA_N70),[1 2])))');
+TP_DLW_NH_AA_N70_B_SEM = (std(TP_DLW_NH_AA_N70_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_NH_AA_N70_B),[1 2])))');
+TP_DSW_NH_AB_N0_SEM = (std(TP_DSW_NH_AB_N0,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_NH_AB_N0),[1 2])))');
+TP_DSW_NH_AB_N0_B_SEM = (std(TP_DSW_NH_AB_N0_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_NH_AB_N0_B),[1 2])))');
+TP_DLW_NH_AB_N0_SEM = (std(TP_DLW_NH_AB_N0,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_NH_AB_N0),[1 2])))');
+TP_DLW_NH_AB_N0_B_SEM = (std(TP_DLW_NH_AB_N0_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_NH_AB_N0_B),[1 2])))');
+TP_DSW_NH_AB_N60_SEM = (std(TP_DSW_NH_AB_N60,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_NH_AB_N60),[1 2])))');
+TP_DSW_NH_AB_N60_B_SEM = (std(TP_DSW_NH_AB_N60_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_NH_AB_N60_B),[1 2])))');
+TP_DLW_NH_AB_N60_SEM = (std(TP_DLW_NH_AB_N60,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_NH_AB_N60),[1 2])))');
+TP_DLW_NH_AB_N60_B_SEM = (std(TP_DLW_NH_AB_N60_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_NH_AB_N60_B),[1 2])))');
+TP_DSW_NH_AB_N70_SEM = (std(TP_DSW_NH_AB_N70,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_NH_AB_N70),[1 2])))');
+TP_DSW_NH_AB_N70_B_SEM = (std(TP_DSW_NH_AB_N70_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_NH_AB_N70_B),[1 2])))');
+TP_DLW_NH_AB_N70_SEM = (std(TP_DLW_NH_AB_N70,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_NH_AB_N70),[1 2])))');
+TP_DLW_NH_AB_N70_B_SEM = (std(TP_DLW_NH_AB_N70_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DLW_NH_AB_N70_B),[1 2])))');
 
 TP_DSW_HI_UN_N0_SEM = (std(TP_DSW_HI_UN_N0,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_HI_UN_N0),[1 2])))');
 TP_DSW_HI_UN_N0_B_SEM = (std(TP_DSW_HI_UN_N0_B,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(DSW_HI_UN_N0_B),[1 2])))');
@@ -1822,12 +2536,38 @@ TP_FLW_HI_N60_SEM = (std(TP_FLW_HI_N60,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(F
 TP_FSW_HI_N70_SEM = (std(TP_FSW_HI_N70,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FSW_HI_N70),[1 2])))');
 TP_FLW_HI_N70_SEM = (std(TP_FLW_HI_N70,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FLW_HI_N70),[1 2])))');
 
+TP_FSW_NH_UN_SEM = (std(TP_FSW_NH_UN,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FSW_NH_UN),[1 2])))');
+TP_FLW_NH_UN_SEM = (std(TP_FLW_NH_UN,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FLW_NH_UN),[1 2])))');
+TP_FSW_NH_AA_SEM = (std(TP_FSW_NH_AA,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FSW_NH_AA),[1 2])))');
+TP_FLW_NH_AA_SEM = (std(TP_FLW_NH_AA,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FLW_NH_AA),[1 2])))');
+TP_FSW_NH_AB_SEM = (std(TP_FSW_NH_AB,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FSW_NH_AB),[1 2])))');
+TP_FLW_NH_AB_SEM = (std(TP_FLW_NH_AB,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FLW_NH_AB),[1 2])))');
+
 TP_FSW_HI_UN_SEM = (std(TP_FSW_HI_UN,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FSW_HI_UN),[1 2])))');
 TP_FLW_HI_UN_SEM = (std(TP_FLW_HI_UN,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FLW_HI_UN),[1 2])))');
 TP_FSW_HI_AA_SEM = (std(TP_FSW_HI_AA,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FSW_HI_AA),[1 2])))');
 TP_FLW_HI_AA_SEM = (std(TP_FLW_HI_AA,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FLW_HI_AA),[1 2])))');
 TP_FSW_HI_AB_SEM = (std(TP_FSW_HI_AB,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FSW_HI_AB),[1 2])))');
 TP_FLW_HI_AB_SEM = (std(TP_FLW_HI_AB,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FLW_HI_AB),[1 2])))');
+
+TP_FSW_NH_UN_N0_SEM = (std(TP_FSW_NH_UN_N0,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FSW_NH_UN_N0),[1 2])))');
+TP_FLW_NH_UN_N0_SEM = (std(TP_FLW_NH_UN_N0,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FLW_NH_UN_N0),[1 2])))');
+TP_FSW_NH_UN_N60_SEM = (std(TP_FSW_NH_UN_N60,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FSW_NH_UN_N60),[1 2])))');
+TP_FLW_NH_UN_N60_SEM = (std(TP_FLW_NH_UN_N60,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FLW_NH_UN_N60),[1 2])))');
+TP_FSW_NH_UN_N70_SEM = (std(TP_FSW_NH_UN_N70,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FSW_NH_UN_N70),[1 2])))');
+TP_FLW_NH_UN_N70_SEM = (std(TP_FLW_NH_UN_N70,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FLW_NH_UN_N70),[1 2])))');
+TP_FSW_NH_AA_N0_SEM = (std(TP_FSW_NH_AA_N0,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FSW_NH_AA_N0),[1 2])))');
+TP_FLW_NH_AA_N0_SEM = (std(TP_FLW_NH_AA_N0,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FLW_NH_AA_N0),[1 2])))');
+TP_FSW_NH_AA_N60_SEM = (std(TP_FSW_NH_AA_N60,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FSW_NH_AA_N60),[1 2])))');
+TP_FLW_NH_AA_N60_SEM = (std(TP_FLW_NH_AA_N60,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FLW_NH_AA_N60),[1 2])))');
+TP_FSW_NH_AA_N70_SEM = (std(TP_FSW_NH_AA_N70,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FSW_NH_AA_N70),[1 2])))');
+TP_FLW_NH_AA_N70_SEM = (std(TP_FLW_NH_AA_N70,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FLW_NH_AA_N70),[1 2])))');
+TP_FSW_NH_AB_N0_SEM = (std(TP_FSW_NH_AB_N0,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FSW_NH_AB_N0),[1 2])))');
+TP_FLW_NH_AB_N0_SEM = (std(TP_FLW_NH_AB_N0,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FLW_NH_AB_N0),[1 2])))');
+TP_FSW_NH_AB_N60_SEM = (std(TP_FSW_NH_AB_N60,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FSW_NH_AB_N60),[1 2])))');
+TP_FLW_NH_AB_N60_SEM = (std(TP_FLW_NH_AB_N60,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FLW_NH_AB_N60),[1 2])))');
+TP_FSW_NH_AB_N70_SEM = (std(TP_FSW_NH_AB_N70,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FSW_NH_AB_N70),[1 2])))');
+TP_FLW_NH_AB_N70_SEM = (std(TP_FLW_NH_AB_N70,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FLW_NH_AB_N70),[1 2])))');
 
 TP_FSW_HI_UN_N0_SEM = (std(TP_FSW_HI_UN_N0,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FSW_HI_UN_N0),[1 2])))');
 TP_FLW_HI_UN_N0_SEM = (std(TP_FLW_HI_UN_N0,0,1,'omitnan')./sqrt(squeeze(sum(~isnan(FLW_HI_UN_N0),[1 2])))');
@@ -1852,17 +2592,23 @@ f1 = figure;t1=tiledlayout(1,2);ax1 = nexttile;ax2 = nexttile;
 f2 = figure;t2=tiledlayout(1,2);ax3 = nexttile;ax4 = nexttile;
 f3 = figure;t3=tiledlayout(1,2);ax5 = nexttile;ax6 = nexttile;
 f4 = figure;t4=tiledlayout(1,2);ax7 = nexttile;ax8 = nexttile;
-f5 = figure;t5=tiledlayout(1,2);ax11 = nexttile;ax12 = nexttile;
-f6 = figure;t6=tiledlayout(1,2);ax13 = nexttile;ax14 = nexttile;
-f9 = figure;t9=tiledlayout(1,2);ax21 = nexttile;ax22 = nexttile;
-f10 = figure;t10=tiledlayout(1,2);ax23 = nexttile;ax24 = nexttile;
-f11 = figure;t11=tiledlayout(1,2);ax25 = nexttile;ax26 = nexttile;
-f12 = figure;t12=tiledlayout(1,2);ax27 = nexttile;ax28 = nexttile;
-f13 = figure;t13=tiledlayout(1,2);ax31 = nexttile;ax32 = nexttile;
-f14 = figure;t14=tiledlayout(1,2);ax33 = nexttile;ax34 = nexttile;
+f5 = figure;t5=tiledlayout(1,2);ax9 = nexttile;ax10 = nexttile;
+f6 = figure;t6=tiledlayout(1,2);ax11 = nexttile;ax12 = nexttile;
+f7 = figure;t7=tiledlayout(1,2);ax13 = nexttile;ax14 = nexttile;
+f8 = figure;t8=tiledlayout(1,2);ax15 = nexttile;ax16 = nexttile;
+f9 = figure;t9=tiledlayout(1,2);ax17 = nexttile;ax18 = nexttile;
+f10 = figure;t10=tiledlayout(1,2);ax19 = nexttile;ax20 = nexttile;
+f11 = figure;t11=tiledlayout(1,2);ax21 = nexttile;ax22 = nexttile;
+f12 = figure;t12=tiledlayout(1,2);ax23 = nexttile;ax24 = nexttile;
+f13 = figure;t13=tiledlayout(1,2);ax25 = nexttile;ax26 = nexttile;
+f14 = figure;t14=tiledlayout(1,2);ax27 = nexttile;ax28 = nexttile;
+f15 = figure;t15=tiledlayout(1,2);ax29 = nexttile;ax30 = nexttile;
+f16 = figure;t16=tiledlayout(1,2);ax31 = nexttile;ax32 = nexttile;
+f17 = figure;t17=tiledlayout(1,2);ax33 = nexttile;ax34 = nexttile;
+f18 = figure;t18=tiledlayout(1,2);ax35 = nexttile;ax36 = nexttile;
 
-hold([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax11 ax12 ax13 ax14 ax21 ax22 ax23 ax24 ax25 ax26 ax27 ax28 ax31 ax32 ax33 ax34],'on')
-grid([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax11 ax12 ax13 ax14 ax21 ax22 ax23 ax24 ax25 ax26 ax27 ax28 ax31 ax32 ax33 ax34],'on')
+hold([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10 ax11 ax12 ax13 ax14 ax15 ax16 ax17 ax18 ax19 ax20 ax21 ax22 ax23 ax24 ax25 ax26 ax27 ax28 ax29 ax30 ax31 ax32 ax33 ax34 ax35 ax36],'on')
+grid([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10 ax11 ax12 ax13 ax14 ax15 ax16 ax17 ax18 ax19 ax20 ax21 ax22 ax23 ax24 ax25 ax26 ax27 ax28 ax29 ax30 ax31 ax32 ax33 ax34 ax35 ax36],'on')
 
 % Plot event onset and baseline markers
 xline(ax1,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
@@ -1873,10 +2619,18 @@ xline(ax5,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientati
 xline(ax6,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
 xline(ax7,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
 xline(ax8,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax9,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax10,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
 xline(ax11,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
 xline(ax12,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
 xline(ax13,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
 xline(ax14,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax15,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax16,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax17,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax18,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax19,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax20,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
 xline(ax21,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
 xline(ax22,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
 xline(ax23,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
@@ -1885,332 +2639,152 @@ xline(ax25,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientat
 xline(ax26,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
 xline(ax27,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
 xline(ax28,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax29,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax30,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
 xline(ax31,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
 xline(ax32,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
 xline(ax33,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
 xline(ax34,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax35,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax36,0,'--','Event onset','LabelVerticalAlignment','bottom','LabelOrientation','horizontal','handlevisibility','off')
 
-xline(ax5,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
-xline(ax6,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax3,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax4,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
 xline(ax7,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
 xline(ax8,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
-xline(ax25,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
-xline(ax26,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
-xline(ax27,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
-xline(ax28,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax11,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax12,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax15,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax16,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax19,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax20,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax23,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
+xline(ax24,-AdapBL,'--','Baseline','LabelVerticalAlignment','top','LabelOrientation','horizontal','handlevisibility','off')
 
 % plot(linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)),GSW_Mean,color=SColor,linewidth=2);hold on;
 % GSW_Mean(isnan(GSW_Mean))=0;GSW_SEM(isnan(GSW_SEM))=0;
 % fill([linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3)), flipud(linspace(-TimeStartW,size(GSW,3)/Param.Fs,size(GSW,3))')'],[(GSW_Mean+GSW_SEM), flipud((GSW_Mean-GSW_SEM)')'],SColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
 
-% Define time vectors
-t_DSW_NH = linspace(-TimeStartW,size(DSW_NH,3)/Param.Fs,size(DSW_NH,3));
-t_DSW_NH_N0 = linspace(-TimeStartW,size(DSW_NH_N0,3)/Param.Fs,size(DSW_NH_N0,3));
-t_DSW_NH_N60 = linspace(-TimeStartW,size(DSW_NH_N60,3)/Param.Fs,size(DSW_NH_N60,3));
-t_DSW_NH_N70 = linspace(-TimeStartW,size(DSW_NH_N70,3)/Param.Fs,size(DSW_NH_N70,3));
-t_DLW_NH = linspace(-TimeStartW,size(DLW_NH,3)/Param.Fs,size(DLW_NH,3));
-t_DLW_NH_N0 = linspace(-TimeStartW,size(DLW_NH_N0,3)/Param.Fs,size(DLW_NH_N0,3));
-t_DLW_NH_N60 = linspace(-TimeStartW,size(DLW_NH_N60,3)/Param.Fs,size(DLW_NH_N60,3));
-t_DLW_NH_N70 = linspace(-TimeStartW,size(DLW_NH_N70,3)/Param.Fs,size(DLW_NH_N70,3));
-t_DSW_HI = linspace(-TimeStartW,size(DSW_HI,3)/Param.Fs,size(DSW_HI,3));
-t_DSW_HI_N0 = linspace(-TimeStartW,size(DSW_HI_N0,3)/Param.Fs,size(DSW_HI_N0,3));
-t_DSW_HI_N60 = linspace(-TimeStartW,size(DSW_HI_N60,3)/Param.Fs,size(DSW_HI_N60,3));
-t_DSW_HI_N70 = linspace(-TimeStartW,size(DSW_HI_N70,3)/Param.Fs,size(DSW_HI_N70,3));
-t_DLW_HI = linspace(-TimeStartW,size(DLW_HI,3)/Param.Fs,size(DLW_HI,3));
-t_DLW_HI_N0 = linspace(-TimeStartW,size(DLW_HI_N0,3)/Param.Fs,size(DLW_HI_N0,3));
-t_DLW_HI_N60 = linspace(-TimeStartW,size(DLW_HI_N60,3)/Param.Fs,size(DLW_HI_N60,3));
-t_DLW_HI_N70 = linspace(-TimeStartW,size(DLW_HI_N70,3)/Param.Fs,size(DLW_HI_N70,3));
+% Define time vector
+t = linspace(-TimeStartW,size(DGSW,3)/Param.Fs,size(DGSW,3));
 
-t_DSW_NH_B = linspace(-TimeStartW,size(DSW_NH_B,3)/Param.Fs,size(DSW_NH_B,3));
-t_DSW_NH_N0_B = linspace(-TimeStartW,size(DSW_NH_N0_B,3)/Param.Fs,size(DSW_NH_N0_B,3));
-t_DSW_NH_N60_B = linspace(-TimeStartW,size(DSW_NH_N60_B,3)/Param.Fs,size(DSW_NH_N60_B,3));
-t_DSW_NH_N70_B = linspace(-TimeStartW,size(DSW_NH_N70_B,3)/Param.Fs,size(DSW_NH_N70_B,3));
-t_DLW_NH_B = linspace(-TimeStartW,size(DLW_NH_B,3)/Param.Fs,size(DLW_NH_B,3));
-t_DLW_NH_N0_B = linspace(-TimeStartW,size(DLW_NH_N0_B,3)/Param.Fs,size(DLW_NH_N0_B,3));
-t_DLW_NH_N60_B = linspace(-TimeStartW,size(DLW_NH_N60_B,3)/Param.Fs,size(DLW_NH_N60_B,3));
-t_DLW_NH_N70_B = linspace(-TimeStartW,size(DLW_NH_N70_B,3)/Param.Fs,size(DLW_NH_N70_B,3));
-t_DSW_HI_B = linspace(-TimeStartW,size(DSW_HI_B,3)/Param.Fs,size(DSW_HI_B,3));
-t_DSW_HI_N0_B = linspace(-TimeStartW,size(DSW_HI_N0_B,3)/Param.Fs,size(DSW_HI_N0_B,3));
-t_DSW_HI_N60_B = linspace(-TimeStartW,size(DSW_HI_N60_B,3)/Param.Fs,size(DSW_HI_N60_B,3));
-t_DSW_HI_N70_B = linspace(-TimeStartW,size(DSW_HI_N70_B,3)/Param.Fs,size(DSW_HI_N70_B,3));
-t_DLW_HI_B = linspace(-TimeStartW,size(DLW_HI_B,3)/Param.Fs,size(DLW_HI_B,3));
-t_DLW_HI_N0_B = linspace(-TimeStartW,size(DLW_HI_N0_B,3)/Param.Fs,size(DLW_HI_N0_B,3));
-t_DLW_HI_N60_B = linspace(-TimeStartW,size(DLW_HI_N60_B,3)/Param.Fs,size(DLW_HI_N60_B,3));
-t_DLW_HI_N70_B = linspace(-TimeStartW,size(DLW_HI_N70_B,3)/Param.Fs,size(DLW_HI_N70_B,3));
+% Diam
+plot(ax1,t,TP_DSW_NH_UN_N0_Mean,color=QuietColor)
+plot(ax1,t,TP_DSW_NH_UN_N60_Mean,color=N60Color)
+plot(ax1,t,TP_DSW_NH_UN_N70_Mean,color=N70Color)
+plot(ax2,t,TP_DLW_NH_UN_N0_Mean,color=QuietColor)
+plot(ax2,t,TP_DLW_NH_UN_N60_Mean,color=N60Color)
+plot(ax2,t,TP_DLW_NH_UN_N70_Mean,color=N70Color)
+plot(ax3,t,TP_DSW_NH_UN_N0_B_Mean,color=QuietColor)
+plot(ax3,t,TP_DSW_NH_UN_N60_B_Mean,color=N60Color)
+plot(ax3,t,TP_DSW_NH_UN_N70_B_Mean,color=N70Color)
+plot(ax4,t,TP_DLW_NH_UN_N0_B_Mean,color=QuietColor)
+plot(ax4,t,TP_DLW_NH_UN_N60_B_Mean,color=N60Color)
+plot(ax4,t,TP_DLW_NH_UN_N70_B_Mean,color=N70Color)
+plot(ax5,t,TP_DSW_HI_UN_N0_Mean,color=QuietColor)
+plot(ax5,t,TP_DSW_HI_UN_N60_Mean,color=N60Color)
+plot(ax5,t,TP_DSW_HI_UN_N70_Mean,color=N70Color)
+plot(ax6,t,TP_DLW_HI_UN_N0_Mean,color=QuietColor)
+plot(ax6,t,TP_DLW_HI_UN_N60_Mean,color=N60Color)
+plot(ax6,t,TP_DLW_HI_UN_N70_Mean,color=N70Color)
+plot(ax7,t,TP_DSW_HI_UN_N0_B_Mean,color=QuietColor)
+plot(ax7,t,TP_DSW_HI_UN_N60_B_Mean,color=N60Color)
+plot(ax7,t,TP_DSW_HI_UN_N70_B_Mean,color=N70Color)
+plot(ax8,t,TP_DLW_HI_UN_N0_B_Mean,color=QuietColor)
+plot(ax8,t,TP_DLW_HI_UN_N60_B_Mean,color=N60Color)
+plot(ax8,t,TP_DLW_HI_UN_N70_B_Mean,color=N70Color)
 
-t_FSW_NH = linspace(-TimeStartW,size(FSW_NH,3)/Param.Fs,size(FSW_NH,3));
-t_FSW_NH_N0 = linspace(-TimeStartW,size(FSW_NH_N0,3)/Param.Fs,size(FSW_NH_N0,3));
-t_FSW_NH_N60 = linspace(-TimeStartW,size(FSW_NH_N60,3)/Param.Fs,size(FSW_NH_N60,3));
-t_FSW_NH_N70 = linspace(-TimeStartW,size(FSW_NH_N70,3)/Param.Fs,size(FSW_NH_N70,3));
-t_FLW_NH = linspace(-TimeStartW,size(FLW_NH,3)/Param.Fs,size(FLW_NH,3));
-t_FLW_NH_N0 = linspace(-TimeStartW,size(FLW_NH_N0,3)/Param.Fs,size(FLW_NH_N0,3));
-t_FLW_NH_N60 = linspace(-TimeStartW,size(FLW_NH_N60,3)/Param.Fs,size(FLW_NH_N60,3));
-t_FLW_NH_N70 = linspace(-TimeStartW,size(FLW_NH_N70,3)/Param.Fs,size(FLW_NH_N70,3));
-t_FSW_HI = linspace(-TimeStartW,size(FSW_HI,3)/Param.Fs,size(FSW_HI,3));
-t_FSW_HI_N0 = linspace(-TimeStartW,size(FSW_HI_N0,3)/Param.Fs,size(FSW_HI_N0,3));
-t_FSW_HI_N60 = linspace(-TimeStartW,size(FSW_HI_N60,3)/Param.Fs,size(FSW_HI_N60,3));
-t_FSW_HI_N70 = linspace(-TimeStartW,size(FSW_HI_N70,3)/Param.Fs,size(FSW_HI_N70,3));
-t_FLW_HI = linspace(-TimeStartW,size(FLW_HI,3)/Param.Fs,size(FLW_HI,3));
-t_FLW_HI_N0 = linspace(-TimeStartW,size(FLW_HI_N0,3)/Param.Fs,size(FLW_HI_N0,3));
-t_FLW_HI_N60 = linspace(-TimeStartW,size(FLW_HI_N60,3)/Param.Fs,size(FLW_HI_N60,3));
-t_FLW_HI_N70 = linspace(-TimeStartW,size(FLW_HI_N70,3)/Param.Fs,size(FLW_HI_N70,3));
+plot(ax9,t,TP_DSW_NH_AA_N0_Mean,color=QuietColor)
+plot(ax9,t,TP_DSW_NH_AA_N60_Mean,color=N60Color)
+plot(ax9,t,TP_DSW_NH_AA_N70_Mean,color=N70Color)
+plot(ax10,t,TP_DLW_NH_AA_N0_Mean,color=QuietColor)
+plot(ax10,t,TP_DLW_NH_AA_N60_Mean,color=N60Color)
+plot(ax10,t,TP_DLW_NH_AA_N70_Mean,color=N70Color)
+plot(ax11,t,TP_DSW_NH_AA_N0_B_Mean,color=QuietColor)
+plot(ax11,t,TP_DSW_NH_AA_N60_B_Mean,color=N60Color)
+plot(ax11,t,TP_DSW_NH_AA_N70_B_Mean,color=N70Color)
+plot(ax12,t,TP_DLW_NH_AA_N0_B_Mean,color=QuietColor)
+plot(ax12,t,TP_DLW_NH_AA_N60_B_Mean,color=N60Color)
+plot(ax12,t,TP_DLW_NH_AA_N70_B_Mean,color=N70Color)
+plot(ax13,t,TP_DSW_HI_AA_N0_Mean,color=QuietColor)
+plot(ax13,t,TP_DSW_HI_AA_N60_Mean,color=N60Color)
+plot(ax13,t,TP_DSW_HI_AA_N70_Mean,color=N70Color)
+plot(ax14,t,TP_DLW_HI_AA_N0_Mean,color=QuietColor)
+plot(ax14,t,TP_DLW_HI_AA_N60_Mean,color=N60Color)
+plot(ax14,t,TP_DLW_HI_AA_N70_Mean,color=N70Color)
+plot(ax15,t,TP_DSW_HI_AA_N0_B_Mean,color=QuietColor)
+plot(ax15,t,TP_DSW_HI_AA_N60_B_Mean,color=N60Color)
+plot(ax15,t,TP_DSW_HI_AA_N70_B_Mean,color=N70Color)
+plot(ax16,t,TP_DLW_HI_AA_N0_B_Mean,color=QuietColor)
+plot(ax16,t,TP_DLW_HI_AA_N60_B_Mean,color=N60Color)
+plot(ax16,t,TP_DLW_HI_AA_N70_B_Mean,color=N70Color)
 
-% plot(ax1,t_DSW_NH,DSW_NH_Mean,color=SColor,linewidth=2)
-plot(ax1,t_DSW_NH_N0,DSW_NH_N0_Mean,color=QuietColor)
-plot(ax1,t_DSW_NH_N60,DSW_NH_N60_Mean,color=N60Color)
-plot(ax1,t_DSW_NH_N70,DSW_NH_N70_Mean,color=N70Color)
-% plot(ax2,t_DLW_NH,DLW_NH_Mean,color=LColor,linewidth=2)
-plot(ax2,t_DLW_NH_N0,DLW_NH_N0_Mean,color=QuietColor)
-plot(ax2,t_DLW_NH_N60,DLW_NH_N60_Mean,color=N60Color)
-plot(ax2,t_DLW_NH_N70,DLW_NH_N70_Mean,color=N70Color)
-% plot(ax3,t_DSW_HI,DSW_HI_Mean,color=SColor,linewidth=2)
-plot(ax3,t_DSW_HI_N0,DSW_HI_N0_Mean,color=QuietColor)
-plot(ax3,t_DSW_HI_N60,DSW_HI_N60_Mean,color=N60Color)
-plot(ax3,t_DSW_HI_N70,DSW_HI_N70_Mean,color=N70Color)
-% plot(ax4,nan,color=SColor,linewidth=2) % plot nans to show color in legend
-% plot(ax4,t_DLW_HI,DLW_HI_Mean,color=LColor,linewidth=2)
-plot(ax4,t_DLW_HI_N0,DLW_HI_N0_Mean,color=QuietColor)
-plot(ax4,t_DLW_HI_N60,DLW_HI_N60_Mean,color=N60Color)
-plot(ax4,t_DLW_HI_N70,DLW_HI_N70_Mean,color=N70Color)
+plot(ax17,t,TP_DSW_NH_AB_N0_Mean,color=QuietColor)
+plot(ax17,t,TP_DSW_NH_AB_N60_Mean,color=N60Color)
+plot(ax17,t,TP_DSW_NH_AB_N70_Mean,color=N70Color)
+plot(ax18,t,TP_DLW_NH_AB_N0_Mean,color=QuietColor)
+plot(ax18,t,TP_DLW_NH_AB_N60_Mean,color=N60Color)
+plot(ax18,t,TP_DLW_NH_AB_N70_Mean,color=N70Color)
+plot(ax19,t,TP_DSW_NH_AB_N0_B_Mean,color=QuietColor)
+plot(ax19,t,TP_DSW_NH_AB_N60_B_Mean,color=N60Color)
+plot(ax19,t,TP_DSW_NH_AB_N70_B_Mean,color=N70Color)
+plot(ax20,t,TP_DLW_NH_AB_N0_B_Mean,color=QuietColor)
+plot(ax20,t,TP_DLW_NH_AB_N60_B_Mean,color=N60Color)
+plot(ax20,t,TP_DLW_NH_AB_N70_B_Mean,color=N70Color)
+plot(ax21,t,TP_DSW_HI_AB_N0_Mean,color=QuietColor)
+plot(ax21,t,TP_DSW_HI_AB_N60_Mean,color=N60Color)
+plot(ax21,t,TP_DSW_HI_AB_N70_Mean,color=N70Color)
+plot(ax22,t,TP_DLW_HI_AB_N0_Mean,color=QuietColor)
+plot(ax22,t,TP_DLW_HI_AB_N60_Mean,color=N60Color)
+plot(ax22,t,TP_DLW_HI_AB_N70_Mean,color=N70Color)
+plot(ax23,t,TP_DSW_HI_AB_N0_B_Mean,color=QuietColor)
+plot(ax23,t,TP_DSW_HI_AB_N60_B_Mean,color=N60Color)
+plot(ax23,t,TP_DSW_HI_AB_N70_B_Mean,color=N70Color)
+plot(ax24,t,TP_DLW_HI_AB_N0_B_Mean,color=QuietColor)
+plot(ax24,t,TP_DLW_HI_AB_N60_B_Mean,color=N60Color)
+plot(ax24,t,TP_DLW_HI_AB_N70_B_Mean,color=N70Color)
 
-% plot(ax5,t_DSW_NH_B,DSW_NH_B_Mean,color=SColor,linewidth=2)
-plot(ax5,t_DSW_NH_N0_B,DSW_NH_N0_B_Mean,color=QuietColor)
-plot(ax5,t_DSW_NH_N60_B,DSW_NH_N60_B_Mean,color=N60Color)
-plot(ax5,t_DSW_NH_N70_B,DSW_NH_N70_B_Mean,color=N70Color)
-% plot(ax6,t_DLW_NH_B,DLW_NH_B_Mean,color=LColor,linewidth=2)
-plot(ax6,t_DLW_NH_N0_B,DLW_NH_N0_B_Mean,color=QuietColor)
-plot(ax6,t_DLW_NH_N60_B,DLW_NH_N60_B_Mean,color=N60Color)
-plot(ax6,t_DLW_NH_N70_B,DLW_NH_N70_B_Mean,color=N70Color)
-% plot(ax7,t_DSW_HI_B,DSW_HI_B_Mean,color=SColor,linewidth=2)
-plot(ax7,t_DSW_HI_N0_B,DSW_HI_N0_B_Mean,color=QuietColor)
-plot(ax7,t_DSW_HI_N60_B,DSW_HI_N60_B_Mean,color=N60Color)
-plot(ax7,t_DSW_HI_N70_B,DSW_HI_N70_B_Mean,color=N70Color)
-% plot(ax8,nan,color=SColor,linewidth=2) % plot nans to show color in legend
-% plot(ax8,t_DLW_HI_B,DLW_HI_B_Mean,color=LColor,linewidth=2)
-plot(ax8,t_DLW_HI_N0_B,DLW_HI_N0_B_Mean,color=QuietColor)
-plot(ax8,t_DLW_HI_N60_B,DLW_HI_N60_B_Mean,color=N60Color)
-plot(ax8,t_DLW_HI_N70_B,DLW_HI_N70_B_Mean,color=N70Color)
+% Fix
+plot(ax25,t,TP_FSW_NH_UN_N0_Mean,color=QuietColor)
+plot(ax25,t,TP_FSW_NH_UN_N60_Mean,color=N60Color)
+plot(ax25,t,TP_FSW_NH_UN_N70_Mean,color=N70Color)
+plot(ax26,t,TP_FLW_NH_UN_N0_Mean,color=QuietColor)
+plot(ax26,t,TP_FLW_NH_UN_N60_Mean,color=N60Color)
+plot(ax26,t,TP_FLW_NH_UN_N70_Mean,color=N70Color)
+plot(ax27,t,TP_FSW_HI_UN_N0_Mean,color=QuietColor)
+plot(ax27,t,TP_FSW_HI_UN_N60_Mean,color=N60Color)
+plot(ax27,t,TP_FSW_HI_UN_N70_Mean,color=N70Color)
+plot(ax28,t,TP_FLW_HI_UN_N0_Mean,color=QuietColor)
+plot(ax28,t,TP_FLW_HI_UN_N60_Mean,color=N60Color)
+plot(ax28,t,TP_FLW_HI_UN_N70_Mean,color=N70Color)
 
-% plot(ax11,t_FSW_NH,FSW_NH_Mean,color=SColor,linewidth=2)
-plot(ax11,t_FSW_NH_N0,FSW_NH_N0_Mean,color=QuietColor)
-plot(ax11,t_FSW_NH_N60,FSW_NH_N60_Mean,color=N60Color)
-plot(ax11,t_FSW_NH_N70,FSW_NH_N70_Mean,color=N70Color)
-% plot(ax12,t_FLW_NH,FLW_NH_Mean,color=LColor,linewidth=2)
-plot(ax12,t_FLW_NH_N0,FLW_NH_N0_Mean,color=QuietColor)
-plot(ax12,t_FLW_NH_N60,FLW_NH_N60_Mean,color=N60Color)
-plot(ax12,t_FLW_NH_N70,FLW_NH_N70_Mean,color=N70Color)
-% plot(ax13,t_FSW_HI,FSW_HI_Mean,color=SColor,linewidth=2)
-plot(ax13,t_FSW_HI_N0,FSW_HI_N0_Mean,color=QuietColor)
-plot(ax13,t_FSW_HI_N60,FSW_HI_N60_Mean,color=N60Color)
-plot(ax13,t_FSW_HI_N70,FSW_HI_N70_Mean,color=N70Color)
-% plot(ax14,nan,color=SColor,linewidth=2) % plot nans to show color in legend
-% plot(ax14,t_FLW_HI,FLW_HI_Mean,color=LColor,linewidth=2)
-plot(ax14,t_FLW_HI_N0,FLW_HI_N0_Mean,color=QuietColor)
-plot(ax14,t_FLW_HI_N60,FLW_HI_N60_Mean,color=N60Color)
-plot(ax14,t_FLW_HI_N70,FLW_HI_N70_Mean,color=N70Color)
+plot(ax29,t,TP_FSW_NH_AA_N0_Mean,color=QuietColor)
+plot(ax29,t,TP_FSW_NH_AA_N60_Mean,color=N60Color)
+plot(ax29,t,TP_FSW_NH_AA_N70_Mean,color=N70Color)
+plot(ax30,t,TP_FLW_NH_AA_N0_Mean,color=QuietColor)
+plot(ax30,t,TP_FLW_NH_AA_N60_Mean,color=N60Color)
+plot(ax30,t,TP_FLW_NH_AA_N70_Mean,color=N70Color)
+plot(ax31,t,TP_FSW_HI_AA_N0_Mean,color=QuietColor)
+plot(ax31,t,TP_FSW_HI_AA_N60_Mean,color=N60Color)
+plot(ax31,t,TP_FSW_HI_AA_N70_Mean,color=N70Color)
+plot(ax32,t,TP_FLW_HI_AA_N0_Mean,color=QuietColor)
+plot(ax32,t,TP_FLW_HI_AA_N60_Mean,color=N60Color)
+plot(ax32,t,TP_FLW_HI_AA_N70_Mean,color=N70Color)
 
-% plot(ax21,t_DSW_NH,TP_DSW_NH_Mean,color=SColor,linewidth=2)
-plot(ax21,t_DSW_NH_N0,TP_DSW_NH_N0_Mean,color=QuietColor)
-plot(ax21,t_DSW_NH_N60,TP_DSW_NH_N60_Mean,color=N60Color)
-plot(ax21,t_DSW_NH_N70,TP_DSW_NH_N70_Mean,color=N70Color)
-% plot(ax22,t_DLW_NH,TP_DLW_NH_Mean,color=LColor,linewidth=2)
-plot(ax22,t_DLW_NH_N0,TP_DLW_NH_N0_Mean,color=QuietColor)
-plot(ax22,t_DLW_NH_N60,TP_DLW_NH_N60_Mean,color=N60Color)
-plot(ax22,t_DLW_NH_N70,TP_DLW_NH_N70_Mean,color=N70Color)
-% plot(ax23,t_DSW_HI,TP_DSW_HI_Mean,color=SColor,linewidth=2)
-plot(ax23,t_DSW_HI_N0,TP_DSW_HI_N0_Mean,color=QuietColor)
-plot(ax23,t_DSW_HI_N60,TP_DSW_HI_N60_Mean,color=N60Color)
-plot(ax23,t_DSW_HI_N70,TP_DSW_HI_N70_Mean,color=N70Color)
-% plot(ax24,nan,color=SColor,linewidth=2) % plot nans to show color in legend
-% plot(ax24,t_DLW_HI,TP_DLW_HI_Mean,color=LColor,linewidth=2)
-plot(ax24,t_DLW_HI_N0,TP_DLW_HI_N0_Mean,color=QuietColor)
-plot(ax24,t_DLW_HI_N60,TP_DLW_HI_N60_Mean,color=N60Color)
-plot(ax24,t_DLW_HI_N70,TP_DLW_HI_N70_Mean,color=N70Color)
-
-% plot(ax25,t_DSW_NH_B,TP_DSW_NH_B_Mean,color=SColor,linewidth=2)
-plot(ax25,t_DSW_NH_N0_B,TP_DSW_NH_N0_B_Mean,color=QuietColor)
-plot(ax25,t_DSW_NH_N60_B,TP_DSW_NH_N60_B_Mean,color=N60Color)
-plot(ax25,t_DSW_NH_N70_B,TP_DSW_NH_N70_B_Mean,color=N70Color)
-% plot(ax26,t_DLW_NH_B,TP_DLW_NH_B_Mean,color=LColor,linewidth=2)
-plot(ax26,t_DLW_NH_N0_B,TP_DLW_NH_N0_B_Mean,color=QuietColor)
-plot(ax26,t_DLW_NH_N60_B,TP_DLW_NH_N60_B_Mean,color=N60Color)
-plot(ax26,t_DLW_NH_N70_B,TP_DLW_NH_N70_B_Mean,color=N70Color)
-% plot(ax27,t_DSW_HI_B,TP_DSW_HI_B_Mean,color=SColor,linewidth=2)
-plot(ax27,t_DSW_HI_N0_B,TP_DSW_HI_N0_B_Mean,color=QuietColor)
-plot(ax27,t_DSW_HI_N60_B,TP_DSW_HI_N60_B_Mean,color=N60Color)
-plot(ax27,t_DSW_HI_N70_B,TP_DSW_HI_N70_B_Mean,color=N70Color)
-% plot(ax28,nan,color=SColor,linewidth=2) % plot nans to show color in legend
-% plot(ax28,t_DLW_HI_B,TP_DLW_HI_B_Mean,color=LColor,linewidth=2)
-plot(ax28,t_DLW_HI_N0_B,TP_DLW_HI_N0_B_Mean,color=QuietColor)
-plot(ax28,t_DLW_HI_N60_B,TP_DLW_HI_N60_B_Mean,color=N60Color)
-plot(ax28,t_DLW_HI_N70_B,TP_DLW_HI_N70_B_Mean,color=N70Color)
-
-% plot(ax31,t_FSW_NH,TP_FSW_NH_Mean,color=SColor,linewidth=2)
-plot(ax31,t_FSW_NH_N0,TP_FSW_NH_N0_Mean,color=QuietColor)
-plot(ax31,t_FSW_NH_N60,TP_FSW_NH_N60_Mean,color=N60Color)
-plot(ax31,t_FSW_NH_N70,TP_FSW_NH_N70_Mean,color=N70Color)
-% plot(ax32,t_FLW_NH,TP_FLW_NH_Mean,color=LColor,linewidth=2)
-plot(ax32,t_FLW_NH_N0,TP_FLW_NH_N0_Mean,color=QuietColor)
-plot(ax32,t_FLW_NH_N60,TP_FLW_NH_N60_Mean,color=N60Color)
-plot(ax32,t_FLW_NH_N70,TP_FLW_NH_N70_Mean,color=N70Color)
-% plot(ax33,t_FSW_HI,TP_FSW_HI_Mean,color=SColor,linewidth=2)
-plot(ax33,t_FSW_HI_N0,TP_FSW_HI_N0_Mean,color=QuietColor)
-plot(ax33,t_FSW_HI_N60,TP_FSW_HI_N60_Mean,color=N60Color)
-plot(ax33,t_FSW_HI_N70,TP_FSW_HI_N70_Mean,color=N70Color)
-% plot(ax34,nan,color=SColor,linewidth=2) % plot nans to show color in legend
-% plot(ax34,t_FLW_HI,TP_FLW_HI_Mean,color=LColor,linewidth=2)
-plot(ax34,t_FLW_HI_N0,TP_FLW_HI_N0_Mean,color=QuietColor)
-plot(ax34,t_FLW_HI_N60,TP_FLW_HI_N60_Mean,color=N60Color)
-plot(ax34,t_FLW_HI_N70,TP_FLW_HI_N70_Mean,color=N70Color)
+plot(ax33,t,TP_FSW_NH_AB_N0_Mean,color=QuietColor)
+plot(ax33,t,TP_FSW_NH_AB_N60_Mean,color=N60Color)
+plot(ax33,t,TP_FSW_NH_AB_N70_Mean,color=N70Color)
+plot(ax34,t,TP_FLW_NH_AB_N0_Mean,color=QuietColor)
+plot(ax34,t,TP_FLW_NH_AB_N60_Mean,color=N60Color)
+plot(ax34,t,TP_FLW_NH_AB_N70_Mean,color=N70Color)
+plot(ax35,t,TP_FSW_HI_AB_N0_Mean,color=QuietColor)
+plot(ax35,t,TP_FSW_HI_AB_N60_Mean,color=N60Color)
+plot(ax35,t,TP_FSW_HI_AB_N70_Mean,color=N70Color)
+plot(ax36,t,TP_FLW_HI_AB_N0_Mean,color=QuietColor)
+plot(ax36,t,TP_FLW_HI_AB_N60_Mean,color=N60Color)
+plot(ax36,t,TP_FLW_HI_AB_N70_Mean,color=N70Color)
 
 % Mean and SEM: Set NaNs to 0 in order to use "fill" correctly
-DGSW_Mean(isnan(DGSW_Mean))=0;DGSW_SEM(isnan(DGSW_SEM))=0;
-DGLW_Mean(isnan(DGLW_Mean))=0;DGLW_SEM(isnan(DGLW_SEM))=0;
-DSW_NH_Mean(isnan(DSW_NH_Mean))=0;DSW_NH_SEM(isnan(DSW_NH_SEM))=0;
-DLW_NH_Mean(isnan(DLW_NH_Mean))=0;DLW_NH_SEM(isnan(DLW_NH_SEM))=0;
-DSW_N0_Mean(isnan(DSW_N0_Mean))=0;DSW_N0_SEM(isnan(DSW_N0_SEM))=0;
-DSW_N60_Mean(isnan(DSW_N60_Mean))=0;DSW_N60_SEM(isnan(DSW_N60_SEM))=0;
-DSW_N70_Mean(isnan(DSW_N70_Mean))=0;DSW_N70_SEM(isnan(DSW_N70_SEM))=0;
-DLW_N0_Mean(isnan(DLW_N0_Mean))=0;DLW_N0_SEM(isnan(DLW_N0_SEM))=0;
-DLW_N60_Mean(isnan(DLW_N60_Mean))=0;DLW_N60_SEM(isnan(DLW_N60_SEM))=0;
-DLW_N70_Mean(isnan(DLW_N70_Mean))=0;DLW_N70_SEM(isnan(DLW_N70_SEM))=0;
-DSW_NH_N0_Mean(isnan(DSW_NH_N0_Mean))=0;DSW_NH_N0_SEM(isnan(DSW_NH_N0_SEM))=0;
-DSW_NH_N60_Mean(isnan(DSW_NH_N60_Mean))=0;DSW_NH_N60_SEM(isnan(DSW_NH_N60_SEM))=0;
-DSW_NH_N70_Mean(isnan(DSW_NH_N70_Mean))=0;DSW_NH_N70_SEM(isnan(DSW_NH_N70_SEM))=0;
-DLW_NH_N0_Mean(isnan(DLW_NH_N0_Mean))=0;DLW_NH_N0_SEM(isnan(DLW_NH_N0_SEM))=0;
-DLW_NH_N60_Mean(isnan(DLW_NH_N60_Mean))=0;DLW_NH_N60_SEM(isnan(DLW_NH_N60_SEM))=0;
-DLW_NH_N70_Mean(isnan(DLW_NH_N70_Mean))=0;DLW_NH_N70_SEM(isnan(DLW_NH_N70_SEM))=0;
-DSW_HI_Mean(isnan(DSW_HI_Mean))=0;DSW_HI_SEM(isnan(DSW_HI_SEM))=0;
-DLW_HI_Mean(isnan(DLW_HI_Mean))=0;DLW_HI_SEM(isnan(DLW_HI_SEM))=0;
-DSW_HI_N0_Mean(isnan(DSW_HI_N0_Mean))=0;DSW_HI_N0_SEM(isnan(DSW_HI_N0_SEM))=0;
-DSW_HI_N60_Mean(isnan(DSW_HI_N60_Mean))=0;DSW_HI_N60_SEM(isnan(DSW_HI_N60_SEM))=0;
-DSW_HI_N70_Mean(isnan(DSW_HI_N70_Mean))=0;DSW_HI_N70_SEM(isnan(DSW_HI_N70_SEM))=0;
-DLW_HI_N0_Mean(isnan(DLW_HI_N0_Mean))=0;DLW_HI_N0_SEM(isnan(DLW_HI_N0_SEM))=0;
-DLW_HI_N60_Mean(isnan(DLW_HI_N60_Mean))=0;DLW_HI_N60_SEM(isnan(DLW_HI_N60_SEM))=0;
-DLW_HI_N70_Mean(isnan(DLW_HI_N70_Mean))=0;DLW_HI_N70_SEM(isnan(DLW_HI_N70_SEM))=0;
-DSW_HI_UN_Mean(isnan(DSW_HI_UN_Mean))=0;DSW_HI_UN_SEM(isnan(DSW_HI_UN_SEM))=0;
-DLW_HI_UN_Mean(isnan(DLW_HI_UN_Mean))=0;DLW_HI_UN_SEM(isnan(DLW_HI_UN_SEM))=0;
-DSW_HI_AA_Mean(isnan(DSW_HI_AA_Mean))=0;DSW_HI_AA_SEM(isnan(DSW_HI_AA_SEM))=0;
-DLW_HI_AA_Mean(isnan(DLW_HI_AA_Mean))=0;DLW_HI_AA_SEM(isnan(DLW_HI_AA_SEM))=0;
-DSW_HI_AB_Mean(isnan(DSW_HI_AB_Mean))=0;DSW_HI_AB_SEM(isnan(DSW_HI_AB_SEM))=0;
-DLW_HI_AB_Mean(isnan(DLW_HI_AB_Mean))=0;DLW_HI_AB_SEM(isnan(DLW_HI_AB_SEM))=0;
-DSW_HI_UN_N0_Mean(isnan(DSW_HI_UN_N0_Mean))=0;DSW_HI_UN_N0_SEM(isnan(DSW_HI_UN_N0_SEM))=0;
-DSW_HI_UN_N60_Mean(isnan(DSW_HI_UN_N60_Mean))=0;DSW_HI_UN_N60_SEM(isnan(DSW_HI_UN_N60_SEM))=0;
-DSW_HI_UN_N70_Mean(isnan(DSW_HI_UN_N70_Mean))=0;DSW_HI_UN_N70_SEM(isnan(DSW_HI_UN_N70_SEM))=0;
-DLW_HI_UN_N0_Mean(isnan(DLW_HI_UN_N0_Mean))=0;DLW_HI_UN_N0_SEM(isnan(DLW_HI_UN_N0_SEM))=0;
-DLW_HI_UN_N60_Mean(isnan(DLW_HI_UN_N60_Mean))=0;DLW_HI_UN_N60_SEM(isnan(DLW_HI_UN_N60_SEM))=0;
-DLW_HI_UN_N70_Mean(isnan(DLW_HI_UN_N70_Mean))=0;DLW_HI_UN_N70_SEM(isnan(DLW_HI_UN_N70_SEM))=0;
-DSW_HI_AA_N0_Mean(isnan(DSW_HI_AA_N0_Mean))=0;DSW_HI_AA_N0_SEM(isnan(DSW_HI_AA_N0_SEM))=0;
-DSW_HI_AA_N60_Mean(isnan(DSW_HI_AA_N60_Mean))=0;DSW_HI_AA_N60_SEM(isnan(DSW_HI_AA_N60_SEM))=0;
-DSW_HI_AA_N70_Mean(isnan(DSW_HI_AA_N70_Mean))=0;DSW_HI_AA_N70_SEM(isnan(DSW_HI_AA_N70_SEM))=0;
-DLW_HI_AA_N0_Mean(isnan(DLW_HI_AA_N0_Mean))=0;DLW_HI_AA_N0_SEM(isnan(DLW_HI_AA_N0_SEM))=0;
-DLW_HI_AA_N60_Mean(isnan(DLW_HI_AA_N60_Mean))=0;DLW_HI_AA_N60_SEM(isnan(DLW_HI_AA_N60_SEM))=0;
-DLW_HI_AA_N70_Mean(isnan(DLW_HI_AA_N70_Mean))=0;DLW_HI_AA_N70_SEM(isnan(DLW_HI_AA_N70_SEM))=0;
-DSW_HI_AB_N0_Mean(isnan(DSW_HI_AB_N0_Mean))=0;DSW_HI_AB_N0_SEM(isnan(DSW_HI_AB_N0_SEM))=0;
-DSW_HI_AB_N60_Mean(isnan(DSW_HI_AB_N60_Mean))=0;DSW_HI_AB_N60_SEM(isnan(DSW_HI_AB_N60_SEM))=0;
-DSW_HI_AB_N70_Mean(isnan(DSW_HI_AB_N70_Mean))=0;DSW_HI_AB_N70_SEM(isnan(DSW_HI_AB_N70_SEM))=0;
-DLW_HI_AB_N0_Mean(isnan(DLW_HI_AB_N0_Mean))=0;DLW_HI_AB_N0_SEM(isnan(DLW_HI_AB_N0_SEM))=0;
-DLW_HI_AB_N60_Mean(isnan(DLW_HI_AB_N60_Mean))=0;DLW_HI_AB_N60_SEM(isnan(DLW_HI_AB_N60_SEM))=0;
-DLW_HI_AB_N70_Mean(isnan(DLW_HI_AB_N70_Mean))=0;DLW_HI_AB_N70_SEM(isnan(DLW_HI_AB_N70_SEM))=0;
-
-DGSW_B_Mean(isnan(DGSW_B_Mean))=0;DGSW_B_SEM(isnan(DGSW_B_SEM))=0;
-DGLW_B_Mean(isnan(DGLW_B_Mean))=0;DGLW_B_SEM(isnan(DGLW_B_SEM))=0;
-DSW_NH_B_Mean(isnan(DSW_NH_B_Mean))=0;DSW_NH_B_SEM(isnan(DSW_NH_B_SEM))=0;
-DLW_NH_B_Mean(isnan(DLW_NH_B_Mean))=0;DLW_NH_B_SEM(isnan(DLW_NH_B_SEM))=0;
-DSW_N0_B_Mean(isnan(DSW_N0_B_Mean))=0;DSW_N0_B_SEM(isnan(DSW_N0_B_SEM))=0;
-DSW_N60_B_Mean(isnan(DSW_N60_B_Mean))=0;DSW_N60_B_SEM(isnan(DSW_N60_B_SEM))=0;
-DSW_N70_B_Mean(isnan(DSW_N70_B_Mean))=0;DSW_N70_B_SEM(isnan(DSW_N70_B_SEM))=0;
-DLW_N0_B_Mean(isnan(DLW_N0_B_Mean))=0;DLW_N0_B_SEM(isnan(DLW_N0_B_SEM))=0;
-DLW_N60_B_Mean(isnan(DLW_N60_B_Mean))=0;DLW_N60_B_SEM(isnan(DLW_N60_B_SEM))=0;
-DLW_N70_B_Mean(isnan(DLW_N70_B_Mean))=0;DLW_N70_B_SEM(isnan(DLW_N70_B_SEM))=0;
-DSW_NH_N0_B_Mean(isnan(DSW_NH_N0_B_Mean))=0;DSW_NH_N0_B_SEM(isnan(DSW_NH_N0_B_SEM))=0;
-DSW_NH_N60_B_Mean(isnan(DSW_NH_N60_B_Mean))=0;DSW_NH_N60_B_SEM(isnan(DSW_NH_N60_B_SEM))=0;
-DSW_NH_N70_B_Mean(isnan(DSW_NH_N70_B_Mean))=0;DSW_NH_N70_B_SEM(isnan(DSW_NH_N70_B_SEM))=0;
-DLW_NH_N0_B_Mean(isnan(DLW_NH_N0_B_Mean))=0;DLW_NH_N0_B_SEM(isnan(DLW_NH_N0_B_SEM))=0;
-DLW_NH_N60_B_Mean(isnan(DLW_NH_N60_B_Mean))=0;DLW_NH_N60_B_SEM(isnan(DLW_NH_N60_B_SEM))=0;
-DLW_NH_N70_B_Mean(isnan(DLW_NH_N70_B_Mean))=0;DLW_NH_N70_B_SEM(isnan(DLW_NH_N70_B_SEM))=0;
-DSW_HI_B_Mean(isnan(DSW_HI_B_Mean))=0;DSW_HI_B_SEM(isnan(DSW_HI_B_SEM))=0;
-DLW_HI_B_Mean(isnan(DLW_HI_B_Mean))=0;DLW_HI_B_SEM(isnan(DLW_HI_B_SEM))=0;
-DSW_HI_N0_B_Mean(isnan(DSW_HI_N0_B_Mean))=0;DSW_HI_N0_B_SEM(isnan(DSW_HI_N0_B_SEM))=0;
-DSW_HI_N60_B_Mean(isnan(DSW_HI_N60_B_Mean))=0;DSW_HI_N60_B_SEM(isnan(DSW_HI_N60_B_SEM))=0;
-DSW_HI_N70_B_Mean(isnan(DSW_HI_N70_B_Mean))=0;DSW_HI_N70_B_SEM(isnan(DSW_HI_N70_B_SEM))=0;
-DLW_HI_N0_B_Mean(isnan(DLW_HI_N0_B_Mean))=0;DLW_HI_N0_B_SEM(isnan(DLW_HI_N0_B_SEM))=0;
-DLW_HI_N60_B_Mean(isnan(DLW_HI_N60_B_Mean))=0;DLW_HI_N60_B_SEM(isnan(DLW_HI_N60_B_SEM))=0;
-DLW_HI_N70_B_Mean(isnan(DLW_HI_N70_B_Mean))=0;DLW_HI_N70_B_SEM(isnan(DLW_HI_N70_B_SEM))=0;
-DSW_HI_UN_B_Mean(isnan(DSW_HI_UN_B_Mean))=0;DSW_HI_UN_B_SEM(isnan(DSW_HI_UN_B_SEM))=0;
-DLW_HI_UN_B_Mean(isnan(DLW_HI_UN_B_Mean))=0;DLW_HI_UN_B_SEM(isnan(DLW_HI_UN_B_SEM))=0;
-DSW_HI_AA_B_Mean(isnan(DSW_HI_AA_B_Mean))=0;DSW_HI_AA_B_SEM(isnan(DSW_HI_AA_B_SEM))=0;
-DLW_HI_AA_B_Mean(isnan(DLW_HI_AA_B_Mean))=0;DLW_HI_AA_B_SEM(isnan(DLW_HI_AA_B_SEM))=0;
-DSW_HI_AB_B_Mean(isnan(DSW_HI_AB_B_Mean))=0;DSW_HI_AB_B_SEM(isnan(DSW_HI_AB_B_SEM))=0;
-DLW_HI_AB_B_Mean(isnan(DLW_HI_AB_B_Mean))=0;DLW_HI_AB_B_SEM(isnan(DLW_HI_AB_B_SEM))=0;
-DSW_HI_UN_N0_B_Mean(isnan(DSW_HI_UN_N0_B_Mean))=0;DSW_HI_UN_N0_B_SEM(isnan(DSW_HI_UN_N0_B_SEM))=0;
-DSW_HI_UN_N60_B_Mean(isnan(DSW_HI_UN_N60_B_Mean))=0;DSW_HI_UN_N60_B_SEM(isnan(DSW_HI_UN_N60_B_SEM))=0;
-DSW_HI_UN_N70_B_Mean(isnan(DSW_HI_UN_N70_B_Mean))=0;DSW_HI_UN_N70_B_SEM(isnan(DSW_HI_UN_N70_B_SEM))=0;
-DLW_HI_UN_N0_B_Mean(isnan(DLW_HI_UN_N0_B_Mean))=0;DLW_HI_UN_N0_B_SEM(isnan(DLW_HI_UN_N0_B_SEM))=0;
-DLW_HI_UN_N60_B_Mean(isnan(DLW_HI_UN_N60_B_Mean))=0;DLW_HI_UN_N60_B_SEM(isnan(DLW_HI_UN_N60_B_SEM))=0;
-DLW_HI_UN_N70_B_Mean(isnan(DLW_HI_UN_N70_B_Mean))=0;DLW_HI_UN_N70_B_SEM(isnan(DLW_HI_UN_N70_B_SEM))=0;
-DSW_HI_AA_N0_B_Mean(isnan(DSW_HI_AA_N0_B_Mean))=0;DSW_HI_AA_N0_B_SEM(isnan(DSW_HI_AA_N0_B_SEM))=0;
-DSW_HI_AA_N60_B_Mean(isnan(DSW_HI_AA_N60_B_Mean))=0;DSW_HI_AA_N60_B_SEM(isnan(DSW_HI_AA_N60_B_SEM))=0;
-DSW_HI_AA_N70_B_Mean(isnan(DSW_HI_AA_N70_B_Mean))=0;DSW_HI_AA_N70_B_SEM(isnan(DSW_HI_AA_N70_B_SEM))=0;
-DLW_HI_AA_N0_B_Mean(isnan(DLW_HI_AA_N0_B_Mean))=0;DLW_HI_AA_N0_B_SEM(isnan(DLW_HI_AA_N0_B_SEM))=0;
-DLW_HI_AA_N60_B_Mean(isnan(DLW_HI_AA_N60_B_Mean))=0;DLW_HI_AA_N60_B_SEM(isnan(DLW_HI_AA_N60_B_SEM))=0;
-DLW_HI_AA_N70_B_Mean(isnan(DLW_HI_AA_N70_B_Mean))=0;DLW_HI_AA_N70_B_SEM(isnan(DLW_HI_AA_N70_B_SEM))=0;
-DSW_HI_AB_N0_B_Mean(isnan(DSW_HI_AB_N0_B_Mean))=0;DSW_HI_AB_N0_B_SEM(isnan(DSW_HI_AB_N0_B_SEM))=0;
-DSW_HI_AB_N60_B_Mean(isnan(DSW_HI_AB_N60_B_Mean))=0;DSW_HI_AB_N60_B_SEM(isnan(DSW_HI_AB_N60_B_SEM))=0;
-DSW_HI_AB_N70_B_Mean(isnan(DSW_HI_AB_N70_B_Mean))=0;DSW_HI_AB_N70_B_SEM(isnan(DSW_HI_AB_N70_B_SEM))=0;
-DLW_HI_AB_N0_B_Mean(isnan(DLW_HI_AB_N0_B_Mean))=0;DLW_HI_AB_N0_B_SEM(isnan(DLW_HI_AB_N0_B_SEM))=0;
-DLW_HI_AB_N60_B_Mean(isnan(DLW_HI_AB_N60_B_Mean))=0;DLW_HI_AB_N60_B_SEM(isnan(DLW_HI_AB_N60_B_SEM))=0;
-DLW_HI_AB_N70_B_Mean(isnan(DLW_HI_AB_N70_B_Mean))=0;DLW_HI_AB_N70_B_SEM(isnan(DLW_HI_AB_N70_B_SEM))=0;
-
-FGSW_Mean(isnan(FGSW_Mean))=0;FGSW_SEM(isnan(FGSW_SEM))=0;
-FGLW_Mean(isnan(FGLW_Mean))=0;FGLW_SEM(isnan(FGLW_SEM))=0;
-FSW_NH_Mean(isnan(FSW_NH_Mean))=0;FSW_NH_SEM(isnan(FSW_NH_SEM))=0;
-FLW_NH_Mean(isnan(FLW_NH_Mean))=0;FLW_NH_SEM(isnan(FLW_NH_SEM))=0;
-FSW_N0_Mean(isnan(FSW_N0_Mean))=0;FSW_N0_SEM(isnan(FSW_N0_SEM))=0;
-FSW_N60_Mean(isnan(FSW_N60_Mean))=0;FSW_N60_SEM(isnan(FSW_N60_SEM))=0;
-FSW_N70_Mean(isnan(FSW_N70_Mean))=0;FSW_N70_SEM(isnan(FSW_N70_SEM))=0;
-FLW_N0_Mean(isnan(FLW_N0_Mean))=0;FLW_N0_SEM(isnan(FLW_N0_SEM))=0;
-FLW_N60_Mean(isnan(FLW_N60_Mean))=0;FLW_N60_SEM(isnan(FLW_N60_SEM))=0;
-FLW_N70_Mean(isnan(FLW_N70_Mean))=0;FLW_N70_SEM(isnan(FLW_N70_SEM))=0;
-FSW_NH_N0_Mean(isnan(FSW_NH_N0_Mean))=0;FSW_NH_N0_SEM(isnan(FSW_NH_N0_SEM))=0;
-FSW_NH_N60_Mean(isnan(FSW_NH_N60_Mean))=0;FSW_NH_N60_SEM(isnan(FSW_NH_N60_SEM))=0;
-FSW_NH_N70_Mean(isnan(FSW_NH_N70_Mean))=0;FSW_NH_N70_SEM(isnan(FSW_NH_N70_SEM))=0;
-FLW_NH_N0_Mean(isnan(FLW_NH_N0_Mean))=0;FLW_NH_N0_SEM(isnan(FLW_NH_N0_SEM))=0;
-FLW_NH_N60_Mean(isnan(FLW_NH_N60_Mean))=0;FLW_NH_N60_SEM(isnan(FLW_NH_N60_SEM))=0;
-FLW_NH_N70_Mean(isnan(FLW_NH_N70_Mean))=0;FLW_NH_N70_SEM(isnan(FLW_NH_N70_SEM))=0;
-FSW_HI_Mean(isnan(FSW_HI_Mean))=0;FSW_HI_SEM(isnan(FSW_HI_SEM))=0;
-FLW_HI_Mean(isnan(FLW_HI_Mean))=0;FLW_HI_SEM(isnan(FLW_HI_SEM))=0;
-FSW_HI_N0_Mean(isnan(FSW_HI_N0_Mean))=0;FSW_HI_N0_SEM(isnan(FSW_HI_N0_SEM))=0;
-FSW_HI_N60_Mean(isnan(FSW_HI_N60_Mean))=0;FSW_HI_N60_SEM(isnan(FSW_HI_N60_SEM))=0;
-FSW_HI_N70_Mean(isnan(FSW_HI_N70_Mean))=0;FSW_HI_N70_SEM(isnan(FSW_HI_N70_SEM))=0;
-FLW_HI_N0_Mean(isnan(FLW_HI_N0_Mean))=0;FLW_HI_N0_SEM(isnan(FLW_HI_N0_SEM))=0;
-FLW_HI_N60_Mean(isnan(FLW_HI_N60_Mean))=0;FLW_HI_N60_SEM(isnan(FLW_HI_N60_SEM))=0;
-FLW_HI_N70_Mean(isnan(FLW_HI_N70_Mean))=0;FLW_HI_N70_SEM(isnan(FLW_HI_N70_SEM))=0;
-FSW_HI_UN_Mean(isnan(FSW_HI_UN_Mean))=0;FSW_HI_UN_SEM(isnan(FSW_HI_UN_SEM))=0;
-FLW_HI_UN_Mean(isnan(FLW_HI_UN_Mean))=0;FLW_HI_UN_SEM(isnan(FLW_HI_UN_SEM))=0;
-FSW_HI_AA_Mean(isnan(FSW_HI_AA_Mean))=0;FSW_HI_AA_SEM(isnan(FSW_HI_AA_SEM))=0;
-FLW_HI_AA_Mean(isnan(FLW_HI_AA_Mean))=0;FLW_HI_AA_SEM(isnan(FLW_HI_AA_SEM))=0;
-FSW_HI_AB_Mean(isnan(FSW_HI_AB_Mean))=0;FSW_HI_AB_SEM(isnan(FSW_HI_AB_SEM))=0;
-FLW_HI_AB_Mean(isnan(FLW_HI_AB_Mean))=0;FLW_HI_AB_SEM(isnan(FLW_HI_AB_SEM))=0;
-FSW_HI_UN_N0_Mean(isnan(FSW_HI_UN_N0_Mean))=0;FSW_HI_UN_N0_SEM(isnan(FSW_HI_UN_N0_SEM))=0;
-FSW_HI_UN_N60_Mean(isnan(FSW_HI_UN_N60_Mean))=0;FSW_HI_UN_N60_SEM(isnan(FSW_HI_UN_N60_SEM))=0;
-FSW_HI_UN_N70_Mean(isnan(FSW_HI_UN_N70_Mean))=0;FSW_HI_UN_N70_SEM(isnan(FSW_HI_UN_N70_SEM))=0;
-FLW_HI_UN_N0_Mean(isnan(FLW_HI_UN_N0_Mean))=0;FLW_HI_UN_N0_SEM(isnan(FLW_HI_UN_N0_SEM))=0;
-FLW_HI_UN_N60_Mean(isnan(FLW_HI_UN_N60_Mean))=0;FLW_HI_UN_N60_SEM(isnan(FLW_HI_UN_N60_SEM))=0;
-FLW_HI_UN_N70_Mean(isnan(FLW_HI_UN_N70_Mean))=0;FLW_HI_UN_N70_SEM(isnan(FLW_HI_UN_N70_SEM))=0;
-FSW_HI_AA_N0_Mean(isnan(FSW_HI_AA_N0_Mean))=0;FSW_HI_AA_N0_SEM(isnan(FSW_HI_AA_N0_SEM))=0;
-FSW_HI_AA_N60_Mean(isnan(FSW_HI_AA_N60_Mean))=0;FSW_HI_AA_N60_SEM(isnan(FSW_HI_AA_N60_SEM))=0;
-FSW_HI_AA_N70_Mean(isnan(FSW_HI_AA_N70_Mean))=0;FSW_HI_AA_N70_SEM(isnan(FSW_HI_AA_N70_SEM))=0;
-FLW_HI_AA_N0_Mean(isnan(FLW_HI_AA_N0_Mean))=0;FLW_HI_AA_N0_SEM(isnan(FLW_HI_AA_N0_SEM))=0;
-FLW_HI_AA_N60_Mean(isnan(FLW_HI_AA_N60_Mean))=0;FLW_HI_AA_N60_SEM(isnan(FLW_HI_AA_N60_SEM))=0;
-FLW_HI_AA_N70_Mean(isnan(FLW_HI_AA_N70_Mean))=0;FLW_HI_AA_N70_SEM(isnan(FLW_HI_AA_N70_SEM))=0;
-FSW_HI_AB_N0_Mean(isnan(FSW_HI_AB_N0_Mean))=0;FSW_HI_AB_N0_SEM(isnan(FSW_HI_AB_N0_SEM))=0;
-FSW_HI_AB_N60_Mean(isnan(FSW_HI_AB_N60_Mean))=0;FSW_HI_AB_N60_SEM(isnan(FSW_HI_AB_N60_SEM))=0;
-FSW_HI_AB_N70_Mean(isnan(FSW_HI_AB_N70_Mean))=0;FSW_HI_AB_N70_SEM(isnan(FSW_HI_AB_N70_SEM))=0;
-FLW_HI_AB_N0_Mean(isnan(FLW_HI_AB_N0_Mean))=0;FLW_HI_AB_N0_SEM(isnan(FLW_HI_AB_N0_SEM))=0;
-FLW_HI_AB_N60_Mean(isnan(FLW_HI_AB_N60_Mean))=0;FLW_HI_AB_N60_SEM(isnan(FLW_HI_AB_N60_SEM))=0;
-FLW_HI_AB_N70_Mean(isnan(FLW_HI_AB_N70_Mean))=0;FLW_HI_AB_N70_SEM(isnan(FLW_HI_AB_N70_SEM))=0;
-
 TP_DGSW_Mean(isnan(TP_DGSW_Mean))=0;TP_DGSW_SEM(isnan(TP_DGSW_SEM))=0;
 TP_DGLW_Mean(isnan(TP_DGLW_Mean))=0;TP_DGLW_SEM(isnan(TP_DGLW_SEM))=0;
 TP_DSW_NH_Mean(isnan(TP_DSW_NH_Mean))=0;TP_DSW_NH_SEM(isnan(TP_DSW_NH_SEM))=0;
@@ -2235,12 +2809,36 @@ TP_DSW_HI_N70_Mean(isnan(TP_DSW_HI_N70_Mean))=0;TP_DSW_HI_N70_SEM(isnan(TP_DSW_H
 TP_DLW_HI_N0_Mean(isnan(TP_DLW_HI_N0_Mean))=0;TP_DLW_HI_N0_SEM(isnan(TP_DLW_HI_N0_SEM))=0;
 TP_DLW_HI_N60_Mean(isnan(TP_DLW_HI_N60_Mean))=0;TP_DLW_HI_N60_SEM(isnan(TP_DLW_HI_N60_SEM))=0;
 TP_DLW_HI_N70_Mean(isnan(TP_DLW_HI_N70_Mean))=0;TP_DLW_HI_N70_SEM(isnan(TP_DLW_HI_N70_SEM))=0;
+TP_DSW_NH_UN_Mean(isnan(TP_DSW_NH_UN_Mean))=0;TP_DSW_NH_UN_SEM(isnan(TP_DSW_NH_UN_SEM))=0;
+TP_DLW_NH_UN_Mean(isnan(TP_DLW_NH_UN_Mean))=0;TP_DLW_NH_UN_SEM(isnan(TP_DLW_NH_UN_SEM))=0;
+TP_DSW_NH_AA_Mean(isnan(TP_DSW_NH_AA_Mean))=0;TP_DSW_NH_AA_SEM(isnan(TP_DSW_NH_AA_SEM))=0;
+TP_DLW_NH_AA_Mean(isnan(TP_DLW_NH_AA_Mean))=0;TP_DLW_NH_AA_SEM(isnan(TP_DLW_NH_AA_SEM))=0;
+TP_DSW_NH_AB_Mean(isnan(TP_DSW_NH_AB_Mean))=0;TP_DSW_NH_AB_SEM(isnan(TP_DSW_NH_AB_SEM))=0;
+TP_DLW_NH_AB_Mean(isnan(TP_DLW_NH_AB_Mean))=0;TP_DLW_NH_AB_SEM(isnan(TP_DLW_NH_AB_SEM))=0;
 TP_DSW_HI_UN_Mean(isnan(TP_DSW_HI_UN_Mean))=0;TP_DSW_HI_UN_SEM(isnan(TP_DSW_HI_UN_SEM))=0;
 TP_DLW_HI_UN_Mean(isnan(TP_DLW_HI_UN_Mean))=0;TP_DLW_HI_UN_SEM(isnan(TP_DLW_HI_UN_SEM))=0;
 TP_DSW_HI_AA_Mean(isnan(TP_DSW_HI_AA_Mean))=0;TP_DSW_HI_AA_SEM(isnan(TP_DSW_HI_AA_SEM))=0;
 TP_DLW_HI_AA_Mean(isnan(TP_DLW_HI_AA_Mean))=0;TP_DLW_HI_AA_SEM(isnan(TP_DLW_HI_AA_SEM))=0;
 TP_DSW_HI_AB_Mean(isnan(TP_DSW_HI_AB_Mean))=0;TP_DSW_HI_AB_SEM(isnan(TP_DSW_HI_AB_SEM))=0;
 TP_DLW_HI_AB_Mean(isnan(TP_DLW_HI_AB_Mean))=0;TP_DLW_HI_AB_SEM(isnan(TP_DLW_HI_AB_SEM))=0;
+TP_DSW_NH_UN_N0_Mean(isnan(TP_DSW_NH_UN_N0_Mean))=0;TP_DSW_NH_UN_N0_SEM(isnan(TP_DSW_NH_UN_N0_SEM))=0;
+TP_DSW_NH_UN_N60_Mean(isnan(TP_DSW_NH_UN_N60_Mean))=0;TP_DSW_NH_UN_N60_SEM(isnan(TP_DSW_NH_UN_N60_SEM))=0;
+TP_DSW_NH_UN_N70_Mean(isnan(TP_DSW_NH_UN_N70_Mean))=0;TP_DSW_NH_UN_N70_SEM(isnan(TP_DSW_NH_UN_N70_SEM))=0;
+TP_DLW_NH_UN_N0_Mean(isnan(TP_DLW_NH_UN_N0_Mean))=0;TP_DLW_NH_UN_N0_SEM(isnan(TP_DLW_NH_UN_N0_SEM))=0;
+TP_DLW_NH_UN_N60_Mean(isnan(TP_DLW_NH_UN_N60_Mean))=0;TP_DLW_NH_UN_N60_SEM(isnan(TP_DLW_NH_UN_N60_SEM))=0;
+TP_DLW_NH_UN_N70_Mean(isnan(TP_DLW_NH_UN_N70_Mean))=0;TP_DLW_NH_UN_N70_SEM(isnan(TP_DLW_NH_UN_N70_SEM))=0;
+TP_DSW_NH_AA_N0_Mean(isnan(TP_DSW_NH_AA_N0_Mean))=0;TP_DSW_NH_AA_N0_SEM(isnan(TP_DSW_NH_AA_N0_SEM))=0;
+TP_DSW_NH_AA_N60_Mean(isnan(TP_DSW_NH_AA_N60_Mean))=0;TP_DSW_NH_AA_N60_SEM(isnan(TP_DSW_NH_AA_N60_SEM))=0;
+TP_DSW_NH_AA_N70_Mean(isnan(TP_DSW_NH_AA_N70_Mean))=0;TP_DSW_NH_AA_N70_SEM(isnan(TP_DSW_NH_AA_N70_SEM))=0;
+TP_DLW_NH_AA_N0_Mean(isnan(TP_DLW_NH_AA_N0_Mean))=0;TP_DLW_NH_AA_N0_SEM(isnan(TP_DLW_NH_AA_N0_SEM))=0;
+TP_DLW_NH_AA_N60_Mean(isnan(TP_DLW_NH_AA_N60_Mean))=0;TP_DLW_NH_AA_N60_SEM(isnan(TP_DLW_NH_AA_N60_SEM))=0;
+TP_DLW_NH_AA_N70_Mean(isnan(TP_DLW_NH_AA_N70_Mean))=0;TP_DLW_NH_AA_N70_SEM(isnan(TP_DLW_NH_AA_N70_SEM))=0;
+TP_DSW_NH_AB_N0_Mean(isnan(TP_DSW_NH_AB_N0_Mean))=0;TP_DSW_NH_AB_N0_SEM(isnan(TP_DSW_NH_AB_N0_SEM))=0;
+TP_DSW_NH_AB_N60_Mean(isnan(TP_DSW_NH_AB_N60_Mean))=0;TP_DSW_NH_AB_N60_SEM(isnan(TP_DSW_NH_AB_N60_SEM))=0;
+TP_DSW_NH_AB_N70_Mean(isnan(TP_DSW_NH_AB_N70_Mean))=0;TP_DSW_NH_AB_N70_SEM(isnan(TP_DSW_NH_AB_N70_SEM))=0;
+TP_DLW_NH_AB_N0_Mean(isnan(TP_DLW_NH_AB_N0_Mean))=0;TP_DLW_NH_AB_N0_SEM(isnan(TP_DLW_NH_AB_N0_SEM))=0;
+TP_DLW_NH_AB_N60_Mean(isnan(TP_DLW_NH_AB_N60_Mean))=0;TP_DLW_NH_AB_N60_SEM(isnan(TP_DLW_NH_AB_N60_SEM))=0;
+TP_DLW_NH_AB_N70_Mean(isnan(TP_DLW_NH_AB_N70_Mean))=0;TP_DLW_NH_AB_N70_SEM(isnan(TP_DLW_NH_AB_N70_SEM))=0;
 TP_DSW_HI_UN_N0_Mean(isnan(TP_DSW_HI_UN_N0_Mean))=0;TP_DSW_HI_UN_N0_SEM(isnan(TP_DSW_HI_UN_N0_SEM))=0;
 TP_DSW_HI_UN_N60_Mean(isnan(TP_DSW_HI_UN_N60_Mean))=0;TP_DSW_HI_UN_N60_SEM(isnan(TP_DSW_HI_UN_N60_SEM))=0;
 TP_DSW_HI_UN_N70_Mean(isnan(TP_DSW_HI_UN_N70_Mean))=0;TP_DSW_HI_UN_N70_SEM(isnan(TP_DSW_HI_UN_N70_SEM))=0;
@@ -2284,12 +2882,36 @@ TP_DSW_HI_N70_B_Mean(isnan(TP_DSW_HI_N70_B_Mean))=0;TP_DSW_HI_N70_B_SEM(isnan(TP
 TP_DLW_HI_N0_B_Mean(isnan(TP_DLW_HI_N0_B_Mean))=0;TP_DLW_HI_N0_B_SEM(isnan(TP_DLW_HI_N0_B_SEM))=0;
 TP_DLW_HI_N60_B_Mean(isnan(TP_DLW_HI_N60_B_Mean))=0;TP_DLW_HI_N60_B_SEM(isnan(TP_DLW_HI_N60_B_SEM))=0;
 TP_DLW_HI_N70_B_Mean(isnan(TP_DLW_HI_N70_B_Mean))=0;TP_DLW_HI_N70_B_SEM(isnan(TP_DLW_HI_N70_B_SEM))=0;
+TP_DSW_NH_UN_B_Mean(isnan(TP_DSW_NH_UN_B_Mean))=0;TP_DSW_NH_UN_B_SEM(isnan(TP_DSW_NH_UN_B_SEM))=0;
+TP_DLW_NH_UN_B_Mean(isnan(TP_DLW_NH_UN_B_Mean))=0;TP_DLW_NH_UN_B_SEM(isnan(TP_DLW_NH_UN_B_SEM))=0;
+TP_DSW_NH_AA_B_Mean(isnan(TP_DSW_NH_AA_B_Mean))=0;TP_DSW_NH_AA_B_SEM(isnan(TP_DSW_NH_AA_B_SEM))=0;
+TP_DLW_NH_AA_B_Mean(isnan(TP_DLW_NH_AA_B_Mean))=0;TP_DLW_NH_AA_B_SEM(isnan(TP_DLW_NH_AA_B_SEM))=0;
+TP_DSW_NH_AB_B_Mean(isnan(TP_DSW_NH_AB_B_Mean))=0;TP_DSW_NH_AB_B_SEM(isnan(TP_DSW_NH_AB_B_SEM))=0;
+TP_DLW_NH_AB_B_Mean(isnan(TP_DLW_NH_AB_B_Mean))=0;TP_DLW_NH_AB_B_SEM(isnan(TP_DLW_NH_AB_B_SEM))=0;
 TP_DSW_HI_UN_B_Mean(isnan(TP_DSW_HI_UN_B_Mean))=0;TP_DSW_HI_UN_B_SEM(isnan(TP_DSW_HI_UN_B_SEM))=0;
 TP_DLW_HI_UN_B_Mean(isnan(TP_DLW_HI_UN_B_Mean))=0;TP_DLW_HI_UN_B_SEM(isnan(TP_DLW_HI_UN_B_SEM))=0;
 TP_DSW_HI_AA_B_Mean(isnan(TP_DSW_HI_AA_B_Mean))=0;TP_DSW_HI_AA_B_SEM(isnan(TP_DSW_HI_AA_B_SEM))=0;
 TP_DLW_HI_AA_B_Mean(isnan(TP_DLW_HI_AA_B_Mean))=0;TP_DLW_HI_AA_B_SEM(isnan(TP_DLW_HI_AA_B_SEM))=0;
 TP_DSW_HI_AB_B_Mean(isnan(TP_DSW_HI_AB_B_Mean))=0;TP_DSW_HI_AB_B_SEM(isnan(TP_DSW_HI_AB_B_SEM))=0;
 TP_DLW_HI_AB_B_Mean(isnan(TP_DLW_HI_AB_B_Mean))=0;TP_DLW_HI_AB_B_SEM(isnan(TP_DLW_HI_AB_B_SEM))=0;
+TP_DSW_NH_UN_N0_B_Mean(isnan(TP_DSW_NH_UN_N0_B_Mean))=0;TP_DSW_NH_UN_N0_B_SEM(isnan(TP_DSW_NH_UN_N0_B_SEM))=0;
+TP_DSW_NH_UN_N60_B_Mean(isnan(TP_DSW_NH_UN_N60_B_Mean))=0;TP_DSW_NH_UN_N60_B_SEM(isnan(TP_DSW_NH_UN_N60_B_SEM))=0;
+TP_DSW_NH_UN_N70_B_Mean(isnan(TP_DSW_NH_UN_N70_B_Mean))=0;TP_DSW_NH_UN_N70_B_SEM(isnan(TP_DSW_NH_UN_N70_B_SEM))=0;
+TP_DLW_NH_UN_N0_B_Mean(isnan(TP_DLW_NH_UN_N0_B_Mean))=0;TP_DLW_NH_UN_N0_B_SEM(isnan(TP_DLW_NH_UN_N0_B_SEM))=0;
+TP_DLW_NH_UN_N60_B_Mean(isnan(TP_DLW_NH_UN_N60_B_Mean))=0;TP_DLW_NH_UN_N60_B_SEM(isnan(TP_DLW_NH_UN_N60_B_SEM))=0;
+TP_DLW_NH_UN_N70_B_Mean(isnan(TP_DLW_NH_UN_N70_B_Mean))=0;TP_DLW_NH_UN_N70_B_SEM(isnan(TP_DLW_NH_UN_N70_B_SEM))=0;
+TP_DSW_NH_AA_N0_B_Mean(isnan(TP_DSW_NH_AA_N0_B_Mean))=0;TP_DSW_NH_AA_N0_B_SEM(isnan(TP_DSW_NH_AA_N0_B_SEM))=0;
+TP_DSW_NH_AA_N60_B_Mean(isnan(TP_DSW_NH_AA_N60_B_Mean))=0;TP_DSW_NH_AA_N60_B_SEM(isnan(TP_DSW_NH_AA_N60_B_SEM))=0;
+TP_DSW_NH_AA_N70_B_Mean(isnan(TP_DSW_NH_AA_N70_B_Mean))=0;TP_DSW_NH_AA_N70_B_SEM(isnan(TP_DSW_NH_AA_N70_B_SEM))=0;
+TP_DLW_NH_AA_N0_B_Mean(isnan(TP_DLW_NH_AA_N0_B_Mean))=0;TP_DLW_NH_AA_N0_B_SEM(isnan(TP_DLW_NH_AA_N0_B_SEM))=0;
+TP_DLW_NH_AA_N60_B_Mean(isnan(TP_DLW_NH_AA_N60_B_Mean))=0;TP_DLW_NH_AA_N60_B_SEM(isnan(TP_DLW_NH_AA_N60_B_SEM))=0;
+TP_DLW_NH_AA_N70_B_Mean(isnan(TP_DLW_NH_AA_N70_B_Mean))=0;TP_DLW_NH_AA_N70_B_SEM(isnan(TP_DLW_NH_AA_N70_B_SEM))=0;
+TP_DSW_NH_AB_N0_B_Mean(isnan(TP_DSW_NH_AB_N0_B_Mean))=0;TP_DSW_NH_AB_N0_B_SEM(isnan(TP_DSW_NH_AB_N0_B_SEM))=0;
+TP_DSW_NH_AB_N60_B_Mean(isnan(TP_DSW_NH_AB_N60_B_Mean))=0;TP_DSW_NH_AB_N60_B_SEM(isnan(TP_DSW_NH_AB_N60_B_SEM))=0;
+TP_DSW_NH_AB_N70_B_Mean(isnan(TP_DSW_NH_AB_N70_B_Mean))=0;TP_DSW_NH_AB_N70_B_SEM(isnan(TP_DSW_NH_AB_N70_B_SEM))=0;
+TP_DLW_NH_AB_N0_B_Mean(isnan(TP_DLW_NH_AB_N0_B_Mean))=0;TP_DLW_NH_AB_N0_B_SEM(isnan(TP_DLW_NH_AB_N0_B_SEM))=0;
+TP_DLW_NH_AB_N60_B_Mean(isnan(TP_DLW_NH_AB_N60_B_Mean))=0;TP_DLW_NH_AB_N60_B_SEM(isnan(TP_DLW_NH_AB_N60_B_SEM))=0;
+TP_DLW_NH_AB_N70_B_Mean(isnan(TP_DLW_NH_AB_N70_B_Mean))=0;TP_DLW_NH_AB_N70_B_SEM(isnan(TP_DLW_NH_AB_N70_B_SEM))=0;
 TP_DSW_HI_UN_N0_B_Mean(isnan(TP_DSW_HI_UN_N0_B_Mean))=0;TP_DSW_HI_UN_N0_B_SEM(isnan(TP_DSW_HI_UN_N0_B_SEM))=0;
 TP_DSW_HI_UN_N60_B_Mean(isnan(TP_DSW_HI_UN_N60_B_Mean))=0;TP_DSW_HI_UN_N60_B_SEM(isnan(TP_DSW_HI_UN_N60_B_SEM))=0;
 TP_DSW_HI_UN_N70_B_Mean(isnan(TP_DSW_HI_UN_N70_B_Mean))=0;TP_DSW_HI_UN_N70_B_SEM(isnan(TP_DSW_HI_UN_N70_B_SEM))=0;
@@ -2333,12 +2955,36 @@ TP_FSW_HI_N70_Mean(isnan(TP_FSW_HI_N70_Mean))=0;TP_FSW_HI_N70_SEM(isnan(TP_FSW_H
 TP_FLW_HI_N0_Mean(isnan(TP_FLW_HI_N0_Mean))=0;TP_FLW_HI_N0_SEM(isnan(TP_FLW_HI_N0_SEM))=0;
 TP_FLW_HI_N60_Mean(isnan(TP_FLW_HI_N60_Mean))=0;TP_FLW_HI_N60_SEM(isnan(TP_FLW_HI_N60_SEM))=0;
 TP_FLW_HI_N70_Mean(isnan(TP_FLW_HI_N70_Mean))=0;TP_FLW_HI_N70_SEM(isnan(TP_FLW_HI_N70_SEM))=0;
+TP_FSW_NH_UN_Mean(isnan(TP_FSW_NH_UN_Mean))=0;TP_FSW_NH_UN_SEM(isnan(TP_FSW_NH_UN_SEM))=0;
+TP_FLW_NH_UN_Mean(isnan(TP_FLW_NH_UN_Mean))=0;TP_FLW_NH_UN_SEM(isnan(TP_FLW_NH_UN_SEM))=0;
+TP_FSW_NH_AA_Mean(isnan(TP_FSW_NH_AA_Mean))=0;TP_FSW_NH_AA_SEM(isnan(TP_FSW_NH_AA_SEM))=0;
+TP_FLW_NH_AA_Mean(isnan(TP_FLW_NH_AA_Mean))=0;TP_FLW_NH_AA_SEM(isnan(TP_FLW_NH_AA_SEM))=0;
+TP_FSW_NH_AB_Mean(isnan(TP_FSW_NH_AB_Mean))=0;TP_FSW_NH_AB_SEM(isnan(TP_FSW_NH_AB_SEM))=0;
+TP_FLW_NH_AB_Mean(isnan(TP_FLW_NH_AB_Mean))=0;TP_FLW_NH_AB_SEM(isnan(TP_FLW_NH_AB_SEM))=0;
 TP_FSW_HI_UN_Mean(isnan(TP_FSW_HI_UN_Mean))=0;TP_FSW_HI_UN_SEM(isnan(TP_FSW_HI_UN_SEM))=0;
 TP_FLW_HI_UN_Mean(isnan(TP_FLW_HI_UN_Mean))=0;TP_FLW_HI_UN_SEM(isnan(TP_FLW_HI_UN_SEM))=0;
 TP_FSW_HI_AA_Mean(isnan(TP_FSW_HI_AA_Mean))=0;TP_FSW_HI_AA_SEM(isnan(TP_FSW_HI_AA_SEM))=0;
 TP_FLW_HI_AA_Mean(isnan(TP_FLW_HI_AA_Mean))=0;TP_FLW_HI_AA_SEM(isnan(TP_FLW_HI_AA_SEM))=0;
 TP_FSW_HI_AB_Mean(isnan(TP_FSW_HI_AB_Mean))=0;TP_FSW_HI_AB_SEM(isnan(TP_FSW_HI_AB_SEM))=0;
 TP_FLW_HI_AB_Mean(isnan(TP_FLW_HI_AB_Mean))=0;TP_FLW_HI_AB_SEM(isnan(TP_FLW_HI_AB_SEM))=0;
+TP_FSW_NH_UN_N0_Mean(isnan(TP_FSW_NH_UN_N0_Mean))=0;TP_FSW_NH_UN_N0_SEM(isnan(TP_FSW_NH_UN_N0_SEM))=0;
+TP_FSW_NH_UN_N60_Mean(isnan(TP_FSW_NH_UN_N60_Mean))=0;TP_FSW_NH_UN_N60_SEM(isnan(TP_FSW_NH_UN_N60_SEM))=0;
+TP_FSW_NH_UN_N70_Mean(isnan(TP_FSW_NH_UN_N70_Mean))=0;TP_FSW_NH_UN_N70_SEM(isnan(TP_FSW_NH_UN_N70_SEM))=0;
+TP_FLW_NH_UN_N0_Mean(isnan(TP_FLW_NH_UN_N0_Mean))=0;TP_FLW_NH_UN_N0_SEM(isnan(TP_FLW_NH_UN_N0_SEM))=0;
+TP_FLW_NH_UN_N60_Mean(isnan(TP_FLW_NH_UN_N60_Mean))=0;TP_FLW_NH_UN_N60_SEM(isnan(TP_FLW_NH_UN_N60_SEM))=0;
+TP_FLW_NH_UN_N70_Mean(isnan(TP_FLW_NH_UN_N70_Mean))=0;TP_FLW_NH_UN_N70_SEM(isnan(TP_FLW_NH_UN_N70_SEM))=0;
+TP_FSW_NH_AA_N0_Mean(isnan(TP_FSW_NH_AA_N0_Mean))=0;TP_FSW_NH_AA_N0_SEM(isnan(TP_FSW_NH_AA_N0_SEM))=0;
+TP_FSW_NH_AA_N60_Mean(isnan(TP_FSW_NH_AA_N60_Mean))=0;TP_FSW_NH_AA_N60_SEM(isnan(TP_FSW_NH_AA_N60_SEM))=0;
+TP_FSW_NH_AA_N70_Mean(isnan(TP_FSW_NH_AA_N70_Mean))=0;TP_FSW_NH_AA_N70_SEM(isnan(TP_FSW_NH_AA_N70_SEM))=0;
+TP_FLW_NH_AA_N0_Mean(isnan(TP_FLW_NH_AA_N0_Mean))=0;TP_FLW_NH_AA_N0_SEM(isnan(TP_FLW_NH_AA_N0_SEM))=0;
+TP_FLW_NH_AA_N60_Mean(isnan(TP_FLW_NH_AA_N60_Mean))=0;TP_FLW_NH_AA_N60_SEM(isnan(TP_FLW_NH_AA_N60_SEM))=0;
+TP_FLW_NH_AA_N70_Mean(isnan(TP_FLW_NH_AA_N70_Mean))=0;TP_FLW_NH_AA_N70_SEM(isnan(TP_FLW_NH_AA_N70_SEM))=0;
+TP_FSW_NH_AB_N0_Mean(isnan(TP_FSW_NH_AB_N0_Mean))=0;TP_FSW_NH_AB_N0_SEM(isnan(TP_FSW_NH_AB_N0_SEM))=0;
+TP_FSW_NH_AB_N60_Mean(isnan(TP_FSW_NH_AB_N60_Mean))=0;TP_FSW_NH_AB_N60_SEM(isnan(TP_FSW_NH_AB_N60_SEM))=0;
+TP_FSW_NH_AB_N70_Mean(isnan(TP_FSW_NH_AB_N70_Mean))=0;TP_FSW_NH_AB_N70_SEM(isnan(TP_FSW_NH_AB_N70_SEM))=0;
+TP_FLW_NH_AB_N0_Mean(isnan(TP_FLW_NH_AB_N0_Mean))=0;TP_FLW_NH_AB_N0_SEM(isnan(TP_FLW_NH_AB_N0_SEM))=0;
+TP_FLW_NH_AB_N60_Mean(isnan(TP_FLW_NH_AB_N60_Mean))=0;TP_FLW_NH_AB_N60_SEM(isnan(TP_FLW_NH_AB_N60_SEM))=0;
+TP_FLW_NH_AB_N70_Mean(isnan(TP_FLW_NH_AB_N70_Mean))=0;TP_FLW_NH_AB_N70_SEM(isnan(TP_FLW_NH_AB_N70_SEM))=0;
 TP_FSW_HI_UN_N0_Mean(isnan(TP_FSW_HI_UN_N0_Mean))=0;TP_FSW_HI_UN_N0_SEM(isnan(TP_FSW_HI_UN_N0_SEM))=0;
 TP_FSW_HI_UN_N60_Mean(isnan(TP_FSW_HI_UN_N60_Mean))=0;TP_FSW_HI_UN_N60_SEM(isnan(TP_FSW_HI_UN_N60_SEM))=0;
 TP_FSW_HI_UN_N70_Mean(isnan(TP_FSW_HI_UN_N70_Mean))=0;TP_FSW_HI_UN_N70_SEM(isnan(TP_FSW_HI_UN_N70_SEM))=0;
@@ -2359,141 +3005,163 @@ TP_FLW_HI_AB_N60_Mean(isnan(TP_FLW_HI_AB_N60_Mean))=0;TP_FLW_HI_AB_N60_SEM(isnan
 TP_FLW_HI_AB_N70_Mean(isnan(TP_FLW_HI_AB_N70_Mean))=0;TP_FLW_HI_AB_N70_SEM(isnan(TP_FLW_HI_AB_N70_SEM))=0;
 
 % Fill
-% fill(ax1,[t_DSW_NH, flipud(t_DSW_NH')'],[(DSW_NH_Mean+DSW_NH_SEM), flipud((DSW_NH_Mean-DSW_NH_SEM)')'],SColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax1,[t_DSW_NH_N0, flipud(t_DSW_NH_N0')'],[(DSW_NH_N0_Mean+DSW_NH_N0_SEM), flipud((DSW_NH_N0_Mean-DSW_NH_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax1,[t_DSW_NH_N60, flipud(t_DSW_NH_N60')'],[(DSW_NH_N60_Mean+DSW_NH_N60_SEM), flipud((DSW_NH_N60_Mean-DSW_NH_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax1,[t_DSW_NH_N70, flipud(t_DSW_NH_N70')'],[(DSW_NH_N70_Mean+DSW_NH_N70_SEM), flipud((DSW_NH_N70_Mean-DSW_NH_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-% fill(ax2,[t_DLW_NH, flipud(t_DLW_NH')'],[(DLW_NH_Mean+DLW_NH_SEM), flipud((DLW_NH_Mean-DLW_NH_SEM)')'],LColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax2,[t_DLW_NH_N0, flipud(t_DLW_NH_N0')'],[(DLW_NH_N0_Mean+DLW_NH_N0_SEM), flipud((DLW_NH_N0_Mean-DLW_NH_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax2,[t_DLW_NH_N60, flipud(t_DLW_NH_N60')'],[(DLW_NH_N60_Mean+DLW_NH_N60_SEM), flipud((DLW_NH_N60_Mean-DLW_NH_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax2,[t_DLW_NH_N70, flipud(t_DLW_NH_N70')'],[(DLW_NH_N70_Mean+DLW_NH_N70_SEM), flipud((DLW_NH_N70_Mean-DLW_NH_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-% fill(ax3,[t_DSW_HI, flipud(t_DSW_HI')'],[(DSW_HI_Mean+DSW_HI_SEM), flipud((DSW_HI_Mean-DSW_HI_SEM)')'],SColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax3,[t_DSW_HI_N0, flipud(t_DSW_HI_N0')'],[(DSW_HI_N0_Mean+DSW_HI_N0_SEM), flipud((DSW_HI_N0_Mean-DSW_HI_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax3,[t_DSW_HI_N60, flipud(t_DSW_HI_N60')'],[(DSW_HI_N60_Mean+DSW_HI_N60_SEM), flipud((DSW_HI_N60_Mean-DSW_HI_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax3,[t_DSW_HI_N70, flipud(t_DSW_HI_N70')'],[(DSW_HI_N70_Mean+DSW_HI_N70_SEM), flipud((DSW_HI_N70_Mean-DSW_HI_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-% fill(ax4,[t_DLW_HI, flipud(t_DLW_HI')'],[(DLW_HI_Mean+DLW_HI_SEM), flipud((DLW_HI_Mean-DLW_HI_SEM)')'],LColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax4,[t_DLW_HI_N0, flipud(t_DLW_HI_N0')'],[(DLW_HI_N0_Mean+DLW_HI_N0_SEM), flipud((DLW_HI_N0_Mean-DLW_HI_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax4,[t_DLW_HI_N60, flipud(t_DLW_HI_N60')'],[(DLW_HI_N60_Mean+DLW_HI_N60_SEM), flipud((DLW_HI_N60_Mean-DLW_HI_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax4,[t_DLW_HI_N70, flipud(t_DLW_HI_N70')'],[(DLW_HI_N70_Mean+DLW_HI_N70_SEM), flipud((DLW_HI_N70_Mean-DLW_HI_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax1,[t, flipud(t')'],[(TP_DSW_NH_UN_N0_Mean+TP_DSW_NH_UN_N0_SEM), flipud((TP_DSW_NH_UN_N0_Mean-TP_DSW_NH_UN_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax1,[t, flipud(t')'],[(TP_DSW_NH_UN_N60_Mean+TP_DSW_NH_UN_N60_SEM), flipud((TP_DSW_NH_UN_N60_Mean-TP_DSW_NH_UN_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax1,[t, flipud(t')'],[(TP_DSW_NH_UN_N70_Mean+TP_DSW_NH_UN_N70_SEM), flipud((TP_DSW_NH_UN_N70_Mean-TP_DSW_NH_UN_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax2,[t, flipud(t')'],[(TP_DLW_NH_UN_N0_Mean+TP_DLW_NH_UN_N0_SEM), flipud((TP_DLW_NH_UN_N0_Mean-TP_DLW_NH_UN_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax2,[t, flipud(t')'],[(TP_DLW_NH_UN_N60_Mean+TP_DLW_NH_UN_N60_SEM), flipud((TP_DLW_NH_UN_N60_Mean-TP_DLW_NH_UN_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax2,[t, flipud(t')'],[(TP_DLW_NH_UN_N70_Mean+TP_DLW_NH_UN_N70_SEM), flipud((TP_DLW_NH_UN_N70_Mean-TP_DLW_NH_UN_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax3,[t, flipud(t')'],[(TP_DSW_NH_UN_N0_B_Mean+TP_DSW_NH_UN_N0_B_SEM), flipud((TP_DSW_NH_UN_N0_B_Mean-TP_DSW_NH_UN_N0_B_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax3,[t, flipud(t')'],[(TP_DSW_NH_UN_N60_B_Mean+TP_DSW_NH_UN_N60_B_SEM), flipud((TP_DSW_NH_UN_N60_B_Mean-TP_DSW_NH_UN_N60_B_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax3,[t, flipud(t')'],[(TP_DSW_NH_UN_N70_B_Mean+TP_DSW_NH_UN_N70_B_SEM), flipud((TP_DSW_NH_UN_N70_B_Mean-TP_DSW_NH_UN_N70_B_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax4,[t, flipud(t')'],[(TP_DLW_NH_UN_N0_B_Mean+TP_DLW_NH_UN_N0_B_SEM), flipud((TP_DLW_NH_UN_N0_B_Mean-TP_DLW_NH_UN_N0_B_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax4,[t, flipud(t')'],[(TP_DLW_NH_UN_N60_B_Mean+TP_DLW_NH_UN_N60_B_SEM), flipud((TP_DLW_NH_UN_N60_B_Mean-TP_DLW_NH_UN_N60_B_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax4,[t, flipud(t')'],[(TP_DLW_NH_UN_N70_B_Mean+TP_DLW_NH_UN_N70_B_SEM), flipud((TP_DLW_NH_UN_N70_B_Mean-TP_DLW_NH_UN_N70_B_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax5,[t, flipud(t')'],[(TP_DSW_HI_UN_N0_Mean+TP_DSW_HI_UN_N0_SEM), flipud((TP_DSW_HI_UN_N0_Mean-TP_DSW_HI_UN_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax5,[t, flipud(t')'],[(TP_DSW_HI_UN_N60_Mean+TP_DSW_HI_UN_N60_SEM), flipud((TP_DSW_HI_UN_N60_Mean-TP_DSW_HI_UN_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax5,[t, flipud(t')'],[(TP_DSW_HI_UN_N70_Mean+TP_DSW_HI_UN_N70_SEM), flipud((TP_DSW_HI_UN_N70_Mean-TP_DSW_HI_UN_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax6,[t, flipud(t')'],[(TP_DLW_HI_UN_N0_Mean+TP_DLW_HI_UN_N0_SEM), flipud((TP_DLW_HI_UN_N0_Mean-TP_DLW_HI_UN_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax6,[t, flipud(t')'],[(TP_DLW_HI_UN_N60_Mean+TP_DLW_HI_UN_N60_SEM), flipud((TP_DLW_HI_UN_N60_Mean-TP_DLW_HI_UN_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax6,[t, flipud(t')'],[(TP_DLW_HI_UN_N70_Mean+TP_DLW_HI_UN_N70_SEM), flipud((TP_DLW_HI_UN_N70_Mean-TP_DLW_HI_UN_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax7,[t, flipud(t')'],[(TP_DSW_HI_UN_N0_B_Mean+TP_DSW_HI_UN_N0_B_SEM), flipud((TP_DSW_HI_UN_N0_B_Mean-TP_DSW_HI_UN_N0_B_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax7,[t, flipud(t')'],[(TP_DSW_HI_UN_N60_B_Mean+TP_DSW_HI_UN_N60_B_SEM), flipud((TP_DSW_HI_UN_N60_B_Mean-TP_DSW_HI_UN_N60_B_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax7,[t, flipud(t')'],[(TP_DSW_HI_UN_N70_B_Mean+TP_DSW_HI_UN_N70_B_SEM), flipud((TP_DSW_HI_UN_N70_B_Mean-TP_DSW_HI_UN_N70_B_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax8,[t, flipud(t')'],[(TP_DLW_HI_UN_N0_B_Mean+TP_DLW_HI_UN_N0_B_SEM), flipud((TP_DLW_HI_UN_N0_B_Mean-TP_DLW_HI_UN_N0_B_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax8,[t, flipud(t')'],[(TP_DLW_HI_UN_N60_B_Mean+TP_DLW_HI_UN_N60_B_SEM), flipud((TP_DLW_HI_UN_N60_B_Mean-TP_DLW_HI_UN_N60_B_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax8,[t, flipud(t')'],[(TP_DLW_HI_UN_N70_B_Mean+TP_DLW_HI_UN_N70_B_SEM), flipud((TP_DLW_HI_UN_N70_B_Mean-TP_DLW_HI_UN_N70_B_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
 
-% fill(ax5,[t_DSW_NH_B, flipud(t_DSW_NH_B')'],[(DSW_NH_B_Mean+DSW_NH_B_SEM), flipud((DSW_NH_B_Mean-DSW_NH_B_SEM)')'],SColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax5,[t_DSW_NH_N0_B, flipud(t_DSW_NH_N0_B')'],[(DSW_NH_N0_B_Mean+DSW_NH_N0_B_SEM), flipud((DSW_NH_N0_B_Mean-DSW_NH_N0_B_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax5,[t_DSW_NH_N60_B, flipud(t_DSW_NH_N60_B')'],[(DSW_NH_N60_B_Mean+DSW_NH_N60_B_SEM), flipud((DSW_NH_N60_B_Mean-DSW_NH_N60_B_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax5,[t_DSW_NH_N70_B, flipud(t_DSW_NH_N70_B')'],[(DSW_NH_N70_B_Mean+DSW_NH_N70_B_SEM), flipud((DSW_NH_N70_B_Mean-DSW_NH_N70_B_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-% fill(ax6,[t_DLW_NH_B, flipud(t_DLW_NH_B')'],[(DLW_NH_B_Mean+DLW_NH_B_SEM), flipud((DLW_NH_B_Mean-DLW_NH_B_SEM)')'],LColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax6,[t_DLW_NH_N0_B, flipud(t_DLW_NH_N0_B')'],[(DLW_NH_N0_B_Mean+DLW_NH_N0_B_SEM), flipud((DLW_NH_N0_B_Mean-DLW_NH_N0_B_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax6,[t_DLW_NH_N60_B, flipud(t_DLW_NH_N60_B')'],[(DLW_NH_N60_B_Mean+DLW_NH_N60_B_SEM), flipud((DLW_NH_N60_B_Mean-DLW_NH_N60_B_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax6,[t_DLW_NH_N70_B, flipud(t_DLW_NH_N70_B')'],[(DLW_NH_N70_B_Mean+DLW_NH_N70_B_SEM), flipud((DLW_NH_N70_B_Mean-DLW_NH_N70_B_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-% fill(ax7,[t_DSW_HI_B, flipud(t_DSW_HI_B')'],[(DSW_HI_B_Mean+DSW_HI_B_SEM), flipud((DSW_HI_B_Mean-DSW_HI_B_SEM)')'],SColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax7,[t_DSW_HI_N0_B, flipud(t_DSW_HI_N0_B')'],[(DSW_HI_N0_B_Mean+DSW_HI_N0_B_SEM), flipud((DSW_HI_N0_B_Mean-DSW_HI_N0_B_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax7,[t_DSW_HI_N60_B, flipud(t_DSW_HI_N60_B')'],[(DSW_HI_N60_B_Mean+DSW_HI_N60_B_SEM), flipud((DSW_HI_N60_B_Mean-DSW_HI_N60_B_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax7,[t_DSW_HI_N70_B, flipud(t_DSW_HI_N70_B')'],[(DSW_HI_N70_B_Mean+DSW_HI_N70_B_SEM), flipud((DSW_HI_N70_B_Mean-DSW_HI_N70_B_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-% fill(ax8,[t_DLW_HI_B, flipud(t_DLW_HI_B')'],[(DLW_HI_B_Mean+DLW_HI_B_SEM), flipud((DLW_HI_B_Mean-DLW_HI_B_SEM)')'],LColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax8,[t_DLW_HI_N0_B, flipud(t_DLW_HI_N0_B')'],[(DLW_HI_N0_B_Mean+DLW_HI_N0_B_SEM), flipud((DLW_HI_N0_B_Mean-DLW_HI_N0_B_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax8,[t_DLW_HI_N60_B, flipud(t_DLW_HI_N60_B')'],[(DLW_HI_N60_B_Mean+DLW_HI_N60_B_SEM), flipud((DLW_HI_N60_B_Mean-DLW_HI_N60_B_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax8,[t_DLW_HI_N70_B, flipud(t_DLW_HI_N70_B')'],[(DLW_HI_N70_B_Mean+DLW_HI_N70_B_SEM), flipud((DLW_HI_N70_B_Mean-DLW_HI_N70_B_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax9,[t, flipud(t')'],[(TP_DSW_NH_AA_N0_Mean+TP_DSW_NH_AA_N0_SEM), flipud((TP_DSW_NH_AA_N0_Mean-TP_DSW_NH_AA_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax9,[t, flipud(t')'],[(TP_DSW_NH_AA_N60_Mean+TP_DSW_NH_AA_N60_SEM), flipud((TP_DSW_NH_AA_N60_Mean-TP_DSW_NH_AA_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax9,[t, flipud(t')'],[(TP_DSW_NH_AA_N70_Mean+TP_DSW_NH_AA_N70_SEM), flipud((TP_DSW_NH_AA_N70_Mean-TP_DSW_NH_AA_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax10,[t, flipud(t')'],[(TP_DLW_NH_AA_N0_Mean+TP_DLW_NH_AA_N0_SEM), flipud((TP_DLW_NH_AA_N0_Mean-TP_DLW_NH_AA_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax10,[t, flipud(t')'],[(TP_DLW_NH_AA_N60_Mean+TP_DLW_NH_AA_N60_SEM), flipud((TP_DLW_NH_AA_N60_Mean-TP_DLW_NH_AA_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax10,[t, flipud(t')'],[(TP_DLW_NH_AA_N70_Mean+TP_DLW_NH_AA_N70_SEM), flipud((TP_DLW_NH_AA_N70_Mean-TP_DLW_NH_AA_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax11,[t, flipud(t')'],[(TP_DSW_NH_AA_N0_B_Mean+TP_DSW_NH_AA_N0_B_SEM), flipud((TP_DSW_NH_AA_N0_B_Mean-TP_DSW_NH_AA_N0_B_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax11,[t, flipud(t')'],[(TP_DSW_NH_AA_N60_B_Mean+TP_DSW_NH_AA_N60_B_SEM), flipud((TP_DSW_NH_AA_N60_B_Mean-TP_DSW_NH_AA_N60_B_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax11,[t, flipud(t')'],[(TP_DSW_NH_AA_N70_B_Mean+TP_DSW_NH_AA_N70_B_SEM), flipud((TP_DSW_NH_AA_N70_B_Mean-TP_DSW_NH_AA_N70_B_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax12,[t, flipud(t')'],[(TP_DLW_NH_AA_N0_B_Mean+TP_DLW_NH_AA_N0_B_SEM), flipud((TP_DLW_NH_AA_N0_B_Mean-TP_DLW_NH_AA_N0_B_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax12,[t, flipud(t')'],[(TP_DLW_NH_AA_N60_B_Mean+TP_DLW_NH_AA_N60_B_SEM), flipud((TP_DLW_NH_AA_N60_B_Mean-TP_DLW_NH_AA_N60_B_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax12,[t, flipud(t')'],[(TP_DLW_NH_AA_N70_B_Mean+TP_DLW_NH_AA_N70_B_SEM), flipud((TP_DLW_NH_AA_N70_B_Mean-TP_DLW_NH_AA_N70_B_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax13,[t, flipud(t')'],[(TP_DSW_HI_AA_N0_Mean+TP_DSW_HI_AA_N0_SEM), flipud((TP_DSW_HI_AA_N0_Mean-TP_DSW_HI_AA_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax13,[t, flipud(t')'],[(TP_DSW_HI_AA_N60_Mean+TP_DSW_HI_AA_N60_SEM), flipud((TP_DSW_HI_AA_N60_Mean-TP_DSW_HI_AA_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax13,[t, flipud(t')'],[(TP_DSW_HI_AA_N70_Mean+TP_DSW_HI_AA_N70_SEM), flipud((TP_DSW_HI_AA_N70_Mean-TP_DSW_HI_AA_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax14,[t, flipud(t')'],[(TP_DLW_HI_AA_N0_Mean+TP_DLW_HI_AA_N0_SEM), flipud((TP_DLW_HI_AA_N0_Mean-TP_DLW_HI_AA_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax14,[t, flipud(t')'],[(TP_DLW_HI_AA_N60_Mean+TP_DLW_HI_AA_N60_SEM), flipud((TP_DLW_HI_AA_N60_Mean-TP_DLW_HI_AA_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax14,[t, flipud(t')'],[(TP_DLW_HI_AA_N70_Mean+TP_DLW_HI_AA_N70_SEM), flipud((TP_DLW_HI_AA_N70_Mean-TP_DLW_HI_AA_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax15,[t, flipud(t')'],[(TP_DSW_HI_AA_N0_B_Mean+TP_DSW_HI_AA_N0_B_SEM), flipud((TP_DSW_HI_AA_N0_B_Mean-TP_DSW_HI_AA_N0_B_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax15,[t, flipud(t')'],[(TP_DSW_HI_AA_N60_B_Mean+TP_DSW_HI_AA_N60_B_SEM), flipud((TP_DSW_HI_AA_N60_B_Mean-TP_DSW_HI_AA_N60_B_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax15,[t, flipud(t')'],[(TP_DSW_HI_AA_N70_B_Mean+TP_DSW_HI_AA_N70_B_SEM), flipud((TP_DSW_HI_AA_N70_B_Mean-TP_DSW_HI_AA_N70_B_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax16,[t, flipud(t')'],[(TP_DLW_HI_AA_N0_B_Mean+TP_DLW_HI_AA_N0_B_SEM), flipud((TP_DLW_HI_AA_N0_B_Mean-TP_DLW_HI_AA_N0_B_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax16,[t, flipud(t')'],[(TP_DLW_HI_AA_N60_B_Mean+TP_DLW_HI_AA_N60_B_SEM), flipud((TP_DLW_HI_AA_N60_B_Mean-TP_DLW_HI_AA_N60_B_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax16,[t, flipud(t')'],[(TP_DLW_HI_AA_N70_B_Mean+TP_DLW_HI_AA_N70_B_SEM), flipud((TP_DLW_HI_AA_N70_B_Mean-TP_DLW_HI_AA_N70_B_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
 
-% fill(ax11,[t_FSW_NH, flipud(t_FSW_NH')'],[(FSW_NH_Mean+FSW_NH_SEM), flipud((FSW_NH_Mean-FSW_NH_SEM)')'],SColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax11,[t_FSW_NH_N0, flipud(t_FSW_NH_N0')'],[(FSW_NH_N0_Mean+FSW_NH_N0_SEM), flipud((FSW_NH_N0_Mean-FSW_NH_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax11,[t_FSW_NH_N60, flipud(t_FSW_NH_N60')'],[(FSW_NH_N60_Mean+FSW_NH_N60_SEM), flipud((FSW_NH_N60_Mean-FSW_NH_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax11,[t_FSW_NH_N70, flipud(t_FSW_NH_N70')'],[(FSW_NH_N70_Mean+FSW_NH_N70_SEM), flipud((FSW_NH_N70_Mean-FSW_NH_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-% fill(ax12,[t_FLW_NH, flipud(t_FLW_NH')'],[(FLW_NH_Mean+FLW_NH_SEM), flipud((FLW_NH_Mean-FLW_NH_SEM)')'],LColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax12,[t_FLW_NH_N0, flipud(t_FLW_NH_N0')'],[(FLW_NH_N0_Mean+FLW_NH_N0_SEM), flipud((FLW_NH_N0_Mean-FLW_NH_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax12,[t_FLW_NH_N60, flipud(t_FLW_NH_N60')'],[(FLW_NH_N60_Mean+FLW_NH_N60_SEM), flipud((FLW_NH_N60_Mean-FLW_NH_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax12,[t_FLW_NH_N70, flipud(t_FLW_NH_N70')'],[(FLW_NH_N70_Mean+FLW_NH_N70_SEM), flipud((FLW_NH_N70_Mean-FLW_NH_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-% fill(ax13,[t_FSW_HI, flipud(t_FSW_HI')'],[(FSW_HI_Mean+FSW_HI_SEM), flipud((FSW_HI_Mean-FSW_HI_SEM)')'],SColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax13,[t_FSW_HI_N0, flipud(t_FSW_HI_N0')'],[(FSW_HI_N0_Mean+FSW_HI_N0_SEM), flipud((FSW_HI_N0_Mean-FSW_HI_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax13,[t_FSW_HI_N60, flipud(t_FSW_HI_N60')'],[(FSW_HI_N60_Mean+FSW_HI_N60_SEM), flipud((FSW_HI_N60_Mean-FSW_HI_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax13,[t_FSW_HI_N70, flipud(t_FSW_HI_N70')'],[(FSW_HI_N70_Mean+FSW_HI_N70_SEM), flipud((FSW_HI_N70_Mean-FSW_HI_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-% fill(ax14,[t_FLW_HI, flipud(t_FLW_HI')'],[(FLW_HI_Mean+FLW_HI_SEM), flipud((FLW_HI_Mean-FLW_HI_SEM)')'],LColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax14,[t_FLW_HI_N0, flipud(t_FLW_HI_N0')'],[(FLW_HI_N0_Mean+FLW_HI_N0_SEM), flipud((FLW_HI_N0_Mean-FLW_HI_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax14,[t_FLW_HI_N60, flipud(t_FLW_HI_N60')'],[(FLW_HI_N60_Mean+FLW_HI_N60_SEM), flipud((FLW_HI_N60_Mean-FLW_HI_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax14,[t_FLW_HI_N70, flipud(t_FLW_HI_N70')'],[(FLW_HI_N70_Mean+FLW_HI_N70_SEM), flipud((FLW_HI_N70_Mean-FLW_HI_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax17,[t, flipud(t')'],[(TP_DSW_NH_AB_N0_Mean+TP_DSW_NH_AB_N0_SEM), flipud((TP_DSW_NH_AB_N0_Mean-TP_DSW_NH_AB_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax17,[t, flipud(t')'],[(TP_DSW_NH_AB_N60_Mean+TP_DSW_NH_AB_N60_SEM), flipud((TP_DSW_NH_AB_N60_Mean-TP_DSW_NH_AB_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax17,[t, flipud(t')'],[(TP_DSW_NH_AB_N70_Mean+TP_DSW_NH_AB_N70_SEM), flipud((TP_DSW_NH_AB_N70_Mean-TP_DSW_NH_AB_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax18,[t, flipud(t')'],[(TP_DLW_NH_AB_N0_Mean+TP_DLW_NH_AB_N0_SEM), flipud((TP_DLW_NH_AB_N0_Mean-TP_DLW_NH_AB_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax18,[t, flipud(t')'],[(TP_DLW_NH_AB_N60_Mean+TP_DLW_NH_AB_N60_SEM), flipud((TP_DLW_NH_AB_N60_Mean-TP_DLW_NH_AB_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax18,[t, flipud(t')'],[(TP_DLW_NH_AB_N70_Mean+TP_DLW_NH_AB_N70_SEM), flipud((TP_DLW_NH_AB_N70_Mean-TP_DLW_NH_AB_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax19,[t, flipud(t')'],[(TP_DSW_NH_AB_N0_B_Mean+TP_DSW_NH_AB_N0_B_SEM), flipud((TP_DSW_NH_AB_N0_B_Mean-TP_DSW_NH_AB_N0_B_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax19,[t, flipud(t')'],[(TP_DSW_NH_AB_N60_B_Mean+TP_DSW_NH_AB_N60_B_SEM), flipud((TP_DSW_NH_AB_N60_B_Mean-TP_DSW_NH_AB_N60_B_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax19,[t, flipud(t')'],[(TP_DSW_NH_AB_N70_B_Mean+TP_DSW_NH_AB_N70_B_SEM), flipud((TP_DSW_NH_AB_N70_B_Mean+TP_DSW_NH_AB_N70_B_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax20,[t, flipud(t')'],[(TP_DLW_NH_AB_N0_B_Mean+TP_DLW_NH_AB_N0_B_SEM), flipud((TP_DLW_NH_AB_N0_B_Mean-TP_DLW_NH_AB_N0_B_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax20,[t, flipud(t')'],[(TP_DLW_NH_AB_N60_B_Mean+TP_DLW_NH_AB_N60_B_SEM), flipud((TP_DLW_NH_AB_N60_B_Mean-TP_DLW_NH_AB_N60_B_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax20,[t, flipud(t')'],[(TP_DLW_NH_AB_N70_B_Mean+TP_DLW_NH_AB_N70_B_SEM), flipud((TP_DLW_NH_AB_N70_B_Mean-TP_DLW_NH_AB_N70_B_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax21,[t, flipud(t')'],[(TP_DSW_HI_AB_N0_Mean+TP_DSW_HI_AB_N0_SEM), flipud((TP_DSW_HI_AB_N0_Mean-TP_DSW_HI_AB_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax21,[t, flipud(t')'],[(TP_DSW_HI_AB_N60_Mean+TP_DSW_HI_AB_N60_SEM), flipud((TP_DSW_HI_AB_N60_Mean-TP_DSW_HI_AB_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax21,[t, flipud(t')'],[(TP_DSW_HI_AB_N70_Mean+TP_DSW_HI_AB_N70_SEM), flipud((TP_DSW_HI_AB_N70_Mean-TP_DSW_HI_AB_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax22,[t, flipud(t')'],[(TP_DLW_HI_AB_N0_Mean+TP_DLW_HI_AB_N0_SEM), flipud((TP_DLW_HI_AB_N0_Mean-TP_DLW_HI_AB_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax22,[t, flipud(t')'],[(TP_DLW_HI_AB_N60_Mean+TP_DLW_HI_AB_N60_SEM), flipud((TP_DLW_HI_AB_N60_Mean-TP_DLW_HI_AB_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax22,[t, flipud(t')'],[(TP_DLW_HI_AB_N70_Mean+TP_DLW_HI_AB_N70_SEM), flipud((TP_DLW_HI_AB_N70_Mean-TP_DLW_HI_AB_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax23,[t, flipud(t')'],[(TP_DSW_HI_AB_N0_B_Mean+TP_DSW_HI_AB_N0_B_SEM), flipud((TP_DSW_HI_AB_N0_B_Mean-TP_DSW_HI_AB_N0_B_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax23,[t, flipud(t')'],[(TP_DSW_HI_AB_N60_B_Mean+TP_DSW_HI_AB_N60_B_SEM), flipud((TP_DSW_HI_AB_N60_B_Mean-TP_DSW_HI_AB_N60_B_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax23,[t, flipud(t')'],[(TP_DSW_HI_AB_N70_B_Mean+TP_DSW_HI_AB_N70_B_SEM), flipud((TP_DSW_HI_AB_N70_B_Mean-TP_DSW_HI_AB_N70_B_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax24,[t, flipud(t')'],[(TP_DLW_HI_AB_N0_B_Mean+TP_DLW_HI_AB_N0_B_SEM), flipud((TP_DLW_HI_AB_N0_B_Mean-TP_DLW_HI_AB_N0_B_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax24,[t, flipud(t')'],[(TP_DLW_HI_AB_N60_B_Mean+TP_DLW_HI_AB_N60_B_SEM), flipud((TP_DLW_HI_AB_N60_B_Mean-TP_DLW_HI_AB_N60_B_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax24,[t, flipud(t')'],[(TP_DLW_HI_AB_N70_B_Mean+TP_DLW_HI_AB_N70_B_SEM), flipud((TP_DLW_HI_AB_N70_B_Mean-TP_DLW_HI_AB_N70_B_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
 
-% fill(ax21,[t_DSW_NH, flipud(t_DSW_NH')'],[(TP_DSW_NH_Mean+TP_DSW_NH_SEM), flipud((TP_DSW_NH_Mean-TP_DSW_NH_SEM)')'],SColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax21,[t_DSW_NH_N0, flipud(t_DSW_NH_N0')'],[(TP_DSW_NH_N0_Mean+TP_DSW_NH_N0_SEM), flipud((TP_DSW_NH_N0_Mean-TP_DSW_NH_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax21,[t_DSW_NH_N60, flipud(t_DSW_NH_N60')'],[(TP_DSW_NH_N60_Mean+TP_DSW_NH_N60_SEM), flipud((TP_DSW_NH_N60_Mean-TP_DSW_NH_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax21,[t_DSW_NH_N70, flipud(t_DSW_NH_N70')'],[(TP_DSW_NH_N70_Mean+TP_DSW_NH_N70_SEM), flipud((TP_DSW_NH_N70_Mean-TP_DSW_NH_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-% fill(ax22,[t_DLW_NH, flipud(t_DLW_NH')'],[(TP_DLW_NH_Mean+TP_DLW_NH_SEM), flipud((TP_DLW_NH_Mean-TP_DLW_NH_SEM)')'],LColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax22,[t_DLW_NH_N0, flipud(t_DLW_NH_N0')'],[(TP_DLW_NH_N0_Mean+TP_DLW_NH_N0_SEM), flipud((TP_DLW_NH_N0_Mean-TP_DLW_NH_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax22,[t_DLW_NH_N60, flipud(t_DLW_NH_N60')'],[(TP_DLW_NH_N60_Mean+TP_DLW_NH_N60_SEM), flipud((TP_DLW_NH_N60_Mean-TP_DLW_NH_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax22,[t_DLW_NH_N70, flipud(t_DLW_NH_N70')'],[(TP_DLW_NH_N70_Mean+TP_DLW_NH_N70_SEM), flipud((TP_DLW_NH_N70_Mean-TP_DLW_NH_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-% fill(ax23,[t_DSW_HI, flipud(t_DSW_HI')'],[(TP_DSW_HI_Mean+TP_DSW_HI_SEM), flipud((TP_DSW_HI_Mean-TP_DSW_HI_SEM)')'],SColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax23,[t_DSW_HI_N0, flipud(t_DSW_HI_N0')'],[(TP_DSW_HI_N0_Mean+TP_DSW_HI_N0_SEM), flipud((TP_DSW_HI_N0_Mean-TP_DSW_HI_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax23,[t_DSW_HI_N60, flipud(t_DSW_HI_N60')'],[(TP_DSW_HI_N60_Mean+TP_DSW_HI_N60_SEM), flipud((TP_DSW_HI_N60_Mean-TP_DSW_HI_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax23,[t_DSW_HI_N70, flipud(t_DSW_HI_N70')'],[(TP_DSW_HI_N70_Mean+TP_DSW_HI_N70_SEM), flipud((TP_DSW_HI_N70_Mean-TP_DSW_HI_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-% fill(ax24,[t_DLW_HI, flipud(t_DLW_HI')'],[(TP_DLW_HI_Mean+TP_DLW_HI_SEM), flipud((TP_DLW_HI_Mean-TP_DLW_HI_SEM)')'],LColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax24,[t_DLW_HI_N0, flipud(t_DLW_HI_N0')'],[(TP_DLW_HI_N0_Mean+TP_DLW_HI_N0_SEM), flipud((TP_DLW_HI_N0_Mean-TP_DLW_HI_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax24,[t_DLW_HI_N60, flipud(t_DLW_HI_N60')'],[(TP_DLW_HI_N60_Mean+TP_DLW_HI_N60_SEM), flipud((TP_DLW_HI_N60_Mean-TP_DLW_HI_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax24,[t_DLW_HI_N70, flipud(t_DLW_HI_N70')'],[(TP_DLW_HI_N70_Mean+TP_DLW_HI_N70_SEM), flipud((TP_DLW_HI_N70_Mean-TP_DLW_HI_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax25,[t, flipud(t')'],[(TP_FSW_NH_UN_N0_Mean+TP_FSW_NH_UN_N0_SEM), flipud((TP_FSW_NH_UN_N0_Mean-TP_FSW_NH_UN_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax25,[t, flipud(t')'],[(TP_FSW_NH_UN_N60_Mean+TP_FSW_NH_UN_N60_SEM), flipud((TP_FSW_NH_UN_N60_Mean-TP_FSW_NH_UN_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax25,[t, flipud(t')'],[(TP_FSW_NH_UN_N70_Mean+TP_FSW_NH_UN_N70_SEM), flipud((TP_FSW_NH_UN_N70_Mean-TP_FSW_NH_UN_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax26,[t, flipud(t')'],[(TP_FLW_NH_UN_N0_Mean+TP_FLW_NH_UN_N0_SEM), flipud((TP_FLW_NH_UN_N0_Mean-TP_FLW_NH_UN_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax26,[t, flipud(t')'],[(TP_FLW_NH_UN_N60_Mean+TP_FLW_NH_UN_N60_SEM), flipud((TP_FLW_NH_UN_N60_Mean-TP_FLW_NH_UN_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax26,[t, flipud(t')'],[(TP_FLW_NH_UN_N70_Mean+TP_FLW_NH_UN_N70_SEM), flipud((TP_FLW_NH_UN_N70_Mean-TP_FLW_NH_UN_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax27,[t, flipud(t')'],[(TP_FSW_HI_UN_N0_Mean+TP_FSW_HI_UN_N0_SEM), flipud((TP_FSW_HI_UN_N0_Mean-TP_FSW_HI_UN_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax27,[t, flipud(t')'],[(TP_FSW_HI_UN_N60_Mean+TP_FSW_HI_UN_N60_SEM), flipud((TP_FSW_HI_UN_N60_Mean-TP_FSW_HI_UN_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax27,[t, flipud(t')'],[(TP_FSW_HI_UN_N70_Mean+TP_FSW_HI_UN_N70_SEM), flipud((TP_FSW_HI_UN_N70_Mean-TP_FSW_HI_UN_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax28,[t, flipud(t')'],[(TP_FLW_HI_UN_N0_Mean+TP_FLW_HI_UN_N0_SEM), flipud((TP_FLW_HI_UN_N0_Mean-TP_FLW_HI_UN_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax28,[t, flipud(t')'],[(TP_FLW_HI_UN_N60_Mean+TP_FLW_HI_UN_N60_SEM), flipud((TP_FLW_HI_UN_N60_Mean-TP_FLW_HI_UN_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax28,[t, flipud(t')'],[(TP_FLW_HI_UN_N70_Mean+TP_FLW_HI_UN_N70_SEM), flipud((TP_FLW_HI_UN_N70_Mean-TP_FLW_HI_UN_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
 
-% fill(ax25,[t_DSW_NH_B, flipud(t_DSW_NH_B')'],[(TP_DSW_NH_B_Mean+TP_DSW_NH_B_SEM), flipud((TP_DSW_NH_B_Mean-TP_DSW_NH_B_SEM)')'],SColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax25,[t_DSW_NH_N0_B, flipud(t_DSW_NH_N0_B')'],[(TP_DSW_NH_N0_B_Mean+TP_DSW_NH_N0_B_SEM), flipud((TP_DSW_NH_N0_B_Mean-TP_DSW_NH_N0_B_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax25,[t_DSW_NH_N60_B, flipud(t_DSW_NH_N60_B')'],[(TP_DSW_NH_N60_B_Mean+TP_DSW_NH_N60_B_SEM), flipud((TP_DSW_NH_N60_B_Mean-TP_DSW_NH_N60_B_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax25,[t_DSW_NH_N70_B, flipud(t_DSW_NH_N70_B')'],[(TP_DSW_NH_N70_B_Mean+TP_DSW_NH_N70_B_SEM), flipud((TP_DSW_NH_N70_B_Mean-TP_DSW_NH_N70_B_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-% fill(ax26,[t_DLW_NH_B, flipud(t_DLW_NH_B')'],[(TP_DLW_NH_B_Mean+TP_DLW_NH_B_SEM), flipud((TP_DLW_NH_B_Mean-TP_DLW_NH_B_SEM)')'],LColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax26,[t_DLW_NH_N0_B, flipud(t_DLW_NH_N0_B')'],[(TP_DLW_NH_N0_B_Mean+TP_DLW_NH_N0_B_SEM), flipud((TP_DLW_NH_N0_B_Mean-TP_DLW_NH_N0_B_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax26,[t_DLW_NH_N60_B, flipud(t_DLW_NH_N60_B')'],[(TP_DLW_NH_N60_B_Mean+TP_DLW_NH_N60_B_SEM), flipud((TP_DLW_NH_N60_B_Mean-TP_DLW_NH_N60_B_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax26,[t_DLW_NH_N70_B, flipud(t_DLW_NH_N70_B')'],[(TP_DLW_NH_N70_B_Mean+TP_DLW_NH_N70_B_SEM), flipud((TP_DLW_NH_N70_B_Mean-TP_DLW_NH_N70_B_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-% fill(ax27,[t_DSW_HI_B, flipud(t_DSW_HI_B')'],[(TP_DSW_HI_B_Mean+TP_DSW_HI_B_SEM), flipud((TP_DSW_HI_B_Mean-TP_DSW_HI_B_SEM)')'],SColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax27,[t_DSW_HI_N0_B, flipud(t_DSW_HI_N0_B')'],[(TP_DSW_HI_N0_B_Mean+TP_DSW_HI_N0_B_SEM), flipud((TP_DSW_HI_N0_B_Mean-TP_DSW_HI_N0_B_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax27,[t_DSW_HI_N60_B, flipud(t_DSW_HI_N60_B')'],[(TP_DSW_HI_N60_B_Mean+TP_DSW_HI_N60_B_SEM), flipud((TP_DSW_HI_N60_B_Mean-TP_DSW_HI_N60_B_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax27,[t_DSW_HI_N70_B, flipud(t_DSW_HI_N70_B')'],[(TP_DSW_HI_N70_B_Mean+TP_DSW_HI_N70_B_SEM), flipud((TP_DSW_HI_N70_B_Mean-TP_DSW_HI_N70_B_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-% fill(ax28,[t_DLW_HI_B, flipud(t_DLW_HI_B')'],[(TP_DLW_HI_B_Mean+TP_DLW_HI_B_SEM), flipud((TP_DLW_HI_B_Mean-TP_DLW_HI_B_SEM)')'],LColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax28,[t_DLW_HI_N0_B, flipud(t_DLW_HI_N0_B')'],[(TP_DLW_HI_N0_B_Mean+TP_DLW_HI_N0_B_SEM), flipud((TP_DLW_HI_N0_B_Mean-TP_DLW_HI_N0_B_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax28,[t_DLW_HI_N60_B, flipud(t_DLW_HI_N60_B')'],[(TP_DLW_HI_N60_B_Mean+TP_DLW_HI_N60_B_SEM), flipud((TP_DLW_HI_N60_B_Mean-TP_DLW_HI_N60_B_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax28,[t_DLW_HI_N70_B, flipud(t_DLW_HI_N70_B')'],[(TP_DLW_HI_N70_B_Mean+TP_DLW_HI_N70_B_SEM), flipud((TP_DLW_HI_N70_B_Mean-TP_DLW_HI_N70_B_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax29,[t, flipud(t')'],[(TP_FSW_NH_AA_N0_Mean+TP_FSW_NH_AA_N0_SEM), flipud((TP_FSW_NH_AA_N0_Mean-TP_FSW_NH_AA_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax29,[t, flipud(t')'],[(TP_FSW_NH_AA_N60_Mean+TP_FSW_NH_AA_N60_SEM), flipud((TP_FSW_NH_AA_N60_Mean-TP_FSW_NH_AA_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax29,[t, flipud(t')'],[(TP_FSW_NH_AA_N70_Mean+TP_FSW_NH_AA_N70_SEM), flipud((TP_FSW_NH_AA_N70_Mean-TP_FSW_NH_AA_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax30,[t, flipud(t')'],[(TP_FLW_NH_AA_N0_Mean+TP_FLW_NH_AA_N0_SEM), flipud((TP_FLW_NH_AA_N0_Mean-TP_FLW_NH_AA_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax30,[t, flipud(t')'],[(TP_FLW_NH_AA_N60_Mean+TP_FLW_NH_AA_N60_SEM), flipud((TP_FLW_NH_AA_N60_Mean-TP_FLW_NH_AA_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax30,[t, flipud(t')'],[(TP_FLW_NH_AA_N70_Mean+TP_FLW_NH_AA_N70_SEM), flipud((TP_FLW_NH_AA_N70_Mean-TP_FLW_NH_AA_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax31,[t, flipud(t')'],[(TP_FSW_HI_AA_N0_Mean+TP_FSW_HI_AA_N0_SEM), flipud((TP_FSW_HI_AA_N0_Mean-TP_FSW_HI_AA_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax31,[t, flipud(t')'],[(TP_FSW_HI_AA_N60_Mean+TP_FSW_HI_AA_N60_SEM), flipud((TP_FSW_HI_AA_N60_Mean-TP_FSW_HI_AA_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax31,[t, flipud(t')'],[(TP_FSW_HI_AA_N70_Mean+TP_FSW_HI_AA_N70_SEM), flipud((TP_FSW_HI_AA_N70_Mean-TP_FSW_HI_AA_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax32,[t, flipud(t')'],[(TP_FLW_HI_AA_N0_Mean+TP_FLW_HI_AA_N0_SEM), flipud((TP_FLW_HI_AA_N0_Mean-TP_FLW_HI_AA_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax32,[t, flipud(t')'],[(TP_FLW_HI_AA_N60_Mean+TP_FLW_HI_AA_N60_SEM), flipud((TP_FLW_HI_AA_N60_Mean-TP_FLW_HI_AA_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax32,[t, flipud(t')'],[(TP_FLW_HI_AA_N70_Mean+TP_FLW_HI_AA_N70_SEM), flipud((TP_FLW_HI_AA_N70_Mean-TP_FLW_HI_AA_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
 
-% fill(ax31,[t_FSW_NH, flipud(t_FSW_NH')'],[(TP_FSW_NH_Mean+TP_FSW_NH_SEM), flipud((TP_FSW_NH_Mean-TP_FSW_NH_SEM)')'],SColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax31,[t_FSW_NH_N0, flipud(t_FSW_NH_N0')'],[(TP_FSW_NH_N0_Mean+TP_FSW_NH_N0_SEM), flipud((TP_FSW_NH_N0_Mean-TP_FSW_NH_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax31,[t_FSW_NH_N60, flipud(t_FSW_NH_N60')'],[(TP_FSW_NH_N60_Mean+TP_FSW_NH_N60_SEM), flipud((TP_FSW_NH_N60_Mean-TP_FSW_NH_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax31,[t_FSW_NH_N70, flipud(t_FSW_NH_N70')'],[(TP_FSW_NH_N70_Mean+TP_FSW_NH_N70_SEM), flipud((TP_FSW_NH_N70_Mean-TP_FSW_NH_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-% fill(ax32,[t_FLW_NH, flipud(t_FLW_NH')'],[(TP_FLW_NH_Mean+TP_FLW_NH_SEM), flipud((TP_FLW_NH_Mean-TP_FLW_NH_SEM)')'],LColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax32,[t_FLW_NH_N0, flipud(t_FLW_NH_N0')'],[(TP_FLW_NH_N0_Mean+TP_FLW_NH_N0_SEM), flipud((TP_FLW_NH_N0_Mean-TP_FLW_NH_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax32,[t_FLW_NH_N60, flipud(t_FLW_NH_N60')'],[(TP_FLW_NH_N60_Mean+TP_FLW_NH_N60_SEM), flipud((TP_FLW_NH_N60_Mean-TP_FLW_NH_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax32,[t_FLW_NH_N70, flipud(t_FLW_NH_N70')'],[(TP_FLW_NH_N70_Mean+TP_FLW_NH_N70_SEM), flipud((TP_FLW_NH_N70_Mean-TP_FLW_NH_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-% fill(ax33,[t_FSW_HI, flipud(t_FSW_HI')'],[(TP_FSW_HI_Mean+TP_FSW_HI_SEM), flipud((TP_FSW_HI_Mean-TP_FSW_HI_SEM)')'],SColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax33,[t_FSW_HI_N0, flipud(t_FSW_HI_N0')'],[(TP_FSW_HI_N0_Mean+TP_FSW_HI_N0_SEM), flipud((TP_FSW_HI_N0_Mean-TP_FSW_HI_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax33,[t_FSW_HI_N60, flipud(t_FSW_HI_N60')'],[(TP_FSW_HI_N60_Mean+TP_FSW_HI_N60_SEM), flipud((TP_FSW_HI_N60_Mean-TP_FSW_HI_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax33,[t_FSW_HI_N70, flipud(t_FSW_HI_N70')'],[(TP_FSW_HI_N70_Mean+TP_FSW_HI_N70_SEM), flipud((TP_FSW_HI_N70_Mean-TP_FSW_HI_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-% fill(ax34,[t_FLW_HI, flipud(t_FLW_HI')'],[(TP_FLW_HI_Mean+TP_FLW_HI_SEM), flipud((TP_FLW_HI_Mean-TP_FLW_HI_SEM)')'],LColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax34,[t_FLW_HI_N0, flipud(t_FLW_HI_N0')'],[(TP_FLW_HI_N0_Mean+TP_FLW_HI_N0_SEM), flipud((TP_FLW_HI_N0_Mean-TP_FLW_HI_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax34,[t_FLW_HI_N60, flipud(t_FLW_HI_N60')'],[(TP_FLW_HI_N60_Mean+TP_FLW_HI_N60_SEM), flipud((TP_FLW_HI_N60_Mean-TP_FLW_HI_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
-fill(ax34,[t_FLW_HI_N70, flipud(t_FLW_HI_N70')'],[(TP_FLW_HI_N70_Mean+TP_FLW_HI_N70_SEM), flipud((TP_FLW_HI_N70_Mean-TP_FLW_HI_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax33,[t, flipud(t')'],[(TP_FSW_NH_AB_N0_Mean+TP_FSW_NH_AB_N0_SEM), flipud((TP_FSW_NH_AB_N0_Mean-TP_FSW_NH_AB_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax33,[t, flipud(t')'],[(TP_FSW_NH_AB_N60_Mean+TP_FSW_NH_AB_N60_SEM), flipud((TP_FSW_NH_AB_N60_Mean-TP_FSW_NH_AB_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax33,[t, flipud(t')'],[(TP_FSW_NH_AB_N70_Mean+TP_FSW_NH_AB_N70_SEM), flipud((TP_FSW_NH_AB_N70_Mean-TP_FSW_NH_AB_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax34,[t, flipud(t')'],[(TP_FLW_NH_AB_N0_Mean+TP_FLW_NH_AB_N0_SEM), flipud((TP_FLW_NH_AB_N0_Mean-TP_FLW_NH_AB_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax34,[t, flipud(t')'],[(TP_FLW_NH_AB_N60_Mean+TP_FLW_NH_AB_N60_SEM), flipud((TP_FLW_NH_AB_N60_Mean-TP_FLW_NH_AB_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax34,[t, flipud(t')'],[(TP_FLW_NH_AB_N70_Mean+TP_FLW_NH_AB_N70_SEM), flipud((TP_FLW_NH_AB_N70_Mean-TP_FLW_NH_AB_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax35,[t, flipud(t')'],[(TP_FSW_HI_AB_N0_Mean+TP_FSW_HI_AB_N0_SEM), flipud((TP_FSW_HI_AB_N0_Mean-TP_FSW_HI_AB_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax35,[t, flipud(t')'],[(TP_FSW_HI_AB_N60_Mean+TP_FSW_HI_AB_N60_SEM), flipud((TP_FSW_HI_AB_N60_Mean-TP_FSW_HI_AB_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax35,[t, flipud(t')'],[(TP_FSW_HI_AB_N70_Mean+TP_FSW_HI_AB_N70_SEM), flipud((TP_FSW_HI_AB_N70_Mean-TP_FSW_HI_AB_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax36,[t, flipud(t')'],[(TP_FLW_HI_AB_N0_Mean+TP_FLW_HI_AB_N0_SEM), flipud((TP_FLW_HI_AB_N0_Mean-TP_FLW_HI_AB_N0_SEM)')'],QuietColor,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax36,[t, flipud(t')'],[(TP_FLW_HI_AB_N60_Mean+TP_FLW_HI_AB_N60_SEM), flipud((TP_FLW_HI_AB_N60_Mean-TP_FLW_HI_AB_N60_SEM)')'],N60Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
+fill(ax36,[t, flipud(t')'],[(TP_FLW_HI_AB_N70_Mean+TP_FLW_HI_AB_N70_SEM), flipud((TP_FLW_HI_AB_N70_Mean-TP_FLW_HI_AB_N70_SEM)')'],N70Color,'FaceAlpha',.1,'Edgecolor','none','handlevisibility' ,'off')
 
-xlabel([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax11 ax12 ax13 ax14 ax21 ax22 ax23 ax24 ax25 ax26 ax27 ax28 ax31 ax32 ax33 ax34],'Time [s]')
-ylabel([ax1 ax3 ax21 ax23],'Pupil diameter [mm]')
-ylabel([ax5 ax7 ax25 ax27],'Pupil baseline difference [mm]')
-ylabel([ax11 ax13 ax31 ax33],'Fixation duration [s]')
-xlim([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax11 ax12 ax13 ax14 ax21 ax22 ax23 ax24 ax25 ax26 ax27 ax28 ax31 ax32 ax33 ax34],[-TimeStartW 3])
-% xlim(ax1,[-TimeStartW, min(t_DSW_NH(cumsum(squeeze(sum(~isnan(DSW_NH),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(DSW_NH),[1 2])))))])
-% xlim(ax2,[-TimeStartW, min(t_DLW_NH(cumsum(squeeze(sum(~isnan(DLW_NH),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(DLW_NH),[1 2])))))])
-% xlim(ax3,[-TimeStartW, min(t_DSW_HI(cumsum(squeeze(sum(~isnan(DSW_HI),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(DSW_HI),[1 2])))))])
-% xlim(ax4,[-TimeStartW, min(t_DSW_NH(cumsum(squeeze(sum(~isnan(DLW_HI),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(DLW_HI),[1 2])))))])
-% xlim(ax5,[-TimeStartW, min(t_DSW_NH_B(cumsum(squeeze(sum(~isnan(DSW_NH_B),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(DSW_NH_B),[1 2])))))])
-% xlim(ax6,[-TimeStartW, min(t_DLW_NH_B(cumsum(squeeze(sum(~isnan(DLW_NH_B),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(DLW_NH_B),[1 2])))))])
-% xlim(ax7,[-TimeStartW, min(t_DSW_HI_B(cumsum(squeeze(sum(~isnan(DSW_HI_B),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(DSW_HI_B),[1 2])))))])
-% xlim(ax8,[-TimeStartW, min(t_DSW_NH_B(cumsum(squeeze(sum(~isnan(DLW_HI_B),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(DLW_HI_B),[1 2])))))])
-% xlim(ax11,[-TimeStartW, min(t_FSW_NH(cumsum(squeeze(sum(~isnan(FSW_NH),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(FSW_NH),[1 2])))))])
-% xlim(ax12,[-TimeStartW, min(t_FLW_NH(cumsum(squeeze(sum(~isnan(FLW_NH),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(FLW_NH),[1 2])))))])
-% xlim(ax13,[-TimeStartW, min(t_FSW_HI(cumsum(squeeze(sum(~isnan(FSW_HI),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(FSW_HI),[1 2])))))])
-% xlim(ax14,[-TimeStartW, min(t_FSW_NH(cumsum(squeeze(sum(~isnan(FLW_HI),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(FLW_HI),[1 2])))))])
-% xlim(ax15,[-TimeStartW, min(t_FSW_NH_B(cumsum(squeeze(sum(~isnan(FSW_NH_B),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(FSW_NH_B),[1 2])))))])
-% xlim(ax16,[-TimeStartW, min(t_FLW_NH_B(cumsum(squeeze(sum(~isnan(FLW_NH_B),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(FLW_NH_B),[1 2])))))])
-% xlim(ax17,[-TimeStartW, min(t_FSW_HI_B(cumsum(squeeze(sum(~isnan(FSW_HI_B),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(FSW_HI_B),[1 2])))))])
-% xlim(ax18,[-TimeStartW, min(t_FSW_NH_B(cumsum(squeeze(sum(~isnan(FLW_HI_B),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(FLW_HI_B),[1 2])))))])
+xlabel([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10 ax11 ax12 ax13 ax14 ax15 ax16 ax17 ax18 ax19 ax20 ax21 ax22 ax23 ax24 ax25 ax26 ax27 ax28 ax29 ax30 ax31 ax32 ax33 ax34 ax35 ax36],'Time [s]')
+ylabel([ax1 ax5 ax9 ax13 ax17 ax21],'Pupil diameter [mm]')
+ylabel([ax3 ax7 ax11 ax15 ax19 ax23],'Pupil baseline difference [mm]')
+ylabel([ax25 ax27 ax29 ax31 ax33 ax35],'Fixation duration [s]')
+xlim([ax1 ax2 ax3 ax4 ax5 ax6 ax7 ax8 ax9 ax10 ax11 ax12 ax13 ax14 ax15 ax16 ax17 ax18 ax19 ax20 ax21 ax22 ax23 ax24 ax25 ax26 ax27 ax28 ax29 ax30 ax31 ax32 ax33 ax34 ax35 ax36],[-TimeStartW 3])
+% xlim(ax1,[-TimeStartW, min(t_G(cumsum(squeeze(sum(~isnan(DSW_NH),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(DSW_NH),[1 2])))))])
+% xlim(ax2,[-TimeStartW, min(t_G(cumsum(squeeze(sum(~isnan(DLW_NH),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(DLW_NH),[1 2])))))])
+% xlim(ax3,[-TimeStartW, min(t_G(cumsum(squeeze(sum(~isnan(DSW_HI),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(DSW_HI),[1 2])))))])
+% xlim(ax4,[-TimeStartW, min(t_G(cumsum(squeeze(sum(~isnan(DLW_HI),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(DLW_HI),[1 2])))))])
+% xlim(ax5,[-TimeStartW, min(t_G(cumsum(squeeze(sum(~isnan(DSW_NH_B),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(DSW_NH_B),[1 2])))))])
+% xlim(ax6,[-TimeStartW, min(t_G(cumsum(squeeze(sum(~isnan(DLW_NH_B),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(DLW_NH_B),[1 2])))))])
+% xlim(ax7,[-TimeStartW, min(t_G(cumsum(squeeze(sum(~isnan(DSW_HI_B),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(DSW_HI_B),[1 2])))))])
+% xlim(ax8,[-TimeStartW, min(t_G(cumsum(squeeze(sum(~isnan(DLW_HI_B),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(DLW_HI_B),[1 2])))))])
+% xlim(ax11,[-TimeStartW, min(t_G(cumsum(squeeze(sum(~isnan(FSW_NH),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(FSW_NH),[1 2])))))])
+% xlim(ax12,[-TimeStartW, min(t_G(cumsum(squeeze(sum(~isnan(FLW_NH),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(FLW_NH),[1 2])))))])
+% xlim(ax13,[-TimeStartW, min(t_G(cumsum(squeeze(sum(~isnan(FSW_HI),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(FSW_HI),[1 2])))))])
+% xlim(ax14,[-TimeStartW, min(t_G(cumsum(squeeze(sum(~isnan(FLW_HI),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(FLW_HI),[1 2])))))])
+% xlim(ax15,[-TimeStartW, min(t_G_B(cumsum(squeeze(sum(~isnan(FSW_NH_B),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(FSW_NH_B),[1 2])))))])
+% xlim(ax16,[-TimeStartW, min(t_G_B(cumsum(squeeze(sum(~isnan(FLW_NH_B),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(FLW_NH_B),[1 2])))))])
+% xlim(ax17,[-TimeStartW, min(t_G_B(cumsum(squeeze(sum(~isnan(FSW_HI_B),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(FSW_HI_B),[1 2])))))])
+% xlim(ax18,[-TimeStartW, min(t_G_B(cumsum(squeeze(sum(~isnan(FLW_HI_B),[1 2]))) >= VisRatio * sum(squeeze(sum(~isnan(FLW_HI_B),[1 2])))))])
 ylim([ax1 ax2],[min([ylim(ax1),ylim(ax2)]), max([ylim(ax1),ylim(ax2)])])
 ylim([ax3 ax4],[min([ylim(ax3),ylim(ax4)]), max([ylim(ax3),ylim(ax4)])])
 ylim([ax5 ax6],[min([ylim(ax5),ylim(ax6)]), max([ylim(ax5),ylim(ax6)])])
 ylim([ax7 ax8],[min([ylim(ax7),ylim(ax8)]), max([ylim(ax7),ylim(ax8)])])
+ylim([ax9 ax10],[min([ylim(ax9),ylim(ax10)]), max([ylim(ax9),ylim(ax10)])])
 ylim([ax11 ax12],[min([ylim(ax11),ylim(ax12)]), max([ylim(ax11),ylim(ax12)])])
 ylim([ax13 ax14],[min([ylim(ax13),ylim(ax14)]), max([ylim(ax13),ylim(ax14)])])
+ylim([ax15 ax16],[min([ylim(ax15),ylim(ax16)]), max([ylim(ax15),ylim(ax16)])])
+ylim([ax17 ax18],[min([ylim(ax17),ylim(ax18)]), max([ylim(ax17),ylim(ax18)])])
+ylim([ax19 ax20],[min([ylim(ax19),ylim(ax20)]), max([ylim(ax19),ylim(ax20)])])
 ylim([ax21 ax22],[min([ylim(ax21),ylim(ax22)]), max([ylim(ax21),ylim(ax22)])])
 ylim([ax23 ax24],[min([ylim(ax23),ylim(ax24)]), max([ylim(ax23),ylim(ax24)])])
 ylim([ax25 ax26],[min([ylim(ax25),ylim(ax26)]), max([ylim(ax25),ylim(ax26)])])
 ylim([ax27 ax28],[min([ylim(ax27),ylim(ax28)]), max([ylim(ax27),ylim(ax28)])])
+ylim([ax29 ax30],[min([ylim(ax29),ylim(ax30)]), max([ylim(ax29),ylim(ax30)])])
 ylim([ax31 ax32],[min([ylim(ax31),ylim(ax32)]), max([ylim(ax31),ylim(ax32)])])
 ylim([ax33 ax34],[min([ylim(ax33),ylim(ax34)]), max([ylim(ax33),ylim(ax34)])])
+ylim([ax35 ax36],[min([ylim(ax35),ylim(ax36)]), max([ylim(ax35),ylim(ax36)])])
+
+set([ax1 ax3 ax5 ax7 ax9 ax11 ax13 ax15 ax17 ax19 ax21 ax23 ax25 ax27 ax29 ax31 ax33 ax35],'Color',[SColor,0.04])
+set([ax2 ax4 ax6 ax8 ax10 ax12 ax14 ax16 ax18 ax20 ax22 ax24 ax26 ax28 ax30 ax32 ax34 ax36],'Color',[LColor,0.04])
+
 % ylmax5_8=cell2mat(ylim([ax5 ax6 ax7 ax8]));
 % [max5_8,idx5_8] = max(diff(ylmax5_8,1,2));
 % ylim([ax5 ax6 ax7 ax8],ylmax5_8(idx5_8,:)) % Setting ylim to the max out of all
@@ -2526,9 +3194,6 @@ ylim([ax33 ax34],[min([ylim(ax33),ylim(ax34)]), max([ylim(ax33),ylim(ax34)])])
 % sgtitle(f13,'Fixation duration averaged over TPs - NH','FontWeight','bold')
 % sgtitle(f14,'Fixation duration averaged over TPs - HI','FontWeight','bold')
 
-set([ax1 ax5 ax11 ax21 ax25 ax31 ax3 ax7 ax13 ax23 ax27 ax33],'Color',[SColor,0.04])
-set([ax2 ax6 ax12 ax22 ax26 ax32 ax4 ax8 ax14 ax24 ax28 ax34],'Color',[LColor,0.04])
-
 % flgd=figure;axlgd=gca();hold(axlgd,'on')
 % plot(axlgd,nan,color=QuietColor,linewidth=2) % plot nans to show color in legend
 % plot(axlgd,nan,color=N60Color,linewidth=2) % plot nans to show color in legend
@@ -2555,7 +3220,7 @@ set([ax2 ax6 ax12 ax22 ax26 ax32 ax4 ax8 ax14 ax24 ax28 ax34],'Color',[LColor,0.
 % saveLegendToImage(flgd3, lgd3, 'lgd3', 'eps');
 
 % Export figs as pdfs
-% tiles = {t9,t10,t11,t12,t13,t14};
+% tiles = {t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18};
 % for i=1:size(tiles,2)
 % exportgraphics(tiles{i}, ['output_' num2str(i) '.pdf']);
 % end

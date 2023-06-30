@@ -270,7 +270,7 @@ for q=1:numel(subDirs_I)
 %         yline(7,"--",'HandleVisibility','off')
 %         xlabel('Time [s]')
 %         yticks(0.5:6.5)
-%         yticklabels({'Raw','Merge < 0.3','Discard < 0.5','Merge < 2','Discard < 1','Split overlaps','Other windows'})
+%         yticklabels({'Raw','Merge < 0.3','Discard < 0.5','Merge < 2','Discard < 1','Split overlaps'})
 %         title(strrep(strrep([PairFiles_I(1).folder(25:end),'\',cell2mat(FileNames_I(i))],'_','-'),'\','\\'))
     end
 end

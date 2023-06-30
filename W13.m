@@ -1107,8 +1107,15 @@ set([ax12 ax14],'Color',[LColor,0.04])
 % plot(axlgd,nan,color=SHLColor,linewidth=2) % plot nans to show color in legend
 % plot(axlgd,nan,color=N60Color,linewidth=2) % plot nans to show color in legend
 % plot(axlgd,nan,color=N70Color,linewidth=2) % plot nans to show color in legend
-% lgd=legend(axlgd,'N0','SHL','N60','N70','Location','southeastoutside');
-% lgd.Title.String = 'Noise conditions:';
+% lgd=legend(axlgd,'Quiet','SHL','N60','N70','Location','southeastoutside');
+% lgd.Title.String = 'Test conditions:';
+% 
+% flgd3=figure;axlgd3=gca();hold(axlgd3,'on')
+% plot(axlgd3,nan,color=QuietColor,linewidth=2) % plot nans to show color in legend
+% plot(axlgd3,nan,color=N60Color,linewidth=2) % plot nans to show color in legend
+% plot(axlgd3,nan,color=N70Color,linewidth=2) % plot nans to show color in legend
+% lgd3=legend(axlgd3,'Quiet','N60','N70','Location','southeastoutside');
+% lgd3.Title.String = 'Test conditions:';
 % 
 % flgd2=figure;axlgd2=gca();hold(axlgd2,'on')
 % plot(axlgd2,nan,color=[SColor 0.3],linewidth=3) % plot nans to show color in legend
@@ -1118,6 +1125,7 @@ set([ax12 ax14],'Color',[LColor,0.04])
 
 % saveLegendToImage(flgd, lgd, 'lgd', 'eps');
 % saveLegendToImage(flgd2, lgd2, 'lgd2', 'eps');
+% saveLegendToImage(flgd3, lgd3, 'lgd', 'eps')
 
 % Export figs as pdfs
 % tiles = {t6,t7};

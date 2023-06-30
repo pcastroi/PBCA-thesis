@@ -151,7 +151,10 @@ cols = [53 155 67;
         212 93 121;
         234 144 133;
         233 226 208;
-        112 108 97]./255;
+        112 108 97;
+        30, 30, 31;
+        111 185 191;
+        242 183 5]./255;
 
 fs = options.fs;
 
@@ -195,56 +198,58 @@ xlabel('x coordinates (pixels)')
 ylabel('y coordinates (pixels)')
 
 
-figure('Position', [100 100 1000 600])
+figure
 % blinks
 subplot(3,1,1)
 hold on
-plot(t, proc_data(:, 4), 'k')
+plot(t, proc_data(:, 4), 'k','LineWidth',1,'HandleVisibility','off')
 % yline(mean(proc_data(:, 4),'omitnan'), '--k')
-yline((nanmean(proc_data(1:500, 4))-3*nanstd(proc_data(1:500, 4))),'--','color',"#555555") %,'Threshold','LabelHorizontalAlignment', 'center'
-axis([t(1) t(Param.Fs*10) nanmean(proc_data(1:500, 4))-3*nanstd(proc_data(1:500, 4))-0.1 max(proc_data(1:Param.Fs*10, 4))+0.1])
-ylims = get(gca, 'YLim');
-height = ylims(2) - ylims(1);
+axis([t(1) t(end) nanmean(proc_data(1:500, 4))-3*nanstd(proc_data(1:500, 4))-0.1 max(proc_data(1:Param.Fs*10, 4))+0.1])
+xlim([0 8])
+ylims1 = get(gca, 'YLim');
+height = ylims1(2) - ylims1(1);
 for i = 1:proc_info.number_of_blinks
-    rectangle('position', [proc_info.blink_starts_s(i) ylims(1) proc_info.blink_durations(i) height ],...
-        'facecolor', [cols(5, :) 0.4],...
+    rectangle('position', [proc_info.blink_starts_s(i) ylims1(1) proc_info.blink_durations(i) height ],...
+        'facecolor', [cols(6, :) 0.4],...
         'edgecolor', 'none');
 end
-title('Blink detection')
-xlabel('Time [s]')
+ylim(ylims1)
+% title('Blink detection')
 ylabel('Pupil diameter [mm]')
 grid on
-line(NaN,NaN,'linewidth',3,'Color',[cols(5, :) 0.4])
-legend('Raw data','Threshold', 'Blink events')
+line(NaN,NaN,'linewidth',5,'Color',[cols(6, :) 0.4])
+yline((nanmean(proc_data(1:500, 4))-3*nanstd(proc_data(1:500, 4))),'--') %,'Threshold','LabelHorizontalAlignment', 'center'
+legend('Blinks','Threshold')
 
 % saccades
 subplot(3,1,2)
 hold on
-plot(t,gaze_vel,'k');
-yline(options.vel_threshold,'--','color',"#555555") %,'Threshold','LabelHorizontalAlignment', 'center'
-axis([t(1) t(Param.Fs*10) min(gaze_vel(1:Param.Fs*10))-10 max(gaze_vel(1:Param.Fs*10))+10])
+plot(t,gaze_vel,'k','LineWidth',1,'HandleVisibility','off');
+axis([t(1) t(end) min(gaze_vel(1:Param.Fs*10))-10 max(gaze_vel(1:Param.Fs*10))+10])
+xlim([0 8])
 ylims = get(gca, 'YLim');
 height = ylims(2) - ylims(1);
 for i = 1:proc_info.number_of_saccades
         rectangle('position', [proc_info.saccade_starts_s(i) ylims(1) proc_info.saccade_durations(i)  height ],...
-        'facecolor', [cols(3, :) 0.4],...
+        'facecolor', [cols(7, :) 0.4],...
         'edgecolor', 'none');
 end
-title('Saccade detection')
-xlabel('Time [s]')
+% title('Saccade detection')
 ylabel('Angular velocity [°/s]')
 grid on
-line(NaN,NaN,'linewidth',3,'Color',[cols(3, :) 0.4])
-legend('Angular velocity','Threshold','Saccade events')
+line(NaN,NaN,'linewidth',5,'Color',[cols(7, :) 0.4])
+yline(options.vel_threshold,'--') %,'Threshold','LabelHorizontalAlignment', 'center'
+legend('Saccades','Threshold')
 % legend('$\textsf{Angular velocity: } \: v_{gaze}$','$\textsf{Saccade events}$','Interpreter','latex')
 
 % Combined events
 subplot(3,1,3)
 hold on
-plot(t, proc_data(:, size(proc_data, 2)),'Color', cols(2, :),'linewidth',1)
-axis([t(1) t(Param.Fs*10) min(proc_data(1:Param.Fs*10, size(proc_data, 2)))-0.1 max(proc_data(1:Param.Fs*10, size(proc_data, 2)))+0.1])
-ylims = get(gca, 'YLim');
-height = ylims(2) - ylims(1);
+plot(t, proc_data(:, size(proc_data, 2)),'Color', cols(2, :),'LineWidth',1,'HandleVisibility','off')
+axis([t(1) t(end) min(proc_data(1:Param.Fs*10, size(proc_data, 2)))-0.1 max(proc_data(1:Param.Fs*10, size(proc_data, 2)))+0.1])
+xlim([0 8])
+ylims3 = ylims1;
+height = ylims3(2) - ylims3(1);
 % for i = 1:proc_info.number_of_blinks
 %     rectangle('position', [proc_info.blink_starts_s(i) ylims(1) proc_info.blink_durations(i) height ],...
 %         'facecolor', [cols(5, :) 0.4],...
@@ -256,16 +261,16 @@ height = ylims(2) - ylims(1);
 %         'edgecolor', 'none');
 % end
 for i = 1:proc_info.number_of_fixations
-    rectangle('position', [proc_info.fixation_starts_s(i) ylims(1) proc_info.fixation_durations(i) height ],...
-        'facecolor', [cols(1, :) 0.2],...
+    rectangle('position', [proc_info.fixation_starts_s(i) ylims3(1) proc_info.fixation_durations(i) height ],...
+        'facecolor', [cols(8, :) 0.2],...
         'edgecolor', 'none');
 end
-text(5, 1500, info_interp)
+ylim(ylims3)
 grid on
-% line(NaN,NaN,'linewidth',3,'Color',[cols(5, :) 0.4])
-% line(NaN,NaN,'linewidth',3,'Color',[cols(3, :) 0.4])
-line(NaN,NaN,'linewidth',3,'Color',[cols(1, :) 0.4])
-legend('Preprocessed data','Fixation events')
-title('Fixation detection')
+% line(NaN,NaN,'linewidth',5,'Color',[cols(5, :) 0.4])
+% line(NaN,NaN,'linewidth',5,'Color',[cols(3, :) 0.4])
+line(NaN,NaN,'linewidth',5,'Color',[cols(8, :) 0.4])
+legend('Fixations')
+% title('Fixation detection')
 xlabel('Time [s]')
 ylabel('Pupil diameter [mm]')
